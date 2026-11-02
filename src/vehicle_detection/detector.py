@@ -134,7 +134,7 @@ class YoloDetector:
     def synchronize(self):
         import torch
 
-        device = next(self.model.model.parameters()).device
+        device = self.model.predictor.device
         if device.type == "cuda":
             torch.cuda.synchronize(device)
         elif device.type == "mps":
@@ -143,7 +143,7 @@ class YoloDetector:
     def hardware(self):
         import torch
 
-        device = next(self.model.model.parameters()).device
+        device = self.model.predictor.device
         return {
             "device": str(device),
             "cuda_runtime": torch.version.cuda,

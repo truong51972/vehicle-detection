@@ -226,6 +226,13 @@ deterministically interleaved per image to reduce systematic timing bias.
   mean/p50/p95 latency, throughput and overhead. Unsupported-class AP is null.
 - `comparison.png`, `samples/` and `report.md`: accuracy/cost plots, paired
   before/after panels, low-delta failure cases and a methods/limitations report.
+- `report_timing.json`: wall-clock report generation time, including record reads,
+  matching, aggregate/stratum metrics, failure diagnostics, samples, plots and writes.
+
+Reporting computes box matches once per image/condition/treatment and reuses them
+for aggregate AP, metadata strata and per-image failure diagnostics. Matches are
+cached only in memory for raw and the current treatment. Aggregate AP still ranks
+all predictions in its population; it is never averaged from per-image AP.
 
 Metrics use classwise confidence-ordered greedy one-to-one IoU matching at
 0.50:0.05:0.95, a precision envelope and 101-point mean interpolated AP. There is no
@@ -234,6 +241,12 @@ Macro averages exclude classes without ground truth. Precision/recall are comput
 at IoU 0.50 and confidence 0.25 by default; AP retains predictions down to 0.001.
 Metadata strata include support and a small-sample flag (default fewer than 30
 images). Always inspect per-class support and losses as well as gains.
+
+Ultralytics may clip detections wholly in square-inference letterbox padding to
+zero source-image area. These predictions are discarded consistently across
+treatments, with per-image `discarded_degenerate_predictions` counts in the records
+and decisions log. Nonfinite values, invalid classes, reversed boxes and
+out-of-bounds predictions still fail validation. Ground-truth boxes are unchanged.
 
 Latency uses batch 1, FP32 and fixed square resolution; warm-up is excluded and
 CUDA/MPS work is synchronized. Preprocessing includes adaptive features, routing

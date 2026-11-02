@@ -57,7 +57,13 @@ def average_precision(tp, target_count):
 
 
 def evaluate(records, precision_confidence=0.25):
-    matches = [match(r["boxes"], r["predictions"]) for r in records]
+    return evaluate_matches(
+        [match(r["boxes"], r["predictions"]) for r in records], precision_confidence
+    )
+
+
+def evaluate_matches(matches, precision_confidence=0.25):
+    """Aggregate cached per-image matches; AP still ranks predictions across images."""
     predicted = np.concatenate([m[0] for m in matches]) if matches else np.empty((0, 6))
     correct = np.concatenate([m[1] for m in matches]) if matches else np.empty((0, 10), bool)
     target = np.concatenate([m[2] for m in matches]) if matches else np.empty((0, 5))
@@ -81,7 +87,7 @@ def evaluate(records, precision_confidence=0.25):
         }
     supported = [row for row in per_class.values() if row["targets"]]
     return {
-        "images": len(records),
+        "images": len(matches),
         "targets": len(target),
         "per_class": per_class,
         **{

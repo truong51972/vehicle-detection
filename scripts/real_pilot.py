@@ -67,6 +67,11 @@ def verify(output):
     require(experiment["split"] == "holdout", "Expected official-validation holdout evaluation")
     require(experiment["training_provenance"] is not None, "Missing real training provenance")
     require(experiment["training_provenance"]["best"]["sha256"] == best_hash, "Bad provenance")
+    configured_device = str(experiment["config"]["training"]["device"])
+    expected_device = (
+        f"cuda:{configured_device}" if configured_device.isdigit() else configured_device
+    )
+    require(experiment["hardware"]["device"] == expected_device, "Inference used unexpected device")
     require(results["experiment"] == digest(experiment), "Results identity mismatch")
     with (output / "train/results.csv").open(newline="") as stream:
         epoch_count = sum(1 for _ in csv.DictReader(stream))

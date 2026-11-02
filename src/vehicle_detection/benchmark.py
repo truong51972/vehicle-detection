@@ -13,7 +13,7 @@ import numpy as np
 from .common import digest, environment, read_image, read_json, write_json
 from .data import CLASSES, load_manifest
 from .detector import YoloDetector
-from .metrics import METRIC_ID, evaluate
+from .metrics import METRIC_ID, evaluate_matches, match
 from .preprocess import process, quality, stress
 
 
@@ -69,11 +69,12 @@ def validate_predictions(predictions, width, height):
         or np.any(result[:, 2] < 0)
         or np.any(result[:, 3] > width)
         or np.any(result[:, 4] > height)
-        or np.any(result[:, 3] <= result[:, 1])
-        or np.any(result[:, 4] <= result[:, 2])
+        or np.any(result[:, 3] < result[:, 1])
+        or np.any(result[:, 4] < result[:, 2])
     ):
         raise ValueError("Detector returned invalid class/coordinates/confidence")
-    return result.tolist()
+    # Ultralytics can clip predictions wholly in letterbox padding to zero image area.
+    return result[(result[:, 3] > result[:, 1]) & (result[:, 4] > result[:, 2])].tolist()
 
 
 def load_record(path, expected, identity):
@@ -190,6 +191,7 @@ def benchmark(prepared, weights, output, config, resume=False, split="holdout", 
                         predictions = detector.predict(processed)
                         detector.synchronize()
                         end = time.perf_counter_ns()
+                        prediction_count = len(predictions)
                         predictions = validate_predictions(
                             predictions, record["width"], record["height"]
                         )
@@ -200,6 +202,7 @@ def benchmark(prepared, weights, output, config, resume=False, split="holdout", 
                             "quality": scores if scores is not None else diagnostic_quality,
                             "sequence": chosen,
                             "predictions": predictions,
+                            "discarded_degenerate_predictions": prediction_count - len(predictions),
                             "preprocess_ms": (pre_end - start) / 1e6,
                             "inference_ms": (end - pre_end) / 1e6,
                             "end_to_end_ms": (end - start) / 1e6,
@@ -241,6 +244,7 @@ def aligned(groups, ids):
 
 
 def report(output, identity, manifest_records):
+    started = time.perf_counter()
     config = identity["config"]
     bench = config["benchmark"]
     sources = {r["id"]: r for r in manifest_records}
@@ -252,24 +256,39 @@ def report(output, identity, manifest_records):
             for sample_id in identity["sample_ids"]
         ]
 
+    def match_rows(rows):
+        return {r["id"]: match(r["boxes"], r["predictions"]) for r in rows}
+
+    def summarize(rows, matches):
+        return evaluate_matches([matches[r["id"]] for r in rows], bench["precision_confidence"])
+
     # Hold only raw + one treatment in memory, even for the full condition matrix.
     with (output / "decisions.jsonl").open("w") as decisions:
         import json
 
         for condition in bench["conditions"]:
             baseline = load_rows(condition, "raw")
-            baseline_by_id = {r["id"]: r for r in baseline}
+            baseline_matches = match_rows(baseline)
             baseline_image_ap = {
-                r["id"]: evaluate([r], bench["precision_confidence"])["map50_95"] for r in baseline
+                r["id"]: summarize([r], baseline_matches)["map50_95"] for r in baseline
+            }
+            baseline_strata = {
+                (attribute, category): summarize(
+                    [r for r in baseline if r["attributes"][attribute] == category],
+                    baseline_matches,
+                )
+                for attribute in ("weather", "timeofday", "scene")
+                for category in {r["attributes"][attribute] for r in baseline}
             }
             for treatment in bench["treatments"]:
                 selected = baseline if treatment == "raw" else load_rows(condition, treatment)
+                matches = baseline_matches if treatment == "raw" else match_rows(selected)
                 aligned({"raw": baseline, treatment: selected}, identity["sample_ids"])
                 metrics.append(
                     {
                         "condition": condition,
                         "treatment": treatment,
-                        **evaluate(selected, bench["precision_confidence"]),
+                        **summarize(selected, matches),
                         "latency": latency(selected),
                     }
                 )
@@ -283,9 +302,8 @@ def report(output, identity, manifest_records):
                 for attribute in ("weather", "timeofday", "scene"):
                     for category in sorted({r["attributes"][attribute] for r in selected}):
                         subset = [r for r in selected if r["attributes"][attribute] == category]
-                        paired_raw = [baseline_by_id[r["id"]] for r in subset]
-                        result = evaluate(subset, bench["precision_confidence"])
-                        base = evaluate(paired_raw, bench["precision_confidence"])
+                        result = summarize(subset, matches)
+                        base = baseline_strata[attribute, category]
                         strata.append(
                             {
                                 "condition": condition,
@@ -305,7 +323,7 @@ def report(output, identity, manifest_records):
                     continue
                 differences = []
                 for row in selected:
-                    current = evaluate([row], bench["precision_confidence"])["map50_95"]
+                    current = summarize([row], matches)["map50_95"]
                     base = baseline_image_ap[row["id"]]
                     if current is not None:
                         differences.append((current - base, row))
@@ -385,6 +403,16 @@ def report(output, identity, manifest_records):
                 }
             )
     render_report(output, metrics, strata, failure_cases, identity)
+    write_json(
+        output / "report_timing.json",
+        {
+            "elapsed_seconds": time.perf_counter() - started,
+            "images_per_treatment": len(identity["sample_ids"]),
+            "conditions": len(bench["conditions"]),
+            "treatments": len(bench["treatments"]),
+            "includes": "record reads, matching, metrics, diagnostics, samples, plots and writes",
+        },
+    )
     return metrics
 
 

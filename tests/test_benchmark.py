@@ -21,7 +21,7 @@ class FakeDetector:
         self.calls += 1
         if self.fail_after is not None and self.calls > self.fail_after:
             raise RuntimeError("simulated interruption")
-        return [[0, 10, 12, 50, 40, 0.9]]
+        return [[0, 10, 12, 50, 40, 0.9], [0, 10, 0, 50, 0, 0.1]]
 
     def synchronize(self):
         pass
@@ -30,7 +30,16 @@ class FakeDetector:
         return {"device": "synthetic-test-only"}
 
 
-def test_benchmark_reports_and_safe_resume(bdd, tmp_path, config):
+def test_benchmark_reports_and_safe_resume(bdd, tmp_path, config, monkeypatch):
+    from vehicle_detection.metrics import match
+
+    matching_calls = []
+
+    def count_match(boxes, predictions):
+        matching_calls.append(1)
+        return match(boxes, predictions)
+
+    monkeypatch.setattr("vehicle_detection.benchmark.match", count_match)
     prepared, output = tmp_path / "prepared", tmp_path / "benchmark"
     prepare(bdd, prepared, config)
     config["benchmark"]["conditions"] = ["clean", "noise"]
@@ -41,15 +50,22 @@ def test_benchmark_reports_and_safe_resume(bdd, tmp_path, config):
     previous = {p: p.read_bytes() for p in shards}
     result = benchmark(prepared, None, output, config, resume=True, detector=FakeDetector())
     assert len(result) == 12
+    assert len(matching_calls) == 48  # Reused across aggregate/stratum AP and diagnostics.
     assert all(r["map50_95"] == 1 and r["delta_map50_95"] == 0 for r in result)
     assert all(p.read_bytes() == content for p, content in previous.items())
     assert len(list((output / "records").rglob("*.json"))) == 48
+    assert all(
+        read_json(p)["discarded_degenerate_predictions"] == 1
+        for p in (output / "records").rglob("*.json")
+    )
     assert len((output / "decisions.jsonl").read_text().splitlines()) == 48
     for name in ("comparison.png", "report.md", "results.csv", "results.json", "experiment.json"):
         assert (output / name).is_file()
     assert list((output / "samples").rglob("*.jpg"))
     assert "synthetic" in (output / "report.md").read_text()
     artifact = read_json(output / "results.json")
+    timing = read_json(output / "report_timing.json")
+    assert timing["elapsed_seconds"] > 0 and timing["images_per_treatment"] == 4
     assert artifact["strata"]
     assert all(r["small_sample"] for r in artifact["strata"])
     with pytest.raises(ValueError, match="Experiment exists"):
@@ -98,3 +114,11 @@ def test_lock_prevents_concurrent_writers(tmp_path):
 def test_invalid_detector_output(prediction):
     with pytest.raises(ValueError, match="Detector returned invalid"):
         validate_predictions(prediction, 80, 64)
+
+
+def test_zero_area_padding_predictions_are_discarded():
+    valid = [0, 10, 12, 50, 40, 0.9]
+    padding = [[0, 10, 0, 50, 0, 0.1], [0, 80, 12, 80, 40, 0.2]]
+    assert validate_predictions([valid, *padding], 80, 64) == [valid]
+    with pytest.raises(ValueError, match="Detector returned invalid"):
+        validate_predictions([[0, 10, 0, 50, 0, float("nan")]], 80, 64)

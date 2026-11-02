@@ -132,3 +132,37 @@ def test_frozen_yolo_adapter_mapping_and_prediction_settings(tmp_path, config, m
     FakeYolo.names = {0: "wrong class"}
     with pytest.raises(ValueError, match="do not match"):
         YoloDetector(checkpoint, config)
+
+
+@pytest.mark.parametrize("kind", ["cuda", "mps", "cpu"])
+def test_timing_and_hardware_use_actual_predictor_device(kind, monkeypatch):
+    import sys
+
+    class Device:
+        type = kind
+
+        def __str__(self):
+            return "cuda:0" if kind == "cuda" else kind
+
+    device = Device()
+    synchronized = []
+    fake_torch = SimpleNamespace(
+        cuda=SimpleNamespace(
+            synchronize=lambda d: synchronized.append(d),
+            get_device_name=lambda d: "actual predictor GPU",
+        ),
+        mps=SimpleNamespace(synchronize=lambda: synchronized.append(device)),
+        version=SimpleNamespace(cuda="test-runtime"),
+        get_num_threads=lambda: 4,
+    )
+    monkeypatch.setitem(sys.modules, "torch", fake_torch)
+    detector = YoloDetector.__new__(YoloDetector)
+    detector.model = SimpleNamespace(
+        predictor=SimpleNamespace(device=device),
+        model=SimpleNamespace(parameters=lambda: iter([SimpleNamespace(device="cpu")])),
+    )
+    detector.synchronize()
+    assert synchronized == ([device] if kind != "cpu" else [])
+    hardware = detector.hardware()
+    assert hardware["device"] == str(device)
+    assert hardware["gpu"] == ("actual predictor GPU" if kind == "cuda" else None)

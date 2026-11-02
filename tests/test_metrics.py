@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from vehicle_detection.metrics import average_precision, evaluate, match
+from vehicle_detection.metrics import average_precision, evaluate, evaluate_matches, match
 
 
 def test_perfect_and_missing_detection():
@@ -50,3 +50,20 @@ def test_negative_images_count_false_positives_and_confidence():
     assert average_precision(np.array([True, False, True]), 2) == pytest.approx(
         (51 + 50 * (2 / 3)) / 101
     )
+
+
+def test_cached_matches_rank_globally_without_mutating_cache():
+    records = [
+        {"boxes": [[0, 0, 0, 10, 10]], "predictions": [[0, 0, 0, 10, 10, 0.5]]},
+        {"boxes": [[0, 0, 0, 10, 10]], "predictions": [[0, 20, 20, 30, 30, 0.9]]},
+    ]
+    cached = [match(r["boxes"], r["predictions"]) for r in records]
+    original = [tuple(array.copy() for array in item) for item in cached]
+    result = evaluate_matches(cached)
+    assert result == evaluate(records)
+    assert result["map50_95"] == pytest.approx(51 * 0.5 / 101)
+    assert result["map50_95"] != np.mean([evaluate([r])["map50_95"] for r in records])
+    evaluate_matches([cached[0]], precision_confidence=0.6)
+    for before, after in zip(original, cached, strict=True):
+        for first, second in zip(before, after, strict=True):
+            np.testing.assert_array_equal(first, second)
