@@ -288,3 +288,43 @@ runs. None are claimed by these tests. Generated data, models and runs stay out 
 References: [BDD100K/Scalabel label schema](https://github.com/ucbdrive/bdd100k/blob/master/doc/format.md),
 [Ultralytics training API](https://docs.ultralytics.com/modes/train/),
 [Ultralytics prediction API](https://docs.ultralytics.com/modes/predict/).
+
+## Real-data fine-tune + evaluation (required before merge)
+
+Synthetic CI exercises the pipeline with a fake detector to catch deterministic
+logic regressions; it **does not validate actual YOLO fine-tuning, preprocessing
+compatibility, or detection accuracy**. With local BDD100K images and detection
+annotations, the following **unmocked** end-to-end pilot is the integration test:
+
+```sh
+uv sync --locked --extra detector
+uv run --extra detector python scripts/real_pilot.py \
+  --data data/bdd100k --device 0 --out runs/real-pilot
+# Without CUDA: replace --device 0 with --device cpu (may be slow).
+```
+
+This executes actual Ultralytics fine-tuning on the raw train partition, checkpoint
+selection on train-derived tune, and inference/evaluation with frozen `best.pt`
+on paired official-validation holdout images for raw, fixed and adaptive filters.
+It verifies nonempty best/last weights, training epochs, provenance/checkpoint
+hashes, original split separation, paired prediction shards, output completeness,
+and finite quality metrics. A success attestation is written to
+`runs/real-pilot/real_validation.json`. All outputs remain gitignored.
+
+To verify an already completed pilot without training again:
+
+```sh
+uv run --extra detector python scripts/real_pilot.py \
+  --out runs/real-pilot --verify-only
+```
+
+**PR acceptance gate:** report the actual device, model, training epochs, train/tune/
+holdout sizes, mAP50/mAP50:95 for raw and adaptive, delta versus raw, and average
+end-to-end latency; attach the command/output and relevant redacted artifacts to
+the PR. A run using fake predictions, a skipped integration check, or successful
+survey/prepare alone **does not meet this gate**. Re-run with a fresh output path
+if any inference/evaluation settings change; never tune using holdout results.
+
+The smoke pilot is a feasibility check only. For research conclusions, calibrate
+on tune and run the full frozen-checkpoint paired holdout experiment. Real data
+and downloaded checkpoints are never checked into the repository.
