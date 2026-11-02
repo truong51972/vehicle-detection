@@ -67,6 +67,9 @@ def export_variant(
         raise ValueError(f"Unknown existing export directory: {destination}")
     else:
         write_json(identity_path, identity)
+    for split in ("train", "tune", "test"):
+        for kind in ("images", "labels"):
+            (destination / kind / split).mkdir(parents=True, exist_ok=True)
     (destination / "verified.json").unlink(missing_ok=True)
     journal = destination / "metadata.jsonl"
     completed = {}

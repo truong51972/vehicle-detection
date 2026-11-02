@@ -92,7 +92,9 @@ def scan_bdd(root):
     )
 
 
-def choose_splits(records, seed, limits, excluded_test_ids=(), tune_fraction=0.2):
+def choose_splits(
+    records, seed, limits, excluded_test_ids=(), tune_fraction=0.2, *, prepare_test=True
+):
     groups = defaultdict(list)
     test = []
     for record in records:
@@ -113,6 +115,8 @@ def choose_splits(records, seed, limits, excluded_test_ids=(), tune_fraction=0.2
         "tune": [r for k in keys[:boundary] for r in sorted(groups[k], key=lambda r: r["id"])],
         "test": sorted(test, key=lambda r: r["id"]),
     }
+    if not prepare_test:
+        del partitions["test"]  # Reserve holdout IDs without decoding or hashing its images.
     owners = {}
     for split, selected in partitions.items():
         if limits[split] is not None and (

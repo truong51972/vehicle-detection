@@ -83,6 +83,43 @@ def test_duplicate_content_cannot_cross_splits(bdd):
         choose_splits(records, 42, {"train": None, "tune": None, "test": None})
 
 
+def test_development_split_never_reads_holdout_pixels(bdd, monkeypatch, tmp_path, recipes):
+    from vehicle_detection import data
+
+    records, _, _ = scan_bdd(bdd)
+    original_read = data.read_image
+    original_hash = data.file_hash
+
+    def train_only(path):
+        assert "val" not in Path(path).parts, "Holdout pixels must remain untouched"
+        return original_read(path)
+
+    def train_hash(path):
+        assert "val" not in Path(path).parts, "Holdout pixels must not be hashed"
+        return original_hash(path)
+
+    monkeypatch.setattr(data, "read_image", train_only)
+    monkeypatch.setattr(data, "file_hash", train_hash)
+    partitions = choose_splits(
+        records, 2026, dict.fromkeys(["train", "tune", "test"]), prepare_test=False
+    )
+    assert set(partitions) == {"train", "tune"}
+    assert sum(map(len, partitions.values())) == 6
+    assert all("sha256" not in r for r in records if r["official_split"] == "val")
+    converted = tmp_path / "converted"
+    write_json(converted / "conversion.json", {"fixture": True})
+    for split, rows in partitions.items():
+        for r in rows:
+            path = converted / "labels" / split / f"{r['id']}.txt"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("0 0.4 0.4 0.2 0.2\n")
+    output = tmp_path / "raw_original"
+    export_variant(partitions, converted, output, "raw_original", recipes)
+    assert verify_alignment([output]) == 6
+    assert not list((output / "images/test").iterdir())
+    assert not list((output / "labels/test").iterdir())
+
+
 @pytest.mark.parametrize("variant", ["raw", "gamma", "clahe", "denoise", "sharpen", "adaptive"])
 def test_filter_geometry_dtype_and_source_invariance(variant, recipes):
     validate_recipes(recipes)
