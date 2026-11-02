@@ -10,7 +10,7 @@ import json
 import math
 import subprocess
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from vehicle_detection.common import digest, file_hash, read_json, write_json
@@ -48,7 +48,11 @@ def verify(output):
     partitions = prepared["partitions"]
     require(all(partitions[split] for split in ("train", "tune", "holdout")), "Empty partition")
     require(
-        all(r["official_split"] == "train" for split in ("train", "tune") for r in partitions[split]),
+        all(
+            r["official_split"] == "train"
+            for split in ("train", "tune")
+            for r in partitions[split]
+        ),
         "Training/tuning contains nontrain examples",
     )
     require(
@@ -95,7 +99,7 @@ def verify(output):
             require(record["experiment"] == results["experiment"], "Mixed experiment records")
 
     summary = {
-        "verified_at_utc": datetime.now(timezone.utc).isoformat(),
+        "verified_at_utc": datetime.now(UTC).isoformat(),
         "mode": "real BDD100K fine-tune and real Ultralytics evaluation, no mock detector",
         "manifest_identity": prepared["identity"],
         "weights_sha256": best_hash,
