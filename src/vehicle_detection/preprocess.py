@@ -3,9 +3,6 @@
 import cv2
 import numpy as np
 
-from .common import digest
-from .config import number
-
 
 def validate_image(image):
     if (
@@ -55,79 +52,73 @@ def sharpen(image, amount, sigma):
     return cv2.addWeighted(image, 1 + amount, smooth, -amount, 0)
 
 
-REGISTRY = {
-    "gamma": (gamma, {"gamma": (0.1, 3.0, False)}),
-    "clahe": (clahe, {"clip_limit": (0.1, 8.0, False), "grid_size": (2, 32, True)}),
-    "denoise": (denoise, {"strength": (0.1, 30.0, False)}),
-    "sharpen": (sharpen, {"amount": (0.0, 2.0, False), "sigma": (0.1, 5.0, False)}),
-}
-
-
-def validate_operators(operators):
-    if not isinstance(operators, list):
-        raise ValueError("operators must be an ordered list")
-    seen = set()
-    for op in operators:
-        if not isinstance(op, dict) or set(op) != {"name", "enabled", "params"}:
-            raise ValueError("Each operator requires name, enabled, params")
-        name = op["name"]
-        if not isinstance(name, str) or name not in REGISTRY or name in seen:
-            raise ValueError(f"Unknown/duplicate operator: {name}")
-        seen.add(name)
-        if not isinstance(op["enabled"], bool):
-            raise ValueError(f"{name}.enabled must be boolean")
-        specs = REGISTRY[name][1]
-        if not isinstance(op["params"], dict) or set(op["params"]) != set(specs):
-            raise ValueError(f"{name} expects parameters: {list(specs)}")
-        for key, bounds in specs.items():
-            number(op["params"][key], f"{name}.{key}", *bounds)
-
-
-def route(scores, operators, policy):
-    wanted = {
-        "gamma": scores["brightness"] < policy["brightness_below"],
-        "clahe": scores["contrast"] < policy["contrast_below"],
-        "denoise": scores["noise"] > policy["noise_above"],
-        "sharpen": (
-            policy["sharpness_min"] <= scores["sharpness"] < policy["sharpness_below"]
-            and scores["noise"] <= policy["noise_above"]
-        ),
+def validate_recipes(recipes):
+    bounds = {
+        "raw": {},
+        "gamma": {"gamma": (0.1, 3)},
+        "clahe": {"clip_limit": (0.1, 8), "grid_size": (2, 32)},
+        "denoise": {"strength": (0.1, 30)},
+        "sharpen": {"amount": (0, 2), "sigma": (0.1, 5)},
+        "adaptive": {
+            "brightness_below": (0, 1),
+            "contrast_below": (0, 1),
+            "noise_above": (0, 1),
+            "sharpness_min": (0, 1e6),
+            "sharpness_below": (0, 1e6),
+            "max_filters": (0, 2),
+        },
     }
-    return [op for op in operators if op["enabled"] and wanted[op["name"]]][: policy["max_filters"]]
+    for variant, settings in recipes.items():
+        if variant not in bounds or set(settings) != set(bounds[variant]):
+            raise ValueError(f"Unknown recipe or parameters: {variant}")
+        for key, value in settings.items():
+            low, high = bounds[variant][key]
+            if (
+                isinstance(value, bool)
+                or not isinstance(value, (int, float))
+                or not np.isfinite(value)
+                or not low <= value <= high
+            ):
+                raise ValueError(f"Invalid {variant}.{key}")
+            if key in {"grid_size", "max_filters"} and not isinstance(value, int):
+                raise ValueError(f"{key} must be an integer")
+    if "adaptive" in recipes:
+        if not {"gamma", "clahe", "denoise", "sharpen"} <= recipes.keys():
+            raise ValueError("Adaptive requires the four fixed operator settings")
+        if recipes["adaptive"]["sharpness_min"] > recipes["adaptive"]["sharpness_below"]:
+            raise ValueError("Adaptive sharpness bounds are reversed")
 
 
-def process(image, treatment, config):
+def apply_recipe(image, variant, recipes):
+    """Offline filtering only; same pixel coordinates, BGR uint8, no source mutation."""
     validate_image(image)
-    scores = quality(image) if treatment == "adaptive" else None
-    if treatment == "adaptive":
-        chosen = route(scores, config["operators"], config["policy"])
-    elif treatment == "raw":
-        chosen = []
+    settings = recipes[variant]
+    scores = quality(image)
+    if variant == "adaptive":
+        wanted = {
+            "gamma": scores["brightness"] < settings["brightness_below"],
+            "clahe": scores["contrast"] < settings["contrast_below"],
+            "denoise": scores["noise"] > settings["noise_above"],
+            "sharpen": (
+                settings["sharpness_min"] <= scores["sharpness"] < settings["sharpness_below"]
+                and scores["noise"] <= settings["noise_above"]
+            ),
+        }
+        chosen = [name for name, enabled in wanted.items() if enabled][: settings["max_filters"]]
+        output = image
+        for name in chosen:
+            output, _, _ = apply_recipe(output, name, recipes)
+        return output, [{"name": n, "params": recipes[n]} for n in chosen], scores
+    if variant == "raw":
+        return image, [], scores
+    if variant == "gamma":
+        output = gamma(image, **settings)
+    elif variant == "clahe":
+        output = clahe(image, **settings)
+    elif variant == "denoise":
+        output = denoise(image, **settings)
+    elif variant == "sharpen":
+        output = sharpen(image, **settings)
     else:
-        chosen = [op for op in config["operators"] if op["enabled"] and op["name"] == treatment]
-        if not chosen:
-            raise ValueError(f"Unknown or disabled treatment: {treatment}")
-    output = image
-    for op in chosen:
-        output = REGISTRY[op["name"]][0](output, **op["params"])
-    return output, scores, [{"name": op["name"], "params": op["params"]} for op in chosen]
-
-
-def stress(image, condition, parameters, seed, sample_id):
-    validate_image(image)
-    if condition == "clean":
-        return image.copy()
-    if condition == "dark":
-        result = image.astype(np.float32) * parameters["dark_factor"]
-    elif condition == "blur":
-        result = cv2.GaussianBlur(image, (0, 0), parameters["blur_sigma"])
-    elif condition == "noise":
-        paired_seed = int(digest([seed, sample_id, condition])[:16], 16)
-        rng = np.random.default_rng(paired_seed)
-        result = image.astype(np.float32) + rng.normal(0, parameters["noise_sigma"], image.shape)
-    elif condition == "haze":
-        alpha = parameters["haze_alpha"]
-        result = image.astype(np.float32) * (1 - alpha) + 255 * alpha
-    else:
-        raise ValueError(f"Unknown synthetic condition: {condition}")
-    return np.clip(result, 0, 255).astype(np.uint8)
+        raise ValueError(f"Unknown recipe: {variant}")
+    return output, [{"name": variant, "params": settings}], scores

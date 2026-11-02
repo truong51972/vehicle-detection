@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "vehicle-detection"
 version = "0.1.0"
-description = "Reproducible BDD100K adaptive preprocessing experiments"
+description = "Notebook-first BDD100K offline preprocessing and YOLO study"
 requires-python = ">=3.11"
 dependencies = [
   "numpy>=2.0,<3",
@@ -13,13 +13,15 @@ dependencies = [
   "PyYAML>=6,<7",
   "matplotlib>=3.9,<4",
   "ijson>=3.3,<4",
+  "pandas>=2.2,<3",
 ]
 
 [project.optional-dependencies]
-detector = ["ultralytics>=8.3,<9", "torch>=2.4,<3", "torchvision>=0.19,<1"]
-
-[project.scripts]
-vd = "vehicle_detection.cli:main"
+study = [
+  "bdd100k==1.0.1", "scalabel==0.3.1", "pydantic>=1.10,<2",
+  "ultralytics==8.4.198", "torch>=2.4,<3", "torchvision>=0.19,<1",
+  "nbformat>=5.10,<6", "nbclient>=0.10,<1", "ipykernel>=6,<8", "jupyterlab>=4,<5",
+]
 
 [dependency-groups]
 dev = ["pytest>=8,<10", "ruff>=0.9,<1"]
@@ -37,4 +39,7 @@ select = ["E", "F", "I", "B", "UP"]
 packages = ["src/vehicle_detection"]
 
 [tool.hatch.build.targets.sdist]
-only-include = ["src", "tests", "scripts", "README.md", "data/README.md", "pyproject.toml", "uv.lock", ".github"]
+only-include = ["src", "tests", "notebooks", "README.md", "data/README.md", "pyproject.toml", "uv.lock", ".github"]
+
+[tool.ruff.lint.per-file-ignores]
+"notebooks/*.ipynb" = ["E402"]

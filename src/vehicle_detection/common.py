@@ -1,11 +1,8 @@
-"""Small file/provenance utilities shared by commands."""
+"""File utilities for the two study notebooks."""
 
 import hashlib
-import importlib.metadata
 import json
 import os
-import platform
-import sys
 from pathlib import Path
 
 import cv2
@@ -40,46 +37,3 @@ def read_image(path):
     if image is None or image.size == 0:
         raise ValueError(f"Unreadable/empty image: {path}")
     return image
-
-
-def environment():
-    versions = {}
-    for name in (
-        "vehicle-detection",
-        "numpy",
-        "opencv-python",
-        "ijson",
-        "PyYAML",
-        "matplotlib",
-        "ultralytics",
-        "torch",
-        "torchvision",
-    ):
-        try:
-            versions[name] = importlib.metadata.version(name)
-        except importlib.metadata.PackageNotFoundError:
-            pass
-    source = Path(__file__).parent
-    processor = platform.processor()
-    cpuinfo = Path("/proc/cpuinfo")
-    if not processor and cpuinfo.is_file():
-        processor = next(
-            (
-                line.split(":", 1)[1].strip()
-                for line in cpuinfo.read_text().splitlines()
-                if line.startswith("model name")
-            ),
-            "unknown",
-        )
-    return {
-        "python": sys.version,
-        "platform": platform.platform(),
-        "processor": processor,
-        "cpu_count": os.cpu_count(),
-        "opencv_version": cv2.__version__,
-        "opencv_threads": cv2.getNumThreads(),
-        "versions": versions,
-        "source_hash": digest(
-            {str(p.relative_to(source)): file_hash(p) for p in sorted(source.rglob("*.py"))}
-        ),
-    }

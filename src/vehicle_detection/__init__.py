@@ -1,3 +1,1 @@
-"""BDD100K vehicle detection experiments."""
-
-__version__ = "0.1.0"
+"""Small helpers for the BDD100K study notebooks."""
