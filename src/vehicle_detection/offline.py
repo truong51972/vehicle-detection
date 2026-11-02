@@ -56,6 +56,13 @@ def export_variant(
             raise ValueError("Export directory overlaps source data")
         if file_hash(source) != r["sha256"]:
             raise ValueError(f"Source image changed: {source}")
+        if original and source.suffix.lower() in {".jpg", ".jpeg"}:
+            with source.open("rb") as stream:
+                stream.seek(-2, 2)
+                if stream.read() != b"\xff\xd9":
+                    raise ValueError(
+                        f"Invalid JPEG end marker; native YOLO would re-encode: {source}"
+                    )
     labels = {r["id"]: file_hash(converted / "labels" / s / f"{r['id']}.txt") for s, r in records}
     identity = {
         "variant": variant,
@@ -99,7 +106,8 @@ def export_variant(
             old = completed.get(r["id"])
             label_source = converted / "labels" / split / label.name
             # Never follow an unexpected image symlink when repairing a generated file.
-            if target.is_symlink() and (not original or target.resolve() != source):
+            # Owned raw links store absolute validated sources; read the link without retraversal.
+            if target.is_symlink() and (not original or target.readlink() != source):
                 raise ValueError(f"Unsafe export symlink: {target}")
             if label.is_symlink():
                 raise ValueError(f"Unexpected label symlink: {label}")

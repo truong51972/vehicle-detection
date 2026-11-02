@@ -36,6 +36,8 @@ No fractional training or pilot limit is used in full mode.
 `RESUME=True` uses native `YOLO(last.pt).train(resume=True)` after interruption.
 Completed runs, including native early stopping, verify/reuse best and last hashes.
 Changes to settings, versions or dataset identity require a fresh experiment root.
+Resume also verifies saved checkpoint arguments, output/data paths and epoch history;
+a mismatched checkpoint/CSV pair fails before any training is overwritten.
 Native resume restores optimizer/scheduler state from the last saved epoch; an
 interrupted partial epoch can be repeated. Avoid running two notebook writers or
 trainers against the same root. A completed run is not resumed for extra epochs;
@@ -147,7 +149,9 @@ Artifacts stay under `runs/phase2-full/`, outside Git:
 
 Preparation verifies source hashes and deeply decodes/hashes selected exports.
 Training startup uses manifest fingerprints, class/split/file inventories and a
-verified identity. Treat exports as immutable. `DEEP_VERIFY_EXPORTS=True` detects
+verified identity. Raw JPEGs must have valid end markers so native validation cannot silently
+re-encode them. Training asserts that native loaders retain every selected image.
+Treat exports as immutable. `DEEP_VERIFY_EXPORTS=True` detects
 arbitrary existing-image/label edits; cheap inventory checks detect missing files.
 Rerunning preparation verifies/reuses outputs and repairs generated files. Unexpected
 symlinks and changed settings are rejected. Use only one exporter per directory.

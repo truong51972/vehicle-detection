@@ -230,6 +230,21 @@ def test_export_restart_integrity_and_recipe_isolation(bdd, tmp_path, recipes):
         export_variant(partitions, converted, roots[0], "raw_original", recipes)
 
 
+def test_raw_rejects_jpeg_that_native_validation_would_reencode(bdd, tmp_path, recipes):
+    records, _, _ = scan_bdd(bdd)
+    partitions = choose_splits(records, 42, {"train": 3, "tune": 2, "test": 2})
+    record = partitions["train"][0]
+    source = Path(record["path"])
+    damaged = source.read_bytes()[:-2]
+    source.write_bytes(damaged)
+    record["sha256"] = file_hash(source)
+    output = tmp_path / "raw_original"
+    with pytest.raises(ValueError, match="JPEG end marker"):
+        export_variant(partitions, tmp_path / "conversion", output, "raw_original", recipes)
+    assert source.read_bytes() == damaged
+    assert not output.exists()
+
+
 def test_export_never_writes_through_source_symlink(bdd, tmp_path, recipes):
     records, _, _ = scan_bdd(bdd)
     partitions = choose_splits(records, 42, {"train": 3, "tune": 2, "test": 2})
