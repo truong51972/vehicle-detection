@@ -218,3 +218,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local experiments, checkpoints, exports and preprocessed caches
+/runs/
+/weights/
+*.pt
+*.onnx
+*.engine
+/processed/
+/cache/
