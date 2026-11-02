@@ -1,0 +1,9 @@
+data:
+  train_limit: null
+  tune_limit: null
+  holdout_limit: null
+  quality_samples: 1000
+training:
+  epochs: 50
+benchmark:
+  conditions: [clean, dark, blur, noise, haze]
