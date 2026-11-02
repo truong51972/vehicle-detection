@@ -49,9 +49,7 @@ def verify(output):
     require(all(partitions[split] for split in ("train", "tune", "holdout")), "Empty partition")
     require(
         all(
-            r["official_split"] == "train"
-            for split in ("train", "tune")
-            for r in partitions[split]
+            r["official_split"] == "train" for split in ("train", "tune") for r in partitions[split]
         ),
         "Training/tuning contains nontrain examples",
     )
@@ -91,8 +89,11 @@ def verify(output):
         for sample_id in sample_ids:
             record = read_json(
                 artifact(
-                    output / "benchmark/records" / row["condition"]
-                    / row["treatment"] / f"{sample_id}.json"
+                    output
+                    / "benchmark/records"
+                    / row["condition"]
+                    / row["treatment"]
+                    / f"{sample_id}.json"
                 )
             )
             require(record["id"] == sample_id, f"Unpaired prediction for {sample_id}")
@@ -112,8 +113,13 @@ def verify(output):
             {
                 k: r[k]
                 for k in (
-                    "condition", "treatment", "map50", "map50_95",
-                    "precision", "recall", "delta_map50_95",
+                    "condition",
+                    "treatment",
+                    "map50",
+                    "map50_95",
+                    "precision",
+                    "recall",
+                    "delta_map50_95",
                 )
             }
             for r in results["overall"]
@@ -147,12 +153,26 @@ def main():
         if args.device.isdigit():
             require(torch.cuda.is_available(), "CUDA unavailable; specify --device cpu")
         cmd = [
-            sys.executable, "-m", "vehicle_detection.cli", "run",
-            "--preset", "pilot",
-            "--data", str(args.data.resolve()), "--out", str(output),
-            "--device", args.device, "--model", args.model,
-            "--epochs", str(args.epochs), "--batch", str(args.batch),
-            "--imgsz", str(args.imgsz),
+            sys.executable,
+            "-m",
+            "vehicle_detection.cli",
+            "run",
+            "--preset",
+            "pilot",
+            "--data",
+            str(args.data.resolve()),
+            "--out",
+            str(output),
+            "--device",
+            args.device,
+            "--model",
+            args.model,
+            "--epochs",
+            str(args.epochs),
+            "--batch",
+            str(args.batch),
+            "--imgsz",
+            str(args.imgsz),
         ]
         print("Executing unmocked BDD100K training and evaluation:", " ".join(cmd), flush=True)
         subprocess.run(cmd, check=True)
