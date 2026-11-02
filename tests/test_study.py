@@ -177,6 +177,14 @@ def test_native_conversion_six_classes_and_geometry(bdd, tmp_path):
 def test_export_restart_integrity_and_recipe_isolation(bdd, tmp_path, recipes):
     records, _, _ = scan_bdd(bdd)
     partitions = choose_splits(records, 42, {"train": 3, "tune": 2, "test": 2})
+    source_file = tmp_path / "source_link.jpg"
+    source_file.symlink_to(partitions["train"][0]["path"])
+    partitions["train"][0]["path"] = str(source_file)
+    source_directory = tmp_path / "source_directory"
+    source_directory.symlink_to(
+        Path(partitions["tune"][0]["path"]).parent, target_is_directory=True
+    )
+    partitions["tune"][0]["path"] = str(source_directory / Path(partitions["tune"][0]["path"]).name)
     converted = tmp_path / "converted"
     write_json(converted / "conversion.json", {"classes": CLASSES, "test": "fixture labels only"})
     for split, rows in partitions.items():

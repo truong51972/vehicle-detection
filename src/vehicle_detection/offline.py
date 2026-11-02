@@ -43,8 +43,15 @@ def export_variant(
         encoding = {**encoding, "format": "original", "jpeg_quality": None}
     destination, converted = Path(destination).resolve(), Path(converted).resolve()
     records = [(split, r) for split, rows in partitions.items() for r in rows]
+    source_paths, parents = {}, {}
     for _, r in records:
-        source = Path(r["path"]).resolve()
+        path = Path(r["path"])
+        if path.parent not in parents:
+            parents[path.parent] = path.parent.resolve()
+        source = parents[path.parent] / path.name
+        if source.is_symlink():
+            source = source.resolve()
+        source_paths[r["id"]] = source
         if destination == source or destination in source.parents or source in destination.parents:
             raise ValueError("Export directory overlaps source data")
         if file_hash(source) != r["sha256"]:
@@ -85,7 +92,7 @@ def export_variant(
     result = []
     with journal.open("a") as log:
         for split, r in records:
-            source = Path(r["path"]).resolve()
+            source = source_paths[r["id"]]
             suffix = source.suffix if original else f".{output_format}"
             target = destination / "images" / split / f"{r['id']}{suffix}"
             label = destination / "labels" / split / f"{r['id']}.txt"

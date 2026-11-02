@@ -19,7 +19,9 @@ No Phase 1 pilot metric or fabricated result is used as a Phase 2 baseline.
 
 Hardware availability was verified with `/usr/lib/wsl/lib/nvidia-smi` and PyTorch:
 NVIDIA GeForce RTX 5060 Ti, 16,311 MiB; Python 3.11.14, torch 2.15.0+cu132,
-CUDA runtime 13.2. A live GPU process alone is not proof of completed training.
+CUDA runtime 13.2; NVIDIA driver 620.67.01 / Windows KMD 621.01.
+CPU: Intel Core i5-14600KF, 20 logical CPUs; WSL source data/artifacts on mounted D:.
+A live GPU process alone is not proof of completed training.
 
 ## Actual execution
 
@@ -39,8 +41,11 @@ and 96 previously exposed Phase 1 test IDs are excluded. No holdout image was de
 Selection identity:
 `d8f6086b184e1460ee375d80246b6c9ca4127339777767bcf32803af30d54d27`.
 
-Official conversion is running, including exhaustive selected-box roundtrips.
-Raw export and GPU training follow automatically in the sequential notebook run.
+Official BDD100K/Scalabel → COCO → Ultralytics YOLO conversion and exhaustive
+selected-box checks completed at **2026-11-02 17:02 UTC**, with 0.01-pixel tolerance,
+all six classes, continuous-coordinate adaptation and valid empty negative labels.
+Raw-original export/deep verification is now running; GPU training follows in the
+sequential notebook run.
 No training metric has been measured yet.
 
 Initial pretrained weights SHA256:
@@ -80,3 +85,7 @@ git diff --check                   # passed
 
 These checks do not establish GPU training completion. Phase 1 execution remains
 available in the merged PR; the two working notebooks now record Phase 2 only.
+
+The initial draft PR commit `1eb1d41` also passed GitHub Actions
+[tests run 19](https://github.com/truong51972/vehicle-detection/actions/runs/41486183058).
+Issue #1 was independently confirmed open after PR creation.
