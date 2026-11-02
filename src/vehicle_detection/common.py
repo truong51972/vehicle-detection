@@ -37,3 +37,22 @@ def read_image(path):
     if image is None or image.size == 0:
         raise ValueError(f"Unreadable/empty image: {path}")
     return image
+
+
+def reuse_evaluation(path, identity, *, force=False):
+    """Read a completed native-val summary only when its inputs and saved plots still match."""
+    path = Path(path)
+    if force or not path.exists():
+        return None
+    cached = read_json(path)
+    result = cached["result"]
+    if cached["identity"] != identity or cached["checksum"] != digest(result):
+        raise ValueError(
+            "Evaluation cache identity/checksum changed; force reevaluation or use a new root"
+        )
+    for name, expected in result["artifacts"].items():
+        if Path(name).name != name or not (path.parent / name).is_file():
+            raise ValueError("Missing evaluation artifact; force reevaluation")
+        if file_hash(path.parent / name) != expected:
+            raise ValueError("Evaluation artifact changed; force reevaluation")
+    return result

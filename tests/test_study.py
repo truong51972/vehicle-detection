@@ -147,18 +147,20 @@ def test_export_restart_integrity_and_recipe_isolation(bdd, tmp_path, recipes):
             path = converted / "labels" / split / f"{r['id']}.txt"
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text("0 0.4 0.4 0.2 0.2\n")
-    roots = [tmp_path / "export" / v for v in ("raw", "gamma")]
-    for variant, root in zip(("raw", "gamma"), roots, strict=True):
+    roots = [tmp_path / "export" / v for v in ("raw_original", "gamma")]
+    for variant, root in zip(("raw_original", "gamma"), roots, strict=True):
         first = export_variant(partitions, converted, root, variant, recipes)
         assert not first.reused.any()
         second = export_variant(partitions, converted, root, variant, recipes)
         assert second.reused.all()
-        assert all(Path(p).is_symlink() for p in second.image) if variant == "raw" else True
+        assert (
+            all(Path(p).is_symlink() for p in second.image) if variant == "raw_original" else True
+        )
     assert verify_alignment(roots) == 6
     journal = roots[0] / "metadata.jsonl"
     with journal.open("ab") as stream:
         stream.write(b'{"id":"interrupted')
-    assert export_variant(partitions, converted, roots[0], "raw", recipes).reused.all()
+    assert export_variant(partitions, converted, roots[0], "raw_original", recipes).reused.all()
     assert journal.read_bytes().endswith(b"\n")
     image = Path(first.iloc[0].image)
     image.write_bytes(b"broken generated image")
@@ -180,7 +182,7 @@ def test_export_restart_integrity_and_recipe_isolation(bdd, tmp_path, recipes):
     source = Path(partitions["train"][0]["path"])
     source.write_bytes(b"changed source")
     with pytest.raises(ValueError, match="Source image changed"):
-        export_variant(partitions, converted, roots[0], "raw", recipes)
+        export_variant(partitions, converted, roots[0], "raw_original", recipes)
 
 
 def test_export_never_writes_through_source_symlink(bdd, tmp_path, recipes):
@@ -204,7 +206,104 @@ def test_export_never_writes_through_source_symlink(bdd, tmp_path, recipes):
         export_variant(partitions, converted, root, "gamma", recipes)
     assert file_hash(source) == original
     target.unlink()
-    temporary = target.with_suffix(".tmp.png")
+    temporary = target.with_suffix(".tmp.jpg")
     temporary.symlink_to(source)
     export_variant(partitions, converted, root, "gamma", recipes)
     assert not temporary.exists() and file_hash(source) == original
+
+
+def test_jpeg_control_format_quality_and_light_verification(bdd, tmp_path, recipes, monkeypatch):
+    from vehicle_detection import offline
+    from vehicle_detection.common import read_image, read_json
+
+    records, _, _ = scan_bdd(bdd)
+    partitions = choose_splits(records, 42, {"train": 3, "tune": 2, "test": 2})
+    converted = tmp_path / "converted"
+    write_json(converted / "conversion.json", {"classes": CLASSES})
+    for split, rows in partitions.items():
+        for r in rows:
+            label = converted / "labels" / split / f"{r['id']}.txt"
+            label.parent.mkdir(parents=True, exist_ok=True)
+            label.write_text("0 .4 .4 .2 .2\n")
+    variants = ["raw_original", "raw_reencoded", "gamma"]
+    roots = [tmp_path / v for v in variants]
+    tables = [
+        export_variant(partitions, converted, p, v, recipes)
+        for p, v in zip(roots, variants, strict=True)
+    ]
+    for v, table in zip(variants, tables, strict=True):
+        image = Path(table.iloc[0].image)
+        source = Path(table.iloc[0].source)
+        assert image.suffix == ".jpg"
+        assert read_image(image).shape == read_image(source).shape
+        if v == "raw_original":
+            assert image.is_symlink() and file_hash(image) == file_hash(source)
+        if v == "raw_reencoded":
+            ok, expected = cv2.imencode(".jpg", read_image(source), [cv2.IMWRITE_JPEG_QUALITY, 95])
+            assert ok and image.read_bytes() == expected.tobytes()
+            assert table.iloc[0].decisions == []
+    assert verify_alignment(roots) == 6
+    assert verify_alignment(roots, deep=False) == 6
+    for root in roots:
+        assert export_variant(partitions, converted, root, root.name, recipes).reused.all()
+    assert verify_alignment(roots) == 6
+    for settings in [{"jpeg_quality": 80}, {"output_format": "png"}]:
+        with pytest.raises(ValueError, match="changed"):
+            export_variant(partitions, converted, roots[2], "gamma", recipes, **settings)
+    png = export_variant(
+        partitions, converted, tmp_path / "png", "gamma", recipes, output_format="png"
+    )
+    assert Path(png.iloc[0].image).suffix == ".png"
+    assert read_json(tmp_path / "png/export.json")["encoding"]["format"] == "png"
+    original_hash = file_hash
+
+    def only_manifests(path):
+        assert Path(path).suffix in {".json", ".csv"}, "light verification read dataset bytes"
+        return original_hash(path)
+
+    monkeypatch.setattr(offline, "file_hash", only_manifests)
+    monkeypatch.setattr(
+        offline, "read_image", lambda p: pytest.fail("light verification decoded an image")
+    )
+    assert verify_alignment(roots, deep=False) == 6
+    identity = read_json(roots[2] / "export.json")
+    altered = copy.deepcopy(identity)
+    altered["encoding"]["jpeg_quality"] = 80
+    write_json(roots[2] / "export.json", altered)
+    with pytest.raises(ValueError, match="identity changed"):
+        verify_alignment(roots, deep=False)
+    write_json(roots[2] / "export.json", identity)
+    Path(tables[2].iloc[0].image).unlink()
+    with pytest.raises(ValueError, match="ID mismatch"):
+        verify_alignment(roots, deep=False)
+    # Original links must fail the cheap check when their source disappears, too.
+    Path(tables[0].iloc[0].source).unlink()
+    with pytest.raises(ValueError, match="Missing exported image/label"):
+        verify_alignment([roots[0]], deep=False)
+
+
+def test_audit_and_disk_preflight(bdd, recipes):
+    from vehicle_detection.data import audit_dataset
+    from vehicle_detection.offline import estimate_disk
+
+    records, _, _ = scan_bdd(bdd)
+    assert audit_dataset(records)["error_count"] == 0
+    bad = copy.deepcopy(records)
+    bad[0]["labels"].extend(
+        [
+            {"box2d": {"x1": 0, "y1": 0, "x2": 100, "y2": 20}},
+            {"box2d": {"x1": 5, "y1": 0, "x2": 1, "y2": 20}},
+            {"box2d": {"x1": 0, "y1": 0, "x2": float("nan"), "y2": 20}},
+            {"box2d": {}},
+        ]
+    )
+    bad[1]["path"] = "missing.jpg"
+    result = audit_dataset(bad)
+    assert result["error_count"] == 5
+    assert result["errors"]["out_of_bounds_box"] == 1
+    assert result["examples"]["out_of_bounds_box"] == [bad[0]["id"]]
+    assert bad[0]["labels"][-4]["box2d"]["x2"] == 100
+    estimates = estimate_disk(records[:2], 100, ["raw_original", "raw_reencoded", "gamma"], recipes)
+    assert estimates.loc[estimates.variant == "raw_original", "estimated_GiB"].item() == 0
+    assert (estimates.loc[estimates.variant != "raw_original", "estimated_GiB"] > 0).all()
+    assert estimates.sample_images.tolist() == [2, 2, 2]

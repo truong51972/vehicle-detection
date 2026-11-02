@@ -14,6 +14,7 @@ dependencies = [
   "matplotlib>=3.9,<4",
   "ijson>=3.3,<4",
   "pandas>=2.2,<3",
+  "Pillow>=10,<14",
 ]
 
 [project.optional-dependencies]
@@ -39,7 +40,7 @@ select = ["E", "F", "I", "B", "UP"]
 packages = ["src/vehicle_detection"]
 
 [tool.hatch.build.targets.sdist]
-only-include = ["src", "tests", "notebooks", "README.md", "data/README.md", "pyproject.toml", "uv.lock", ".github"]
+only-include = ["src", "tests", "notebooks", "docs", "README.md", "data/README.md", "pyproject.toml", "uv.lock", ".github"]
 
 [tool.ruff.lint.per-file-ignores]
 "notebooks/*.ipynb" = ["E402"]

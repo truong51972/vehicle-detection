@@ -7,6 +7,7 @@ from pathlib import Path
 
 import ijson
 import numpy as np
+from PIL import Image
 
 from .common import file_hash, read_image, read_json, write_json
 
@@ -27,7 +28,7 @@ def scan_bdd(root):
                 if key in paths:
                     raise ValueError(f"Ambiguous image: {key}")
                 paths[key] = str(path)
-    records, audit, sources, seen = [], Counter(), {}, set()
+    records, audit, sources, seen, missing_examples = [], Counter(), {}, set(), []
     for split in ("train", "val"):
         candidates = [
             p
@@ -55,6 +56,8 @@ def scan_bdd(root):
                 seen.add(sample_id)
                 if (split, name) not in paths:
                     audit[f"missing_images:{split}"] += 1
+                    if len(missing_examples) < 10:
+                        missing_examples.append(sample_id)
                     continue
                 labels = []
                 for label in frame["labels"]:
@@ -82,7 +85,11 @@ def scan_bdd(root):
         for split in ("train", "val")
     ):
         raise ValueError("Both official splits require usable detection box2d annotations")
-    return sorted(records, key=lambda r: r["id"]), dict(audit), sources
+    return (
+        sorted(records, key=lambda r: r["id"]),
+        {**dict(audit), "missing_image_examples": missing_examples},
+        sources,
+    )
 
 
 def choose_splits(records, seed, limits, excluded_test_ids=(), tune_fraction=0.2):
@@ -232,3 +239,59 @@ def convert_labels(partitions, output, convention="continuous"):
         },
     )
     return read_json(output / "conversion.json")
+
+
+def audit_dataset(records, convention="continuous"):
+    """Audit every supplied annotation against image headers without decoding all image pixels."""
+    if convention not in {"continuous", "inclusive"}:
+        raise ValueError("Unknown coordinate convention")
+    counts, errors, examples, owners, ids = Counter(), Counter(), {}, {}, set()
+
+    def error(reason, sample_id):
+        errors[reason] += 1
+        bucket = examples.setdefault(reason, [])
+        if sample_id not in bucket and len(bucket) < 10:
+            bucket.append(sample_id)
+
+    for r in records:
+        counts["images"] += 1
+        counts["boxes"] += len(r["labels"])
+        if r["id"] in ids:
+            error("duplicate_id", r["id"])
+        ids.add(r["id"])
+        previous = owners.setdefault(r["group"], r["official_split"])
+        if previous != r["official_split"]:
+            error("cross_split_group", r["id"])
+        try:
+            with Image.open(r["path"]) as image:
+                width, height = image.size
+                if min(width, height) < 2:
+                    raise ValueError("Invalid image size")
+            counts["readable_headers"] += 1
+        except (OSError, ValueError):
+            error("missing_or_invalid_image_header", r["id"])
+            continue
+        for label in r["labels"]:
+            try:
+                x1, y1, x2, y2 = [float(label["box2d"][k]) for k in ("x1", "y1", "x2", "y2")]
+            except (KeyError, TypeError, ValueError, OverflowError):
+                error("malformed_box", r["id"])
+                continue
+            x2 += convention == "inclusive"
+            y2 += convention == "inclusive"
+            if not np.isfinite([x1, y1, x2, y2]).all():
+                error("nonfinite_box", r["id"])
+            elif x1 >= x2 or y1 >= y2:
+                error("reversed_or_empty_box", r["id"])
+            elif not (0 <= x1 < x2 <= width and 0 <= y1 < y2 <= height):
+                error("out_of_bounds_box", r["id"])
+            else:
+                counts["valid_boxes"] += 1
+    return {
+        "counts": dict(counts),
+        "errors": dict(errors),
+        "examples": examples,
+        "error_count": sum(errors.values()),
+        "box_convention": convention,
+        "scope": "all supplied boxes and image headers; no full-pixel decode or content hashes",
+    }

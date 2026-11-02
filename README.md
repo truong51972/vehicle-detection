@@ -25,12 +25,19 @@ Select this project's `.venv` Python kernel and execute in order:
    `YOLO.train()`/checkpoint resume and `YOLO.val()` comparisons, inline loss curves,
    confusion matrix/PR plots, native metrics, timing and diagnostic failure examples.
 
-Both notebooks have a configuration cell near the top. The default pilot selects
-64 train / 16 tune / 16 test images and materializes **raw and gamma**. Recipes for
-CLAHE, denoise, sharpen and a bounded adaptive filter/skip policy are also available.
-Choose enabled variants before export. `MODE='full'` uses all eligible images;
-processed PNG variants can consume substantial disk space. Full-study execution is
-not implied by successful pilot cells.
+Both notebooks have a configuration cell near the top. The default Phase 1 pilot
+selects **64 train / 16 tune / 16 test** images and trains for **3 epochs**. It exports
+three aligned variants: `raw_original` (untouched source links), `raw_reencoded`
+(JPEG95-only compression control), and `gamma` (gamma 0.65 + the same JPEG95 encoder).
+`OUTPUT_FORMAT='jpg'`, `JPEG_QUALITY=95` are explicit; PNG is an optional setting
+requiring a fresh output root. Recipes for CLAHE, denoise, sharpen and a bounded
+adaptive filter/skip policy are available but have not been trained in this pilot.
+
+Phase 1 is complete when both notebooks, official conversion, offline exports,
+actual pilot fine-tuning, native evaluation and checkpoint reuse are verified.
+Full training and robustness research belong to [Phase 2](docs/PHASES.md), tracked
+under [Issue #1](https://github.com/truong51972/vehicle-detection/issues/1), which
+remains open. Successful pilot cells do not establish research-grade results.
 
 For unattended execution, without a web server:
 
@@ -104,21 +111,23 @@ presented later as untouched research holdout. Calibrate recipes and select mode
 on train-derived **tune**, freeze choices, then evaluate a fresh final test set.
 Never retune on test results.
 
-Artifacts stay under `runs/notebook-pilot/` (or the configured root):
+Artifacts stay under `runs/phase1-pilot/` (or the configured root):
 
 - `selection.json`, `conversion/`: selected IDs/input hashes, source subsets, official
   COCO annotations, native YOLO labels and conversion/version checks.
-- `datasets/<variant>/`: raw source links or lossless processed PNGs, identical labels,
+- `datasets/<variant>/`: original source links or generated JPEG95 images, identical labels,
   per-variant `data.yaml`, export identity, compact metadata JSONL/CSV with parameters,
-  quality scores, decisions, source/output hashes and preparation cost.
+  quality scores, decisions, source/output hashes, preparation cost and a verified manifest.
+- `preflight.json`, `disk_estimate.csv`: annotation/header audit and sampled disk budget.
 - `preparation_cost.csv`, `metadata.csv`: separate offline cost and compact inventory.
 - `experiments/<study>/<variant>/`: independent native YOLO best/last checkpoints,
   arguments, results/loss curves and a small config/hash record.
-- `experiments/<study>/evaluation/`: native evaluation plots for each trained/evaluated
-  pair; `results.csv`, `results.json`, `per_class_AP.csv`, `validation.json` summarize it.
+- `experiments/<study>/evaluation/`: native evaluation plots and verified
+  `native_result.json` cache for each trained/evaluated pair; `results.csv`,
+  `results.json`, `per_class_AP.csv`, `validation.json` summarize it.
 
 Rerun notebook 1 to hash-verify/skip completed exports and repair missing/corrupt
-**generated** files. Changed recipes/inputs are rejected; choose a fresh output root.
+**generated** files. Changed recipes/inputs/encoding are rejected; choose a fresh output root.
 Unexpected symlinks are rejected before repairs, and source images stay untouched.
 Use one exporter per output directory. A partial final metadata append is discarded
 and that image is recomputed. All earlier complete entries are retained.
@@ -128,10 +137,32 @@ interrupted training uses **native `YOLO(last.pt).train(resume=True)`**. Changed
 settings/dataset identity require a new experiment root. Checkpoint hashes prevent
 silently substituting another completed run. No fake detector is used in notebooks.
 
+Notebook 2 defaults to inexpensive manifest/export fingerprints, split/class mapping
+and image/label ID inventories. It does not hash or decode every image on entry.
+Treat verified exports as immutable: use `DEEP_VERIFY_EXPORTS=True` or rerun notebook
+1 after possible file-content changes. Cheap inventory checks detect missing files;
+only deep verification detects arbitrary changes to existing image/label bytes.
+
+Completed native evaluation pairs are reused only when dataset/selection identities,
+checkpoint hashes, validation settings, software versions, hardware and saved plot
+hashes match. `FORCE_REEVALUATE=True` reruns them; incompatible results otherwise
+fail clearly. Cached speed is the original measurement, not new timing.
+
+Before full export, notebook 1 audits all supplied vehicle boxes against actual
+image headers, counts missing images/invalid geometry and shows representative IDs.
+Full mode stops on errors without clipping boxes. Pilot mode audits a seeded
+128-image sample. A seeded 16-image train sample is actually encoded with each
+selected recipe to estimate extra image storage; original links add no copied-image
+bytes. The full-mode free-space gate uses a p90 budget plus 10% headroom. Estimates
+exclude labels, caches, weights and training artifacts and are approximate. Header
+checks do not replace selected-image deep decoding or full content-leakage checks.
+
 ## Interpretation
 
-Notebook 2 separates frozen raw-checkpoint evaluation on raw/processed images
-from separately trained raw/processed checkpoints on a common raw test set. All
+Notebook 2 separates a frozen `raw_original` checkpoint across input variants
+from separately trained checkpoints on the common `raw_reencoded` test set. Gamma
+comparisons use the same-encoding raw control; original-to-control differences
+measure recompression effects and must not be attributed to gamma. All
 metrics and speed fields come directly from `model.val()`. Per-class AP includes
 only classes actually evaluated (`ap_class_index`); absent-class values remain missing.
 Rare-class support, confusion matrices, PR curves and example failures matter.
@@ -166,23 +197,38 @@ Notebook smoke checks validate syntax and saved execution/visual outputs without
 running real data or GPU training in CI.
 
 **Executed locally, 2 November 2026:** both notebooks completed on real BDD2018 data,
-with Python 3.11.14 / PyTorch 2.15.0+cu132 / CUDA 13.2 on an RTX 5060 Ti. The pilot
-exported raw and gamma datasets with 64 train / 16 tune / 16 test images per variant,
-verified every selected converted box, and separately fine-tuned both models for
-3 epochs (batch 8, imgsz 640, seed 2026) from the same pretrained checkpoint.
-Four native evaluation pairs completed; inline tables/curves/matrices/examples are
-saved in the notebooks. Both notebooks then completed a clean fresh-kernel rerun
-(66.1 s and 41.4 s); all exports were verified/reused and all four best/last checkpoint
-hashes **and modification times remained unchanged**. This verifies completed-output
-reuse; an intentionally interrupted native training resume was not exercised.
+with Python 3.11.14 / PyTorch 2.15.0+cu132 / CUDA 13.2 / Ultralytics 8.4.198 /
+OpenCV 4.14.0 on an RTX 5060 Ti. All three variants contain 64 train / 16 tune /
+16 test images, with checked conversion geometry, matching labels and shapes.
+Three models separately fine-tuned for 3 epochs (batch 8, imgsz 640, seed 2026)
+from the same pretrained weights; all nine native evaluation pairs completed.
+Executed notebooks contain original/control/gamma overlays and sizes, loss curves,
+confusion/PR plots, native AP, controlled comparisons and diagnostic examples.
 
-The current study-extra checks pass **13 tests**. A fresh core-only environment passes
-**12 tests with the optional native-converter integration test skipped**. Builds and
-lint/format checks pass. Full-size export/training/evaluation, real 2020 annotations,
-additional materialized recipes, mixed training, calibration and multi-seed uncertainty
-studies have **not** run. These new native scores use a different 16-image pilot subset
-and evaluator and must not be compared numerically with the superseded CLI scores.
-Data, variants, weights and full training outputs remain gitignored.
+For the frozen original-raw checkpoint, native mAP50:95 was **0.397209** on original
+images, **0.373802** on JPEG95-only control and **0.346246** on gamma+JPEG95.
+On the common JPEG95-only test set, separately trained original/control/gamma models
+scored **0.373802 / 0.357840 / 0.373457**. These are integration-pilot observations,
+not evidence to select a recipe. The 96 original images occupy 5.25 MiB (links add
+zero copied-image bytes), JPEG95-only 11.25 MiB and gamma+JPEG95 12.38 MiB.
+JPEG95 can be larger than the lower-quality original JPEGs; the former gamma PNG
+pilot occupied 78.47 MiB and was superseded by this controlled JPEG run.
+
+A fresh-kernel rerun verifies all six best/last checkpoint hashes and modification
+times, all nine evaluation caches and native plots remain unchanged; aggregate
+native results are identical (notebook wall times **74.0 s / 26.5 s**).
+Completed-output reuse is verified; an intentional
+mid-training interruption has not been exercised. A separate read-only audit of
+**79,863 image headers / 875,024 vehicle boxes** found **zero errors**; this was
+not a full export, training run or pixel/content-hash audit.
+
+Study-extra checks pass **16 tests**; the core-only environment passes **15 with
+1 optional native-converter skip**. Lint, format, notebook smoke and builds pass.
+Full-size export/training/evaluation, real 2020 annotations, additional trained
+recipes, calibration, adverse-condition benchmarks and multi-seed uncertainty remain
+unrun; see the unchecked Phase 2 scope. Pilot scores must not be compared numerically
+with the superseded CLI/custom evaluator. Data, images, weights and full training
+outputs remain gitignored.
 
 References: [BDD toolkit](https://github.com/bdd100k/bdd100k),
 [BDD coordinate conventions](https://github.com/bdd100k/bdd100k/blob/master/doc/source/format.rst),
