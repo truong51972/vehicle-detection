@@ -47,7 +47,9 @@ are:
 
 The new notebook sequence lives in `notebooks/phase2/`. Notebook 01 handles the
 data contract; notebook 02 calibrates Adaptive and exports matched nested pilots;
-notebook 03 initially runs pretrained validation and will be extended with #7.
+notebook 03 retains pretrained validation and now prepares guarded paired S10
+partial fine-tuning. Its full S10 experiments remain pending; see the
+[issue #7 implementation record](ISSUE7_IMPLEMENTATION.md).
 No optimizer steps are part of #5 or #6.
 
 Official train supplies training pool, calibration and development validation.
