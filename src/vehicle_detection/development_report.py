@@ -36,7 +36,7 @@ def development_report(protocol, policy, checkpoints, directory, output, plan, *
     if any(s != settings[0] for s in settings):
         raise ValueError("Evaluation matrix settings differ")
     identity = {
-        "version": "development-analysis-v1",
+        "version": "development-analysis-v2",
         "evaluations": recorded,
         "plan_sha256": file_hash(plan),
         "code_sha256": file_hash(__file__),
@@ -47,7 +47,25 @@ def development_report(protocol, policy, checkpoints, directory, output, plan, *
         "minimum_source_groups": 5,
         "versions": {p: md.version(p) for p in ("numpy", "ultralytics")},
     }
-    cached = reuse_evaluation(output / "summary.json", identity)
+    summary_path = output / "summary.json"
+    if summary_path.is_file():
+        recorded = read_json(summary_path)["identity"]
+        if recorded.get("version") == "development-analysis-v1":
+            # Replay historical six-class reports under their original source identities.
+            # Only implementation hashes may differ; preserve all study inputs/settings.
+            stable = (
+                "evaluations",
+                "plan_sha256",
+                "resamples",
+                "seed",
+                "settings",
+                "minimum_source_groups",
+                "versions",
+            )
+            if any(recorded.get(key) != identity.get(key) for key in stable):
+                raise ValueError("Historical analysis inputs/settings changed")
+            return reuse_evaluation(summary_path, recorded)
+    cached = reuse_evaluation(summary_path, identity)
     if cached is not None:
         return cached
     freeze_json(output / "identity.json", identity)
