@@ -21,11 +21,15 @@ def test_native_best_checkpoints_need_no_custom_completion_receipts(pair_inputs)
         run = output / branch
         (run / "weights").mkdir(parents=True)
         (run / "weights/best.pt").write_bytes(b"fixture native weights")
-        (run / "args.yaml").write_text(yaml.safe_dump({
-            "data": str(output / f"{branch}.yaml"),
-            "freeze": pair["freeze"],
-            **{k: pair["settings"][k] for k in ("batch", "epochs", "imgsz")},
-        }))
+        (run / "args.yaml").write_text(
+            yaml.safe_dump(
+                {
+                    "data": str(output / f"{branch}.yaml"),
+                    "freeze": pair["freeze"],
+                    **{k: pair["settings"][k] for k in ("batch", "epochs", "imgsz")},
+                }
+            )
+        )
     checkpoints = completed_checkpoints(output, pair_inputs[0])
     assert set(checkpoints) == {"raw", "adaptive"}
     assert all(path.name == "best.pt" for path in checkpoints.values())
@@ -101,9 +105,14 @@ def test_development_pair_and_cache_reuse_never_repair_missing_inputs(pair_input
     # Original six-class result files can still be replayed under their pinned identity.
     legacy = {**identity, "version": "development-native-v1"}
     legacy.pop("class_names")
-    write_json(destination / "native_result.json", {
-        "identity": legacy, "result": result, "checksum": digest(result),
-    })
+    write_json(
+        destination / "native_result.json",
+        {
+            "identity": legacy,
+            "result": result,
+            "checksum": digest(result),
+        },
+    )
     assert evaluate_development(*args, pretrained=True) == result
     with pytest.raises(ValueError, match="Historical evaluation cache"):
         evaluate_development(*args, pretrained=True, settings={"batch": 1})
