@@ -1,235 +1,172 @@
-"""Exploratory development comparisons from saved native matches; no inference/training."""
+"""Development comparisons from saved native YOLO matching statistics; never infer."""
 
-import importlib.metadata as md
+from importlib.metadata import version
 from pathlib import Path
 
 import numpy as np
 
-from .common import digest, file_hash, freeze_json, read_json, reuse_evaluation, write_json
+from .common import digest, file_hash, read_json, reuse_evaluation, write_json
 from .evaluation_stats import bootstrap_support, class_ap, load_stats, paired_interval
 from .protocol import CONDITIONS, validate_protocol
 
 
 def development_report(protocol, policy, checkpoints, directory, output, plan, *, resamples=100):
-    """Report all natural slices and predeclared contrasts; retain support/exclusion ledgers."""
+    """Native 3×2 matrix, descriptive condition slices and two paired group contrasts."""
     if type(resamples) is not int or resamples < 0 or resamples == 1:
-        raise ValueError("Use zero bootstrap draws for points only, or at least two draws")
+        raise ValueError("Use 0 for points only or at least 2 group bootstrap draws")
     validate_protocol(protocol)
     directory, output = Path(directory), Path(output)
-    names = [f"{m}-{t}" for m in ("pretrained", "raw", "adaptive") for t in ("raw", "adaptive")]
-    recorded, results, settings = {}, {}, []
+    names = [f"{model}-{input_name}"
+             for model in ("pretrained", "raw", "adaptive")
+             for input_name in ("raw", "adaptive")]
+    hashes = {model: file_hash(path) for model, path in checkpoints.items()}
+    evaluations, saved = {}, {}
     for name in names:
-        path = directory / name / "native_result.json"
-        saved = read_json(path)
-        identity = saved["identity"]
         model, _ = name.split("-")
+        path = directory / name / "native_result.json"
+        document = read_json(path)
+        bound = document["identity"]
         if (
-            identity["role"] != "development_validation"
-            or identity["protocol_id"] != protocol["manifest_id"]
-            or identity["policy_id"] != policy["policy_id"]
-            or identity["checkpoint_sha256"] != file_hash(checkpoints[model])
+            bound["role"] != "development_validation"
+            or bound["protocol_id"] != protocol["manifest_id"]
+            or bound["policy_id"] != policy["policy_id"]
+            or bound["checkpoint_sha256"] != hashes[model]
         ):
             raise ValueError("Recorded evaluation role/protocol/policy/checkpoint changed")
-        settings.append(identity["settings"])
-        results[name] = reuse_evaluation(path, identity)
-        recorded[name] = file_hash(path)
-    if any(s != settings[0] for s in settings):
-        raise ValueError("Evaluation matrix settings differ")
+        evaluations[name] = reuse_evaluation(path, bound)
+        saved[name] = file_hash(path)
+
+    config = read_json(directory / names[0] / "native_result.json")["identity"]["settings"]
     identity = {
-        "version": "development-analysis-v2",
-        "evaluations": recorded,
+        "version": "development-analysis-v3",
+        "evaluations": saved,
         "plan_sha256": file_hash(plan),
-        "code_sha256": file_hash(__file__),
-        "statistics_code_sha256": file_hash(Path(__file__).with_name("evaluation_stats.py")),
         "resamples": resamples,
         "seed": 2026,
-        "settings": settings[0],
+        "settings": config,
         "minimum_source_groups": 5,
-        "versions": {p: md.version(p) for p in ("numpy", "ultralytics")},
+        "versions": {p: version(p) for p in ("numpy", "ultralytics")},
     }
-    summary_path = output / "summary.json"
-    if summary_path.is_file():
-        recorded = read_json(summary_path)["identity"]
-        if recorded.get("version") == "development-analysis-v1":
-            # Replay historical six-class reports under their original source identities.
-            # Only implementation hashes may differ; preserve all study inputs/settings.
-            stable = (
-                "evaluations",
-                "plan_sha256",
-                "resamples",
-                "seed",
-                "settings",
-                "minimum_source_groups",
-                "versions",
-            )
-            if any(recorded.get(key) != identity.get(key) for key in stable):
+    summary = output / "summary.json"
+    if summary.is_file():
+        old = read_json(summary)["identity"]
+        if old.get("version") in ("development-analysis-v1", "development-analysis-v2"):
+            stable = ("evaluations", "plan_sha256", "resamples", "seed",
+                      "settings", "minimum_source_groups", "versions")
+            if any(old.get(k) != identity[k] for k in stable):
                 raise ValueError("Historical analysis inputs/settings changed")
-            return reuse_evaluation(summary_path, recorded)
-    cached = reuse_evaluation(summary_path, identity)
+            return reuse_evaluation(summary, old)
+    cached = reuse_evaluation(summary, identity)
     if cached is not None:
         return cached
-    freeze_json(output / "identity.json", identity)
-    stats = {n: load_stats(directory / n / "paired_stats.npz") for n in names}
+
+    stats = {name: load_stats(directory / name / "paired_stats.npz") for name in names}
     rows = protocol["splits"]["development_validation"]
     expected = {r["id"]: sorted(int(b[0]) for b in r["boxes"]) for r in rows}
-    for values in stats.values():
-        if set(values) != set(expected) or any(
-            sorted(map(int, values[i]["target_cls"])) != target for i, target in expected.items()
+    for records in stats.values():
+        if set(records) != set(expected) or any(
+            sorted(map(int, records[i]["target_cls"])) != classes
+            for i, classes in expected.items()
         ):
-            raise ValueError("Saved matching statistics differ from frozen development GT/IDs")
+            raise ValueError("Saved matching statistics differ from frozen development GT")
+
+    slices = [("overall", "all", rows)]
+    slices.extend(
+        (axis, value, [r for r in rows if r["attributes"][axis] == value])
+        for axis in CONDITIONS
+        for value in sorted({r["attributes"][axis] for r in rows})
+    )
+    conditions = []
+    for axis, value, selected in slices:
+        ids = [r["id"] for r in selected]
+        for name in names:
+            per_class = class_ap(stats[name], ids, detailed=True)
+            conditions.append(
+                {
+                    "evaluation": name,
+                    "axis": axis,
+                    "condition": value,
+                    "images": len(ids),
+                    "groups": len({r["group"] for r in selected}),
+                    "mAP50": float(np.mean([p["AP50"] for p in per_class.values()]))
+                    if per_class else None,
+                    "mAP50_95": float(np.mean([p["AP50_95"] for p in per_class.values()]))
+                    if per_class else None,
+                    "classes": {str(k): v for k, v in per_class.items()},
+                }
+            )
+
+    comparisons = []
+    pilot = {"rows": rows}
+    for treatment in ("raw", "adaptive"):
+        before, after = f"raw-{treatment}", f"adaptive-{treatment}"
+        support = bootstrap_support(stats[before], pilot)
+        if resamples:
+            interval = paired_interval(
+                stats[before], stats[after], pilot, resamples=resamples
+            )
+            status = "exploratory"
+        else:
+            ids = list(stats[before])
+            a, b = class_ap(stats[before], ids), class_ap(stats[after], ids)
+            target = support["class_ids"]
+            mean_a, mean_b = (float(np.mean([values[c] for c in target])) for values in (a, b))
+            interval = {
+                "before_ap": mean_a,
+                "after_ap": mean_b,
+                "recovery": mean_b - mean_a,
+                "estimand": support,
+                "reason": "Point estimates only; group uncertainty not computed",
+            }
+            status = "not_resampled"
+        comparisons.append(
+            {
+                "before": before,
+                "after": after,
+                "axis": "overall",
+                "condition": "all",
+                "images": len(rows),
+                "groups": len({r["group"] for r in rows}),
+                "status": status,
+                **interval,
+            }
+        )
+
     errors = []
-    attributes = {r["id"]: r["attributes"] for r in rows}
-    for name, values in stats.items():
+    for name, records in stats.items():
         ranked = []
-        for sample_id, record in values.items():
-            shown = record["conf"] >= 0.25
-            matched = int(record["tp"][shown, 0].sum())
+        for sample_id, values in records.items():
+            shown = values["conf"] >= 0.25
+            matched = int(values["tp"][shown, 0].sum())
             ranked.append(
                 {
                     "evaluation": name,
                     "id": sample_id,
                     "false_positives_at_025": int(shown.sum()) - matched,
-                    "false_negatives_at_025": len(record["target_cls"]) - matched,
-                    **attributes[sample_id],
+                    "false_negatives_at_025": len(values["target_cls"]) - matched,
                 }
             )
-        errors.extend(
-            sorted(
-                ranked,
-                key=lambda r: (-r["false_negatives_at_025"], -r["false_positives_at_025"], r["id"]),
-            )[:12]
-        )
-    slices = [("overall", "all", rows)]
-    slices += [
-        (axis, condition, [r for r in rows if r["attributes"][axis] == condition])
-        for axis in CONDITIONS
-        for condition in sorted({r["attributes"][axis] for r in rows})
-    ]
-    supports, points = [], {}
-    for axis, condition, selected in slices:
-        selected_ids = {r["id"] for r in selected}
-        for name in names:
-            ids = [i for i in stats[name] if i in selected_ids]
-            values = class_ap(stats[name], ids, detailed=True)
-            points[name, axis, condition] = values
-            supports.append(
-                {
-                    "evaluation": name,
-                    "axis": axis,
-                    "condition": condition,
-                    "images": len(ids),
-                    "groups": len({r["group"] for r in selected}),
-                    "mAP50_95": float(np.mean([v["AP50_95"] for v in values.values()]))
-                    if values
-                    else None,
-                    "mAP50": float(np.mean([v["AP50"] for v in values.values()]))
-                    if values
-                    else None,
-                    "classes": {str(c): v for c, v in values.items()},
-                }
+        errors.extend(sorted(
+            ranked, key=lambda row: (
+                -row["false_negatives_at_025"], -row["false_positives_at_025"], row["id"]
             )
-            if (
-                axis == "overall"
-                and abs(supports[-1]["mAP50_95"] - results[name]["overall"]["mAP50_95"]) > 1e-8
-            ):
-                raise ValueError("Native matching-statistic AP differs from saved metric")
-    overall = [(f"{m}-raw", f"{m}-adaptive") for m in ("pretrained", "raw", "adaptive")]
-    overall += [
-        ("pretrained-raw", "raw-raw"),
-        ("pretrained-raw", "adaptive-raw"),
-        ("raw-raw", "adaptive-raw"),
-        ("raw-adaptive", "adaptive-adaptive"),
-    ]
-    comparisons, artifacts = [], {}
-    for axis, condition, selected in slices:
-        contrasts = (
-            overall
-            if axis == "overall"
-            else [("raw-raw", "adaptive-raw"), ("raw-adaptive", "adaptive-adaptive")]
-        )
-        pilot = {"rows": selected}
-        for before, after in contrasts:
-            row = {
-                "before": before,
-                "after": after,
-                "axis": axis,
-                "condition": condition,
-                "images": len(selected),
-                "groups": len({r["group"] for r in selected}),
-            }
-            selected_ids = {r["id"] for r in selected}
-            subset = {i: value for i, value in stats[before].items() if i in selected_ids}
-            paired = {i: stats[after][i] for i in subset}
-            try:
-                policy_support = bootstrap_support(subset, pilot)
-            except ValueError as exc:
-                if "No classes meet" not in str(exc):
-                    raise
-                comparisons.append({**row, "status": "unsupported", "reason": str(exc)})
-                continue
-            if resamples == 0:
-                target = policy_support["class_ids"]
-                a = float(np.mean([points[before, axis, condition][c]["AP50_95"] for c in target]))
-                b = float(np.mean([points[after, axis, condition][c]["AP50_95"] for c in target]))
-                comparisons.append(
-                    {
-                        **row,
-                        "status": "not_resampled",
-                        "estimand": policy_support,
-                        "before_ap": a,
-                        "after_ap": b,
-                        "recovery": b - a,
-                        "reason": "Point estimates only; paired uncertainty pending",
-                    }
-                )
-                continue
-            filename = digest([before, after, axis, condition]) + ".json"
-            path = output / filename
-            if path.exists():
-                record = read_json(path)
-                if record["identity"] != identity or record["checksum"] != digest(record["result"]):
-                    raise ValueError("Changed cached interval")
-                interval = record["result"]
-            else:
-                print("Bootstrap", before, after, axis, condition, flush=True)
-                interval = paired_interval(subset, paired, pilot, resamples=resamples)
-                write_json(
-                    path, {"identity": identity, "result": interval, "checksum": digest(interval)}
-                )
-            if interval["estimand"] != policy_support:
-                raise ValueError("Changed fixed support target")
-            artifacts[filename] = file_hash(path)
-            comparisons.append(
-                {
-                    **row,
-                    "status": "exploratory",
-                    **{k: v for k, v in interval.items() if k != "draws"},
-                    "ledger": filename,
-                }
-            )
+        )[:12])
+
     result = {
         "matrix": [
-            {
-                "evaluation": n,
-                **results[n]["overall"],
-                "classes": results[n]["classes"],
-                "speed_ms": results[n]["speed_ms"],
-            }
-            for n in names
+            {"evaluation": name, **value["overall"], "classes": value["classes"],
+             "speed_ms": value["speed_ms"]}
+            for name, value in evaluations.items()
         ],
-        "conditions": supports,
-        "errors": errors,
+        "conditions": conditions,
         "comparisons": comparisons,
-        "artifacts": artifacts,
-        "provenance": identity,
+        "errors": errors,
+        "artifacts": {},
         "final_test_accessed": False,
         "limitation": (
-            "Single training seed; conditional exploratory group intervals; "
-            "no multiplicity adjustment"
+            "Single-seed, exploratory two-contrast paired group analysis; "
+            "conditional support is descriptive; no multiplicity adjustment"
         ),
     }
-    write_json(
-        output / "summary.json",
-        {"identity": identity, "result": result, "checksum": digest(result)},
-    )
+    write_json(summary, {"identity": identity, "result": result, "checksum": digest(result)})
     return result

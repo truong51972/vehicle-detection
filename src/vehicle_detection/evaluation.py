@@ -4,7 +4,6 @@ import json
 from importlib.metadata import version
 from pathlib import Path
 
-import yaml
 from ultralytics import YOLO
 from ultralytics.models.yolo.detect import DetectionValidator
 

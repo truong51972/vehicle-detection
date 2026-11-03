@@ -9,7 +9,6 @@ from vehicle_detection import evaluation
 from vehicle_detection.common import digest, file_hash, read_json, write_json
 from vehicle_detection.datasets import export_development_pair
 from vehicle_detection.evaluation import evaluate_development
-from vehicle_detection.finetuning import prepare_pair
 
 
 def test_explicit_checkpoint_has_no_native_or_legacy_receipt_dependency(pair_inputs):

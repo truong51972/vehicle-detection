@@ -84,11 +84,10 @@ def test_report_preserves_pairs_supports_and_reuses_without_recomputing(
     )
     result = reporting.development_report(*args, resamples=5)
     overall = [r for r in result["comparisons"] if r["axis"] == "overall"]
-    assert len(overall) == 7 and all(r["recovery"] == 0 for r in overall)
+    assert len(overall) == 2 and all(r["recovery"] == 0 for r in overall)
     assert all(r["valid_draws"] == 5 for r in overall)
-    assert all(
-        r["status"] == "unsupported" for r in result["comparisons"] if r["condition"] == "rare"
-    )
+    assert any(r["condition"] == "rare" and r["images"] == 1
+               for r in result["conditions"])
 
     def no_bootstrap(*args, **kwargs):
         pytest.fail("Valid saved report should not recompute bootstrap")
