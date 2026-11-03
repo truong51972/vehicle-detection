@@ -18,12 +18,14 @@ artifacts; missing or mismatched artifacts fail rather than launching upstream w
 3. [03_training.ipynb](notebooks/03_training.ipynb) consumes prepared inputs and
    a local pinned `weights/yolo26n.pt`; runs both native YOLO26n partial fine-tuning
    branches with equal initialization/budgets and shared Raw development validation.
-   Writes `runs/training-s10-v1/`: native best/last checkpoints, histories, resource
-   metrics and freeze/resume/completion receipts. `RESUME` is explicit per branch.
+   Writes `runs/training-native-s10-v1/`: native `best.pt`, `last.pt`,
+   `results.csv`, `args.yaml` and a small paired dataset manifest.
+   `RESUME` explicitly opts in to native `last.pt` continuation.
 4. [04_eval_and_report.ipynb](notebooks/04_eval_and_report.ipynb) consumes existing
-   checkpoints/receipts and frozen Raw/Adaptive development inputs. Reports native
+   native checkpoints (or historical six-class receipts) and frozen Raw/Adaptive
+   development inputs. Reports native
    pretrained / Raw-trained / Adaptive-trained × Raw / Adaptive metrics, per-class
-   AP, latency, plots and representative errors under `runs/development-v1/`.
+   AP, latency, plots and representative errors under `runs/development-native-v1/`.
    **Default: saved-result reuse.** Set `ALLOW_INFERENCE=True` to fill missing
    evaluations and `MEASURE_LOADERS=True` to collect missing isolated CPU loader
    measurements. Supported condition/group uncertainty is computed once from saved
@@ -71,8 +73,10 @@ Large images, model weights and run caches remain gitignored.
 A protocol binds four disjoint roles, groups/duplicate safeguards, source hashes,
 boxes and classes. A policy binds calibration-only IDs and the frozen operator code.
 An export binds IDs/labels/geometry, recipes and JPEG95, with a deep-verification
-receipt. Training binds the exact data, initial checkpoint, implementation, native
-settings, versions, hardware and equal branch budgets. Evaluation binds those inputs
+receipt. New training binds verified exports, initial checkpoint, native freeze and
+shared settings in a short study manifest; Ultralytics owns optimization, weights,
+history and resume. Native resume is epoch-boundary continuation, not bitwise
+reproducibility or an atomic last-checkpoint guarantee. Evaluation binds those inputs
 and its own implementation, matching statistics, native plot hashes and metric settings.
 Raw and Adaptive always retain the same IDs and GT. COCO-80 pretrained predictions
 map to the six vehicle classes; fine-tuned six-class heads use native IDs/AP directly.
@@ -89,8 +93,10 @@ completed S10 experiments without rerunning earlier phases, configure notebook 0
   and frozen policy. Phase 02 exposes `RAW_DEVELOPMENT` / `DEV_CONVERSION`.
 - `OUTPUT`: `runs/development-v1` for the completed native evaluation caches.
 
-Original training receipts retain their original source hash. Changed training code
-gets a new root and identity; it cannot resume or masquerade as the historical run.
+Original training receipts retain their original source hash and remain readable.
+New runs must use distinct roots; do not resume the old six-class S10 checkpoints
+with this simplified training implementation. Native `best.pt` can be evaluated
+without a custom `complete.json` receipt.
 No full-data training/holdout runs are part of CI. Fresh-kernel smoke fixtures have
 synthetic images/checkpoints and never count as scientific evidence.
 
