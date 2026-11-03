@@ -1,10 +1,12 @@
-# Issue #7: paired S10 implementation, experiments pending
+# Issue #7: paired S10 implementation and completed training
 
 [Issue #7](https://github.com/truong51972/vehicle-detection/issues/7) requires
 completed paired training and development evidence before data-scale/model
-selection. This first implementation increment supplies the guarded S10 runner
-in [notebook 03](../notebooks/phase2/03_finetuning_benchmark.ipynb). It does not
-complete the issue or claim a detection improvement.
+selection. The guarded S10 runner is available in
+[notebook 03](../notebooks/phase2/03_finetuning_benchmark.ipynb). Both full S10
+branches completed on 2026-11-03; see the [results report](ISSUE7_RESULTS.md) for
+development metrics, checkpoint provenance, convergence and resource costs.
+Issue #7 remains open for the development matrix, uncertainty and selection work.
 
 ## Frozen inputs and initial budget
 
@@ -76,19 +78,24 @@ symlink/YAML rejection, backbone buffers, gradients/updates, zero-LR warmup,
 changed-batch rejection, native paired completion/cache reuse and resume guards.
 Their generated-image metrics are test fixtures, never research evidence.
 
-Local verification: **89 tests passed**, Ruff lint/format, source/wheel build and
+Implementation verification: **89 tests passed**, Ruff lint/format, source/wheel build and
 `git diff --check` passed. Both real-data GPU smoke branches passed interruption/
 resume with the final implementation. The four saved issue #5 baseline code
 cells and outputs remain byte-for-byte equivalent as notebook JSON values. New
-training cells are unexecuted and explicitly marked pending.
+training cells remain unexecuted in the saved notebook; the full run used the same
+`train_branch` implementation through an external sequential launcher.
 Full deep verification of both 4,890-image S10 exports and the 13,975-image Raw
 development export also passed with the final source. The prepared identities
-and paired YAMLs are under `runs/issue7-s10-v2/`; no full S10 optimizer steps ran.
+and paired YAMLs are under `runs/issue7-s10-v2/`. Both branches subsequently
+completed 20 epochs and 1,746 optimizer steps without interruption. Compact
+full-run evidence is in [s10_results.json](issue7/s10_results.json).
 
 Still required before closing #7:
 
-- Declare the expansion/model-selection rules before full S10 outcomes are used.
-- Finish real Raw S10 and Adaptive S10 runs with matched budgets and checkpoints.
+- Record that expansion/model-selection rules were not declared before S10
+  outcomes became visible. These outcomes are exploratory for scale selection;
+  do not present a retrospective rule as predeclared. Declare rules before any
+  further experiments used to confirm an expansion or selection decision.
 - Export/evaluate Adaptive development inputs and complete pretrained/Raw-trained/
   Adaptive-trained × Raw/Adaptive-input validation, with fixed supported-class
   and group uncertainty, weather/time/scene slices and convergence/resource review.

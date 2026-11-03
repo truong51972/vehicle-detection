@@ -40,7 +40,7 @@ Select the project `.venv` kernel and run:
 4. [03_finetuning_benchmark.ipynb](notebooks/phase2/03_finetuning_benchmark.ipynb):
    retains the verified pretrained baseline and adds guarded paired S10 partial
    fine-tuning. Run preparation first; enable `RUN_S10` to execute both branches.
-   Full S10 experiments and the development matrix remain pending.
+   Both full S10 branches are complete; the development matrix remains pending.
 
 Issue #6 is documented in [the Adaptive execution record](docs/ISSUE6_RESULTS.md).
 The [v2 review follow-up](docs/ISSUE6_REVIEW.md) explains the minimum-support gate
@@ -51,6 +51,8 @@ The [fixed-estimand review](docs/ISSUE11_BOOTSTRAP_REVIEW.md) supersedes its ori
 bootstrap intervals and shortlist gate without rerunning inference.
 The [issue #7 implementation record](docs/ISSUE7_IMPLEMENTATION.md) describes the
 matched training budget, freeze/resume guards, smoke evidence and remaining work.
+The [S10 results report](docs/ISSUE7_RESULTS.md) records the completed paired runs,
+development metrics, convergence and measured resource costs.
 Issue #8 releases the final test only after protocol/model/policy freeze.
 See [the issue #5 execution record](docs/ISSUE5_RESULTS.md).
 
