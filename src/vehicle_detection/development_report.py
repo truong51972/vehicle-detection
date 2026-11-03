@@ -4,22 +4,10 @@ import importlib.metadata as md
 from pathlib import Path
 
 import numpy as np
-from ultralytics.utils.metrics import ap_per_class
 
 from .common import digest, file_hash, freeze_json, read_json, reuse_evaluation, write_json
-from .evaluation_stats import STAT_KEYS, bootstrap_support, load_stats, paired_interval
+from .evaluation_stats import bootstrap_support, class_ap, load_stats, paired_interval
 from .protocol import CONDITIONS, validate_protocol
-
-
-def _points(stats, ids):
-    arrays = {k: np.concatenate([stats[i][k] for i in ids], axis=0) for k in STAT_KEYS}
-    if not len(arrays["target_cls"]):
-        return {}
-    values = ap_per_class(arrays["tp"], arrays["conf"], arrays["pred_cls"], arrays["target_cls"])
-    return {
-        int(c): {"AP50": float(ap[0]), "AP50_95": float(ap.mean())}
-        for c, ap in zip(values[6], values[5], strict=True)
-    }
 
 
 def development_report(protocol, policy, checkpoints, directory, output, plan, *, resamples=100):
@@ -104,7 +92,7 @@ def development_report(protocol, policy, checkpoints, directory, output, plan, *
         selected_ids = {r["id"] for r in selected}
         for name in names:
             ids = [i for i in stats[name] if i in selected_ids]
-            values = _points(stats[name], ids)
+            values = class_ap(stats[name], ids, detailed=True)
             points[name, axis, condition] = values
             supports.append(
                 {
