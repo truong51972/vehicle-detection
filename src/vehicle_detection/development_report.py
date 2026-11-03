@@ -113,7 +113,24 @@ def development_report(protocol, policy, checkpoints, directory, output, plan, *
     pilot = {"rows": rows}
     for treatment in ("raw", "adaptive"):
         before, after = f"raw-{treatment}", f"adaptive-{treatment}"
-        support = bootstrap_support(stats[before], pilot)
+        try:
+            support = bootstrap_support(stats[before], pilot)
+        except ValueError as exc:
+            if "No classes meet" not in str(exc):
+                raise
+            comparisons.append(
+                {
+                    "before": before,
+                    "after": after,
+                    "axis": "overall",
+                    "condition": "all",
+                    "images": len(rows),
+                    "groups": len({r["group"] for r in rows}),
+                    "status": "unsupported",
+                    "reason": str(exc),
+                }
+            )
+            continue
         if resamples:
             interval = paired_interval(stats[before], stats[after], pilot, resamples=resamples)
             status = "exploratory"
