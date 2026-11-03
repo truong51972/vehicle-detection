@@ -44,10 +44,10 @@ were intentionally dropped: these were implementation-specific checks and are
 not equivalent native guarantees. The small run manifest is **not** a claim of
 bitwise training reproducibility.
 
-Historical six-class evaluation caches are read-only: a legacy
+Historical six-class evaluation caches and development-analysis summaries are read-only: a legacy
 `development-native-v1` cache can be reused with its recorded identity and
 artifact hashes when role/protocol/policy/checkpoint/data/mapping/settings
-still match. Fresh outputs use `development-native-v2` and separate roots.
+still match. Fresh outputs use `development-native-v2` and `development-analysis-v2` identities and separate roots.
 Change of class list or settings requires a fresh evaluation identity. Neither
 path performs upstream notebook execution or accesses final-test image pixels.
 
