@@ -135,7 +135,7 @@ def test_label_rounding_does_not_reorder_nearly_equal_centers(pair_inputs):
         label.write_text("0 0.482142 0.51 0.01 0.01\n0 0.482142 0.49 0.01 0.01\n")
         meta.loc[meta.id == row["id"], "label_sha256"] = file_hash(label)
     meta.to_csv(root / "metadata.csv", index=False)
-    finetuning._verify_role(root, rows, "train", "raw_reencoded")
+    finetuning.verify_role(root, rows, "train", "raw_reencoded")
 
 
 def test_changed_yaml_and_symlinks_rejected_before_training(pair_inputs):

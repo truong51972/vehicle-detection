@@ -3,12 +3,12 @@
 This addresses the review on [PR #10](https://github.com/truong51972/vehicle-detection/pull/10).
 The original results in [ISSUE6_RESULTS.md](ISSUE6_RESULTS.md) remain v1 evidence
 from revision `7380eed`. The original executed notebook is copied byte-for-byte
-to [the v1 evidence archive](../notebooks/phase2/evidence/02_adaptive_preprocessing_v1.ipynb),
+to [the v1 evidence archive](../notebooks/archive/phase2/evidence/02_adaptive_preprocessing_v1.ipynb),
 including its embedded charts and selected example images. Every original file
 under `docs/issue6/`, and the local v1 subset/policy manifests, remains unchanged.
 The [preservation inventory](issue6-v2/v1_preservation.json) records their hashes.
 
-The current [notebook 02](../notebooks/phase2/02_adaptive_preprocessing.ipynb)
+The current [notebook 02](../notebooks/archive/phase2/02_adaptive_preprocessing.ipynb)
 uses fresh `runs/issue6-v2/` and `docs/issue6-v2/` roots. Current code explicitly
 rejects v1 policy reuse: replay v1 using its recorded revision, rather than silently
 relabeling old artifacts. Subset IDs and the parent protocol are unchanged.

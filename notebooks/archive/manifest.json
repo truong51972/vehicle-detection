@@ -1,0 +1,42 @@
+{
+  "notebooks/01_data_preparation.ipynb": {
+    "archive": "notebooks/archive/01_data_preparation.ipynb",
+    "sha256": "01af079715d574784a797e036e310da671b7e0fc6c11a0d080ca42f47df4a835",
+    "source_revision": "2df2241f6bf4e09b92499122ad039a9e59f0ad86"
+  },
+  "notebooks/02_training_benchmark.ipynb": {
+    "archive": "notebooks/archive/02_training_benchmark.ipynb",
+    "sha256": "07997ff433961d4dc2cd1e93a01aa3b27ff5e0bd533e2aafbe2805aa604d4d66",
+    "source_revision": "2df2241f6bf4e09b92499122ad039a9e59f0ad86"
+  },
+  "notebooks/phase2/01_data_protocol.ipynb": {
+    "archive": "notebooks/archive/phase2/01_data_protocol.ipynb",
+    "sha256": "5d4ed8206a12a158abf19d49278a6b097804283098df7d319fe944c92a990c0e",
+    "source_revision": "2df2241f6bf4e09b92499122ad039a9e59f0ad86"
+  },
+  "notebooks/phase2/02_adaptive_preprocessing.ipynb": {
+    "archive": "notebooks/archive/phase2/02_adaptive_preprocessing.ipynb",
+    "sha256": "a6733c7e3961e8be55b002fef883959b5d2b3b0f2d171137f3ad8befb0b48827",
+    "source_revision": "2df2241f6bf4e09b92499122ad039a9e59f0ad86"
+  },
+  "notebooks/phase2/02b_synthetic_robustness.ipynb": {
+    "archive": "notebooks/archive/phase2/02b_synthetic_robustness.ipynb",
+    "sha256": "0a7719742db0e4ad43b77d393e3520521ecfa2ddebafbd1a63a000a435eabff4",
+    "source_revision": "2df2241f6bf4e09b92499122ad039a9e59f0ad86"
+  },
+  "notebooks/phase2/03_finetuning_benchmark.ipynb": {
+    "archive": "notebooks/archive/phase2/03_finetuning_benchmark.ipynb",
+    "sha256": "f242d9f92061c0fc9e0816b77b42e4b6c7df8e3051e3d9f36951f7774e7e76a1",
+    "source_revision": "2df2241f6bf4e09b92499122ad039a9e59f0ad86"
+  },
+  "notebooks/phase2/evidence/02_adaptive_preprocessing_v1.ipynb": {
+    "archive": "notebooks/archive/phase2/evidence/02_adaptive_preprocessing_v1.ipynb",
+    "sha256": "69f0b8c18f61b6707671cc0ee48ae535e230bc5ce38019ad9e318a318e58dbfd",
+    "source_revision": "2df2241f6bf4e09b92499122ad039a9e59f0ad86"
+  },
+  "notebooks/phase2/evidence/02b_synthetic_robustness_v1.ipynb": {
+    "archive": "notebooks/archive/phase2/evidence/02b_synthetic_robustness_v1.ipynb",
+    "sha256": "c2f4c3a4ffe912069df75f8181a1e74a12e5b10b93c7e6ffcba88ef5bb32ed43",
+    "source_revision": "2df2241f6bf4e09b92499122ad039a9e59f0ad86"
+  }
+}

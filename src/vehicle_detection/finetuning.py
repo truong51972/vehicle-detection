@@ -7,7 +7,6 @@ import shutil
 import time
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 import torch
 import yaml
@@ -18,8 +17,9 @@ from ultralytics.nn.tasks import torch_safe_load
 
 from .adaptive import validate_policy
 from .baseline import PRETRAINED_SHA256, VAL_SETTINGS, verify_coco_names
-from .common import digest, file_hash, read_json, write_json
+from .common import digest, file_hash, freeze_json, read_json, write_json
 from .data import CLASSES
+from .datasets import verify_role
 from .offline import verify_alignment
 from .subsets import validate_subsets
 
@@ -71,15 +71,6 @@ TRAIN_SETTINGS = {
 }
 
 
-def _freeze_json(path, value):
-    path = Path(path)
-    if path.exists():
-        if read_json(path) != value:
-            raise ValueError("Frozen training identity changed; use a new experiment root")
-    else:
-        write_json(path, value)
-
-
 def backbone_boundary(model):
     """Derive the boundary from the loaded architecture, never another YOLO generation."""
     if model.yaml.get("yaml_file") != "yolo26n.yaml" or not model.yaml.get("end2end"):
@@ -88,61 +79,6 @@ def backbone_boundary(model):
     if not 0 < boundary < len(model.model) or type(model.model[-1]).__name__ != "Detect":
         raise ValueError("Unsupported backbone/detection layout")
     return boundary
-
-
-def _verify_role(directory, records, split, variant, recipes=None):
-    """Reject wrong roles before decoding pixels, then verify owned files and frozen boxes."""
-    directory = Path(directory).resolve()
-    meta = pd.read_csv(directory / "metadata.csv")
-    selected = {r["id"]: r for r in records}
-    if meta.id.duplicated().any() or set(meta.id) != set(selected) or set(meta.split) != {split}:
-        raise ValueError("Export must contain exactly the frozen role IDs, with no duplicates")
-    export = read_json(directory / "export.json")
-    if (
-        export["variant"] != variant
-        or export["encoding"]["format"] != "jpg"
-        or export["encoding"]["jpeg_quality"] != 95
-        or (variant == "raw_reencoded" and export["recipe"] != {})
-        or (recipes is not None and export["recipe"] != recipes)
-    ):
-        raise ValueError("Export treatment/encoding differs from the frozen policy")
-    for row in meta.to_dict("records"):
-        source = selected[row["id"]]
-        image = directory / "images" / split / f"{row['id']}.jpg"
-        label = directory / "labels" / split / f"{row['id']}.txt"
-        if (
-            Path(row["image"]) != image
-            or image.resolve() != image
-            or label.resolve() != label
-            or row["source_sha256"] != source["sha256"]
-            or (row["width"], row["height"]) != (source["width"], source["height"])
-        ):
-            raise ValueError(
-                "Export path, source hash or geometry changed; re-export after relocation"
-            )
-        actual = [list(map(float, line.split())) for line in label.read_text().splitlines()]
-        expected = [
-            [
-                c,
-                (x1 + x2) / 2 / source["width"],
-                (y1 + y2) / 2 / source["height"],
-                (x2 - x1) / source["width"],
-                (y2 - y1) / source["height"],
-            ]
-            for c, x1, y1, x2, y2 in source["boxes"]
-        ]
-        if len(actual) != len(expected) or any(len(box) != 5 for box in actual):
-            raise ValueError("Export labels differ from the frozen boxes")
-        # Native labels preserve source order; sorting rounded centers can swap tied boxes.
-        if actual and not np.allclose(actual, expected, atol=1e-6, rtol=0):
-            raise ValueError("Export labels differ from the frozen boxes")
-    verify_alignment([directory], deep=True)
-    return {
-        "path": str(directory),
-        "export": export,
-        "files_identity": read_json(directory / "verified.json")["files_identity"],
-        "ids": sorted(selected),
-    }
 
 
 def prepare_pair(protocol, subsets, policy, decision, pair, development, checkpoint, output):
@@ -172,11 +108,11 @@ def prepare_pair(protocol, subsets, policy, decision, pair, development, checkpo
     ids = set(subsets["subsets"]["S10"]["ids"])
     rows = [r for r in protocol["splits"]["training_pool"] if r["id"] in ids]
     datasets = {
-        b: _verify_role(pair / b, rows, "train", v, policy["recipes"] if b == "adaptive" else None)
+        b: verify_role(pair / b, rows, "train", v, policy["recipes"] if b == "adaptive" else None)
         for b, v in [("raw", "raw_reencoded"), ("adaptive", "adaptive")]
     }
     verify_alignment([pair / b for b in datasets], deep=False)
-    dev = _verify_role(
+    dev = verify_role(
         development, protocol["splits"]["development_validation"], "tune", "raw_reencoded"
     )
     if file_hash(checkpoint) != PRETRAINED_SHA256:
@@ -184,7 +120,7 @@ def prepare_pair(protocol, subsets, policy, decision, pair, development, checkpo
     model = YOLO(str(checkpoint))
     verify_coco_names(model.names)
     identity = {
-        "version": "issue7-s10-v1",
+        "version": "paired-s10-v2",
         "protocol_id": protocol["manifest_id"],
         "pair": binding,
         "policy_decision_id": decision["decision_id"],
@@ -207,7 +143,7 @@ def prepare_pair(protocol, subsets, policy, decision, pair, development, checkpo
     identity["experiment_id"] = digest(identity)
     if not (output / "pair.json").exists() and output.exists() and any(output.iterdir()):
         raise ValueError("Unknown training directory; choose an empty experiment root")
-    _freeze_json(output / "pair.json", identity)
+    freeze_json(output / "pair.json", identity)
     for branch, dataset in datasets.items():
         config = {
             "path": str(output),
@@ -315,7 +251,7 @@ class PairedTrainer(DetectionTrainer):
         self.audit = FreezeAudit(self.model, boundary)
         self.optimizer_steps = 0
         if not self.resume:
-            _freeze_json(
+            freeze_json(
                 self.save_dir.parent / "initial_model.json",
                 {"initial_state_sha256": self.audit.report["initial_state_sha256"]},
             )
@@ -469,7 +405,7 @@ def train_branch(experiment, branch, output, *, resume=False):
     run = output / branch
     if run.exists() and any(run.iterdir()) and not (run / "identity.json").exists():
         raise ValueError("Unknown native run directory")
-    _freeze_json(run / "identity.json", identity)
+    freeze_json(run / "identity.json", identity)
     if (run / "complete.json").exists():
         completed = read_json(run / "complete.json")
         if (
