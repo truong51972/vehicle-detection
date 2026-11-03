@@ -1,0 +1,145 @@
+{
+  "atomic_resume_snapshot_verified": true,
+  "branches": {
+    "adaptive": {
+      "best_checkpoint_sha256": "7ec05d60b8e4bbacfecd60c7156fad2f829bec39954e5bd1e1d88723ff7c2585",
+      "changed_trainable_parameter_count": 241,
+      "epoch_resources": [
+        {
+          "epoch": 1,
+          "gpu_peak_allocated_bytes": 136291328,
+          "native_resume": false,
+          "optimizer_steps": 2,
+          "training_images_per_second": 17.22928153369868,
+          "training_seconds": 0.23216290198615752,
+          "wall_seconds_including_validation": 0.5801162869902328
+        },
+        {
+          "epoch": 2,
+          "gpu_peak_allocated_bytes": 166702080,
+          "native_resume": true,
+          "optimizer_steps": 2,
+          "training_images_per_second": 15.26539872671457,
+          "training_seconds": 0.26203049600007944,
+          "wall_seconds_including_validation": 0.635807656974066
+        }
+      ],
+      "first_epoch_verified_optimizer_steps": 1,
+      "frozen_parameters": 1365472,
+      "frozen_parameters_and_buffers_unchanged": true,
+      "last_checkpoint_sha256": "bb6eb2c3e8db88eb828a52ed7c23dec6f4b1c2799f43318908d8aca69b0f8cc3",
+      "nonzero_gradient_parameter_count": 238,
+      "resumed_verified_optimizer_steps": 1,
+      "trainable_parameters": 1170844
+    },
+    "raw": {
+      "best_checkpoint_sha256": "4c9c5df3a977dd82f1320bd1be6c6ff5af10275a91c62e87125f7876fbe2607f",
+      "changed_trainable_parameter_count": 241,
+      "epoch_resources": [
+        {
+          "epoch": 1,
+          "gpu_peak_allocated_bytes": 105880576,
+          "native_resume": false,
+          "optimizer_steps": 2,
+          "training_images_per_second": 2.4489142003406092,
+          "training_seconds": 1.6333769469929393,
+          "wall_seconds_including_validation": 2.3572351159818936
+        },
+        {
+          "epoch": 2,
+          "gpu_peak_allocated_bytes": 136291328,
+          "native_resume": true,
+          "optimizer_steps": 2,
+          "training_images_per_second": 20.650459743721353,
+          "training_seconds": 0.1937002880149521,
+          "wall_seconds_including_validation": 0.5809472340042703
+        }
+      ],
+      "first_epoch_verified_optimizer_steps": 1,
+      "frozen_parameters": 1365472,
+      "frozen_parameters_and_buffers_unchanged": true,
+      "last_checkpoint_sha256": "c4f3fb2032410cc597124b3b6bab4dbfb4affbb483674b7f46551b93a359d8fa",
+      "nonzero_gradient_parameter_count": 238,
+      "resumed_verified_optimizer_steps": 1,
+      "trainable_parameters": 1170844
+    }
+  },
+  "development_ids": [
+    "0008a165-c48f4b3e",
+    "00091078-59817bb0"
+  ],
+  "final_test_accessed": false,
+  "gpu": "NVIDIA GeForce RTX 5060 Ti",
+  "implementation_sha256": "b26d86fb09868556f1fe1b81b8b90c57a05f39e8ed24fcda902a5d6826daa0f2",
+  "initial_model_sha256": "0eb44864206cebf099e21275b9cede6426adcb2bd9d7f5ac5ef08beca9583781",
+  "limitations": [
+    "Four training and two development images; not completed S10 evidence.",
+    "Native resume uses EMA/FP16 state at epoch boundaries; not bitwise continuation.",
+    "No tiny-sample AP reported as model-selection evidence."
+  ],
+  "protocol_id": "680090b8eef098fbe10c77e632aacbfd3d6854d8489d7518e20f062e032b6e44",
+  "purpose": "integration smoke, not S10 training or model-selection evidence",
+  "settings": {
+    "agnostic_nms": false,
+    "amp": false,
+    "augment": false,
+    "augmentations": [],
+    "batch": 2,
+    "bgr": 0,
+    "cache": false,
+    "channels_last": false,
+    "close_mosaic": 0,
+    "cls_remap": true,
+    "compile": false,
+    "conf": 0.001,
+    "copy_paste": 0,
+    "cos_lr": true,
+    "cutmix": 0,
+    "degrees": 0,
+    "deterministic": true,
+    "device": "0",
+    "epochs": 2,
+    "fliplr": 0,
+    "flipud": 0,
+    "fraction": 1.0,
+    "hsv_h": 0,
+    "hsv_s": 0,
+    "hsv_v": 0,
+    "imgsz": 320,
+    "iou": 0.7,
+    "lr0": 0.001,
+    "lrf": 0.01,
+    "max_det": 300,
+    "mixup": 0,
+    "mosaic": 0,
+    "multi_scale": 0,
+    "nbs": 2,
+    "nms": false,
+    "optimizer": "AdamW",
+    "patience": 0,
+    "perspective": 0,
+    "plots": false,
+    "quantize": 32,
+    "rect": false,
+    "save": true,
+    "scale": 0,
+    "seed": 2026,
+    "shear": 0,
+    "translate": 0,
+    "val": true,
+    "verbose": false,
+    "warmup_bias_lr": 0.0,
+    "warmup_epochs": 3.0,
+    "weight_decay": 0.0005,
+    "workers": 0
+  },
+  "smoke_script_sha256": "71227b5807bffdd22922a2d9fbd4d45b71549fcdb409b390c1458794fb684a1c",
+  "source_checkpoint_sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+  "subsets_id": "8a9ba46aa120f0e1d113d4bd907bc8ef5e82ab9bb3bd533d863812deb3f30b4f",
+  "train_ids": [
+    "0033b19f-65613f7e",
+    "0033b19f-7f07efac",
+    "0035afff-3295dbd6",
+    "0035afff-434368a1"
+  ]
+}
