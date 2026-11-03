@@ -80,8 +80,7 @@ def test_pair_binds_roles_and_native_settings_without_training(pair_inputs):
     assert experiment["training"]["raw"]["ids"] == experiment["training"]["adaptive"]["ids"]
     assert experiment["freeze"] == 11
     configs = [
-        yaml.safe_load((pair_inputs[-1] / f"{b}.yaml").read_text())
-        for b in ("raw", "adaptive")
+        yaml.safe_load((pair_inputs[-1] / f"{b}.yaml").read_text()) for b in ("raw", "adaptive")
     ]
     assert configs[0]["val"] == configs[1]["val"]
     assert all("test" not in c and c["names"] == dict(enumerate(CLASSES)) for c in configs)
@@ -111,7 +110,8 @@ def test_deep_label_audit_is_export_only(pair_inputs):
     protocol, subsets, policy, decision, pair, dev, checkpoint, output = pair_inputs
     experiment = prepare_pair(*pair_inputs)
     records = [
-        r for r in protocol["splits"]["training_pool"]
+        r
+        for r in protocol["splits"]["training_pool"]
         if r["id"] in set(subsets["subsets"]["S10"]["ids"])
     ]
     label = next((pair / "raw/labels/train").glob("*.txt"))
@@ -139,15 +139,22 @@ def test_native_training_uses_same_pretrained_and_reuses_outputs(pair_inputs, mo
             (run / "weights/best.pt").write_bytes(b"fixture best")
             (run / "weights/last.pt").write_bytes(b"fixture last")
             with (run / "args.yaml").open("w") as stream:
-                yaml.safe_dump({
-                    "data": kwargs["data"], "freeze": kwargs["freeze"],
-                    "epochs": kwargs["epochs"], "batch": kwargs["batch"],
-                    "imgsz": kwargs["imgsz"],
-                }, stream)
-            pd.DataFrame({
-                "epoch": range(experiment["settings"]["epochs"]),
-                "metrics/mAP50-95(B)": [0.1] * experiment["settings"]["epochs"],
-            }).to_csv(run / "results.csv", index=False)
+                yaml.safe_dump(
+                    {
+                        "data": kwargs["data"],
+                        "freeze": kwargs["freeze"],
+                        "epochs": kwargs["epochs"],
+                        "batch": kwargs["batch"],
+                        "imgsz": kwargs["imgsz"],
+                    },
+                    stream,
+                )
+            pd.DataFrame(
+                {
+                    "epoch": range(experiment["settings"]["epochs"]),
+                    "metrics/mAP50-95(B)": [0.1] * experiment["settings"]["epochs"],
+                }
+            ).to_csv(run / "results.csv", index=False)
 
     monkeypatch.setattr(finetuning, "YOLO", Native)
     raw = train_branch(experiment, "raw", pair_inputs[-1])
@@ -210,10 +217,20 @@ def test_real_native_one_epoch_smoke(pair_inputs, monkeypatch):
     torch.save({"model": model, "train_args": {"task": "detect"}}, checkpoint)
     monkeypatch.setattr(finetuning, "PRETRAINED_SHA256", file_hash(checkpoint))
     monkeypatch.setattr(finetuning, "YOLO", NativeYOLO)
-    monkeypatch.setattr(finetuning, "TRAIN_SETTINGS", {
-        **TRAIN_SETTINGS, "epochs": 1, "batch": 2, "nbs": 2,
-        "imgsz": 64, "workers": 0, "device": "cpu", "plots": False,
-    })
+    monkeypatch.setattr(
+        finetuning,
+        "TRAIN_SETTINGS",
+        {
+            **TRAIN_SETTINGS,
+            "epochs": 1,
+            "batch": 2,
+            "nbs": 2,
+            "imgsz": 64,
+            "workers": 0,
+            "device": "cpu",
+            "plots": False,
+        },
+    )
     experiment = prepare_pair(*pair_inputs)
     runs = [train_branch(experiment, b, pair_inputs[-1]) for b in ("raw", "adaptive")]
     assert runs[0]["budget"] == runs[1]["budget"]
