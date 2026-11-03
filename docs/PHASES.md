@@ -36,13 +36,19 @@ are:
   development validation, with semantic COCO→vehicle mapping and native metrics.
 - #6: calibrate Adaptive using calibration only; create representative nested
   S10/S20 training subsets and matched Raw/Adaptive exports.
+- #11: independently screen synthetic degradations/restoration on calibration
+  with frozen YOLO26n metrics before proposing a supported v3 policy; preserve
+  clean evaluation and v1/v2 evidence.
 - #7: progressive partial fine-tuning of neck/head with backbone frozen; scale
   paired subsets only when development-validation evidence justifies it.
 - #8: lock protocol and execute the final 3×2 model/input benchmark once.
+  The reviewed #11 specification bounds additional synthetic stress to six
+  conditions and labels frozen v2 as Gamma-or-Skip; natural results stay separate.
 
 The new notebook sequence lives in `notebooks/phase2/`. Notebook 01 handles the
-data contract; notebook 02 arrives with #6; notebook 03 initially runs pretrained
-validation and will be extended with #7. No optimizer steps are part of #5.
+data contract; notebook 02 calibrates Adaptive and exports matched nested pilots;
+notebook 03 initially runs pretrained validation and will be extended with #7.
+No optimizer steps are part of #5 or #6.
 
 Official train supplies training pool, calibration and development validation.
 Official val minus prior exposures and disclosed exclusions supplies final test.
@@ -52,3 +58,9 @@ leakage checks against final test remain deferred to its controlled release.
 The two original notebooks and [PR #3 execution snapshot](PHASE2_RESULTS.md)
 preserve historical YOLO11 evidence independently. They are not YOLO26 outcomes.
 See [issue #5 evidence and limitations](ISSUE5_RESULTS.md) for the current protocol.
+See [issue #6 evidence and limitations](ISSUE6_RESULTS.md) for nested subsets and
+the frozen Adaptive policy. Quality proxies alone do not establish detection gains.
+The [PR review follow-up](ISSUE6_REVIEW.md) introduces a separately measured v2
+policy with minimum-support gates and retains the original executed v1 notebook.
+The [issue #11 statistical review](ISSUE11_BOOTSTRAP_REVIEW.md) fixes the bootstrap
+class target, preserves native point estimates and records the no-v3 confirmation gate.

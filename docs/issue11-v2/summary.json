@@ -1,0 +1,134 @@
+{
+  "analysis_id": "3fe3a1e382239dac2d0b2265a83176c1ecf9b7cd810de63cd2f586e020685980",
+  "artifacts": {
+    "analysis.json": "a3696560274743c95350bbc57195e668ddb9840328e68457c0d5e33c79954010",
+    "bootstrap_audit.png": "7f3912c56a094a7f2d5cb9753d6cf5dccc6b7058474423b263c258aaa8d016fc",
+    "bootstrap_draw_support.csv.gz": "88c7961b246a5f890b03d293819c642bd40cc5927760e1cc7f2babb6321c16ae",
+    "confirmation_gate.json": "826376575386922afe68e8f9f76cf189bdec7b34fe4ae4c1910e00c0a6c43368",
+    "experimental_matrix.csv": "6dfc8efdaec274935c7a9ceb0d04d6418f48e029c79880b57a842340b697b2ea",
+    "final_robustness_spec.json": "1c65e239a7d6c4cca0c81d1b9b3c5a6368b1a9dd936c2eeb13e75d13d32aa2fe",
+    "fixed_class_support.png": "f045d660ff50ab9705a3ee504d6a9334f0586c8241f439da89ab9542a75a86a6",
+    "per_class_recovery.csv": "912d34f63d0e4b78ef9062724cabc3d275dd8089bf957ccf5ea0706279b377e7",
+    "prior_evidence_hashes.json": "b4cce678de351eaa6d422a34b1afba5b42ea169481fed20972597c10ddd9927e",
+    "shortlist.csv": "7cbec22b0c6e64627fc4a74f381d9e9b02ae2b27736dba545d9d1b0b61587983",
+    "supported_recovery.png": "c8c7875506ae023e3eda5c132430fcb2d73d6e93bfb756ffa9682272dc97a61d",
+    "v3_decision.json": "2f3477c075fa2934a14c969cb4b35297f448162975eec80a39082136ddb207e8"
+  },
+  "checkpoint_sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+  "clahe_veil": {
+    "corruption_p50_ms": 5.141696005011909,
+    "corruption_p95_ms": 7.055056245008018,
+    "experiment": "veil-s2-clahe",
+    "family": "veil",
+    "image_GiB": 0.03851242270320654,
+    "images": 256,
+    "mAP50": 0.26212208555035915,
+    "model_inference_ms": 1.335258413973861,
+    "native_degradation": 0.009416025586149429,
+    "native_mAP50_95": 0.15962913336335127,
+    "native_recovery": 0.011963074822483849,
+    "operator": "clahe",
+    "precision": 0.4270911490983229,
+    "recall": 0.26519578586573817,
+    "restore_p50_ms": 8.28916700265836,
+    "restore_p95_ms": 8.898347750800895,
+    "severity": 2,
+    "supported_clean_loss": -0.004607720977524127,
+    "supported_invalid_draws": 0.0,
+    "supported_mAP50_95": 0.19155496003602152,
+    "supported_recovery": 0.014355689786980569,
+    "supported_recovery_ci_high": 0.02901192366312773,
+    "supported_recovery_ci_low": 0.003984624020349493,
+    "supported_valid_draws": 100.0
+  },
+  "estimand": {
+    "class_ids": [
+      0,
+      1,
+      2,
+      4,
+      5
+    ],
+    "class_names": [
+      "car",
+      "truck",
+      "bus",
+      "motorcycle",
+      "bicycle"
+    ],
+    "limit": "Support gate is an engineering minimum, not statistical adequacy",
+    "minimum_source_groups": 5,
+    "missing_class_draw": "exclude macro draw; no AP imputation or redraw",
+    "population": "fixed supported classes; percentile CI conditional on their presence",
+    "support": [
+      {
+        "class": "car",
+        "class_id": 0,
+        "images": 254,
+        "included": true,
+        "instances": 2621,
+        "reason": null,
+        "source_groups": 156
+      },
+      {
+        "class": "truck",
+        "class_id": 1,
+        "images": 75,
+        "included": true,
+        "instances": 122,
+        "reason": null,
+        "source_groups": 64
+      },
+      {
+        "class": "bus",
+        "class_id": 2,
+        "images": 40,
+        "included": true,
+        "instances": 48,
+        "reason": null,
+        "source_groups": 35
+      },
+      {
+        "class": "train",
+        "class_id": 3,
+        "images": 1,
+        "included": false,
+        "instances": 1,
+        "reason": "insufficient source groups",
+        "source_groups": 1
+      },
+      {
+        "class": "motorcycle",
+        "class_id": 4,
+        "images": 10,
+        "included": true,
+        "instances": 16,
+        "reason": null,
+        "source_groups": 10
+      },
+      {
+        "class": "bicycle",
+        "class_id": 5,
+        "images": 12,
+        "included": true,
+        "instances": 22,
+        "reason": null,
+        "source_groups": 12
+      }
+    ],
+    "version": "fixed-supported-macro-v2"
+  },
+  "final_pixels_accessed": false,
+  "final_spec_id": "912a3e3e02ca5e403912b6825e39ed993c95f9ceff506d31435d3de42ca26106",
+  "inference_run": false,
+  "interval_comparisons": 26,
+  "invalid_draws_total": 0,
+  "point_limitation": "six-class AP is descriptive; CI/gates use the fixed supported target",
+  "policy_decision_id": "33a47ce82c437e234b237e0d00f14db37b5bc2467b8187e5fff5c00e8c3b891c",
+  "requested_draws_per_comparison": 100,
+  "source_commit": "98d7a1f234a6c75e6f06512baef7033060caf8fc",
+  "source_study_id": "a7e6b2586bd26454a6fdcb651087f7ed52a59ecee0c0efeebdb765427e47f22c",
+  "train_absent_draws_per_comparison": 43,
+  "training_run": false,
+  "valid_draws_total": 2600
+}

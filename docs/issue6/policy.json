@@ -1,0 +1,2802 @@
+{
+  "calibration_ids": [
+    "00134776-9123d227",
+    "007b11e5-1033ff33",
+    "01118704-e91b1b1c",
+    "0252f2b5-2e69185a",
+    "02f48a74-f9aab55d",
+    "03a1130c-86adf6ea",
+    "03a1130c-8c69a61a",
+    "05af6dc5-5baee748",
+    "05fd5ca5-3a7a96de",
+    "06083322-27981e9c",
+    "061015c1-a0d2ddc5",
+    "06f4b4ad-d601a293",
+    "06ff7d61-48a6bc46",
+    "08f7bc96-82c4d570",
+    "09d90930-ace30bf2",
+    "0a9d498a-04e16ecd",
+    "0d4c18ab-917b194d",
+    "0fa50feb-e9c97185",
+    "1017ef7a-e90255eb",
+    "10ee3eb0-c205ee54",
+    "114e578a-47a24858",
+    "119b71aa-3ca5b095",
+    "129b62fc-44b12a9c",
+    "12f37766-0ea64463",
+    "13340903-6877dcdc",
+    "13fbfc19-d10661aa",
+    "1407449b-a0d3dcf0",
+    "140a808d-7e62ac88",
+    "15084f1f-d109119f",
+    "15b611fa-a78daa23",
+    "169900a5-ed63402d",
+    "17d56d5f-e6a8e690",
+    "18b78953-680aacd8",
+    "18dafff3-2283a4e8",
+    "19196b50-4e7a25fc",
+    "1abd6590-820d7f31",
+    "1accee17-e156848c",
+    "1beed53f-63ff17ed",
+    "1beed53f-d02fafd3",
+    "1d092676-229605e3",
+    "1d1c2bfe-11d23336",
+    "1dcbf95d-cfac3bac",
+    "1e1cf714-33559c73",
+    "1e423277-014d3087",
+    "1f07428e-19b745fa",
+    "20679230-35bf98b0",
+    "24937b75-917da3dd",
+    "264b9ed7-741f6ed4",
+    "26747328-a3cb89fc",
+    "26c1e2eb-a0dbf6cc",
+    "270489de-677db260",
+    "277a961d-df7b8638",
+    "2912625b-623255d0",
+    "2bf5eb25-c92b8c9b",
+    "2c150d4d-6e8ca6a4",
+    "2c29598f-54fc6503",
+    "2d3c5c52-c8746568",
+    "2f78a740-af5e4806",
+    "30df844b-847ee296",
+    "31b7487a-0271ab86",
+    "31dc57aa-0c5d597f",
+    "33fbca34-1f18826d",
+    "340553b3-3159f287",
+    "341776ab-53d10541",
+    "35737120-a0776190",
+    "35f4dc75-88229f04",
+    "35ffa090-b4326a3e",
+    "39ccdf51-c9c7bd64",
+    "3a209be1-b107916b",
+    "3b048843-2b28098d",
+    "3b232e0e-c0ed45bf",
+    "3b87b80e-d856ff82",
+    "3bfe7892-1d89aa18",
+    "3e276395-545dcc6d",
+    "3ed67640-070dd272",
+    "3f34d7dc-5990b7f9",
+    "409449bc-660bf007",
+    "40e9d6a2-ad577522",
+    "417417e3-635458ee",
+    "42461eb9-0451a5f2",
+    "46efc898-278c1321",
+    "48436e3b-95952717",
+    "48cc4f2d-c31da819",
+    "4a18f193-8df5253b",
+    "4abf640c-ab8e23cb",
+    "4ae517b9-289876c6",
+    "4baee3d7-320fba1f",
+    "4cc7403c-0204a943",
+    "4e974ddb-ea3d97b2",
+    "4ef0b323-48a566b1",
+    "50906934-74e5a9a9",
+    "50ac1dfd-38fe28ca",
+    "536aa113-d20d69db",
+    "54028280-ea973e68",
+    "555ac361-f1f3ded8",
+    "5561a79a-efe6f837",
+    "55752dc8-ccfaa86b",
+    "5644ef76-12d98871",
+    "564b466a-238becda",
+    "57c4b923-a4f84ed1",
+    "57c53979-79ceda1a",
+    "58a67b28-88e704ca",
+    "58ebbedc-05852951",
+    "58f34298-335b53f1",
+    "58ffc70b-6137230d",
+    "59d1965e-4fa31394",
+    "59d3355f-c8ef35af",
+    "5a2abbfd-9ec6d372",
+    "5aca29a8-b7f2aa05",
+    "5aff3f12-b97b363f",
+    "5bef0508-a893a812",
+    "5c4333b1-bdcd07f9",
+    "5e8408fa-d1bee8a0",
+    "5e862ec4-5bdc60b7",
+    "5ed9ce9c-c88de7d8",
+    "5f178acc-13fc1d69",
+    "603881b7-c5819bec",
+    "605a5f6b-91938a4a",
+    "60855380-4b618726",
+    "60e3224d-0ea59f5b",
+    "616c6563-cbc4da9a",
+    "628d6ba6-6f8767f5",
+    "62fc466a-73b89ea3",
+    "63187401-c4c25dcb",
+    "635dacee-af1dd825",
+    "653b2669-5633ef58",
+    "65432146-55d58472",
+    "65d17662-86f403e7",
+    "66838ab6-8a29d484",
+    "6753f3b1-12ea04f3",
+    "676fc918-d00480e4",
+    "677b0010-08987cad",
+    "679e3f11-b8eaf857",
+    "680277fe-f9a910ca",
+    "69987804-3a11739d",
+    "69c4320c-4efe330c",
+    "6ac3ccd7-ca00691c",
+    "6ad31d7e-9b212475",
+    "6b72aca7-670b0808",
+    "6babc941-92f2f39f",
+    "6c129222-d7d6a91b",
+    "6ce28c96-2e3e4ad0",
+    "6cebae75-4745fb8f",
+    "6d1cfc8e-013b37ea",
+    "6d226a88-0e6e431e",
+    "6d4a38ac-8351f306",
+    "6df3c1f4-2a02a625",
+    "6e495af0-540e4a46",
+    "6ef14911-adc83de9",
+    "6efc4740-380662d4",
+    "6f2daaf6-6b2ec8ff",
+    "70b50978-6eda525a",
+    "7226d097-71847f47",
+    "722e8519-e26ce4f7",
+    "72430348-0b2d92bb",
+    "72430348-0ca918c2",
+    "726770e5-33f45b27",
+    "7297b179-c661c980",
+    "73869519-9b1f273f",
+    "73fbca3f-0c4e7c59",
+    "7439610d-6c2d3205",
+    "744d7642-837cfd49",
+    "74864afc-2311bc20",
+    "755b49ba-2c46e7b7",
+    "779178f0-535c5ea3",
+    "77c3dc21-d06517da",
+    "782118be-c17db3b3",
+    "78bc7c78-2325d6da",
+    "793871d7-82ca5745",
+    "7980c85c-4b420fa2",
+    "79b32938-dc16c302",
+    "79b8198f-d661af00",
+    "79d012b5-253ffb7a",
+    "7aa83b3c-76b7a542",
+    "7c35c3cb-b5a57080",
+    "7c5d50c5-7292de37",
+    "7c8cdea2-01015c6c",
+    "7cdd49ee-41e8a71a",
+    "7f282094-890af522",
+    "803be978-104fe5cd",
+    "8178495a-bda62f7b",
+    "8185e299-7d95a0f7",
+    "81ea5d4c-2a914ce3",
+    "82e35f62-a01dc25b",
+    "84913296-b8c1b99f",
+    "851cde9e-5ca39711",
+    "86ec451d-c38ddce3",
+    "8743c909-8d298495",
+    "8759dd07-4da00cb1",
+    "876fe91b-394b0090",
+    "87c60b0c-a8514b3c",
+    "89c1bf10-0a7b2e39",
+    "8b580a00-fbf3df61",
+    "8b8b5d32-654ea46b",
+    "8c6df755-9a142721",
+    "8ccd331b-2421ac33",
+    "8cd7b842-e8d4c6d7",
+    "8dd26be9-386fb3ae",
+    "8ef38609-0441cf33",
+    "9081cc9d-8f710e84",
+    "91644fc9-c66430a9",
+    "91845e0c-28a0e359",
+    "920fafd7-ac56c10d",
+    "921f6518-683cbad4",
+    "9360a0c8-2c09414b",
+    "93d1341d-a40d3f33",
+    "948fbe10-ac1d8d84",
+    "94aa8729-b668bf10",
+    "95e3be8c-8b674feb",
+    "966ce84f-f3f6699d",
+    "96e06ec8-b73c1b36",
+    "9703b3c6-12b67e18",
+    "9724d02c-d942c43b",
+    "97f4a063-9fac7a7a",
+    "98713760-d8008495",
+    "99df2a61-2b70a65d",
+    "9a8e2e2e-f780baee",
+    "9e80c933-9a915845",
+    "9ec09241-cf0b4c4c",
+    "9ee57356-690e42ac",
+    "9efd3c16-b81b79c1",
+    "9f22e256-45c76330",
+    "a08021bf-78f8c650",
+    "a2125192-df657be2",
+    "a240d7cc-792b408c",
+    "a291a71b-261e9a2f",
+    "a2dc5fb1-fe93dc17",
+    "a2f20747-70c793f4",
+    "a389f631-ec631071",
+    "a4224094-6184454f",
+    "a5715983-cdf6c729",
+    "a5ba3518-c4c2924a",
+    "a60f201a-ca28d820",
+    "a8305048-bd7134f0",
+    "a93859c0-48a7af45",
+    "a98ace27-34ebb44b",
+    "a999ddc2-1531378d",
+    "aa1f79fc-65466709",
+    "aa20ff51-5590d193",
+    "aa60b8fc-145f2657",
+    "aa88fa0c-ca70bfe1",
+    "aa88fa0c-fda02603",
+    "ab5bfde7-31f29ba3",
+    "abbc7ff9-e2afeafb",
+    "ac295c71-cbe62f5d",
+    "ac6a14e6-3c1f5cb4",
+    "ad930b5f-36f46e0f",
+    "aeaadb1c-8634798e",
+    "aeae66ac-86811f58",
+    "af0c7640-d267e774",
+    "af7dc725-65b49541",
+    "b07627ba-50a1d408",
+    "b07e8864-3410383b",
+    "b0a681c2-78689da3",
+    "b12e7089-db4f24d3",
+    "b145825b-bedacfac"
+  ],
+  "calibration_rows_sha256": "fea9d22403e87277dcbda60633582830c9c15369dab3ced3476a7a6d7e8e281c",
+  "candidates": [
+    {
+      "ids": [
+        "00134776-9123d227",
+        "007b11e5-1033ff33",
+        "05af6dc5-5baee748",
+        "06083322-27981e9c",
+        "061015c1-a0d2ddc5",
+        "06ff7d61-48a6bc46",
+        "08f7bc96-82c4d570",
+        "114e578a-47a24858",
+        "12f37766-0ea64463",
+        "13fbfc19-d10661aa",
+        "140a808d-7e62ac88",
+        "1accee17-e156848c"
+      ],
+      "mean_proxy_loss_delta": -0.011246358865137087,
+      "operator": "gamma",
+      "settings": {
+        "gamma": 0.95
+      }
+    },
+    {
+      "ids": [
+        "00134776-9123d227",
+        "007b11e5-1033ff33",
+        "05af6dc5-5baee748",
+        "06083322-27981e9c",
+        "061015c1-a0d2ddc5",
+        "06ff7d61-48a6bc46",
+        "08f7bc96-82c4d570",
+        "114e578a-47a24858",
+        "12f37766-0ea64463",
+        "13fbfc19-d10661aa",
+        "140a808d-7e62ac88",
+        "1accee17-e156848c"
+      ],
+      "mean_proxy_loss_delta": -0.17734580954304832,
+      "operator": "gamma",
+      "settings": {
+        "gamma": 0.85
+      }
+    },
+    {
+      "ids": [
+        "05fd5ca5-3a7a96de",
+        "4e974ddb-ea3d97b2",
+        "79b8198f-d661af00",
+        "a2125192-df657be2",
+        "ac295c71-cbe62f5d"
+      ],
+      "mean_proxy_loss_delta": -0.0624736104678298,
+      "operator": "clahe",
+      "settings": {
+        "clip_limit": 1.2,
+        "grid_size": 8
+      }
+    },
+    {
+      "ids": [
+        "05fd5ca5-3a7a96de",
+        "4e974ddb-ea3d97b2",
+        "79b8198f-d661af00",
+        "a2125192-df657be2",
+        "ac295c71-cbe62f5d"
+      ],
+      "mean_proxy_loss_delta": -0.072052539695771,
+      "operator": "clahe",
+      "settings": {
+        "clip_limit": 1.5,
+        "grid_size": 8
+      }
+    },
+    {
+      "ids": [],
+      "mean_proxy_loss_delta": null,
+      "operator": "denoise",
+      "settings": {
+        "strength": 2.0
+      }
+    },
+    {
+      "ids": [],
+      "mean_proxy_loss_delta": null,
+      "operator": "denoise",
+      "settings": {
+        "strength": 3.0
+      }
+    },
+    {
+      "ids": [],
+      "mean_proxy_loss_delta": null,
+      "operator": "sharpen",
+      "settings": {
+        "amount": 0.15,
+        "sigma": 1.0
+      }
+    },
+    {
+      "ids": [],
+      "mean_proxy_loss_delta": null,
+      "operator": "sharpen",
+      "settings": {
+        "amount": 0.3,
+        "sigma": 1.0
+      }
+    }
+  ],
+  "encoding": {
+    "format": "jpg",
+    "jpeg_quality": 95
+  },
+  "implementation": {
+    "calibration_code": "f41417b3895f7b098f79d87005f93bcdb076b4dcf35883eb42f05a922225d380",
+    "numpy": "2.4.6",
+    "opencv": "4.14.0",
+    "operator_code": "354f19a51ba613f7bd0109fe5fcb7f86b98423059081500d96640ad2e29bb27b"
+  },
+  "limits": [
+    "Calibration uses a bounded seeded sample, not every calibration frame.",
+    "At most one filter; fixed priority Gamma, CLAHE, Denoise, Sharpen, otherwise skip.",
+    "Quality loss is a heuristic proxy; lower loss does not prove higher detection AP.",
+    "Small candidate support can miss adverse cases; inspect paired pilot examples.",
+    "No development-validation or final-test outcome enters recipe fitting."
+  ],
+  "measurements": [
+    {
+      "black_fraction": 0.001803927951388889,
+      "brightness": 0.09553850294458062,
+      "contrast": 0.1083277123069041,
+      "id": "00134776-9123d227",
+      "noise": 0.0,
+      "sharpness": 554.6942757964134,
+      "white_fraction": 0.00047471788194444444
+    },
+    {
+      "black_fraction": 0.0037706163194444445,
+      "brightness": 0.10815325967626635,
+      "contrast": 0.12517373560387077,
+      "id": "007b11e5-1033ff33",
+      "noise": 0.0,
+      "sharpness": 269.3773432958549,
+      "white_fraction": 0.001125759548611111
+    },
+    {
+      "black_fraction": 0.001125759548611111,
+      "brightness": 0.4864001172300517,
+      "contrast": 0.2842814558143768,
+      "id": "01118704-e91b1b1c",
+      "noise": 0.0,
+      "sharpness": 410.63585069444446,
+      "white_fraction": 0.0
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.445051072729439,
+      "contrast": 0.20145586925929573,
+      "id": "0252f2b5-2e69185a",
+      "noise": 0.0,
+      "sharpness": 1721.8044138203065,
+      "white_fraction": 0.0
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.3392131863596133,
+      "contrast": 0.23932049928404897,
+      "id": "02f48a74-f9aab55d",
+      "noise": 0.0,
+      "sharpness": 787.9305215983846,
+      "white_fraction": 0.0289306640625
+    },
+    {
+      "black_fraction": 2.0345052083333332e-05,
+      "brightness": 0.34395097720077616,
+      "contrast": 0.2511633746463768,
+      "id": "03a1130c-86adf6ea",
+      "noise": 0.0,
+      "sharpness": 724.2939398066129,
+      "white_fraction": 0.004116482204861111
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.34261759174155776,
+      "contrast": 0.2530056128518045,
+      "id": "03a1130c-8c69a61a",
+      "noise": 0.0,
+      "sharpness": 363.62041130215846,
+      "white_fraction": 0.005588107638888889
+    },
+    {
+      "black_fraction": 0.2116156684027778,
+      "brightness": 0.0676637869774646,
+      "contrast": 0.09833335792726601,
+      "id": "05af6dc5-5baee748",
+      "noise": 0.0,
+      "sharpness": 170.08087014117172,
+      "white_fraction": 0.00048828125
+    },
+    {
+      "black_fraction": 0.001430935329861111,
+      "brightness": 0.12877745119315087,
+      "contrast": 0.1162333472247136,
+      "id": "05fd5ca5-3a7a96de",
+      "noise": 0.0,
+      "sharpness": 254.6948918913617,
+      "white_fraction": 0.0012953016493055555
+    },
+    {
+      "black_fraction": 0.021674262152777776,
+      "brightness": 0.10112400428921568,
+      "contrast": 0.09481079472742751,
+      "id": "06083322-27981e9c",
+      "noise": 0.0,
+      "sharpness": 161.9005712336964,
+      "white_fraction": 0.0010850694444444445
+    },
+    {
+      "black_fraction": 0.10558403862847222,
+      "brightness": 0.07374682457618463,
+      "contrast": 0.10613620236125021,
+      "id": "061015c1-a0d2ddc5",
+      "noise": 0.0,
+      "sharpness": 343.0262251639348,
+      "white_fraction": 0.0009697808159722222
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.4684030171313317,
+      "contrast": 0.21337252213567456,
+      "id": "06f4b4ad-d601a293",
+      "noise": 0.0,
+      "sharpness": 873.4179424013896,
+      "white_fraction": 0.017096625434027776
+    },
+    {
+      "black_fraction": 0.00031195746527777775,
+      "brightness": 0.11876175491898149,
+      "contrast": 0.15276437135970075,
+      "id": "06ff7d61-48a6bc46",
+      "noise": 0.0,
+      "sharpness": 246.20339546600977,
+      "white_fraction": 0.007656521267361111
+    },
+    {
+      "black_fraction": 0.005954318576388889,
+      "brightness": 0.11926836001327615,
+      "contrast": 0.11097568163015539,
+      "id": "08f7bc96-82c4d570",
+      "noise": 0.0,
+      "sharpness": 344.32804726850657,
+      "white_fraction": 0.0006781684027777778
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.412657787181713,
+      "contrast": 0.2423469051844267,
+      "id": "09d90930-ace30bf2",
+      "noise": 0.0,
+      "sharpness": 859.0555497860007,
+      "white_fraction": 0.0008884006076388889
+    },
+    {
+      "black_fraction": 6.781684027777777e-06,
+      "brightness": 0.23196521501395698,
+      "contrast": 0.19000943613937263,
+      "id": "0a9d498a-04e16ecd",
+      "noise": 0.0,
+      "sharpness": 980.9384802112149,
+      "white_fraction": 0.0030653211805555555
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.38497739970554196,
+      "contrast": 0.281783996665479,
+      "id": "0d4c18ab-917b194d",
+      "noise": 0.0,
+      "sharpness": 742.9832761110623,
+      "white_fraction": 0.001953125
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.23513843145765248,
+      "contrast": 0.14002718226187036,
+      "id": "0fa50feb-e9c97185",
+      "noise": 0.0,
+      "sharpness": 225.40012078152762,
+      "white_fraction": 0.003451877170138889
+    },
+    {
+      "black_fraction": 0.009189181857638888,
+      "brightness": 0.38090987859987746,
+      "contrast": 0.26489877102718584,
+      "id": "1017ef7a-e90255eb",
+      "noise": 0.0,
+      "sharpness": 981.6760053976359,
+      "white_fraction": 0.04071044921875
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.1985576288892293,
+      "contrast": 0.13754362534671416,
+      "id": "10ee3eb0-c205ee54",
+      "noise": 0.0,
+      "sharpness": 1177.73494449589,
+      "white_fraction": 0.0015190972222222222
+    },
+    {
+      "black_fraction": 0.20450846354166666,
+      "brightness": 0.05669179347086057,
+      "contrast": 0.09920210870435694,
+      "id": "114e578a-47a24858",
+      "noise": 0.0,
+      "sharpness": 119.13388378071934,
+      "white_fraction": 8.138020833333333e-05
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.26059123519199345,
+      "contrast": 0.12486730853543347,
+      "id": "119b71aa-3ca5b095",
+      "noise": 0.0,
+      "sharpness": 215.48703355034007,
+      "white_fraction": 0.0018107096354166667
+    },
+    {
+      "black_fraction": 2.712673611111111e-05,
+      "brightness": 0.16016114345043575,
+      "contrast": 0.15367412596860183,
+      "id": "129b62fc-44b12a9c",
+      "noise": 0.0,
+      "sharpness": 313.1441667222959,
+      "white_fraction": 0.003506130642361111
+    },
+    {
+      "black_fraction": 0.05441623263888889,
+      "brightness": 0.08306568287037036,
+      "contrast": 0.10098757773552462,
+      "id": "12f37766-0ea64463",
+      "noise": 0.0,
+      "sharpness": 146.08268199732277,
+      "white_fraction": 0.0004475911458333333
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.45506184895833335,
+      "contrast": 0.22134928488414354,
+      "id": "13340903-6877dcdc",
+      "noise": 0.0,
+      "sharpness": 1007.2380636996693,
+      "white_fraction": 0.0
+    },
+    {
+      "black_fraction": 0.03272840711805555,
+      "brightness": 0.08774852877348856,
+      "contrast": 0.08832273134898443,
+      "id": "13fbfc19-d10661aa",
+      "noise": 0.0,
+      "sharpness": 222.32703069993008,
+      "white_fraction": 0.00037977430555555556
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.37292243774680006,
+      "contrast": 0.23571268631479314,
+      "id": "1407449b-a0d3dcf0",
+      "noise": 0.0058140382170677185,
+      "sharpness": 783.4543215168386,
+      "white_fraction": 0.017625596788194444
+    },
+    {
+      "black_fraction": 0.3857760959201389,
+      "brightness": 0.026818741276892703,
+      "contrast": 0.03901929732881123,
+      "id": "140a808d-7e62ac88",
+      "noise": 0.0,
+      "sharpness": 53.441745168632934,
+      "white_fraction": 7.459852430555556e-05
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.3368273899186411,
+      "contrast": 0.21903339520593942,
+      "id": "15084f1f-d109119f",
+      "noise": 0.0,
+      "sharpness": 937.2285968020652,
+      "white_fraction": 0.05372450086805555
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.3869612683398012,
+      "contrast": 0.264578754849905,
+      "id": "15b611fa-a78daa23",
+      "noise": 0.0,
+      "sharpness": 342.7979093061553,
+      "white_fraction": 0.0
+    },
+    {
+      "black_fraction": 0.014485677083333334,
+      "brightness": 0.1228794338916122,
+      "contrast": 0.19898435573967216,
+      "id": "169900a5-ed63402d",
+      "noise": 0.0,
+      "sharpness": 550.604312206308,
+      "white_fraction": 0.026563856336805556
+    },
+    {
+      "black_fraction": 2.712673611111111e-05,
+      "brightness": 0.14691986549394065,
+      "contrast": 0.1670839232690401,
+      "id": "17d56d5f-e6a8e690",
+      "noise": 0.0,
+      "sharpness": 743.3159577051798,
+      "white_fraction": 0.010640462239583334
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.41219713796977125,
+      "contrast": 0.23742059698847942,
+      "id": "18b78953-680aacd8",
+      "noise": 0.0058140382170677185,
+      "sharpness": 1320.1923584996919,
+      "white_fraction": 0.020392523871527776
+    },
+    {
+      "black_fraction": 0.014051649305555556,
+      "brightness": 0.4130987828073938,
+      "contrast": 0.23738423764874503,
+      "id": "18dafff3-2283a4e8",
+      "noise": 0.0,
+      "sharpness": 1046.468280022343,
+      "white_fraction": 0.002651638454861111
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.3239811783003132,
+      "contrast": 0.2148513297111847,
+      "id": "19196b50-4e7a25fc",
+      "noise": 0.0,
+      "sharpness": 1268.995760427397,
+      "white_fraction": 0.005221896701388889
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.47850509344362746,
+      "contrast": 0.23303443399243656,
+      "id": "1abd6590-820d7f31",
+      "noise": 0.0,
+      "sharpness": 316.25744483187617,
+      "white_fraction": 0.0005357530381944445
+    },
+    {
+      "black_fraction": 0.50836181640625,
+      "brightness": 0.068082708886506,
+      "contrast": 0.10894835137059378,
+      "id": "1accee17-e156848c",
+      "noise": 0.0,
+      "sharpness": 104.31086556995173,
+      "white_fraction": 4.7471788194444445e-05
+    },
+    {
+      "black_fraction": 0.07515462239583333,
+      "brightness": 0.06502446193321078,
+      "contrast": 0.08303095072453873,
+      "id": "1beed53f-63ff17ed",
+      "noise": 0.0,
+      "sharpness": 174.8095522145798,
+      "white_fraction": 0.0006578233506944445
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.21190480749591503,
+      "contrast": 0.19242471128591515,
+      "id": "1beed53f-d02fafd3",
+      "noise": 0.0,
+      "sharpness": 684.8742715495143,
+      "white_fraction": 0.004835340711805556
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.32299235557938455,
+      "contrast": 0.2027218580145506,
+      "id": "1d092676-229605e3",
+      "noise": 0.0058140382170677185,
+      "sharpness": 1123.2887152892847,
+      "white_fraction": 0.008985731336805556
+    },
+    {
+      "black_fraction": 0.246826171875,
+      "brightness": 0.06317026973549836,
+      "contrast": 0.09013578495457342,
+      "id": "1d1c2bfe-11d23336",
+      "noise": 0.0,
+      "sharpness": 132.3452925387724,
+      "white_fraction": 0.0002644856770833333
+    },
+    {
+      "black_fraction": 8.138020833333333e-05,
+      "brightness": 0.43220720145697167,
+      "contrast": 0.23835069047428406,
+      "id": "1dcbf95d-cfac3bac",
+      "noise": 0.0058140382170677185,
+      "sharpness": 1174.8551988534996,
+      "white_fraction": 0.0037367078993055555
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.391439839282067,
+      "contrast": 0.2800115081148515,
+      "id": "1e1cf714-33559c73",
+      "noise": 0.0,
+      "sharpness": 690.1955892708567,
+      "white_fraction": 0.0
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.3738537624251089,
+      "contrast": 0.23407957241142083,
+      "id": "1e423277-014d3087",
+      "noise": 0.0,
+      "sharpness": 842.2535574402614,
+      "white_fraction": 0.005486382378472222
+    },
+    {
+      "black_fraction": 0.04524061414930555,
+      "brightness": 0.12123031449993192,
+      "contrast": 0.2090450998426114,
+      "id": "1f07428e-19b745fa",
+      "noise": 0.0,
+      "sharpness": 526.3117727857589,
+      "white_fraction": 0.0079345703125
+    },
+    {
+      "black_fraction": 0.16459825303819445,
+      "brightness": 0.055346360549428104,
+      "contrast": 0.0610012154823085,
+      "id": "20679230-35bf98b0",
+      "noise": 0.0,
+      "sharpness": 111.80230712775645,
+      "white_fraction": 0.00019666883680555556
+    },
+    {
+      "black_fraction": 0.003024631076388889,
+      "brightness": 0.38496396931168303,
+      "contrast": 0.2266317761653715,
+      "id": "24937b75-917da3dd",
+      "noise": 0.0058140382170677185,
+      "sharpness": 1062.2929493519996,
+      "white_fraction": 0.005235460069444444
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.18289074201729302,
+      "contrast": 0.1567074443730799,
+      "id": "264b9ed7-741f6ed4",
+      "noise": 0.0,
+      "sharpness": 280.3959301577674,
+      "white_fraction": 0.002292209201388889
+    },
+    {
+      "black_fraction": 0.10301378038194445,
+      "brightness": 0.13911720558449073,
+      "contrast": 0.16046441601128136,
+      "id": "26747328-a3cb89fc",
+      "noise": 0.0,
+      "sharpness": 350.2099673383306,
+      "white_fraction": 0.004258897569444444
+    },
+    {
+      "black_fraction": 0.00010850694444444444,
+      "brightness": 0.30703944121051197,
+      "contrast": 0.22330460747121664,
+      "id": "26c1e2eb-a0dbf6cc",
+      "noise": 0.0,
+      "sharpness": 985.3011347514888,
+      "white_fraction": 0.013814290364583334
+    },
+    {
+      "black_fraction": 0.06603325737847222,
+      "brightness": 0.09200306478928377,
+      "contrast": 0.08932001568650637,
+      "id": "270489de-677db260",
+      "noise": 0.0,
+      "sharpness": 149.0583331382109,
+      "white_fraction": 0.0007663302951388889
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.36869678372651143,
+      "contrast": 0.23377087014019218,
+      "id": "277a961d-df7b8638",
+      "noise": 0.0058140382170677185,
+      "sharpness": 1887.5088222598959,
+      "white_fraction": 0.017489963107638888
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.37862229690053106,
+      "contrast": 0.22114812186160834,
+      "id": "2912625b-623255d0",
+      "noise": 0.0,
+      "sharpness": 946.2882252885605,
+      "white_fraction": 0.0004475911458333333
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.3348120861843001,
+      "contrast": 0.2496112274383617,
+      "id": "2bf5eb25-c92b8c9b",
+      "noise": 0.0,
+      "sharpness": 710.1542249189483,
+      "white_fraction": 1.3563368055555555e-05
+    },
+    {
+      "black_fraction": 0.001430935329861111,
+      "brightness": 0.4336823640046296,
+      "contrast": 0.20363823544300982,
+      "id": "2c150d4d-6e8ca6a4",
+      "noise": 0.0,
+      "sharpness": 662.206774706044,
+      "white_fraction": 0.0252685546875
+    },
+    {
+      "black_fraction": 2.712673611111111e-05,
+      "brightness": 0.2949180985328159,
+      "contrast": 0.28379326839118474,
+      "id": "2c29598f-54fc6503",
+      "noise": 0.0,
+      "sharpness": 323.1565691563818,
+      "white_fraction": 6.781684027777777e-06
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.4538914898641748,
+      "contrast": 0.21573413817511852,
+      "id": "2d3c5c52-c8746568",
+      "noise": 0.0,
+      "sharpness": 1305.0949402869117,
+      "white_fraction": 0.0011393229166666667
+    },
+    {
+      "black_fraction": 0.18863932291666666,
+      "brightness": 0.11693726915679466,
+      "contrast": 0.1384600714133781,
+      "id": "2f78a740-af5e4806",
+      "noise": 0.0,
+      "sharpness": 227.7128079522079,
+      "white_fraction": 0.0020751953125
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.5012882274220452,
+      "contrast": 0.2739040048335594,
+      "id": "30df844b-847ee296",
+      "noise": 0.0,
+      "sharpness": 1355.4043980273477,
+      "white_fraction": 6.781684027777778e-05
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.46535918458095044,
+      "contrast": 0.2522135960649404,
+      "id": "31b7487a-0271ab86",
+      "noise": 0.0,
+      "sharpness": 560.7315525213877,
+      "white_fraction": 0.0001220703125
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.44681771471609477,
+      "contrast": 0.23413796818845442,
+      "id": "31dc57aa-0c5d597f",
+      "noise": 0.0,
+      "sharpness": 689.4485762781106,
+      "white_fraction": 0.007107204861111111
+    },
+    {
+      "black_fraction": 0.002170138888888889,
+      "brightness": 0.40289431636369827,
+      "contrast": 0.2419513117330201,
+      "id": "33fbca34-1f18826d",
+      "noise": 0.0058140382170677185,
+      "sharpness": 1513.479578739653,
+      "white_fraction": 0.0007595486111111111
+    },
+    {
+      "black_fraction": 0.021050347222222224,
+      "brightness": 0.06843881378506263,
+      "contrast": 0.06071248135132629,
+      "id": "340553b3-3159f287",
+      "noise": 0.0,
+      "sharpness": 130.77035125685327,
+      "white_fraction": 0.0003323025173611111
+    },
+    {
+      "black_fraction": 0.0017903645833333333,
+      "brightness": 0.1435117900241694,
+      "contrast": 0.12272229927704056,
+      "id": "341776ab-53d10541",
+      "noise": 0.0,
+      "sharpness": 360.4057967743756,
+      "white_fraction": 0.0004679361979166667
+    },
+    {
+      "black_fraction": 0.00010172526041666667,
+      "brightness": 0.18694568376395698,
+      "contrast": 0.1603977252129237,
+      "id": "35737120-a0776190",
+      "noise": 0.0,
+      "sharpness": 426.4948683800061,
+      "white_fraction": 0.0004475911458333333
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.3469805815121187,
+      "contrast": 0.1953172145566171,
+      "id": "35f4dc75-88229f04",
+      "noise": 0.0058140382170677185,
+      "sharpness": 1368.6342913518993,
+      "white_fraction": 0.003994411892361111
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.3977319655075572,
+      "contrast": 0.19930664158654965,
+      "id": "35ffa090-b4326a3e",
+      "noise": 0.0,
+      "sharpness": 416.53720045071327,
+      "white_fraction": 2.0345052083333332e-05
+    },
+    {
+      "black_fraction": 5.425347222222222e-05,
+      "brightness": 0.17623317610464326,
+      "contrast": 0.1571895061770847,
+      "id": "39ccdf51-c9c7bd64",
+      "noise": 0.0,
+      "sharpness": 456.08518592070465,
+      "white_fraction": 0.004774305555555556
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.32897154033054193,
+      "contrast": 0.2517202220767265,
+      "id": "3a209be1-b107916b",
+      "noise": 0.0,
+      "sharpness": 676.1390004150661,
+      "white_fraction": 0.043707953559027776
+    },
+    {
+      "black_fraction": 0.1449856228298611,
+      "brightness": 0.06224083329078159,
+      "contrast": 0.08571677019446683,
+      "id": "3b048843-2b28098d",
+      "noise": 0.0,
+      "sharpness": 459.9547337865757,
+      "white_fraction": 0.0003255208333333333
+    },
+    {
+      "black_fraction": 9.494357638888889e-05,
+      "brightness": 0.5140159590311819,
+      "contrast": 0.20908673660176166,
+      "id": "3b232e0e-c0ed45bf",
+      "noise": 0.0058140382170677185,
+      "sharpness": 836.7056101125977,
+      "white_fraction": 0.0081787109375
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.47284209473720046,
+      "contrast": 0.2581773782125329,
+      "id": "3b87b80e-d856ff82",
+      "noise": 0.0,
+      "sharpness": 565.2540956733772,
+      "white_fraction": 0.00031195746527777775
+    },
+    {
+      "black_fraction": 0.0733981662326389,
+      "brightness": 0.11321718303206699,
+      "contrast": 0.12719501422473717,
+      "id": "3bfe7892-1d89aa18",
+      "noise": 0.0,
+      "sharpness": 78.71998216027832,
+      "white_fraction": 0.004197862413194444
+    },
+    {
+      "black_fraction": 0.022813585069444444,
+      "brightness": 0.10698077299496188,
+      "contrast": 0.11688969344606955,
+      "id": "3e276395-545dcc6d",
+      "noise": 0.0,
+      "sharpness": 248.7252583672971,
+      "white_fraction": 0.001125759548611111
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.4195021552457789,
+      "contrast": 0.2616642850055735,
+      "id": "3ed67640-070dd272",
+      "noise": 0.0,
+      "sharpness": 1308.0505575949765,
+      "white_fraction": 0.0017157660590277778
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.3523634301811002,
+      "contrast": 0.24369402926170272,
+      "id": "3f34d7dc-5990b7f9",
+      "noise": 0.0,
+      "sharpness": 870.8260810054655,
+      "white_fraction": 0.006381564670138889
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.3272088343801062,
+      "contrast": 0.27921932420658846,
+      "id": "409449bc-660bf007",
+      "noise": 0.0,
+      "sharpness": 760.0427768417624,
+      "white_fraction": 0.03944227430555555
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.3658994853366694,
+      "contrast": 0.24340859575852436,
+      "id": "40e9d6a2-ad577522",
+      "noise": 0.0,
+      "sharpness": 477.31818146157417,
+      "white_fraction": 0.009602864583333334
+    },
+    {
+      "black_fraction": 0.2092624240451389,
+      "brightness": 0.09193115234375,
+      "contrast": 0.14298345830302045,
+      "id": "417417e3-635458ee",
+      "noise": 0.0,
+      "sharpness": 213.8276607364784,
+      "white_fraction": 0.004414876302083333
+    },
+    {
+      "black_fraction": 4.7471788194444445e-05,
+      "brightness": 0.425148532177628,
+      "contrast": 0.2389777627255118,
+      "id": "42461eb9-0451a5f2",
+      "noise": 0.0058140382170677185,
+      "sharpness": 1964.3411098217798,
+      "white_fraction": 0.015007866753472222
+    },
+    {
+      "black_fraction": 4.7471788194444445e-05,
+      "brightness": 0.46336717792585785,
+      "contrast": 0.20867176793217412,
+      "id": "46efc898-278c1321",
+      "noise": 0.0,
+      "sharpness": 678.012412386176,
+      "white_fraction": 0.029486762152777776
+    },
+    {
+      "black_fraction": 0.00041368272569444444,
+      "brightness": 0.4106303030109613,
+      "contrast": 0.25238010734721417,
+      "id": "48436e3b-95952717",
+      "noise": 0.0058140382170677185,
+      "sharpness": 1532.310311926322,
+      "white_fraction": 0.005594889322916667
+    },
+    {
+      "black_fraction": 0.0002644856770833333,
+      "brightness": 0.4180432687397876,
+      "contrast": 0.23656527375790068,
+      "id": "48cc4f2d-c31da819",
+      "noise": 0.0,
+      "sharpness": 891.4529145613404,
+      "white_fraction": 0.00010850694444444444
+    },
+    {
+      "black_fraction": 0.6221449110243056,
+      "brightness": 0.046375575512322985,
+      "contrast": 0.07427055539468218,
+      "id": "4a18f193-8df5253b",
+      "noise": 0.0,
+      "sharpness": 101.77431231291024,
+      "white_fraction": 0.0
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.13764350575299564,
+      "contrast": 0.14270664588418766,
+      "id": "4abf640c-ab8e23cb",
+      "noise": 0.0,
+      "sharpness": 523.5182721259786,
+      "white_fraction": 0.0020887586805555555
+    },
+    {
+      "black_fraction": 8.138020833333333e-05,
+      "brightness": 0.4259849930640659,
+      "contrast": 0.2553868077314684,
+      "id": "4ae517b9-289876c6",
+      "noise": 0.0,
+      "sharpness": 1270.4510905300667,
+      "white_fraction": 0.009901258680555556
+    },
+    {
+      "black_fraction": 6.781684027777777e-06,
+      "brightness": 0.18614249302151417,
+      "contrast": 0.1416440604976051,
+      "id": "4baee3d7-320fba1f",
+      "noise": 0.0,
+      "sharpness": 387.9150100961144,
+      "white_fraction": 0.004686143663194444
+    },
+    {
+      "black_fraction": 0.13859049479166666,
+      "brightness": 0.07822938474434914,
+      "contrast": 0.09826262894157096,
+      "id": "4cc7403c-0204a943",
+      "noise": 0.0,
+      "sharpness": 153.5384426580535,
+      "white_fraction": 0.00014241536458333334
+    },
+    {
+      "black_fraction": 0.026930067274305556,
+      "brightness": 0.12161830661083878,
+      "contrast": 0.11773128836320701,
+      "id": "4e974ddb-ea3d97b2",
+      "noise": 0.0,
+      "sharpness": 377.173110385,
+      "white_fraction": 0.0014241536458333333
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.3898468084065223,
+      "contrast": 0.2125951788412976,
+      "id": "4ef0b323-48a566b1",
+      "noise": 0.0,
+      "sharpness": 338.0903494341506,
+      "white_fraction": 4.7471788194444445e-05
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.13106048517497276,
+      "contrast": 0.1322310902764736,
+      "id": "50906934-74e5a9a9",
+      "noise": 0.0,
+      "sharpness": 579.4262266113067,
+      "white_fraction": 0.002963595920138889
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.46081628072235836,
+      "contrast": 0.31408294761602057,
+      "id": "50ac1dfd-38fe28ca",
+      "noise": 0.0,
+      "sharpness": 1319.3411520673535,
+      "white_fraction": 0.0
+    },
+    {
+      "black_fraction": 0.1265597873263889,
+      "brightness": 0.0956591637305964,
+      "contrast": 0.11251459018218676,
+      "id": "536aa113-d20d69db",
+      "noise": 0.0,
+      "sharpness": 97.1453785608856,
+      "white_fraction": 0.0006103515625
+    },
+    {
+      "black_fraction": 0.0135498046875,
+      "brightness": 0.5556496746919254,
+      "contrast": 0.25198587646371073,
+      "id": "54028280-ea973e68",
+      "noise": 0.0,
+      "sharpness": 683.8294123129713,
+      "white_fraction": 0.00054931640625
+    },
+    {
+      "black_fraction": 0.24094645182291666,
+      "brightness": 0.053452728204997274,
+      "contrast": 0.07586350930346886,
+      "id": "555ac361-f1f3ded8",
+      "noise": 0.0,
+      "sharpness": 68.26881776455745,
+      "white_fraction": 0.0008612738715277778
+    },
+    {
+      "black_fraction": 0.3120795355902778,
+      "brightness": 0.04536390782441449,
+      "contrast": 0.05218987628706451,
+      "id": "5561a79a-efe6f837",
+      "noise": 0.0,
+      "sharpness": 22.036729511655405,
+      "white_fraction": 0.00016954210069444444
+    },
+    {
+      "black_fraction": 0.00021701388888888888,
+      "brightness": 0.4250530832992919,
+      "contrast": 0.22994609739892807,
+      "id": "55752dc8-ccfaa86b",
+      "noise": 0.0,
+      "sharpness": 276.9402494472854,
+      "white_fraction": 0.038330078125
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.4141521777982026,
+      "contrast": 0.2359233586119498,
+      "id": "5644ef76-12d98871",
+      "noise": 0.0,
+      "sharpness": 798.7512132840025,
+      "white_fraction": 0.0
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.622663457201457,
+      "contrast": 0.22281142812170532,
+      "id": "564b466a-238becda",
+      "noise": 0.0,
+      "sharpness": 340.7702102197081,
+      "white_fraction": 0.0026719835069444445
+    },
+    {
+      "black_fraction": 0.07145860460069445,
+      "brightness": 0.11172380301947168,
+      "contrast": 0.16494187860721982,
+      "id": "57c4b923-a4f84ed1",
+      "noise": 0.0,
+      "sharpness": 259.7428874158197,
+      "white_fraction": 0.00031873914930555556
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.40473140807972496,
+      "contrast": 0.24880628126481985,
+      "id": "57c53979-79ceda1a",
+      "noise": 0.0,
+      "sharpness": 951.1413993459703,
+      "white_fraction": 0.0
+    },
+    {
+      "black_fraction": 0.00042046440972222225,
+      "brightness": 0.3534766369655501,
+      "contrast": 0.28701238260643325,
+      "id": "58a67b28-88e704ca",
+      "noise": 0.0,
+      "sharpness": 802.4554083860583,
+      "white_fraction": 0.0009426540798611111
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.4532605007063589,
+      "contrast": 0.2403541734937784,
+      "id": "58ebbedc-05852951",
+      "noise": 0.0058140382170677185,
+      "sharpness": 898.6878855757783,
+      "white_fraction": 0.0010308159722222222
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.46828799445125274,
+      "contrast": 0.2575066787002664,
+      "id": "58f34298-335b53f1",
+      "noise": 0.0058140382170677185,
+      "sharpness": 868.7046194913578,
+      "white_fraction": 0.0
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.23181750727634803,
+      "contrast": 0.1943897012410117,
+      "id": "58ffc70b-6137230d",
+      "noise": 0.0,
+      "sharpness": 370.34461649847617,
+      "white_fraction": 0.0029771592881944445
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.396630859375,
+      "contrast": 0.26452946784190495,
+      "id": "59d1965e-4fa31394",
+      "noise": 0.0,
+      "sharpness": 860.3888270214292,
+      "white_fraction": 0.0015326605902777778
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.419722546679262,
+      "contrast": 0.2808787855614683,
+      "id": "59d3355f-c8ef35af",
+      "noise": 0.0,
+      "sharpness": 582.5939481684732,
+      "white_fraction": 0.05959743923611111
+    },
+    {
+      "black_fraction": 8.816189236111111e-05,
+      "brightness": 0.5030138867613018,
+      "contrast": 0.26039704132536845,
+      "id": "5a2abbfd-9ec6d372",
+      "noise": 0.0,
+      "sharpness": 1077.3129880156046,
+      "white_fraction": 0.0
+    },
+    {
+      "black_fraction": 0.008070203993055556,
+      "brightness": 0.1827824744264025,
+      "contrast": 0.15648416714606747,
+      "id": "5aca29a8-b7f2aa05",
+      "noise": 0.0,
+      "sharpness": 320.120022058073,
+      "white_fraction": 0.013237847222222222
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.15080292479404955,
+      "contrast": 0.1641959569641385,
+      "id": "5aff3f12-b97b363f",
+      "noise": 0.0,
+      "sharpness": 567.1367187277402,
+      "white_fraction": 0.003960503472222222
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.3845480792143246,
+      "contrast": 0.19810259694841795,
+      "id": "5bef0508-a893a812",
+      "noise": 0.0,
+      "sharpness": 514.798965488687,
+      "white_fraction": 0.03213161892361111
+    },
+    {
+      "black_fraction": 0.00048149956597222225,
+      "brightness": 0.3400574395339733,
+      "contrast": 0.26509316193797133,
+      "id": "5c4333b1-bdcd07f9",
+      "noise": 0.0,
+      "sharpness": 1362.9537866045205,
+      "white_fraction": 0.006130642361111111
+    },
+    {
+      "black_fraction": 0.01055908203125,
+      "brightness": 0.31087380535981757,
+      "contrast": 0.23137016622455814,
+      "id": "5e8408fa-d1bee8a0",
+      "noise": 0.0,
+      "sharpness": 762.6785842884838,
+      "white_fraction": 0.0
+    },
+    {
+      "black_fraction": 0.0262451171875,
+      "brightness": 0.3920033839273557,
+      "contrast": 0.21642144312623035,
+      "id": "5e862ec4-5bdc60b7",
+      "noise": 0.0,
+      "sharpness": 1283.608685887476,
+      "white_fraction": 0.003919813368055556
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.4299059234153731,
+      "contrast": 0.28981062793207596,
+      "id": "5ed9ce9c-c88de7d8",
+      "noise": 0.0,
+      "sharpness": 1049.5050634575755,
+      "white_fraction": 0.020107693142361112
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.33432117204520695,
+      "contrast": 0.20058301268296605,
+      "id": "5f178acc-13fc1d69",
+      "noise": 0.0058140382170677185,
+      "sharpness": 1233.9676039428164,
+      "white_fraction": 0.027262369791666668
+    },
+    {
+      "black_fraction": 0.0045166015625,
+      "brightness": 0.3667275954435594,
+      "contrast": 0.22741725022535764,
+      "id": "603881b7-c5819bec",
+      "noise": 0.0,
+      "sharpness": 2022.1890393130848,
+      "white_fraction": 0.018649631076388888
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.4159216388378268,
+      "contrast": 0.29096437406029635,
+      "id": "605a5f6b-91938a4a",
+      "noise": 0.0,
+      "sharpness": 380.5419557881944,
+      "white_fraction": 0.0
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.3742953697320942,
+      "contrast": 0.29922503588218996,
+      "id": "60855380-4b618726",
+      "noise": 0.0,
+      "sharpness": 429.13314126151397,
+      "white_fraction": 0.04696994357638889
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.5514441529650055,
+      "contrast": 0.23732672216871173,
+      "id": "60e3224d-0ea59f5b",
+      "noise": 0.0,
+      "sharpness": 855.5396921755631,
+      "white_fraction": 0.004102918836805556
+    },
+    {
+      "black_fraction": 0.0025634765625,
+      "brightness": 0.1669387052781182,
+      "contrast": 0.1588091552080102,
+      "id": "616c6563-cbc4da9a",
+      "noise": 0.0,
+      "sharpness": 663.0237858411339,
+      "white_fraction": 0.007290310329861111
+    },
+    {
+      "black_fraction": 0.0037434895833333335,
+      "brightness": 0.1958115787547658,
+      "contrast": 0.14177268287826997,
+      "id": "628d6ba6-6f8767f5",
+      "noise": 0.0,
+      "sharpness": 218.76571866906724,
+      "white_fraction": 0.0006985134548611111
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.44002797245200165,
+      "contrast": 0.28666160130142676,
+      "id": "62fc466a-73b89ea3",
+      "noise": 0.0,
+      "sharpness": 1805.2806308191778,
+      "white_fraction": 0.0016547309027777778
+    },
+    {
+      "black_fraction": 0.009297688802083334,
+      "brightness": 0.1402701184640523,
+      "contrast": 0.17522545095811387,
+      "id": "63187401-c4c25dcb",
+      "noise": 0.0,
+      "sharpness": 174.78108355692692,
+      "white_fraction": 0.0030924479166666665
+    },
+    {
+      "black_fraction": 0.10993787977430555,
+      "brightness": 0.07360246778833061,
+      "contrast": 0.07491528345061454,
+      "id": "635dacee-af1dd825",
+      "noise": 0.0,
+      "sharpness": 107.78674055893481,
+      "white_fraction": 0.00037299262152777775
+    },
+    {
+      "black_fraction": 0.04842800564236111,
+      "brightness": 0.11169167645356753,
+      "contrast": 0.1484940014259877,
+      "id": "653b2669-5633ef58",
+      "noise": 0.0,
+      "sharpness": 68.0768206090103,
+      "white_fraction": 0.0034315321180555555
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.4332031515948393,
+      "contrast": 0.32010239560870357,
+      "id": "65432146-55d58472",
+      "noise": 0.0,
+      "sharpness": 383.8517895693672,
+      "white_fraction": 0.0
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.5458791562414896,
+      "contrast": 0.23496482279124234,
+      "id": "65d17662-86f403e7",
+      "noise": 0.0,
+      "sharpness": 657.796978927275,
+      "white_fraction": 0.0
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.32852389599502996,
+      "contrast": 0.25485591940832325,
+      "id": "66838ab6-8a29d484",
+      "noise": 0.0,
+      "sharpness": 1206.3673027683465,
+      "white_fraction": 2.0345052083333332e-05
+    },
+    {
+      "black_fraction": 0.09345838758680555,
+      "brightness": 0.12899903939440358,
+      "contrast": 0.1522455468191302,
+      "id": "6753f3b1-12ea04f3",
+      "noise": 0.0,
+      "sharpness": 486.4953350091789,
+      "white_fraction": 0.004414876302083333
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.422162729566653,
+      "contrast": 0.30211117793304515,
+      "id": "676fc918-d00480e4",
+      "noise": 0.0,
+      "sharpness": 287.2299697387641,
+      "white_fraction": 6.781684027777777e-06
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.5046335390710104,
+      "contrast": 0.23383580969602724,
+      "id": "677b0010-08987cad",
+      "noise": 0.0,
+      "sharpness": 413.27734898619445,
+      "white_fraction": 0.0023057725694444445
+    },
+    {
+      "black_fraction": 0.1590915256076389,
+      "brightness": 0.049999095775462965,
+      "contrast": 0.06949866547965439,
+      "id": "679e3f11-b8eaf857",
+      "noise": 0.0,
+      "sharpness": 140.74785695248,
+      "white_fraction": 0.00023735894097222222
+    },
+    {
+      "black_fraction": 0.00031195746527777775,
+      "brightness": 0.3824842398982162,
+      "contrast": 0.24211712156202783,
+      "id": "680277fe-f9a910ca",
+      "noise": 0.0,
+      "sharpness": 711.704960266749,
+      "white_fraction": 0.002292209201388889
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.3176654092626634,
+      "contrast": 0.22620516973618668,
+      "id": "69987804-3a11739d",
+      "noise": 0.0,
+      "sharpness": 756.9052599970205,
+      "white_fraction": 2.0345052083333332e-05
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.2551294796347358,
+      "contrast": 0.2225507925889615,
+      "id": "69c4320c-4efe330c",
+      "noise": 0.0,
+      "sharpness": 585.0011745021667,
+      "white_fraction": 0.002936469184027778
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.4346078910079657,
+      "contrast": 0.2862061353762342,
+      "id": "6ac3ccd7-ca00691c",
+      "noise": 0.0058140382170677185,
+      "sharpness": 791.9071112535894,
+      "white_fraction": 0.029256184895833332
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.3438736660028595,
+      "contrast": 0.20276870958893448,
+      "id": "6ad31d7e-9b212475",
+      "noise": 0.0,
+      "sharpness": 1007.014531272383,
+      "white_fraction": 0.0007188585069444445
+    },
+    {
+      "black_fraction": 0.004191080729166667,
+      "brightness": 0.11846878616898149,
+      "contrast": 0.15339768758970326,
+      "id": "6b72aca7-670b0808",
+      "noise": 0.0,
+      "sharpness": 279.287339175005,
+      "white_fraction": 0.005744086371527778
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.35965214482060187,
+      "contrast": 0.22695821525415183,
+      "id": "6babc941-92f2f39f",
+      "noise": 0.0058140382170677185,
+      "sharpness": 1534.69763066868,
+      "white_fraction": 0.026292588975694444
+    },
+    {
+      "black_fraction": 0.058797200520833336,
+      "brightness": 0.09511726728451797,
+      "contrast": 0.10426589610153239,
+      "id": "6c129222-d7d6a91b",
+      "noise": 0.0,
+      "sharpness": 235.78447699086902,
+      "white_fraction": 0.0012139214409722222
+    },
+    {
+      "black_fraction": 0.003078884548611111,
+      "brightness": 0.4359803708809913,
+      "contrast": 0.25505756560970894,
+      "id": "6ce28c96-2e3e4ad0",
+      "noise": 0.0,
+      "sharpness": 833.2362203211237,
+      "white_fraction": 5.425347222222222e-05
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.42798503136063454,
+      "contrast": 0.21544841264067457,
+      "id": "6cebae75-4745fb8f",
+      "noise": 0.0058140382170677185,
+      "sharpness": 960.7092627937686,
+      "white_fraction": 0.005038791232638889
+    },
+    {
+      "black_fraction": 0.2781778971354167,
+      "brightness": 0.09062513297419662,
+      "contrast": 0.13581517709326632,
+      "id": "6d1cfc8e-013b37ea",
+      "noise": 0.0,
+      "sharpness": 300.3435454013539,
+      "white_fraction": 0.0006442599826388889
+    },
+    {
+      "black_fraction": 0.03706190321180555,
+      "brightness": 0.09576697920921841,
+      "contrast": 0.12084468018038441,
+      "id": "6d226a88-0e6e431e",
+      "noise": 0.0,
+      "sharpness": 501.72474081409564,
+      "white_fraction": 0.0018107096354166667
+    },
+    {
+      "black_fraction": 0.004801432291666667,
+      "brightness": 0.14537281709558825,
+      "contrast": 0.1271915607345787,
+      "id": "6d4a38ac-8351f306",
+      "noise": 0.0,
+      "sharpness": 341.94473589676215,
+      "white_fraction": 0.0019395616319444445
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.4602310080933415,
+      "contrast": 0.2627036906924011,
+      "id": "6df3c1f4-2a02a625",
+      "noise": 0.011628076434135437,
+      "sharpness": 2363.596236472835,
+      "white_fraction": 0.00018310546875
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.47181683708639705,
+      "contrast": 0.23428015968265908,
+      "id": "6e495af0-540e4a46",
+      "noise": 0.0,
+      "sharpness": 433.3636175669546,
+      "white_fraction": 0.00897216796875
+    },
+    {
+      "black_fraction": 0.0008748372395833334,
+      "brightness": 0.5165458197167756,
+      "contrast": 0.20342770126743387,
+      "id": "6ef14911-adc83de9",
+      "noise": 0.0058140382170677185,
+      "sharpness": 917.5261362886263,
+      "white_fraction": 0.00022379557291666666
+    },
+    {
+      "black_fraction": 0.06703016493055555,
+      "brightness": 0.09593370225694443,
+      "contrast": 0.11588387361509309,
+      "id": "6efc4740-380662d4",
+      "noise": 0.0,
+      "sharpness": 404.65449027326184,
+      "white_fraction": 0.0008612738715277778
+    },
+    {
+      "black_fraction": 0.030999077690972224,
+      "brightness": 0.0928195795462282,
+      "contrast": 0.12045881064680766,
+      "id": "6f2daaf6-6b2ec8ff",
+      "noise": 0.0,
+      "sharpness": 267.65643593834506,
+      "white_fraction": 0.0028076171875
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.35099477996493733,
+      "contrast": 0.2573381550372419,
+      "id": "70b50978-6eda525a",
+      "noise": 0.0,
+      "sharpness": 262.0255090329382,
+      "white_fraction": 0.0915188259548611
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.33254445061444715,
+      "contrast": 0.20092476669494647,
+      "id": "7226d097-71847f47",
+      "noise": 0.0058140382170677185,
+      "sharpness": 1535.1745051232017,
+      "white_fraction": 0.00029839409722222225
+    },
+    {
+      "black_fraction": 0.35308837890625,
+      "brightness": 0.09570003999863835,
+      "contrast": 0.1500818574883992,
+      "id": "722e8519-e26ce4f7",
+      "noise": 0.0,
+      "sharpness": 188.73916547368339,
+      "white_fraction": 0.002109103732638889
+    },
+    {
+      "black_fraction": 0.21190049913194445,
+      "brightness": 0.12456397760927287,
+      "contrast": 0.16015980781863942,
+      "id": "72430348-0b2d92bb",
+      "noise": 0.0,
+      "sharpness": 130.62579879123302,
+      "white_fraction": 0.006815592447916667
+    },
+    {
+      "black_fraction": 0.14573838975694445,
+      "brightness": 0.0844753423287718,
+      "contrast": 0.1416816559961123,
+      "id": "72430348-0ca918c2",
+      "noise": 0.0,
+      "sharpness": 121.0712412264152,
+      "white_fraction": 0.008477105034722222
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.4573246442674292,
+      "contrast": 0.2251622704332567,
+      "id": "726770e5-33f45b27",
+      "noise": 0.0,
+      "sharpness": 556.3675868540174,
+      "white_fraction": 0.0017225477430555555
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.5280027967133034,
+      "contrast": 0.23969718178692143,
+      "id": "7297b179-c661c980",
+      "noise": 0.0,
+      "sharpness": 1112.0941349128148,
+      "white_fraction": 0.011508517795138888
+    },
+    {
+      "black_fraction": 0.020724826388888888,
+      "brightness": 0.45407565912649783,
+      "contrast": 0.2291810385418291,
+      "id": "73869519-9b1f273f",
+      "noise": 0.0,
+      "sharpness": 490.09189940487715,
+      "white_fraction": 0.03009033203125
+    },
+    {
+      "black_fraction": 0.1358100043402778,
+      "brightness": 0.11117903433074619,
+      "contrast": 0.15201659134831566,
+      "id": "73fbca3f-0c4e7c59",
+      "noise": 0.0,
+      "sharpness": 440.3213540578697,
+      "white_fraction": 0.0034993489583333335
+    },
+    {
+      "black_fraction": 0.0010172526041666667,
+      "brightness": 0.365705210035403,
+      "contrast": 0.22703782402697834,
+      "id": "7439610d-6c2d3205",
+      "noise": 0.0,
+      "sharpness": 1342.4112783471744,
+      "white_fraction": 0.0019395616319444445
+    },
+    {
+      "black_fraction": 0.022148980034722224,
+      "brightness": 0.38714982575061274,
+      "contrast": 0.2805623589754292,
+      "id": "744d7642-837cfd49",
+      "noise": 0.0058140382170677185,
+      "sharpness": 1387.4026629658026,
+      "white_fraction": 0.04533555772569445
+    },
+    {
+      "black_fraction": 9.494357638888889e-05,
+      "brightness": 0.40524011416632627,
+      "contrast": 0.18773728332588038,
+      "id": "74864afc-2311bc20",
+      "noise": 0.0058140382170677185,
+      "sharpness": 1217.4117552481684,
+      "white_fraction": 0.0
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.5194400031062772,
+      "contrast": 0.27288271485483034,
+      "id": "755b49ba-2c46e7b7",
+      "noise": 0.0,
+      "sharpness": 827.5959396093256,
+      "white_fraction": 0.0
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.14098895037615738,
+      "contrast": 0.1398705470927119,
+      "id": "779178f0-535c5ea3",
+      "noise": 0.0,
+      "sharpness": 707.3574152419137,
+      "white_fraction": 0.0033772786458333335
+    },
+    {
+      "black_fraction": 0.009908040364583334,
+      "brightness": 0.4577320772058823,
+      "contrast": 0.2417090458967391,
+      "id": "77c3dc21-d06517da",
+      "noise": 0.0,
+      "sharpness": 598.7921313322897,
+      "white_fraction": 0.03541395399305555
+    },
+    {
+      "black_fraction": 0.055962456597222224,
+      "brightness": 0.16598320589086327,
+      "contrast": 0.17216607720264845,
+      "id": "782118be-c17db3b3",
+      "noise": 0.0,
+      "sharpness": 831.9981646393828,
+      "white_fraction": 0.006069607204861111
+    },
+    {
+      "black_fraction": 0.0024549696180555555,
+      "brightness": 0.3751683453329248,
+      "contrast": 0.3048902102165326,
+      "id": "78bc7c78-2325d6da",
+      "noise": 0.0,
+      "sharpness": 552.8071957156982,
+      "white_fraction": 0.009148491753472222
+    },
+    {
+      "black_fraction": 0.00031195746527777775,
+      "brightness": 0.2430619915066721,
+      "contrast": 0.18802648685058823,
+      "id": "793871d7-82ca5745",
+      "noise": 0.0,
+      "sharpness": 189.25454103486774,
+      "white_fraction": 0.010091145833333334
+    },
+    {
+      "black_fraction": 0.016255696614583332,
+      "brightness": 0.18415665636914488,
+      "contrast": 0.21244453008455333,
+      "id": "7980c85c-4b420fa2",
+      "noise": 0.0,
+      "sharpness": 317.69072591885924,
+      "white_fraction": 0.02154541015625
+    },
+    {
+      "black_fraction": 0.24483235677083334,
+      "brightness": 0.11482289964596949,
+      "contrast": 0.14311379950382508,
+      "id": "79b32938-dc16c302",
+      "noise": 0.0,
+      "sharpness": 392.07520748343734,
+      "white_fraction": 0.003200954861111111
+    },
+    {
+      "black_fraction": 0.007676866319444444,
+      "brightness": 0.13883357162309368,
+      "contrast": 0.11662781116707614,
+      "id": "79b8198f-d661af00",
+      "noise": 0.0,
+      "sharpness": 195.6473385873768,
+      "white_fraction": 0.00029161241319444444
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.2282828137765523,
+      "contrast": 0.1563569419516652,
+      "id": "79d012b5-253ffb7a",
+      "noise": 0.0,
+      "sharpness": 875.9808266928167,
+      "white_fraction": 0.0011393229166666667
+    },
+    {
+      "black_fraction": 6.781684027777778e-05,
+      "brightness": 0.40647084354575164,
+      "contrast": 0.2624793982200152,
+      "id": "7aa83b3c-76b7a542",
+      "noise": 0.0,
+      "sharpness": 569.5566092462819,
+      "white_fraction": 0.0
+    },
+    {
+      "black_fraction": 0.1809149848090278,
+      "brightness": 0.07454799411083878,
+      "contrast": 0.07812821585471715,
+      "id": "7c35c3cb-b5a57080",
+      "noise": 0.0,
+      "sharpness": 101.16488809865197,
+      "white_fraction": 0.00010172526041666667
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.45777885752825437,
+      "contrast": 0.20735493116058112,
+      "id": "7c5d50c5-7292de37",
+      "noise": 0.0,
+      "sharpness": 456.73978833504657,
+      "white_fraction": 0.00018310546875
+    },
+    {
+      "black_fraction": 0.015306260850694444,
+      "brightness": 0.3382602932666122,
+      "contrast": 0.31226019683696266,
+      "id": "7c8cdea2-01015c6c",
+      "noise": 0.0,
+      "sharpness": 420.95613135820554,
+      "white_fraction": 0.008185492621527778
+    },
+    {
+      "black_fraction": 0.00019666883680555556,
+      "brightness": 0.1996850107230392,
+      "contrast": 0.1667497797412298,
+      "id": "7cdd49ee-41e8a71a",
+      "noise": 0.0,
+      "sharpness": 460.0112165870766,
+      "white_fraction": 0.0012681749131944445
+    },
+    {
+      "black_fraction": 0.00128173828125,
+      "brightness": 0.3795811472375409,
+      "contrast": 0.23283134976691242,
+      "id": "7f282094-890af522",
+      "noise": 0.0058140382170677185,
+      "sharpness": 1360.457594871337,
+      "white_fraction": 0.004543728298611111
+    },
+    {
+      "black_fraction": 0.020609537760416668,
+      "brightness": 0.15212085865162037,
+      "contrast": 0.15995028305673692,
+      "id": "803be978-104fe5cd",
+      "noise": 0.0,
+      "sharpness": 543.2931802526208,
+      "white_fraction": 0.002204047309027778
+    },
+    {
+      "black_fraction": 0.003689236111111111,
+      "brightness": 0.09428205635552832,
+      "contrast": 0.10904572303987979,
+      "id": "8178495a-bda62f7b",
+      "noise": 0.0,
+      "sharpness": 359.10353456143247,
+      "white_fraction": 0.001003689236111111
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.41254175389773967,
+      "contrast": 0.2501578472825755,
+      "id": "8185e299-7d95a0f7",
+      "noise": 0.0,
+      "sharpness": 770.1565822461781,
+      "white_fraction": 0.0
+    },
+    {
+      "black_fraction": 6.781684027777778e-05,
+      "brightness": 0.37553394458912037,
+      "contrast": 0.23650855055806075,
+      "id": "81ea5d4c-2a914ce3",
+      "noise": 0.0,
+      "sharpness": 953.623118688249,
+      "white_fraction": 0.0
+    },
+    {
+      "black_fraction": 1.3563368055555555e-05,
+      "brightness": 0.42168138956971674,
+      "contrast": 0.23838936042720577,
+      "id": "82e35f62-a01dc25b",
+      "noise": 0.0,
+      "sharpness": 1173.32830232598,
+      "white_fraction": 0.042609320746527776
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.3917661845554194,
+      "contrast": 0.26827532786814157,
+      "id": "84913296-b8c1b99f",
+      "noise": 0.0,
+      "sharpness": 848.4922461095783,
+      "white_fraction": 0.010443793402777778
+    },
+    {
+      "black_fraction": 0.01568603515625,
+      "brightness": 0.4211248925568491,
+      "contrast": 0.21075011866013302,
+      "id": "851cde9e-5ca39711",
+      "noise": 0.0,
+      "sharpness": 898.1474594126145,
+      "white_fraction": 0.006754557291666667
+    },
+    {
+      "black_fraction": 0.004930284288194444,
+      "brightness": 0.2754671915424156,
+      "contrast": 0.31415521589381185,
+      "id": "86ec451d-c38ddce3",
+      "noise": 0.0,
+      "sharpness": 484.2430627697412,
+      "white_fraction": 0.059455023871527776
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.35158252591401146,
+      "contrast": 0.24007067905968663,
+      "id": "8743c909-8d298495",
+      "noise": 0.0058140382170677185,
+      "sharpness": 946.5601858028936,
+      "white_fraction": 0.07951524522569445
+    },
+    {
+      "black_fraction": 1.3563368055555555e-05,
+      "brightness": 0.3241503746680964,
+      "contrast": 0.23946031497886028,
+      "id": "8759dd07-4da00cb1",
+      "noise": 0.0,
+      "sharpness": 1265.3309111539504,
+      "white_fraction": 0.004035101996527778
+    },
+    {
+      "black_fraction": 0.06586371527777778,
+      "brightness": 0.07508539602907134,
+      "contrast": 0.09276793067509026,
+      "id": "876fe91b-394b0090",
+      "noise": 0.0,
+      "sharpness": 88.4265340846262,
+      "white_fraction": 0.0007392035590277778
+    },
+    {
+      "black_fraction": 0.08329264322916667,
+      "brightness": 0.0883932674632353,
+      "contrast": 0.11274090417140697,
+      "id": "87c60b0c-a8514b3c",
+      "noise": 0.0,
+      "sharpness": 183.1560985363192,
+      "white_fraction": 0.0011528862847222222
+    },
+    {
+      "black_fraction": 0.010287814670138888,
+      "brightness": 0.27051576435695807,
+      "contrast": 0.22841719001500904,
+      "id": "89c1bf10-0a7b2e39",
+      "noise": 0.0,
+      "sharpness": 416.0488960829414,
+      "white_fraction": 6.781684027777777e-06
+    },
+    {
+      "black_fraction": 0.026685926649305556,
+      "brightness": 0.24323235804738563,
+      "contrast": 0.23356561890061833,
+      "id": "8b580a00-fbf3df61",
+      "noise": 0.0,
+      "sharpness": 460.6239893689843,
+      "white_fraction": 0.003044976128472222
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.4545994710818355,
+      "contrast": 0.2071097719730828,
+      "id": "8b8b5d32-654ea46b",
+      "noise": 0.0,
+      "sharpness": 624.1770237787271,
+      "white_fraction": 0.00030517578125
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.40087685844737203,
+      "contrast": 0.2968328451751359,
+      "id": "8c6df755-9a142721",
+      "noise": 0.0,
+      "sharpness": 593.1018540152337,
+      "white_fraction": 0.013800726996527778
+    },
+    {
+      "black_fraction": 0.027743869357638888,
+      "brightness": 0.1114984915407135,
+      "contrast": 0.12480301313515707,
+      "id": "8ccd331b-2421ac33",
+      "noise": 0.0,
+      "sharpness": 273.48676782952225,
+      "white_fraction": 0.002265082465277778
+    },
+    {
+      "black_fraction": 0.002102322048611111,
+      "brightness": 0.3119790602873094,
+      "contrast": 0.23707981197722033,
+      "id": "8cd7b842-e8d4c6d7",
+      "noise": 0.0,
+      "sharpness": 1017.0821522385527,
+      "white_fraction": 0.04001193576388889
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.39737229690053105,
+      "contrast": 0.20871286788064147,
+      "id": "8dd26be9-386fb3ae",
+      "noise": 0.0,
+      "sharpness": 716.9418013323512,
+      "white_fraction": 0.0
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.3202764905875545,
+      "contrast": 0.2664371085954633,
+      "id": "8ef38609-0441cf33",
+      "noise": 0.0,
+      "sharpness": 366.5972362666586,
+      "white_fraction": 1.3563368055555555e-05
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.21782263795275053,
+      "contrast": 0.24259162528123404,
+      "id": "9081cc9d-8f710e84",
+      "noise": 0.0,
+      "sharpness": 102.1523852788004,
+      "white_fraction": 0.043158637152777776
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.34786204086669387,
+      "contrast": 0.2734877139815763,
+      "id": "91644fc9-c66430a9",
+      "noise": 0.0058140382170677185,
+      "sharpness": 1575.4142273612965,
+      "white_fraction": 0.025214301215277776
+    },
+    {
+      "black_fraction": 0.00025770399305555556,
+      "brightness": 0.32985510067742374,
+      "contrast": 0.21692947643310828,
+      "id": "91845e0c-28a0e359",
+      "noise": 0.0,
+      "sharpness": 1559.1787165049693,
+      "white_fraction": 0.022271050347222224
+    },
+    {
+      "black_fraction": 0.0935329861111111,
+      "brightness": 0.0895101709303513,
+      "contrast": 0.1651716459860811,
+      "id": "920fafd7-ac56c10d",
+      "noise": 0.0,
+      "sharpness": 304.3481231375517,
+      "white_fraction": 0.011725531684027778
+    },
+    {
+      "black_fraction": 0.031867133246527776,
+      "brightness": 0.38161368442776417,
+      "contrast": 0.2938158894029947,
+      "id": "921f6518-683cbad4",
+      "noise": 0.0,
+      "sharpness": 395.5489409197536,
+      "white_fraction": 9.494357638888889e-05
+    },
+    {
+      "black_fraction": 0.13909912109375,
+      "brightness": 0.08464491102430556,
+      "contrast": 0.09829240581882993,
+      "id": "9360a0c8-2c09414b",
+      "noise": 0.0,
+      "sharpness": 181.64850309086435,
+      "white_fraction": 0.0010172526041666667
+    },
+    {
+      "black_fraction": 0.06880696614583333,
+      "brightness": 0.06818996587350218,
+      "contrast": 0.10084860172618697,
+      "id": "93d1341d-a40d3f33",
+      "noise": 0.0,
+      "sharpness": 360.24864306549233,
+      "white_fraction": 0.0005560980902777778
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.3657251029752179,
+      "contrast": 0.23909599296888362,
+      "id": "948fbe10-ac1d8d84",
+      "noise": 0.0058140382170677185,
+      "sharpness": 882.9272332713928,
+      "white_fraction": 4.0690104166666664e-05
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.529166613476988,
+      "contrast": 0.20747717611038885,
+      "id": "94aa8729-b668bf10",
+      "noise": 0.0,
+      "sharpness": 576.8508563505279,
+      "white_fraction": 0.0006849500868055555
+    },
+    {
+      "black_fraction": 4.7471788194444445e-05,
+      "brightness": 0.10765973924291938,
+      "contrast": 0.1237575130066276,
+      "id": "95e3be8c-8b674feb",
+      "noise": 0.0,
+      "sharpness": 596.7716944471093,
+      "white_fraction": 0.001430935329861111
+    },
+    {
+      "black_fraction": 0.06008572048611111,
+      "brightness": 0.12483516518586601,
+      "contrast": 0.12954093020367197,
+      "id": "966ce84f-f3f6699d",
+      "noise": 0.0,
+      "sharpness": 419.05535235651473,
+      "white_fraction": 0.002468532986111111
+    },
+    {
+      "black_fraction": 0.052191840277777776,
+      "brightness": 0.07555907671228212,
+      "contrast": 0.10257040763611032,
+      "id": "96e06ec8-b73c1b36",
+      "noise": 0.0,
+      "sharpness": 435.935307873206,
+      "white_fraction": 0.00022379557291666666
+    },
+    {
+      "black_fraction": 0.10361735026041667,
+      "brightness": 0.09139601098686002,
+      "contrast": 0.1113092952725712,
+      "id": "9703b3c6-12b67e18",
+      "noise": 0.0,
+      "sharpness": 552.6468423633938,
+      "white_fraction": 0.001491970486111111
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.1806641954741966,
+      "contrast": 0.16126474569918178,
+      "id": "9724d02c-d942c43b",
+      "noise": 0.0,
+      "sharpness": 242.96178310405878,
+      "white_fraction": 0.005879720052083333
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.5004702233540985,
+      "contrast": 0.19271810603027997,
+      "id": "97f4a063-9fac7a7a",
+      "noise": 0.0,
+      "sharpness": 586.7173158855717,
+      "white_fraction": 0.0031602647569444445
+    },
+    {
+      "black_fraction": 0.00025770399305555556,
+      "brightness": 0.16539365149271515,
+      "contrast": 0.14531871763157403,
+      "id": "98713760-d8008495",
+      "noise": 0.0,
+      "sharpness": 302.7484732464784,
+      "white_fraction": 0.0015190972222222222
+    },
+    {
+      "black_fraction": 0.0026991102430555555,
+      "brightness": 0.33738941865808825,
+      "contrast": 0.30702358294795407,
+      "id": "99df2a61-2b70a65d",
+      "noise": 0.0,
+      "sharpness": 469.01478383234803,
+      "white_fraction": 0.11680772569444445
+    },
+    {
+      "black_fraction": 0.002753363715277778,
+      "brightness": 0.3522341792619826,
+      "contrast": 0.240695907676841,
+      "id": "9a8e2e2e-f780baee",
+      "noise": 0.0,
+      "sharpness": 402.82350440967235,
+      "white_fraction": 0.056803385416666664
+    },
+    {
+      "black_fraction": 0.1312527126736111,
+      "brightness": 0.06772197648590686,
+      "contrast": 0.07990825237568959,
+      "id": "9e80c933-9a915845",
+      "noise": 0.0,
+      "sharpness": 292.83884385186764,
+      "white_fraction": 8.816189236111111e-05
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.38897537530637255,
+      "contrast": 0.21829145101634356,
+      "id": "9ec09241-cf0b4c4c",
+      "noise": 0.0,
+      "sharpness": 263.0100426274686,
+      "white_fraction": 0.023932562934027776
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.15375407432938454,
+      "contrast": 0.1630073668837008,
+      "id": "9ee57356-690e42ac",
+      "noise": 0.0,
+      "sharpness": 429.6223122924566,
+      "white_fraction": 0.005147298177083333
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.19583817359409042,
+      "contrast": 0.19145536091600338,
+      "id": "9efd3c16-b81b79c1",
+      "noise": 0.0,
+      "sharpness": 356.8332627646993,
+      "white_fraction": 0.005018446180555556
+    },
+    {
+      "black_fraction": 0.1474541558159722,
+      "brightness": 0.06643545113357843,
+      "contrast": 0.06961041672254793,
+      "id": "9f22e256-45c76330",
+      "noise": 0.0,
+      "sharpness": 66.66783416708127,
+      "white_fraction": 9.494357638888889e-05
+    },
+    {
+      "black_fraction": 0.0011800130208333333,
+      "brightness": 0.307204276024646,
+      "contrast": 0.2474027931903731,
+      "id": "a08021bf-78f8c650",
+      "noise": 0.0,
+      "sharpness": 731.1212550203005,
+      "white_fraction": 0.003289116753472222
+    },
+    {
+      "black_fraction": 0.007737901475694444,
+      "brightness": 0.14103147552423748,
+      "contrast": 0.11966384155873604,
+      "id": "a2125192-df657be2",
+      "noise": 0.0,
+      "sharpness": 225.83611842948528,
+      "white_fraction": 0.0012613932291666667
+    },
+    {
+      "black_fraction": 0.3123711480034722,
+      "brightness": 0.06610543577239925,
+      "contrast": 0.10202322668601722,
+      "id": "a240d7cc-792b408c",
+      "noise": 0.0,
+      "sharpness": 297.5034314509895,
+      "white_fraction": 0.0004001193576388889
+    },
+    {
+      "black_fraction": 0.002814398871527778,
+      "brightness": 0.12247710716230938,
+      "contrast": 0.1283613422025565,
+      "id": "a291a71b-261e9a2f",
+      "noise": 0.0,
+      "sharpness": 411.2589789406385,
+      "white_fraction": 0.00048828125
+    },
+    {
+      "black_fraction": 2.0345052083333332e-05,
+      "brightness": 0.43013370821418845,
+      "contrast": 0.29649480092979486,
+      "id": "a2dc5fb1-fe93dc17",
+      "noise": 0.0,
+      "sharpness": 283.88712551693123,
+      "white_fraction": 0.008416069878472222
+    },
+    {
+      "black_fraction": 0.08465576171875,
+      "brightness": 0.08843948929398149,
+      "contrast": 0.10832436253863745,
+      "id": "a2f20747-70c793f4",
+      "noise": 0.0,
+      "sharpness": 225.9865912021954,
+      "white_fraction": 0.001614040798611111
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.4029160709422658,
+      "contrast": 0.20047535078540937,
+      "id": "a389f631-ec631071",
+      "noise": 0.0,
+      "sharpness": 1402.1820189680582,
+      "white_fraction": 8.138020833333333e-05
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.1789008246527778,
+      "contrast": 0.16675176184338242,
+      "id": "a4224094-6184454f",
+      "noise": 0.0,
+      "sharpness": 356.19425969649063,
+      "white_fraction": 0.0084228515625
+    },
+    {
+      "black_fraction": 0.005303276909722222,
+      "brightness": 0.19017461639603758,
+      "contrast": 0.24981462961203124,
+      "id": "a5715983-cdf6c729",
+      "noise": 0.0,
+      "sharpness": 716.2907528516686,
+      "white_fraction": 0.054985894097222224
+    },
+    {
+      "black_fraction": 0.06545003255208333,
+      "brightness": 0.09241658794594226,
+      "contrast": 0.11385557057860048,
+      "id": "a5ba3518-c4c2924a",
+      "noise": 0.0,
+      "sharpness": 305.8500562816123,
+      "white_fraction": 0.0016886393229166667
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.4750800504663671,
+      "contrast": 0.2626968521702881,
+      "id": "a60f201a-ca28d820",
+      "noise": 0.0,
+      "sharpness": 954.828610084491,
+      "white_fraction": 0.0
+    },
+    {
+      "black_fraction": 0.004096137152777778,
+      "brightness": 0.3209971841384123,
+      "contrast": 0.26335832468163733,
+      "id": "a8305048-bd7134f0",
+      "noise": 0.0,
+      "sharpness": 1086.9094555307593,
+      "white_fraction": 0.0012749565972222222
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.3747397694972086,
+      "contrast": 0.18399482729082836,
+      "id": "a93859c0-48a7af45",
+      "noise": 0.0,
+      "sharpness": 423.7841354409394,
+      "white_fraction": 0.00019666883680555556
+    },
+    {
+      "black_fraction": 0.01239013671875,
+      "brightness": 0.4663662513616558,
+      "contrast": 0.22124927162244623,
+      "id": "a98ace27-34ebb44b",
+      "noise": 0.0058140382170677185,
+      "sharpness": 3074.42468258113,
+      "white_fraction": 0.002109103732638889
+    },
+    {
+      "black_fraction": 4.0690104166666664e-05,
+      "brightness": 0.3455581565308415,
+      "contrast": 0.24110287275175601,
+      "id": "a999ddc2-1531378d",
+      "noise": 0.0,
+      "sharpness": 1002.6394387481757,
+      "white_fraction": 0.003655327690972222
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.3595260586873638,
+      "contrast": 0.24950301889676582,
+      "id": "aa1f79fc-65466709",
+      "noise": 0.0,
+      "sharpness": 325.19146735285534,
+      "white_fraction": 0.011766221788194444
+    },
+    {
+      "black_fraction": 0.1730685763888889,
+      "brightness": 0.08019216367102397,
+      "contrast": 0.09422043455579768,
+      "id": "aa20ff51-5590d193",
+      "noise": 0.0,
+      "sharpness": 122.56494729933732,
+      "white_fraction": 0.0005154079861111111
+    },
+    {
+      "black_fraction": 6.781684027777777e-06,
+      "brightness": 0.35741674219601033,
+      "contrast": 0.21273503005372024,
+      "id": "aa60b8fc-145f2657",
+      "noise": 0.0,
+      "sharpness": 1084.0495473009844,
+      "white_fraction": 0.001858181423611111
+    },
+    {
+      "black_fraction": 0.00013563368055555556,
+      "brightness": 0.4860426293998502,
+      "contrast": 0.188525123020757,
+      "id": "aa88fa0c-ca70bfe1",
+      "noise": 0.0,
+      "sharpness": 1063.208478394068,
+      "white_fraction": 6.781684027777777e-06
+    },
+    {
+      "black_fraction": 0.006937662760416667,
+      "brightness": 0.5423282664845451,
+      "contrast": 0.21473716260074657,
+      "id": "aa88fa0c-fda02603",
+      "noise": 0.0,
+      "sharpness": 811.4289618409987,
+      "white_fraction": 8.138020833333333e-05
+    },
+    {
+      "black_fraction": 0.05215115017361111,
+      "brightness": 0.10453644131263616,
+      "contrast": 0.1198252362487353,
+      "id": "ab5bfde7-31f29ba3",
+      "noise": 0.0,
+      "sharpness": 415.89166735112667,
+      "white_fraction": 0.0002780490451388889
+    },
+    {
+      "black_fraction": 0.2939656575520833,
+      "brightness": 0.05931739557802288,
+      "contrast": 0.08829304238525941,
+      "id": "abbc7ff9-e2afeafb",
+      "noise": 0.0,
+      "sharpness": 246.22957767817525,
+      "white_fraction": 0.0007798936631944445
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.20350847098822167,
+      "contrast": 0.11307241690786349,
+      "id": "ac295c71-cbe62f5d",
+      "noise": 0.0,
+      "sharpness": 279.3181174525784,
+      "white_fraction": 0.0008884006076388889
+    },
+    {
+      "black_fraction": 0.003953721788194444,
+      "brightness": 0.0635667721949891,
+      "contrast": 0.05847077664899009,
+      "id": "ac6a14e6-3c1f5cb4",
+      "noise": 0.0,
+      "sharpness": 178.77988688036066,
+      "white_fraction": 0.00017632378472222222
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.35614500357434636,
+      "contrast": 0.28256100690926395,
+      "id": "ad930b5f-36f46e0f",
+      "noise": 0.0,
+      "sharpness": 931.7499191127717,
+      "white_fraction": 0.0670505099826389
+    },
+    {
+      "black_fraction": 0.07151963975694445,
+      "brightness": 0.09265548938759532,
+      "contrast": 0.12255827939745742,
+      "id": "aeaadb1c-8634798e",
+      "noise": 0.0,
+      "sharpness": 114.74163683876395,
+      "white_fraction": 0.0016004774305555555
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.14406584031181915,
+      "contrast": 0.1404932604926318,
+      "id": "aeae66ac-86811f58",
+      "noise": 0.0,
+      "sharpness": 323.70262680409684,
+      "white_fraction": 0.0030924479166666665
+    },
+    {
+      "black_fraction": 0.00019666883680555556,
+      "brightness": 0.37267034526484205,
+      "contrast": 0.21859243573902526,
+      "id": "af0c7640-d267e774",
+      "noise": 0.0,
+      "sharpness": 613.1303750695546,
+      "white_fraction": 0.015726725260416668
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.4197869593801062,
+      "contrast": 0.24820005650919497,
+      "id": "af7dc725-65b49541",
+      "noise": 0.0,
+      "sharpness": 416.3917103836106,
+      "white_fraction": 0.005886501736111111
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.11344172326048475,
+      "contrast": 0.10935398762957575,
+      "id": "b07627ba-50a1d408",
+      "noise": 0.0,
+      "sharpness": 215.3314949505399,
+      "white_fraction": 0.0017903645833333333
+    },
+    {
+      "black_fraction": 2.0345052083333332e-05,
+      "brightness": 0.401596993506604,
+      "contrast": 0.2555834049656097,
+      "id": "b07e8864-3410383b",
+      "noise": 0.0,
+      "sharpness": 649.6852711211018,
+      "white_fraction": 0.07982042100694445
+    },
+    {
+      "black_fraction": 0.18452962239583334,
+      "brightness": 0.05680178972630719,
+      "contrast": 0.0634710780421719,
+      "id": "b0a681c2-78689da3",
+      "noise": 0.0,
+      "sharpness": 79.84483488106433,
+      "white_fraction": 0.000244140625
+    },
+    {
+      "black_fraction": 0.05276828342013889,
+      "brightness": 0.1056621210767293,
+      "contrast": 0.10729059834590854,
+      "id": "b12e7089-db4f24d3",
+      "noise": 0.0,
+      "sharpness": 55.51249016655816,
+      "white_fraction": 0.000244140625
+    },
+    {
+      "black_fraction": 0.0,
+      "brightness": 0.43945870991625813,
+      "contrast": 0.23911672378295326,
+      "id": "b145825b-bedacfac",
+      "noise": 0.0,
+      "sharpness": 872.7815023967881,
+      "white_fraction": 0.008619520399305556
+    }
+  ],
+  "per_operator": 12,
+  "policy_id": "2e487f9a9ec7c5b2589ded366df7e1bcadb06f217b81295222e3d57f9a6cdb9f",
+  "protocol_id": "680090b8eef098fbe10c77e632aacbfd3d6854d8489d7518e20f062e032b6e44",
+  "recipes": {
+    "adaptive": {
+      "brightness_below": 0.12,
+      "contrast_below": 0.12,
+      "max_filters": 1,
+      "noise_above": 1.0,
+      "sharpness_below": 0.0,
+      "sharpness_min": 0.0
+    },
+    "clahe": {
+      "clip_limit": 1.5,
+      "grid_size": 8
+    },
+    "denoise": {
+      "strength": 2.0
+    },
+    "gamma": {
+      "gamma": 0.85
+    },
+    "raw": {},
+    "sharpen": {
+      "amount": 0.15,
+      "sigma": 1.0
+    }
+  },
+  "sample_size": 256,
+  "sample_summary": {
+    "images": 256,
+    "instances:bicycle": 25,
+    "instances:bus": 40,
+    "instances:car": 2577,
+    "instances:motorcycle": 8,
+    "instances:train": 0,
+    "instances:truck": 122,
+    "intersection:clear|dawn/dusk|city street": 3,
+    "intersection:clear|dawn/dusk|highway": 1,
+    "intersection:clear|dawn/dusk|residential": 1,
+    "intersection:clear|dawn/dusk|tunnel": 1,
+    "intersection:clear|daytime|city street": 25,
+    "intersection:clear|daytime|highway": 10,
+    "intersection:clear|daytime|parking lot": 2,
+    "intersection:clear|daytime|residential": 9,
+    "intersection:clear|night|city street": 63,
+    "intersection:clear|night|highway": 21,
+    "intersection:clear|night|parking lot": 1,
+    "intersection:clear|night|residential": 4,
+    "intersection:overcast|dawn/dusk|city street": 3,
+    "intersection:overcast|dawn/dusk|highway": 2,
+    "intersection:overcast|daytime|city street": 17,
+    "intersection:overcast|daytime|highway": 4,
+    "intersection:overcast|daytime|residential": 5,
+    "intersection:overcast|night|city street": 1,
+    "intersection:partly cloudy|dawn/dusk|city street": 1,
+    "intersection:partly cloudy|dawn/dusk|highway": 3,
+    "intersection:partly cloudy|daytime|city street": 7,
+    "intersection:partly cloudy|daytime|highway": 9,
+    "intersection:partly cloudy|daytime|parking lot": 1,
+    "intersection:partly cloudy|daytime|residential": 2,
+    "intersection:partly cloudy|night|residential": 1,
+    "intersection:rainy|dawn/dusk|highway": 1,
+    "intersection:rainy|daytime|city street": 3,
+    "intersection:rainy|daytime|highway": 1,
+    "intersection:rainy|daytime|residential": 3,
+    "intersection:rainy|night|city street": 4,
+    "intersection:rainy|night|highway": 3,
+    "intersection:rainy|night|residential": 2,
+    "intersection:snowy|daytime|city street": 12,
+    "intersection:snowy|daytime|highway": 1,
+    "intersection:snowy|daytime|residential": 2,
+    "intersection:snowy|night|city street": 8,
+    "intersection:undefined|dawn/dusk|city street": 1,
+    "intersection:undefined|daytime|city street": 15,
+    "intersection:undefined|daytime|highway": 2,
+    "intersection:undefined|night|city street": 1,
+    "missing_metadata:scene": 0,
+    "missing_metadata:timeofday": 0,
+    "missing_metadata:weather": 19,
+    "negative": 1,
+    "presence:bicycle": 17,
+    "presence:bus": 35,
+    "presence:car": 254,
+    "presence:motorcycle": 8,
+    "presence:train": 0,
+    "presence:truck": 71,
+    "scene:city street": 164,
+    "scene:highway": 58,
+    "scene:parking lot": 4,
+    "scene:residential": 29,
+    "scene:tunnel": 1,
+    "size_instances:large": 565,
+    "size_instances:medium": 1026,
+    "size_instances:small": 1181,
+    "size_presence:large": 207,
+    "size_presence:medium": 241,
+    "size_presence:small": 217,
+    "timeofday:dawn/dusk": 17,
+    "timeofday:daytime": 130,
+    "timeofday:night": 109,
+    "weather:clear": 141,
+    "weather:overcast": 32,
+    "weather:partly cloudy": 24,
+    "weather:rainy": 17,
+    "weather:snowy": 23,
+    "weather:undefined": 19
+  },
+  "seed": 2026,
+  "version": "issue6-policy-v1"
+}

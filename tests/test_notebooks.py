@@ -10,6 +10,10 @@ def test_notebook_sources_and_committed_execution_outputs():
         "01_data_preparation.ipynb",
         "02_training_benchmark.ipynb",
         "01_data_protocol.ipynb",
+        "02_adaptive_preprocessing.ipynb",
+        "02_adaptive_preprocessing_v1.ipynb",
+        "02b_synthetic_robustness.ipynb",
+        "02b_synthetic_robustness_v1.ipynb",
         "03_finetuning_benchmark.ipynb",
     }
     for path in paths:
