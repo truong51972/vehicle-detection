@@ -1,0 +1,16 @@
+{
+  "manifest_id": "680090b8eef098fbe10c77e632aacbfd3d6854d8489d7518e20f062e032b6e44",
+  "old_sizes": {
+    "train": 55890,
+    "tune": 13973
+  },
+  "selection_id": "d8f6086b184e1460ee375d80246b6c9ca4127339777767bcf32803af30d54d27",
+  "transitions": {
+    "train->calibration": 5638,
+    "train->development_validation": 11201,
+    "train->training_pool": 39051,
+    "tune->calibration": 1347,
+    "tune->development_validation": 2774,
+    "tune->training_pool": 9852
+  }
+}

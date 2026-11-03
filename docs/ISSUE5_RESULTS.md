@@ -91,7 +91,8 @@ Undefined/missing metadata is retained and counted: official train includes
 
 The complete manifest is local `runs/issue5-v1/protocol.json` (about 174 MB), with
 relative paths, image/label/annotation hashes, boxes, groups, metadata and exclusions.
-Its identity is `b308ba62bca6c59f167ae2fa39026a80eece8b542a99d544d7e5b3c079395186`.
+Its corrected canonical identity is
+`680090b8eef098fbe10c77e632aacbfd3d6854d8489d7518e20f062e032b6e44`.
 
 Version-controlled evidence is compact:
 
@@ -99,8 +100,10 @@ Version-controlled evidence is compact:
   (gzip CSV; readable in notebook 01); SHA256
   `02c532371deae481582f9c9083a7a0f54c0fe4ded937513e5cf4b3925b6e8376`.
 - [Protocol summary](issue5/protocol_summary.json): sources, algorithm/code hash,
-  exclusions, counts, drift/support diagnostics, historical transitions and
+  exclusions, counts, drift/support diagnostics, joint-audit hash and
   deep-verified Raw export identity.
+- [Optional historical comparison](issue5/historical_comparison.json): the old
+  train/tune transitions are a separate report and never enter canonical identity.
 - [Executed notebook 01](../notebooks/phase2/01_data_protocol.ipynb): audits,
   charts, native conversion, 0.01-pixel box roundtrips and export verification.
 
@@ -109,6 +112,61 @@ quality 95 for a common encoding contract with future Adaptive exports. All
 13,975 development images and labels passed deep verification. Training,
 calibration and final-test export directories remain empty. New code uses the
 existing native conversion/export helpers; no new metric engine or CLI is added.
+
+## Review corrections: canonical identity and joint support
+
+The original measured manifest ID was
+`b308ba62bca6c59f167ae2fa39026a80eece8b542a99d544d7e5b3c079395186`.
+It incorrectly included optional YOLO11 historical comparison. That comparison is
+now outside `build_protocol()` in a separate report. Regression tests build with
+the optional legacy file present and absent and require identical complete manifests,
+IDs and membership. The canonical identity above removes history and refreshes the
+protocol source hash; the allocation algorithm/config/score, exclusions, every split
+record, source/label identity, box and metadata value remain unchanged.
+
+The full data audit and development export verification were rerun. The compressed
+membership file remains **byte-identical**, retaining its SHA256 above and the
+`issue5-v1` split version. This is an identity correction, not a new split selection.
+The [identity migration record](issue5/identity_migration.json) stores original and
+canonical identities/checksums and exact invariants. Baseline cache metadata now
+references the canonical ID; the original measured execution identity is retained.
+**Inference was not rerun.** Cache reuse was verified with `YOLO.val()` patched to
+raise if invoked. Measured metrics, timing, checkpoint, adapter, six-class mapping,
+NMS/settings, image/label export identity and native plot hashes are unchanged.
+Notebook 03 preserves the original measured outputs and labels this metadata migration.
+
+The [class × condition support CSV](issue5/class_condition_support.csv) has **330
+rows**, covering six classes × seven weather/four time-of-day values × five
+populations (official-train reference and all four roles), including zero cells.
+It records population/condition sample counts, class image presence, instances,
+expected supports, joint prevalence/instance-rate drift, within-condition drift,
+and rare/zero-support flags. References always use all official train; final-test
+annotations are descriptive only and never influence allocation or tuning.
+Undefined conditional drift remains missing when a condition has no samples.
+
+![Class × weather image/instance support and conditional drift](issue5/class_weather_support.png)
+
+![Class × time-of-day image/instance support and conditional drift](issue5/class_timeofday_support.png)
+
+For the review examples, calibration/development contain **62/110 nighttime
+motorcycle images** (73/130 objects), versus approximately 56.79/113.62 expected
+images by population size. Rainy bicycle support is **18/62 images** (25/95 objects),
+versus approximately 24.00/48.01 expected images. The complete CSV exposes each
+role's counts and both joint and conditional drift rather than relying on marginals.
+
+Across the three train-derived roles, no class/condition cell with expected support
+of at least five images has zero observed support. Maximum joint class-presence
+drift is **1.115 percentage points** (calibration daytime cars). Among cells with
+at least 30 class images, the largest absolute conditional drift is **2.551 pp**
+(calibration trucks in partly cloudy weather). This descriptive cutoff is not a
+new statistical significance or balancing rule. Sparse conditions remain uncertain:
+calibration and development each have **17 rare cells**, with **5/6 zero cells**;
+final-test metadata has **15 rare / 6 zero cells**. These fall back to parent
+marginals for interpretation, not forced oversampling or fabricated support.
+
+These diagnostics do not justify automatically changing the frozen population.
+There is no membership version bump, rebalancing, additional final-test image access
+or baseline rerun. The audit documents joint support limits for later paired work.
 
 ## Pretrained development validation
 
@@ -158,10 +216,12 @@ application end-to-end latency. No deployment-throughput claim is made.
 
 ## Checks and remaining boundary
 
-`pytest -q`: **27 passed**, including actual native fixture conversion, semantic
+`pytest -q`: **29 passed**, including actual native fixture conversion, semantic
 mapping through native postprocessing/matching/AP, split reproducibility and
 integrity, duplicate grouping, exposure-group exclusion, rare/absent supports,
-stale/moved paths, and rejection of final-test exports before pixel verification.
+stale/moved paths, optional-history identity independence, class/condition
+counts/zero cells/drift without image access, and rejection of final-test exports
+before pixel verification.
 Notebook checks inspect actual execution status and compile cells. Ruff lint,
 format, source/wheel builds and `git diff --check` pass. These are local checks;
 GitHub CI and review status are tracked separately on the pull request.

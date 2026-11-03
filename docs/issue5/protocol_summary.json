@@ -1,7 +1,7 @@
 {
   "algorithm": {
     "attempts": 64,
-    "code_sha256": "c02281a6dfd77bffa7c173cb8f22b66658379ed7b1c6029b5695e99eba1d2b04",
+    "code_sha256": "05c1fe18d4ac39b682a325280af11ce37e441be9c0d779435730dd4c29b397f0",
     "fractions": {
       "calibration": 0.1,
       "development_validation": 0.2,
@@ -22,6 +22,7 @@
       "sha256": "c835be652f0c002897be51e74deedd16a1dcee0b7230f19c0456fba772f694af"
     }
   },
+  "class_condition_audit_sha256": "c154626e39825c58199fc44324072084f58902767e8b7bee08cf586c263f061a",
   "classes": [
     "car",
     "truck",
@@ -5688,21 +5689,6 @@
     },
     "training_groups": 42109
   },
-  "historical_diff": {
-    "old_sizes": {
-      "train": 55890,
-      "tune": 13973
-    },
-    "selection_id": "d8f6086b184e1460ee375d80246b6c9ca4127339777767bcf32803af30d54d27",
-    "transitions": {
-      "train->calibration": 5638,
-      "train->development_validation": 11201,
-      "train->training_pool": 39051,
-      "tune->calibration": 1347,
-      "tune->development_validation": 2774,
-      "tune->training_pool": 9852
-    }
-  },
   "label_audit": {
     "duplicate_boxes": 1
   },
@@ -5714,7 +5700,7 @@
     "Rare supports below 5 use parent-marginal reporting; absent classes remain absent."
   ],
   "local_full_manifest": "runs/issue5-v1/protocol.json",
-  "manifest_id": "b308ba62bca6c59f167ae2fa39026a80eece8b542a99d544d7e5b3c079395186",
+  "manifest_id": "680090b8eef098fbe10c77e632aacbfd3d6854d8489d7518e20f062e032b6e44",
   "membership_sha256": "02c532371deae481582f9c9083a7a0f54c0fe4ded937513e5cf4b3925b6e8376",
   "raw_export": {
     "conversion": {

@@ -68,7 +68,15 @@ paths, group keys, labels, metadata, image/annotation hashes, exclusions, seed,
 algorithm and summaries. Compact membership and provenance are saved under
 `docs/issue5/`. Changing the protocol requires a new version/root and an explicit
 membership diff. `validate_protocol()` is the downstream integrity check.
-The historical train/tune reassignment is recorded explicitly.
+The historical train/tune reassignment is an optional separate
+`historical_comparison.json` report; legacy artifacts never enter canonical identity.
+
+Post-allocation class × weather/time-of-day audits record image presence, instance
+counts, condition denominators, rare/zero support, and both joint and conditional
+drift from official train in `class_condition_support.csv` and notebook heatmaps.
+Final-test metadata is descriptive only. These audits never rebalance or reassign
+the frozen IDs. The review provenance record distinguishes the corrected identity
+metadata from the original measured baseline; no new inference is implied.
 
 ## Conversion and baseline
 

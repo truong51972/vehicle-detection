@@ -127,7 +127,6 @@ def build_protocol(
     *,
     seed=2026,
     attempts=64,
-    historical=None,
     discovery=None,
 ):
     """Inspect train pixels only; group risks, select natural proportions and freeze evidence."""
@@ -301,23 +300,95 @@ def build_protocol(
             "Rare supports below 5 use parent-marginal reporting; absent classes remain absent.",
         ],
     }
-    if historical is not None:
-        old_roles = {i: s for s, ids in historical["splits"].items() for i in ids}
-        manifest["historical_diff"] = {
-            "selection_id": historical["selection_id"],
-            "old_sizes": {s: len(ids) for s, ids in historical["splits"].items()},
-            "transitions": dict(
-                Counter(
-                    f"{old_roles.get(r['id'], 'absent')}->{role}"
-                    for role, rows in splits.items()
-                    if role != "final_test"
-                    for r in rows
-                )
-            ),
-        }
     manifest["manifest_id"] = digest(manifest)
     validate_protocol(manifest)
     return manifest
+
+
+def historical_comparison(manifest, historical):
+    """Optional report only: legacy artifacts never participate in canonical identity."""
+    old_roles = {i: s for s, ids in historical["splits"].items() for i in ids}
+    return {
+        "manifest_id": manifest["manifest_id"],
+        "selection_id": historical["selection_id"],
+        "old_sizes": {s: len(ids) for s, ids in historical["splits"].items()},
+        "transitions": dict(
+            Counter(
+                f"{old_roles.get(r['id'], 'absent')}->{role}"
+                for role, rows in manifest["splits"].items()
+                if role != "final_test"
+                for r in rows
+            )
+        ),
+    }
+
+
+def class_condition_audit(manifest):
+    """Post-allocation annotation audit; all drift references official train, never changes IDs."""
+    validate_protocol(manifest)
+    populations = {
+        "official_train": [r for role in FRACTIONS for r in manifest["splits"][role]],
+        **manifest["splits"],
+    }
+    domains = {
+        axis: sorted({r["attributes"][axis] for rows in manifest["splits"].values() for r in rows})
+        for axis in ("weather", "timeofday")
+    }
+    totals, presence, instances = Counter(), Counter(), Counter()
+    for role, rows in populations.items():
+        for row in rows:
+            classes = Counter(box[0] for box in row["boxes"])
+            for axis in domains:
+                condition = row["attributes"][axis]
+                totals[role, axis, condition] += 1
+                for cls, count in classes.items():
+                    key = (role, axis, condition, cls)
+                    presence[key] += 1
+                    instances[key] += count
+    reference_n = len(populations["official_train"])
+    audit = []
+    for role, rows in populations.items():
+        n = len(rows)
+        for axis, conditions in domains.items():
+            for condition in conditions:
+                denominator = totals[role, axis, condition]
+                reference_denominator = totals["official_train", axis, condition]
+                for cls, name in enumerate(CLASSES):
+                    key = (role, axis, condition, cls)
+                    reference = ("official_train", axis, condition, cls)
+                    count, boxes = presence[key], instances[key]
+                    reference_count, reference_boxes = presence[reference], instances[reference]
+                    audit.append(
+                        {
+                            "role": role,
+                            "axis": axis,
+                            "condition": condition,
+                            "class": name,
+                            "images": n,
+                            "condition_images": denominator,
+                            "class_images": count,
+                            "instances": boxes,
+                            "reference_condition_images": reference_denominator,
+                            "reference_class_images": reference_count,
+                            "reference_instances": reference_boxes,
+                            "expected_class_images": reference_count * n / reference_n,
+                            "expected_instances": reference_boxes * n / reference_n,
+                            "presence_drift_pp": 100 * (count / n - reference_count / reference_n),
+                            "instances_drift_per_image": boxes / n - reference_boxes / reference_n,
+                            "conditional_presence_drift_pp": 100
+                            * (count / denominator - reference_count / reference_denominator)
+                            if denominator and reference_denominator
+                            else None,
+                            "conditional_instances_drift": (
+                                boxes / denominator - reference_boxes / reference_denominator
+                            )
+                            if denominator and reference_denominator
+                            else None,
+                            "zero_support": count == 0,
+                            "rare_support": count < 5,
+                        }
+                    )
+    return audit
 
 
 def validate_protocol(manifest):

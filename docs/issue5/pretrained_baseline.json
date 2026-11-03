@@ -55,7 +55,7 @@
       "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39"
     },
     "input": "Raw JPEG95",
-    "manifest_id": "b308ba62bca6c59f167ae2fa39026a80eece8b542a99d544d7e5b3c079395186",
+    "manifest_id": "680090b8eef098fbe10c77e632aacbfd3d6854d8489d7518e20f062e032b6e44",
     "mapping": {
       "1": 5,
       "2": 0,
@@ -90,6 +90,11 @@
       "torchvision": "0.29.2",
       "ultralytics": "8.4.198"
     }
+  },
+  "provenance": {
+    "identity_migration": "docs/issue5/identity_migration.json",
+    "inference_rerun": false,
+    "measured_manifest_id": "b308ba62bca6c59f167ae2fa39026a80eece8b542a99d544d7e5b3c079395186"
   },
   "result": {
     "artifacts": {
