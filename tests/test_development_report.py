@@ -95,6 +95,19 @@ def test_report_preserves_pairs_supports_and_reuses_without_recomputing(
 
     monkeypatch.setattr(reporting, "paired_interval", no_bootstrap)
     assert reporting.development_report(*args, resamples=5) == result
+
+    # Historical summary source hashes remain valid and readable without recomputation.
+    historical = read_json(tmp_path / "report/summary.json")
+    historical["identity"]["version"] = "development-analysis-v1"
+    historical["identity"]["code_sha256"] = "original-study-report"
+    historical["identity"]["statistics_code_sha256"] = "original-native-ap"
+    historical["result"]["provenance"] = historical["identity"]
+    historical["checksum"] = digest(historical["result"])
+    write_json(tmp_path / "report/summary.json", historical)
+    assert reporting.development_report(*args, resamples=5) == historical["result"]
+    with pytest.raises(ValueError, match="Historical analysis inputs/settings"):
+        reporting.development_report(*args, resamples=0)
+
     point_args = (*args[:4], tmp_path / "points-only", args[-1])
     points = reporting.development_report(*point_args, resamples=0)
     overall_points = [r for r in points["comparisons"] if r["axis"] == "overall"]
