@@ -33,11 +33,7 @@ class PretrainedValidator(MatchingStats, VehicleValidator):
 
 class TrainedValidator(MatchingStats, DetectionValidator):
     def init_metrics(self, model):
-        if (
-            self.training
-            or self.args.split != "val"
-            or model.names != self.data["names"]
-        ):
+        if self.training or self.args.split != "val" or model.names != self.data["names"]:
             raise ValueError("Native checkpoint classes differ from development dataset")
         super().init_metrics(model)
 
@@ -190,8 +186,15 @@ def evaluate_development(
         prior = saved["identity"]
         if prior.get("version") == "development-native-v1":
             # Read-only replay of original six-class caches, even if source code changed.
-            comparable = ("protocol_id", "role", "policy_id", "dataset",
-                          "checkpoint_sha256", "mapping", "settings")
+            comparable = (
+                "protocol_id",
+                "role",
+                "policy_id",
+                "dataset",
+                "checkpoint_sha256",
+                "mapping",
+                "settings",
+            )
             if target_classes != tuple(CLASSES) or any(
                 prior.get(k) != identity.get(k) for k in comparable
             ):
