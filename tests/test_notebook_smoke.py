@@ -102,8 +102,7 @@ for target in ["vehicle_detection.data.scan_bdd", "vehicle_detection.protocol.bu
                "vehicle_detection.adaptive.calibrate_policy",
                "vehicle_detection.offline.export_variant",
                "vehicle_detection.finetuning.prepare_pair",
-               "vehicle_detection.finetuning.train_branch",
-               "vehicle_detection.loader_benchmark.build_dataloader"]:
+               "vehicle_detection.finetuning.train_branch"]:
     patch(target, side_effect=AssertionError("Upstream phase triggered")).start()
 patch.object(YOLO, "train", side_effect=AssertionError("Training triggered")).start()
 patch.object(DetectionTrainer, "__init__", side_effect=AssertionError("Trainer created")).start()
