@@ -16,11 +16,13 @@ def development_report(protocol, policy, checkpoints, directory, output, plan, *
         raise ValueError("Use 0 for points only or at least 2 group bootstrap draws")
     validate_protocol(protocol)
     directory, output = Path(directory), Path(output)
-    names = [f"{model}-{input_name}"
-             for model in ("pretrained", "raw", "adaptive")
-             for input_name in ("raw", "adaptive")]
+    names = [
+        f"{model}-{input_name}"
+        for model in ("pretrained", "raw", "adaptive")
+        for input_name in ("raw", "adaptive")
+    ]
     hashes = {model: file_hash(path) for model, path in checkpoints.items()}
-    evaluations, saved = {}, {}
+    evaluations, saved, configs = {}, {}, []
     for name in names:
         model, _ = name.split("-")
         path = directory / name / "native_result.json"
@@ -33,10 +35,13 @@ def development_report(protocol, policy, checkpoints, directory, output, plan, *
             or bound["checkpoint_sha256"] != hashes[model]
         ):
             raise ValueError("Recorded evaluation role/protocol/policy/checkpoint changed")
+        configs.append(bound["settings"])
         evaluations[name] = reuse_evaluation(path, bound)
         saved[name] = file_hash(path)
 
-    config = read_json(directory / names[0] / "native_result.json")["identity"]["settings"]
+    if any(config != configs[0] for config in configs):
+        raise ValueError("Evaluation matrix settings differ")
+    config = configs[0]
     identity = {
         "version": "development-analysis-v3",
         "evaluations": saved,
@@ -51,8 +56,15 @@ def development_report(protocol, policy, checkpoints, directory, output, plan, *
     if summary.is_file():
         old = read_json(summary)["identity"]
         if old.get("version") in ("development-analysis-v1", "development-analysis-v2"):
-            stable = ("evaluations", "plan_sha256", "resamples", "seed",
-                      "settings", "minimum_source_groups", "versions")
+            stable = (
+                "evaluations",
+                "plan_sha256",
+                "resamples",
+                "seed",
+                "settings",
+                "minimum_source_groups",
+                "versions",
+            )
             if any(old.get(k) != identity[k] for k in stable):
                 raise ValueError("Historical analysis inputs/settings changed")
             return reuse_evaluation(summary, old)
@@ -65,8 +77,7 @@ def development_report(protocol, policy, checkpoints, directory, output, plan, *
     expected = {r["id"]: sorted(int(b[0]) for b in r["boxes"]) for r in rows}
     for records in stats.values():
         if set(records) != set(expected) or any(
-            sorted(map(int, records[i]["target_cls"])) != classes
-            for i, classes in expected.items()
+            sorted(map(int, records[i]["target_cls"])) != classes for i, classes in expected.items()
         ):
             raise ValueError("Saved matching statistics differ from frozen development GT")
 
@@ -89,9 +100,11 @@ def development_report(protocol, policy, checkpoints, directory, output, plan, *
                     "images": len(ids),
                     "groups": len({r["group"] for r in selected}),
                     "mAP50": float(np.mean([p["AP50"] for p in per_class.values()]))
-                    if per_class else None,
+                    if per_class
+                    else None,
                     "mAP50_95": float(np.mean([p["AP50_95"] for p in per_class.values()]))
-                    if per_class else None,
+                    if per_class
+                    else None,
                     "classes": {str(k): v for k, v in per_class.items()},
                 }
             )
@@ -102,9 +115,7 @@ def development_report(protocol, policy, checkpoints, directory, output, plan, *
         before, after = f"raw-{treatment}", f"adaptive-{treatment}"
         support = bootstrap_support(stats[before], pilot)
         if resamples:
-            interval = paired_interval(
-                stats[before], stats[after], pilot, resamples=resamples
-            )
+            interval = paired_interval(stats[before], stats[after], pilot, resamples=resamples)
             status = "exploratory"
         else:
             ids = list(stats[before])
@@ -146,16 +157,25 @@ def development_report(protocol, policy, checkpoints, directory, output, plan, *
                     "false_negatives_at_025": len(values["target_cls"]) - matched,
                 }
             )
-        errors.extend(sorted(
-            ranked, key=lambda row: (
-                -row["false_negatives_at_025"], -row["false_positives_at_025"], row["id"]
-            )
-        )[:12])
+        errors.extend(
+            sorted(
+                ranked,
+                key=lambda row: (
+                    -row["false_negatives_at_025"],
+                    -row["false_positives_at_025"],
+                    row["id"],
+                ),
+            )[:12]
+        )
 
     result = {
         "matrix": [
-            {"evaluation": name, **value["overall"], "classes": value["classes"],
-             "speed_ms": value["speed_ms"]}
+            {
+                "evaluation": name,
+                **value["overall"],
+                "classes": value["classes"],
+                "speed_ms": value["speed_ms"],
+            }
             for name, value in evaluations.items()
         ],
         "conditions": conditions,

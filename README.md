@@ -22,15 +22,15 @@ artifacts; missing or mismatched artifacts fail rather than launching upstream w
    `results.csv`, `args.yaml` and a small paired dataset manifest.
    `RESUME` explicitly opts in to native `last.pt` continuation.
 4. [04_eval_and_report.ipynb](notebooks/04_eval_and_report.ipynb) consumes existing
-   native checkpoints (or historical six-class receipts) and frozen Raw/Adaptive
-   development inputs. Reports native
+   explicit native checkpoints (including historical six-class weights) and frozen
+   Raw/Adaptive development inputs. Reports native
    pretrained / Raw-trained / Adaptive-trained × Raw / Adaptive metrics, per-class
    AP, latency, plots and representative errors under `runs/development-native-v1/`.
    **Default: saved-result reuse.** Set `ALLOW_INFERENCE=True` to fill missing
-   evaluations and `MEASURE_LOADERS=True` to collect missing isolated CPU loader
-   measurements. Supported condition/group uncertainty is computed once from saved
-   native matches. `BOOTSTRAP_RESAMPLES=0` reports points by default; set 100 for
-   the prospective group analysis.
+   evaluations. Natural condition slices are descriptive; two matched
+   Raw-trained vs Adaptive-trained contrasts use native saved matches.
+   `BOOTSTRAP_RESAMPLES=0` reports points by default; set 100 for
+   exploratory source-group uncertainty.
    Valid caches are reused with either execution opt-in. Checkpoint/scale selection
    and final-test release remain separate. Changed inputs
    require a new output root. This notebook never imports the training runner.
@@ -76,8 +76,8 @@ An export binds IDs/labels/geometry, recipes and JPEG95, with a deep-verificatio
 receipt. New training binds verified exports, initial checkpoint, native freeze and
 shared settings in a short study manifest; Ultralytics owns optimization, weights,
 history and resume. Native resume is epoch-boundary continuation, not bitwise
-reproducibility or an atomic last-checkpoint guarantee. Evaluation binds those inputs
-and its own implementation, matching statistics, native plot hashes and metric settings.
+reproducibility or an atomic last-checkpoint guarantee. Evaluation binds the
+explicit checkpoint, verified development export, native settings and metric plots.
 Raw and Adaptive always retain the same IDs and GT. COCO-80 pretrained predictions
 map to the six vehicle classes; fine-tuned six-class heads use native IDs/AP directly.
 
@@ -93,7 +93,8 @@ completed S10 experiments without rerunning earlier phases, configure notebook 0
   and frozen policy. Phase 02 exposes `RAW_DEVELOPMENT` / `DEV_CONVERSION`.
 - `OUTPUT`: `runs/development-v1` for the completed native evaluation caches.
 
-Original training receipts retain their original source hash and remain readable.
+Original training receipts remain available as historical evidence, but the new
+evaluator does not require or parse them.
 New runs must use distinct roots; do not resume the old six-class S10 checkpoints
 with this simplified training implementation. Native `best.pt` can be evaluated
 without a custom `complete.json` receipt.
@@ -105,7 +106,7 @@ synthetic images/checkpoints and never count as scientific evidence.
 [Archive and replay instructions](notebooks/archive/README.md) identify every
 historical notebook by its original path, source revision and preserved SHA256.
 [Historical design](docs/HISTORY.md), [S10 results](docs/ISSUE7_RESULTS.md) and the
-[module audit](docs/REFACTOR.md) preserve study context and remaining limitations.
+[module audit](docs/REFACTOR.md) and [cleanup decisions](docs/EPIC14_CLEANUP.md) preserve study context and remaining limitations.
 The [development matrix record](docs/DEVELOPMENT_RESULTS.md) preserves the six
 completed evaluations and identifies unfinished #7 analysis after benchmarking stopped.
 [Issue #13](https://github.com/truong51972/vehicle-detection/issues/13) restructures

@@ -1,6 +1,5 @@
 """Historical six-class COCO→BDD prediction adapter; native YOLO computes metrics."""
 
-
 import torch
 from ultralytics.models.yolo.detect import DetectionValidator
 from ultralytics.utils.metrics import ConfusionMatrix
@@ -67,4 +66,3 @@ class VehicleValidator(DetectionValidator):
 
     def postprocess(self, preds):
         return [remap_predictions(pred) for pred in super().postprocess(preds)]
-

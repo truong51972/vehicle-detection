@@ -80,8 +80,13 @@ def evaluate_development(
         if prior.get("version") in {"development-native-v1", "development-native-v2"}:
             # Read-only old six-class measurements; never rewrite their source hashes.
             comparable = (
-                "protocol_id", "policy_id", "role", "dataset",
-                "checkpoint_sha256", "mapping", "settings",
+                "protocol_id",
+                "policy_id",
+                "role",
+                "dataset",
+                "checkpoint_sha256",
+                "mapping",
+                "settings",
             )
             if names != CLASSES or any(prior.get(k) != identity[k] for k in comparable):
                 raise ValueError("Historical evaluation cache inputs/roles changed")
@@ -136,8 +141,7 @@ def evaluate_development(
         "role": "development_validation",
         "final_test_accessed": False,
         "artifacts": {
-            p.name: file_hash(p)
-            for p in [*output.glob("*.png"), *output.glob("*.jpg"), stats]
+            p.name: file_hash(p) for p in [*output.glob("*.png"), *output.glob("*.jpg"), stats]
         },
     }
     write_json(saved, {"identity": identity, "result": result, "checksum": digest(result)})
