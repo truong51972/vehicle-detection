@@ -83,6 +83,43 @@ def test_duplicate_content_cannot_cross_splits(bdd):
         choose_splits(records, 42, {"train": None, "tune": None, "test": None})
 
 
+def test_development_split_never_reads_holdout_pixels(bdd, monkeypatch, tmp_path, recipes):
+    from vehicle_detection import data
+
+    records, _, _ = scan_bdd(bdd)
+    original_read = data.read_image
+    original_hash = data.file_hash
+
+    def train_only(path):
+        assert "val" not in Path(path).parts, "Holdout pixels must remain untouched"
+        return original_read(path)
+
+    def train_hash(path):
+        assert "val" not in Path(path).parts, "Holdout pixels must not be hashed"
+        return original_hash(path)
+
+    monkeypatch.setattr(data, "read_image", train_only)
+    monkeypatch.setattr(data, "file_hash", train_hash)
+    partitions = choose_splits(
+        records, 2026, dict.fromkeys(["train", "tune", "test"]), prepare_test=False
+    )
+    assert set(partitions) == {"train", "tune"}
+    assert sum(map(len, partitions.values())) == 6
+    assert all("sha256" not in r for r in records if r["official_split"] == "val")
+    converted = tmp_path / "converted"
+    write_json(converted / "conversion.json", {"fixture": True})
+    for split, rows in partitions.items():
+        for r in rows:
+            path = converted / "labels" / split / f"{r['id']}.txt"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("0 0.4 0.4 0.2 0.2\n")
+    output = tmp_path / "raw_original"
+    export_variant(partitions, converted, output, "raw_original", recipes)
+    assert verify_alignment([output]) == 6
+    assert not list((output / "images/test").iterdir())
+    assert not list((output / "labels/test").iterdir())
+
+
 @pytest.mark.parametrize("variant", ["raw", "gamma", "clahe", "denoise", "sharpen", "adaptive"])
 def test_filter_geometry_dtype_and_source_invariance(variant, recipes):
     validate_recipes(recipes)
@@ -140,6 +177,14 @@ def test_native_conversion_six_classes_and_geometry(bdd, tmp_path):
 def test_export_restart_integrity_and_recipe_isolation(bdd, tmp_path, recipes):
     records, _, _ = scan_bdd(bdd)
     partitions = choose_splits(records, 42, {"train": 3, "tune": 2, "test": 2})
+    source_file = tmp_path / "source_link.jpg"
+    source_file.symlink_to(partitions["train"][0]["path"])
+    partitions["train"][0]["path"] = str(source_file)
+    source_directory = tmp_path / "source_directory"
+    source_directory.symlink_to(
+        Path(partitions["tune"][0]["path"]).parent, target_is_directory=True
+    )
+    partitions["tune"][0]["path"] = str(source_directory / Path(partitions["tune"][0]["path"]).name)
     converted = tmp_path / "converted"
     write_json(converted / "conversion.json", {"classes": CLASSES, "test": "fixture labels only"})
     for split, rows in partitions.items():
@@ -183,6 +228,21 @@ def test_export_restart_integrity_and_recipe_isolation(bdd, tmp_path, recipes):
     source.write_bytes(b"changed source")
     with pytest.raises(ValueError, match="Source image changed"):
         export_variant(partitions, converted, roots[0], "raw_original", recipes)
+
+
+def test_raw_rejects_jpeg_that_native_validation_would_reencode(bdd, tmp_path, recipes):
+    records, _, _ = scan_bdd(bdd)
+    partitions = choose_splits(records, 42, {"train": 3, "tune": 2, "test": 2})
+    record = partitions["train"][0]
+    source = Path(record["path"])
+    damaged = source.read_bytes()[:-2]
+    source.write_bytes(damaged)
+    record["sha256"] = file_hash(source)
+    output = tmp_path / "raw_original"
+    with pytest.raises(ValueError, match="JPEG end marker"):
+        export_variant(partitions, tmp_path / "conversion", output, "raw_original", recipes)
+    assert source.read_bytes() == damaged
+    assert not output.exists()
 
 
 def test_export_never_writes_through_source_symlink(bdd, tmp_path, recipes):

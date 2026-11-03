@@ -43,12 +43,26 @@ def export_variant(
         encoding = {**encoding, "format": "original", "jpeg_quality": None}
     destination, converted = Path(destination).resolve(), Path(converted).resolve()
     records = [(split, r) for split, rows in partitions.items() for r in rows]
+    source_paths, parents = {}, {}
     for _, r in records:
-        source = Path(r["path"]).resolve()
+        path = Path(r["path"])
+        if path.parent not in parents:
+            parents[path.parent] = path.parent.resolve()
+        source = parents[path.parent] / path.name
+        if source.is_symlink():
+            source = source.resolve()
+        source_paths[r["id"]] = source
         if destination == source or destination in source.parents or source in destination.parents:
             raise ValueError("Export directory overlaps source data")
         if file_hash(source) != r["sha256"]:
             raise ValueError(f"Source image changed: {source}")
+        if original and source.suffix.lower() in {".jpg", ".jpeg"}:
+            with source.open("rb") as stream:
+                stream.seek(-2, 2)
+                if stream.read() != b"\xff\xd9":
+                    raise ValueError(
+                        f"Invalid JPEG end marker; native YOLO would re-encode: {source}"
+                    )
     labels = {r["id"]: file_hash(converted / "labels" / s / f"{r['id']}.txt") for s, r in records}
     identity = {
         "variant": variant,
@@ -67,6 +81,9 @@ def export_variant(
         raise ValueError(f"Unknown existing export directory: {destination}")
     else:
         write_json(identity_path, identity)
+    for split in ("train", "tune", "test"):
+        for kind in ("images", "labels"):
+            (destination / kind / split).mkdir(parents=True, exist_ok=True)
     (destination / "verified.json").unlink(missing_ok=True)
     journal = destination / "metadata.jsonl"
     completed = {}
@@ -82,14 +99,15 @@ def export_variant(
     result = []
     with journal.open("a") as log:
         for split, r in records:
-            source = Path(r["path"]).resolve()
+            source = source_paths[r["id"]]
             suffix = source.suffix if original else f".{output_format}"
             target = destination / "images" / split / f"{r['id']}{suffix}"
             label = destination / "labels" / split / f"{r['id']}.txt"
             old = completed.get(r["id"])
             label_source = converted / "labels" / split / label.name
             # Never follow an unexpected image symlink when repairing a generated file.
-            if target.is_symlink() and (not original or target.resolve() != source):
+            # Owned raw links store absolute validated sources; read the link without retraversal.
+            if target.is_symlink() and (not original or target.readlink() != source):
                 raise ValueError(f"Unsafe export symlink: {target}")
             if label.is_symlink():
                 raise ValueError(f"Unexpected label symlink: {label}")

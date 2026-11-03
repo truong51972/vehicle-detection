@@ -24,11 +24,13 @@ Completion means these concrete artifacts and behaviors are verified:
 
 This verifies feasibility and a reproducible starting workflow. Full fine-tuning,
 robustness benchmarks and research-grade accuracy claims are not Phase 1 gates.
-The PR remains draft for owner review of the recorded JPEG closeout evidence.
+Phase 1 was merged in PR #2; its executed pilot evidence remains in that history.
 
 ## Phase 2: full BDD100K fine-tuning and controlled benchmark
 
-Remaining work is tracked here under Issue #1 and is deliberately unchecked:
+Phase 2 starts with the full raw baseline in the same two notebooks. See
+[the execution record](PHASE2_RESULTS.md) for actual progress. Items remain unchecked
+until their experiments and evidence are complete:
 
 - [ ] Freeze a study protocol, compute/storage budget and untouched final test set.
   Exclude all exposed IDs in `notebooks/test_exposure.json`; make model/recipe
@@ -48,6 +50,6 @@ Remaining work is tracked here under Issue #1 and is deliberately unchecked:
 - [ ] Repeat independent seeds and quantify uncertainty (including paired/bootstrap
   analysis where appropriate); report accuracy/cost tradeoffs and limitations.
 
-Create separately scoped implementation work for these items before executing a
-full study. Do not mark Issue #1 complete until the agreed research requirements
+The current run prioritizes full raw training before exporting additional variants.
+Official-val holdout pixels remain unprepared throughout development/calibration. Do not mark Issue #1 complete until the agreed research requirements
 and their evidence have been reviewed.
