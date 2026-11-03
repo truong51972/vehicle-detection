@@ -3,7 +3,6 @@
 from types import SimpleNamespace
 
 import pandas as pd
-
 import pytest
 import yaml
 from test_adaptive import frozen as frozen
@@ -15,7 +14,7 @@ pytest.importorskip("ultralytics")
 from vehicle_detection import finetuning  # noqa: E402
 from vehicle_detection.adaptive import calibrate_policy, export_pair  # noqa: E402
 from vehicle_detection.baseline import COCO_TO_VEHICLE  # noqa: E402
-from vehicle_detection.common import digest, file_hash, read_json, write_json  # noqa: E402
+from vehicle_detection.common import digest, file_hash, write_json  # noqa: E402
 from vehicle_detection.data import CLASSES  # noqa: E402
 from vehicle_detection.finetuning import (  # noqa: E402
     TRAIN_SETTINGS,
