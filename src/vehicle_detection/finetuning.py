@@ -40,9 +40,23 @@ TRAIN_SETTINGS = {
     "augmentations": [],
     **dict.fromkeys(
         (
-            "hsv_h", "hsv_s", "hsv_v", "degrees", "translate", "scale", "shear",
-            "perspective", "flipud", "fliplr", "bgr", "mosaic", "mixup",
-            "cutmix", "copy_paste", "multi_scale", "close_mosaic",
+            "hsv_h",
+            "hsv_s",
+            "hsv_v",
+            "degrees",
+            "translate",
+            "scale",
+            "shear",
+            "perspective",
+            "flipud",
+            "fliplr",
+            "bgr",
+            "mosaic",
+            "mixup",
+            "cutmix",
+            "copy_paste",
+            "multi_scale",
+            "close_mosaic",
         ),
         0,
     ),
@@ -85,16 +99,23 @@ def prepare_pair(protocol, subsets, policy, decision, pair, development, checkpo
     rows = [r for r in protocol["splits"]["training_pool"] if r["id"] in ids]
     training = {
         branch: verify_role(
-            pair / branch, rows, "train", variant,
-            policy["recipes"] if branch == "adaptive" else None, deep=False,
+            pair / branch,
+            rows,
+            "train",
+            variant,
+            policy["recipes"] if branch == "adaptive" else None,
+            deep=False,
         )
         for branch, variant in (("raw", "raw_reencoded"), ("adaptive", "adaptive"))
     }
     # This one cross-variant check compares IDs, label digests, dimensions and splits.
     verify_alignment([pair / "raw", pair / "adaptive"], deep=False)
     development_export = verify_role(
-        development, protocol["splits"]["development_validation"], "tune",
-        "raw_reencoded", deep=False,
+        development,
+        protocol["splits"]["development_validation"],
+        "tune",
+        "raw_reencoded",
+        deep=False,
     )
     if file_hash(checkpoint) != PRETRAINED_SHA256:
         raise ValueError("Use the unchanged pinned pretrained YOLO26n checkpoint")
@@ -166,9 +187,7 @@ def train_branch(experiment, branch, output, *, resume=False):
             raise ValueError("Native run settings changed; select a new output root")
     elif run.exists() and any(run.iterdir()):
         raise ValueError("Unknown native run directory; select a new output root")
-    best, last, history = (
-        run / "weights/best.pt", run / "weights/last.pt", run / "results.csv"
-    )
+    best, last, history = (run / "weights/best.pt", run / "weights/last.pt", run / "results.csv")
     if resume:
         if not args_path.is_file() or not last.is_file():
             raise FileNotFoundError("Native resume requires this branch's last.pt and args.yaml")
