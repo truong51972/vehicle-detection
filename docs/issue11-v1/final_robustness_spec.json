@@ -1,0 +1,122 @@
+{
+  "current_policy_id": "1ac3fb9bb94b132f70d3e168b5ef15a54b616444e535b9a3bb265682a6fce0ef",
+  "encoding": {
+    "format": "jpg",
+    "quality": 95
+  },
+  "inputs": [
+    "Raw under same condition",
+    "frozen Adaptive under same condition"
+  ],
+  "models": [
+    "frozen pretrained YOLO26n",
+    "future Raw-trained model",
+    "future Adaptive-trained model"
+  ],
+  "natural_clean": "Report separately with natural prevalence; no blending with synthetic AP",
+  "paired_group_uncertainty": true,
+  "primary_metric": "native mAP50:95",
+  "protocol_id": "680090b8eef098fbe10c77e632aacbfd3d6854d8489d7518e20f062e032b6e44",
+  "release_gate": [
+    "model/policy/protocol freeze",
+    "final pixel/geometry/content leakage checks",
+    "no subsequent retuning"
+  ],
+  "reserved_images": 9730,
+  "role": "final_test",
+  "seed": 2026,
+  "settings": {
+    "agnostic_nms": false,
+    "augment": false,
+    "batch": 32,
+    "conf": 0.001,
+    "deterministic": true,
+    "device": "0",
+    "imgsz": 640,
+    "iou": 0.7,
+    "max_det": 300,
+    "nms": false,
+    "plots": true,
+    "quantize": 32,
+    "rect": true,
+    "seed": 2026,
+    "verbose": false,
+    "workers": 0
+  },
+  "source_id_parity": "all conditions use identical final source IDs/groups/GT",
+  "spec_id": "e8b55c297536e82a9d2ed84c867a74c8967b5c893e7717d468712a00d929b08a",
+  "status": "specification_only_not_executed",
+  "synthetic": {
+    "defocus": [
+      {
+        "radius": 1
+      },
+      {
+        "radius": 2
+      },
+      {
+        "radius": 4
+      }
+    ],
+    "motion": [
+      {
+        "size": 5
+      },
+      {
+        "size": 11
+      },
+      {
+        "size": 21
+      }
+    ],
+    "overexposure": [
+      {
+        "factor": 1.3
+      },
+      {
+        "factor": 1.7
+      },
+      {
+        "factor": 2.3
+      }
+    ],
+    "shot_read": [
+      {
+        "photons": 800,
+        "read_sigma": 0.003
+      },
+      {
+        "photons": 200,
+        "read_sigma": 0.008
+      },
+      {
+        "photons": 50,
+        "read_sigma": 0.02
+      }
+    ],
+    "underexposure": [
+      {
+        "factor": 0.7
+      },
+      {
+        "factor": 0.45
+      },
+      {
+        "factor": 0.25
+      }
+    ],
+    "veil": [
+      {
+        "alpha": 0.1
+      },
+      {
+        "alpha": 0.25
+      },
+      {
+        "alpha": 0.4
+      }
+    ]
+  },
+  "v3_decision_id": "8ce7eba9d9e9523313bbd287de6f40a5cfd57b9825ffa52cfa6cf2b5339ddd9f",
+  "version": "issue11-final-stress-spec-v1"
+}

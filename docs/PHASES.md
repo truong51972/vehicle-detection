@@ -36,6 +36,9 @@ are:
   development validation, with semantic COCO→vehicle mapping and native metrics.
 - #6: calibrate Adaptive using calibration only; create representative nested
   S10/S20 training subsets and matched Raw/Adaptive exports.
+- #11: independently screen synthetic degradations/restoration on calibration
+  with frozen YOLO26n metrics before proposing a supported v3 policy; preserve
+  clean evaluation and v1/v2 evidence.
 - #7: progressive partial fine-tuning of neck/head with backbone frozen; scale
   paired subsets only when development-validation evidence justifies it.
 - #8: lock protocol and execute the final 3×2 model/input benchmark once.

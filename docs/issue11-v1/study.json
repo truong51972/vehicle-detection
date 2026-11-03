@@ -1,0 +1,394 @@
+{
+  "bootstraps": 100,
+  "checkpoint": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+  "code": {
+    "baseline.py": "446d4b2318a42cf4399f230ed121a964b671717e2624b5a7e305656e5ac6a422",
+    "preprocess.py": "354f19a51ba613f7bd0109fe5fcb7f86b98423059081500d96640ad2e29bb27b",
+    "stress.py": "8175f20c82debe9221e29f6bc667bdc73946909ad9d4c93e469dfabcc671438b",
+    "stress_eval.py": "712e8734fa4e728d74b7fe6379f7896ec8f55d14efd3f32a697d20f3b665b9de"
+  },
+  "conditions": [
+    [
+      "clean",
+      0,
+      "skip"
+    ],
+    [
+      "shot_read",
+      1,
+      "skip"
+    ],
+    [
+      "shot_read",
+      2,
+      "skip"
+    ],
+    [
+      "shot_read",
+      3,
+      "skip"
+    ],
+    [
+      "motion",
+      1,
+      "skip"
+    ],
+    [
+      "motion",
+      2,
+      "skip"
+    ],
+    [
+      "motion",
+      3,
+      "skip"
+    ],
+    [
+      "defocus",
+      1,
+      "skip"
+    ],
+    [
+      "defocus",
+      2,
+      "skip"
+    ],
+    [
+      "defocus",
+      3,
+      "skip"
+    ],
+    [
+      "underexposure",
+      1,
+      "skip"
+    ],
+    [
+      "underexposure",
+      2,
+      "skip"
+    ],
+    [
+      "underexposure",
+      3,
+      "skip"
+    ],
+    [
+      "overexposure",
+      1,
+      "skip"
+    ],
+    [
+      "overexposure",
+      2,
+      "skip"
+    ],
+    [
+      "overexposure",
+      3,
+      "skip"
+    ],
+    [
+      "veil",
+      1,
+      "skip"
+    ],
+    [
+      "veil",
+      2,
+      "skip"
+    ],
+    [
+      "veil",
+      3,
+      "skip"
+    ],
+    [
+      "shot_read",
+      2,
+      "nlmeans"
+    ],
+    [
+      "shot_read",
+      2,
+      "bilateral"
+    ],
+    [
+      "motion",
+      2,
+      "unsharp"
+    ],
+    [
+      "motion",
+      2,
+      "clahe"
+    ],
+    [
+      "defocus",
+      2,
+      "unsharp"
+    ],
+    [
+      "defocus",
+      2,
+      "clahe"
+    ],
+    [
+      "underexposure",
+      2,
+      "gamma"
+    ],
+    [
+      "underexposure",
+      2,
+      "clahe"
+    ],
+    [
+      "overexposure",
+      2,
+      "darken"
+    ],
+    [
+      "overexposure",
+      2,
+      "percentile"
+    ],
+    [
+      "veil",
+      2,
+      "clahe"
+    ],
+    [
+      "veil",
+      2,
+      "percentile"
+    ],
+    [
+      "clean",
+      0,
+      "adaptive_v2"
+    ],
+    [
+      "clean",
+      0,
+      "bilateral"
+    ],
+    [
+      "clean",
+      0,
+      "clahe"
+    ],
+    [
+      "clean",
+      0,
+      "darken"
+    ],
+    [
+      "clean",
+      0,
+      "gamma"
+    ],
+    [
+      "clean",
+      0,
+      "nlmeans"
+    ],
+    [
+      "clean",
+      0,
+      "percentile"
+    ],
+    [
+      "clean",
+      0,
+      "unsharp"
+    ],
+    [
+      "shot_read",
+      2,
+      "adaptive_v2"
+    ],
+    [
+      "motion",
+      2,
+      "adaptive_v2"
+    ],
+    [
+      "defocus",
+      2,
+      "adaptive_v2"
+    ],
+    [
+      "underexposure",
+      2,
+      "adaptive_v2"
+    ],
+    [
+      "overexposure",
+      2,
+      "adaptive_v2"
+    ],
+    [
+      "veil",
+      2,
+      "adaptive_v2"
+    ]
+  ],
+  "corruptions": {
+    "defocus": [
+      {
+        "radius": 1
+      },
+      {
+        "radius": 2
+      },
+      {
+        "radius": 4
+      }
+    ],
+    "motion": [
+      {
+        "size": 5
+      },
+      {
+        "size": 11
+      },
+      {
+        "size": 21
+      }
+    ],
+    "overexposure": [
+      {
+        "factor": 1.3
+      },
+      {
+        "factor": 1.7
+      },
+      {
+        "factor": 2.3
+      }
+    ],
+    "shot_read": [
+      {
+        "photons": 800,
+        "read_sigma": 0.003
+      },
+      {
+        "photons": 200,
+        "read_sigma": 0.008
+      },
+      {
+        "photons": 50,
+        "read_sigma": 0.02
+      }
+    ],
+    "underexposure": [
+      {
+        "factor": 0.7
+      },
+      {
+        "factor": 0.45
+      },
+      {
+        "factor": 0.25
+      }
+    ],
+    "veil": [
+      {
+        "alpha": 0.1
+      },
+      {
+        "alpha": 0.25
+      },
+      {
+        "alpha": 0.4
+      }
+    ]
+  },
+  "gates": {
+    "independent_calibration_confirmation_required": true,
+    "max_clean_loss": 0.01,
+    "max_restore_p95_ms": 25.0,
+    "recovery_ci_low_min": 0.0,
+    "recovery_min": 0.005
+  },
+  "operators": {
+    "adaptive_v2": {},
+    "bilateral": {
+      "d": 5,
+      "sigmaColor": 25.0,
+      "sigmaSpace": 3.0
+    },
+    "clahe": {
+      "clip_limit": 1.5,
+      "grid_size": 8
+    },
+    "darken": {
+      "gamma": 1.3
+    },
+    "gamma": {
+      "gamma": 0.7
+    },
+    "nlmeans": {
+      "strength": 5.0
+    },
+    "percentile": {
+      "high": 99.0,
+      "low": 1.0
+    },
+    "skip": {},
+    "unsharp": {
+      "amount": 0.4,
+      "sigma": 1.0
+    }
+  },
+  "pilot_id": "e56112bcfbdd986f9e6a9758d94c69469ab0740c848a06e640e6e1e2bec0bedf",
+  "protocol_id": "680090b8eef098fbe10c77e632aacbfd3d6854d8489d7518e20f062e032b6e44",
+  "scope": "calibration exploratory screening only; no development/final-test access",
+  "screen": {
+    "defocus": [
+      "unsharp",
+      "clahe"
+    ],
+    "motion": [
+      "unsharp",
+      "clahe"
+    ],
+    "overexposure": [
+      "darken",
+      "percentile"
+    ],
+    "shot_read": [
+      "nlmeans",
+      "bilateral"
+    ],
+    "underexposure": [
+      "gamma",
+      "clahe"
+    ],
+    "veil": [
+      "clahe",
+      "percentile"
+    ]
+  },
+  "settings": {
+    "agnostic_nms": false,
+    "augment": false,
+    "batch": 32,
+    "conf": 0.001,
+    "deterministic": true,
+    "device": "0",
+    "imgsz": 640,
+    "iou": 0.7,
+    "max_det": 300,
+    "nms": false,
+    "plots": true,
+    "quantize": 32,
+    "rect": true,
+    "seed": 2026,
+    "verbose": false,
+    "workers": 0
+  },
+  "study_id": "a7e6b2586bd26454a6fdcb651087f7ed52a59ecee0c0efeebdb765427e47f22c",
+  "version": "issue11-study-v1"
+}

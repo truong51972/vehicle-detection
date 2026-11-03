@@ -1,0 +1,8 @@
+{
+  "initial_noise_floor": 0.035,
+  "initial_sharpness_upper": 80.0,
+  "masked_by_gamma": 8,
+  "note": "Diagnostic only; frozen v2 is unchanged",
+  "potential_sharpen_before_priority": 8,
+  "v2_policy_id": "1ac3fb9bb94b132f70d3e168b5ef15a54b616444e535b9a3bb265682a6fce0ef"
+}

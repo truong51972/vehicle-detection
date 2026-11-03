@@ -1,0 +1,67 @@
+slice,class,slice_images,class_images,instances,rare_support
+weather:clear,car,131,130,1306,False
+weather:clear,truck,131,33,49,False
+weather:clear,bus,131,17,21,False
+weather:clear,train,131,1,1,True
+weather:clear,motorcycle,131,5,7,False
+weather:clear,bicycle,131,5,8,False
+weather:overcast,car,33,33,429,False
+weather:overcast,truck,33,11,16,False
+weather:overcast,bus,33,8,9,False
+weather:overcast,train,33,0,0,True
+weather:overcast,motorcycle,33,1,2,True
+weather:overcast,bicycle,33,4,7,True
+weather:undefined,car,32,32,268,False
+weather:undefined,truck,32,12,18,False
+weather:undefined,bus,32,6,7,False
+weather:undefined,train,32,0,0,True
+weather:undefined,motorcycle,32,1,1,True
+weather:undefined,bicycle,32,1,5,True
+timeofday:daytime,car,137,136,1474,False
+timeofday:daytime,truck,137,53,94,False
+timeofday:daytime,bus,137,28,34,False
+timeofday:daytime,train,137,1,1,True
+timeofday:daytime,motorcycle,137,4,5,True
+timeofday:daytime,bicycle,137,8,17,False
+timeofday:night,car,101,100,965,False
+timeofday:night,truck,101,16,20,False
+timeofday:night,bus,101,10,12,False
+timeofday:night,train,101,0,0,True
+timeofday:night,motorcycle,101,5,7,False
+timeofday:night,bicycle,101,3,4,True
+scene:city street,car,164,163,1653,False
+scene:city street,truck,164,53,74,False
+scene:city street,bus,164,28,34,False
+scene:city street,train,164,1,1,True
+scene:city street,motorcycle,164,10,16,False
+scene:city street,bicycle,164,12,22,False
+scene:highway,car,54,53,470,False
+scene:highway,truck,54,15,28,False
+scene:highway,bus,54,9,11,False
+scene:highway,train,54,0,0,True
+scene:highway,motorcycle,54,0,0,True
+scene:highway,bicycle,54,0,0,True
+scene:residential,car,35,35,467,False
+scene:residential,truck,35,6,19,False
+scene:residential,bus,35,3,3,True
+scene:residential,train,35,0,0,True
+scene:residential,motorcycle,35,0,0,True
+scene:residential,bicycle,35,0,0,True
+image_has_small,car,214,214,2406,False
+image_has_small,truck,214,58,95,False
+image_has_small,bus,214,37,44,False
+image_has_small,train,214,1,1,True
+image_has_small,motorcycle,214,10,16,False
+image_has_small,bicycle,214,11,21,False
+image_has_medium,car,239,238,2540,False
+image_has_medium,truck,239,74,121,False
+image_has_medium,bus,239,38,46,False
+image_has_medium,train,239,1,1,True
+image_has_medium,motorcycle,239,10,16,False
+image_has_medium,bicycle,239,12,22,False
+image_has_large,car,202,201,2217,False
+image_has_large,truck,202,65,101,False
+image_has_large,bus,202,37,45,False
+image_has_large,train,202,1,1,True
+image_has_large,motorcycle,202,8,14,False
+image_has_large,bicycle,202,11,19,False

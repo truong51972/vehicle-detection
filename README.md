@@ -34,13 +34,18 @@ Select the project `.venv` kernel and run:
    freeze nested S10/S20 training subsets, calibrate a bounded v2 pixel-only policy on
    calibration data, export paired Raw/Adaptive S10 JPEG95 images, and inspect
    support, quality proxies, adverse examples, offline latency and storage.
-3. [03_finetuning_benchmark.ipynb](notebooks/phase2/03_finetuning_benchmark.ipynb):
+3. [02b_synthetic_robustness.ipynb](notebooks/phase2/02b_synthetic_robustness.ipynb):
+   issue #11 calibration-only corruption/operator screen with real frozen YOLO26n
+   metrics, matched-condition recovery, estimator errors and paired uncertainty.
+4. [03_finetuning_benchmark.ipynb](notebooks/phase2/03_finetuning_benchmark.ipynb):
    currently **pretrained development validation only**, including six-class
    mapping, native AP/precision/recall/plots and verified result-cache reuse.
 
 Issue #6 is documented in [the Adaptive execution record](docs/ISSUE6_RESULTS.md).
 The [v2 review follow-up](docs/ISSUE6_REVIEW.md) explains the minimum-support gate
 and preserves the original v1 results independently.
+The [issue #11 research record](docs/ISSUE11_RESULTS.md) adds a separately versioned
+synthetic robustness study. Its experiments never replace clean BDD evaluation.
 Issue #7 will extend notebook 03 with progressive partial fine-tuning.
 Issue #8 releases the final test only after protocol/model/policy freeze.
 See [the issue #5 execution record](docs/ISSUE5_RESULTS.md).
@@ -150,6 +155,33 @@ retains every embedded chart and example image byte-for-byte. Replay v1 with sou
 revision `7380eed`; the current implementation explicitly rejects v1 policies.
 Do not relabel old timing or quality evidence as v2. The noise estimator remains
 unvalidated and often reports zero; the new diagnostics disclose this limitation.
+
+## Synthetic robustness research
+
+Notebook 02b freezes a 256-image whole-group calibration pilot and a bounded
+45-dataset matrix: six corruption families at three severities, independent
+moderate-severity operator screens, clean safety controls and a frozen-v2 baseline.
+It includes bilateral filtering and percentile luminance stretch alongside the
+existing candidate operators. Nothing is trained, no roles/boxes move, and no
+development-validation or final-test pixels are accessed. All exports share a
+single final JPEG95 stage. Natural clean and synthetic AP remain separate.
+
+`runs/issue11-v1/` holds the pilot, labels, datasets, per-image native matching
+statistics and safe identity-checked metric caches. `docs/issue11-v1/` contains
+compact configuration, membership, result/support/uncertainty tables, diagnostics,
+the versioned policy decision and an unexecuted final robustness specification.
+Frozen v1/v2 artifacts and helpers remain unchanged. Selected notebook image
+embeds are intentional review evidence; exported image roots/weights stay ignored.
+
+The pilot's AP/clean-safety/latency gates can shortlist operators, but independent
+calibration-group router confirmation is required before deploying Adaptive v3.
+Until then downstream work retains the exact v2 baseline. Synthetic corruptions
+are approximations, and a better synthetic quality score is not detector recovery
+or evidence of real-world camera robustness.
+
+Notebook 02b requires the completed issue #5 protocol and pinned local
+`weights/yolo26n.pt`. On a fresh checkout, run notebook 03's existing pretrained-only
+baseline after notebook 01 to obtain/check that checkpoint before notebook 02b.
 
 ## WSL migration and history
 
