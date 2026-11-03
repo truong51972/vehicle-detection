@@ -6,6 +6,7 @@ from pathlib import Path
 
 import numpy as np
 import torch
+import yaml
 from ultralytics import YOLO
 from ultralytics.models.yolo.detect import DetectionValidator
 
@@ -32,8 +33,12 @@ class PretrainedValidator(MatchingStats, VehicleValidator):
 
 class TrainedValidator(MatchingStats, DetectionValidator):
     def init_metrics(self, model):
-        if self.training or self.args.split != "val" or model.names != dict(enumerate(CLASSES)):
-            raise ValueError("Expected a native six-class development checkpoint")
+        if (
+            self.training
+            or self.args.split != "val"
+            or model.names != self.data["names"]
+        ):
+            raise ValueError("Native checkpoint classes differ from development dataset")
         super().init_metrics(model)
 
 
@@ -43,6 +48,38 @@ def completed_checkpoints(directory, protocol):
     directory = Path(directory).resolve()
     require_paths(training=directory / "pair.json")
     pair = read_json(directory / "pair.json")
+    if pair.get("version") == "paired-native-v1":
+        # New studies use Ultralytics args.yaml / best.pt, not custom completion receipts.
+        expected_train = {r["id"] for r in protocol["splits"]["training_pool"]}
+        expected_dev = sorted(r["id"] for r in protocol["splits"]["development_validation"])
+        if (
+            pair["protocol_id"] != protocol["manifest_id"]
+            or pair.get("final_test_accessed")
+            or pair["training"]["raw"]["ids"] != pair["training"]["adaptive"]["ids"]
+            or not set(pair["training"]["raw"]["ids"]) <= expected_train
+            or pair["development"]["ids"] != expected_dev
+        ):
+            raise ValueError("Native study changed protocol/role/paired IDs")
+        checkpoints = {}
+        for branch in ("raw", "adaptive"):
+            run = directory / branch
+            best = run / "weights/best.pt"
+            args_path = run / "args.yaml"
+            data_path = directory / f"{branch}.yaml"
+            require_paths(checkpoint=best, args=args_path, data=data_path)
+            args = yaml.safe_load(args_path.read_text())
+            data = yaml.safe_load(data_path.read_text())
+            if (
+                args.get("data") != str(data_path)
+                or args.get("freeze") != pair["freeze"]
+                or any(args.get(k) != pair["settings"][k] for k in ("epochs", "batch", "imgsz"))
+                or data["train"] != str(Path(pair["training"][branch]["path"]) / "images/train")
+                or data["val"] != str(Path(pair["development"]["path"]) / "images/tune")
+                or data["names"] != dict(enumerate(CLASSES))
+            ):
+                raise ValueError("Native checkpoint run/dataset identity changed")
+            checkpoints[branch] = best
+        return checkpoints
     if (
         pair["experiment_id"] != digest({k: v for k, v in pair.items() if k != "experiment_id"})
         or pair["protocol_id"] != protocol["manifest_id"]
@@ -91,8 +128,9 @@ def evaluate_development(
     pretrained=False,
     allow_inference=False,
     settings=None,
+    class_names=None,
 ):
-    """Reuse verified results; missing inference requires an explicit opt-in and new identity."""
+    """Reuse verified results; missing inference requires an explicit opt-in."""
     validate_protocol(protocol)
     validate_policy(policy, protocol)
     dataset, checkpoint, output = map(lambda p: Path(p).resolve(), (dataset, checkpoint, output))
@@ -109,6 +147,9 @@ def evaluate_development(
         policy["recipes"] if variant == "adaptive" else None,
         deep=False,
     )
+    target_classes = tuple(CLASSES if class_names is None else class_names)
+    if not target_classes or (pretrained and target_classes != tuple(CLASSES)):
+        raise ValueError("Pretrained COCO mapping is frozen to the historical six-class taxonomy")
     config = {**VAL_SETTINGS, "half": False, **(settings or {})}
     if config["nms"] is not False or config["augment"] or not config["plots"] or config["half"]:
         raise ValueError("Use fixed FP32 NMS-free validation with native plots")
@@ -116,13 +157,14 @@ def evaluate_development(
     if pretrained and checkpoint_hash != PRETRAINED_SHA256:
         raise ValueError("Use the pinned untouched pretrained YOLO26n checkpoint")
     identity = {
-        "version": "development-native-v1",
+        "version": "development-native-v2",
         "protocol_id": protocol["manifest_id"],
         "role": "development_validation",
         "policy_id": policy["policy_id"],
         "dataset": bound,
         "checkpoint_sha256": checkpoint_hash,
         "mapping": "COCO-80 to six vehicles" if pretrained else "native six vehicles",
+        "class_names": list(target_classes),
         "settings": config,
         "code": {
             name: file_hash(Path(__file__).with_name(name))
@@ -142,7 +184,20 @@ def evaluate_development(
         },
         "versions": {p: md.version(p) for p in ("ultralytics", "torch", "numpy", "opencv-python")},
     }
-    cached = reuse_evaluation(output / "native_result.json", identity)
+    result_path = output / "native_result.json"
+    if result_path.is_file():
+        saved = read_json(result_path)
+        prior = saved["identity"]
+        if prior.get("version") == "development-native-v1":
+            # Read-only replay of original six-class caches, even if source code changed.
+            comparable = ("protocol_id", "role", "policy_id", "dataset",
+                          "checkpoint_sha256", "mapping", "settings")
+            if target_classes != tuple(CLASSES) or any(
+                prior.get(k) != identity.get(k) for k in comparable
+            ):
+                raise ValueError("Historical evaluation cache inputs/roles changed")
+            return reuse_evaluation(result_path, prior)
+    cached = reuse_evaluation(result_path, identity)
     if cached is not None:
         return cached
     if not allow_inference:
@@ -164,7 +219,7 @@ def evaluate_development(
     model = YOLO(str(checkpoint))
     if pretrained:
         verify_coco_names(model.names)
-    elif model.names != dict(enumerate(CLASSES)):
+    elif model.names != dict(enumerate(target_classes)):
         raise ValueError("Trained checkpoint has the wrong class mapping")
     if model.model.yaml.get("yaml_file") != "yolo26n.yaml" or not model.model.yaml.get("end2end"):
         raise ValueError("Expected the native end-to-end YOLO26n architecture")
@@ -200,7 +255,7 @@ def evaluate_development(
         raise ValueError("Invalid native metrics")
     indices = {int(c): i for i, c in enumerate(metrics.box.ap_class_index)}
     classes = []
-    for cls, name in enumerate(CLASSES):
+    for cls, name in enumerate(target_classes):
         i = indices.get(cls)
         classes.append(
             {
