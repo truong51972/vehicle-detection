@@ -11,28 +11,18 @@ from ultralytics import YOLO
 from .baseline import PRETRAINED_SHA256, VAL_SETTINGS, VehicleValidator, verify_coco_names
 from .common import digest, file_hash, read_json, reuse_evaluation, write_json
 from .data import CLASSES
-from .evaluation_stats import (  # Re-export historical research imports.
+from .evaluation_stats import (  # noqa: F401 -- historical research re-exports
+    STAT_KEYS,
     MatchingStats,
-)
-from .evaluation_stats import (
-    bootstrap_support as bootstrap_support,
-)
-from .evaluation_stats import (
-    class_ap as class_ap,
-)
-from .evaluation_stats import (
-    load_stats as load_stats,
-)
-from .evaluation_stats import (
-    native_ap as native_ap,
-)
-from .evaluation_stats import (
-    paired_interval as paired_interval,
+    bootstrap_support,
+    class_ap,
+    load_stats,
+    native_ap,
+    paired_interval,
 )
 from .stress import freeze, validate_pilot, verify_stress
 
 SETTINGS = {**VAL_SETTINGS, "workers": 0}
-STAT_KEYS = ("tp", "conf", "pred_cls", "target_cls")
 
 
 class CalibrationValidator(MatchingStats, VehicleValidator):

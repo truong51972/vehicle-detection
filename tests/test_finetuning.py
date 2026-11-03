@@ -353,3 +353,14 @@ def test_interrupted_checkpoint_publish_preserves_previous_resume(tmp_path, monk
     assert not previous.exists()
     receipt = read_json(tmp_path / "resume.json")
     assert file_hash(trainer.wdir / receipt["checkpoint"]) == file_hash(trainer.last)
+
+
+def test_extracted_validation_change_invalidates_training_identity(pair_inputs):
+    experiment = prepare_pair(*pair_inputs)
+    experiment["validation_code_sha256"] = "changed validator"
+    experiment["experiment_id"] = digest(
+        {k: v for k, v in experiment.items() if k != "experiment_id"}
+    )
+    write_json(pair_inputs[-1] / "pair.json", experiment)
+    with pytest.raises(ValueError, match="implementation/identity changed"):
+        train_branch(experiment, "raw", pair_inputs[-1])

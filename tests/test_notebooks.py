@@ -8,7 +8,7 @@ from vehicle_detection.common import file_hash
 
 ACTIVE = (
     "01_data_init.ipynb",
-    "02_preprocessing_research.ipynb",
+    "02_data_preprocessing.ipynb",
     "03_training.ipynb",
     "04_eval_and_report.ipynb",
 )
@@ -50,3 +50,44 @@ def test_active_entrypoints_are_independent_and_archives_are_unchanged():
             images += sum("image/png" in o.get("data", {}) for o in cell.get("outputs", []))
         if status == "complete":
             assert images >= 3
+
+
+def test_active_notebooks_have_navigable_numbered_sections():
+    import re
+
+    for phase, name in enumerate(ACTIVE, 1):
+        cells = json.loads((Path("notebooks") / name).read_text())["cells"]
+        overview = "".join(cells[0]["source"])
+        title, purpose, *_ = overview.split("\n\n")
+        assert re.fullmatch(rf"# {phase:02d} — [^\n]+", title)
+        assert purpose.strip() and not purpose.startswith(("#", "- "))
+        assert all(f"**{label}:**" in overview for label in ("Inputs", "Outputs", "Prerequisites"))
+        assert "**Outline**" in overview
+        outline = re.findall(r"\[([^]]+)\]\(#([a-z0-9-]+)\)", overview)
+        sections, current, subsections = [], None, {}
+        for cell in cells[1:]:
+            source = "".join(cell["source"])
+            if cell["cell_type"] == "code":
+                assert current is not None, "Code needs a numbered section for context"
+                current["code_cells"] += 1
+                continue
+            for number, title in re.findall(r"^## (\d+)\. (.+)$", source, re.MULTILINE):
+                anchor = re.search(r'<a id="([a-z0-9-]+)"></a>', source)
+                assert anchor, "Main sections need stable outline anchors"
+                current = {
+                    "number": int(number),
+                    "title": title,
+                    "anchor": anchor[1],
+                    "code_cells": 0,
+                }
+                sections.append(current)
+            for parent, child in re.findall(r"^### (\d+)\.(\d+) ", source, re.MULTILINE):
+                assert current and int(parent) == current["number"]
+                assert int(child) == subsections.get(parent, 0) + 1
+                subsections[parent] = int(child)
+        assert [s["number"] for s in sections] == list(range(1, len(sections) + 1))
+        assert [(s["title"], s["anchor"]) for s in sections] == outline
+        assert len({s["anchor"] for s in sections}) == len(sections)
+        assert all(s["code_cells"] for s in sections), "Avoid empty main sections"
+        assert "Configuration" in sections[0]["title"]
+        assert "Summary" in sections[-1]["title"]

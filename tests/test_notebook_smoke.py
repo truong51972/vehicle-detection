@@ -37,7 +37,9 @@ def test_four_fresh_kernels_and_cached_evaluation_without_upstream_work(bdd, tmp
             notebook.cells.insert(1, nbformat.v4.new_code_cell(setup))
         if overrides:
             index = next(i for i, c in enumerate(notebook.cells) if "require_paths(" in c.source)
-            notebook.cells.insert(index + 1, nbformat.v4.new_code_cell(overrides))
+            cell = notebook.cells[index]
+            position = cell.source.index("require_paths(")
+            cell.source = cell.source[:position] + overrides + "\n" + cell.source[position:]
         nbclient.NotebookClient(
             notebook,
             timeout=180,
@@ -58,7 +60,7 @@ def test_four_fresh_kernels_and_cached_evaluation_without_upstream_work(bdd, tmp
     decision["reason"] = "Fixture policy, never research evidence"
     decision["decision_id"] = digest({k: v for k, v in decision.items() if k != "decision_id"})
     write_json(project / "docs/issue11-v2/v3_decision.json", decision)
-    run("02_preprocessing_research.ipynb", cwd=project / "notebooks")
+    run("02_data_preprocessing.ipynb", cwd=project / "notebooks")
 
     config = yaml_model_load("yolo26n.yaml")
     config["end2end"] = True
@@ -78,15 +80,21 @@ training.TRAIN_SETTINGS.update(epochs=1, batch=2, nbs=2, imgsz=64, workers=0, de
 """
     )
     run("03_training.ipynb", setup=train_setup)
+    (project / "docs/development-v1").mkdir()
+    shutil.copy(repository / "docs/development-v1/PLAN.md", project / "docs/development-v1")
     run(
         "04_eval_and_report.ipynb",
         setup=setup,
-        overrides="ALLOW_INFERENCE = True\nimport vehicle_detection.evaluation as evaluation\n"
+        overrides="ALLOW_INFERENCE = True\nMEASURE_LOADERS = True\nBOOTSTRAP_RESAMPLES = 2\n"
+        "import vehicle_detection.evaluation as evaluation\n"
         "original = evaluation.evaluate_development\n"
         "def evaluate_development(*args, **kwargs):\n"
         '    return original(*args, settings={"device":"cpu", "batch":2, '
         '"imgsz":64, "workers":0}, **kwargs)',
     )
+    # Missing optional loader measurements must not block saved-result reporting.
+    for branch in ("raw", "adaptive"):
+        shutil.rmtree(project / f"runs/development-v1/loader-{branch}")
     # Reuse the exact same saved settings in a fresh kernel. Any upstream work is fatal.
     guard = (
         setup
@@ -97,7 +105,8 @@ for target in ["vehicle_detection.data.scan_bdd", "vehicle_detection.protocol.bu
                "vehicle_detection.adaptive.calibrate_policy",
                "vehicle_detection.offline.export_variant",
                "vehicle_detection.finetuning.prepare_pair",
-               "vehicle_detection.finetuning.train_branch"]:
+               "vehicle_detection.finetuning.train_branch",
+               "vehicle_detection.loader_benchmark.build_dataloader"]:
     patch(target, side_effect=AssertionError("Upstream phase triggered")).start()
 patch.object(YOLO, "train", side_effect=AssertionError("Training triggered")).start()
 patch.object(DetectionTrainer, "__init__", side_effect=AssertionError("Trainer created")).start()
@@ -108,7 +117,7 @@ patch("vehicle_detection.evaluation.YOLO",
     run(
         "04_eval_and_report.ipynb",
         setup=guard,
-        overrides="import vehicle_detection.evaluation as evaluation\n"
+        overrides="BOOTSTRAP_RESAMPLES = 2\nimport vehicle_detection.evaluation as evaluation\n"
         "original = evaluation.evaluate_development\n"
         "def evaluate_development(*args, **kwargs):\n"
         '    return original(*args, settings={"device":"cpu", "batch":2, '

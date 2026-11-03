@@ -1,5 +1,10 @@
 # Issue #7: paired S10 implementation and completed training
 
+Follow-up: the [partial development completion record](DEVELOPMENT_RESULTS.md)
+preserves newly completed six-class inference and identifies analysis deferred
+when further benchmarking stopped. The historical training evidence below remains
+unchanged.
+
 [Issue #7](https://github.com/truong51972/vehicle-detection/issues/7) requires
 completed paired training and development evidence before data-scale/model
 selection. The guarded S10 runner is available in

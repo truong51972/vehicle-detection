@@ -132,6 +132,7 @@ def prepare_pair(protocol, subsets, policy, decision, pair, development, checkpo
         "settings": TRAIN_SETTINGS,
         "native_defaults_sha256": digest(DEFAULT_CFG_DICT),
         "code_sha256": file_hash(__file__),
+        "validation_code_sha256": file_hash(Path(__file__).with_name("datasets.py")),
         "versions": {p: md.version(p) for p in ("ultralytics", "torch", "torchvision", "numpy")},
         "hardware": {
             "gpu": torch.cuda.get_device_name(0) if torch.cuda.is_available() else None,
@@ -361,7 +362,11 @@ def train_branch(experiment, branch, output, *, resume=False):
         raise ValueError("Unknown branch or changed paired experiment")
     if experiment["experiment_id"] != digest(
         {k: v for k, v in experiment.items() if k != "experiment_id"}
-    ) or experiment["code_sha256"] != file_hash(__file__):
+    ) or (
+        experiment["code_sha256"] != file_hash(__file__)
+        or experiment.get("validation_code_sha256")
+        != file_hash(Path(__file__).with_name("datasets.py"))
+    ):
         raise ValueError("Training implementation/identity changed; prepare a new root")
     if (
         any(md.version(p) != version for p, version in experiment["versions"].items())

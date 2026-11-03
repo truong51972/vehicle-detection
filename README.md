@@ -9,7 +9,7 @@ artifacts; missing or mismatched artifacts fail rather than launching upstream w
    boxes, checksums and leakage; freezes training/calibration/development/final
    roles; converts labels and exports verified Raw development references.
    Writes `runs/data-v1/` and compact audits under `docs/data-v1/`.
-2. [02_preprocessing_research.ipynb](notebooks/02_preprocessing_research.ipynb)
+2. [02_data_preprocessing.ipynb](notebooks/02_data_preprocessing.ipynb)
    consumes the frozen protocol and development references. Inspects the original
    calibration/operator evidence and frozen **v2 Gamma-or-Skip**, freezes nested
    S10/S20 membership, and exports paired S10 and development inputs with equal
@@ -25,7 +25,12 @@ artifacts; missing or mismatched artifacts fail rather than launching upstream w
    pretrained / Raw-trained / Adaptive-trained × Raw / Adaptive metrics, per-class
    AP, latency, plots and representative errors under `runs/development-v1/`.
    **Default: saved-result reuse.** Set `ALLOW_INFERENCE=True` to fill missing
-   evaluations. Valid caches are reused even with that setting. Changed inputs
+   evaluations and `MEASURE_LOADERS=True` to collect missing isolated CPU loader
+   measurements. Supported condition/group uncertainty is computed once from saved
+   native matches. `BOOTSTRAP_RESAMPLES=0` reports points by default; set 100 for
+   the prospective group analysis. Absent optional loader costs are marked pending.
+   Valid caches are reused with either execution opt-in. Checkpoint/scale selection
+   and final-test release remain separate. Changed inputs
    require a new output root. This notebook never imports the training runner.
 
 No notebook invokes another notebook. You can run phase 04 while training is idle,
@@ -44,7 +49,9 @@ uv run --extra study jupyter lab notebooks/
 ```
 
 Use the `.venv` kernel. Repository-root and `notebooks/` launch directories both
-work. Extract BDD detection images/annotations under `data/bdd100k/`; nested Kaggle
+work. Every notebook starts with a purpose, artifact contract and linked numbered
+outline. The six-class taxonomy, including railway `train`, is unchanged. Extract
+BDD detection images/annotations under `data/bdd100k/`; nested Kaggle
 layouts are supported. Keep data/runs on the WSL-native filesystem.
 
 ```text
@@ -77,9 +84,10 @@ completed S10 experiments without rerunning earlier phases, configure notebook 0
 - `POLICY_PATH`: `runs/issue6-v2/policy.json`
 - `TRAIN_ROOT`: `runs/issue7-s10-v2`
 - Raw input: `runs/issue5-v1/datasets/raw`
-- Adaptive input: a separately prepared development export from the same originals,
-  labels and frozen policy. Phase 02 exposes `RAW_DEVELOPMENT` / `DEV_CONVERSION`
-  for existing references and writes Adaptive development under its new run root.
+- Adaptive input: `runs/development-v1/inputs/adaptive` for the completed six-class
+  matrix, or a separately prepared export from the same original sources, labels
+  and frozen policy. Phase 02 exposes `RAW_DEVELOPMENT` / `DEV_CONVERSION`.
+- `OUTPUT`: `runs/development-v1` for the completed native evaluation caches.
 
 Original training receipts retain their original source hash. Changed training code
 gets a new root and identity; it cannot resume or masquerade as the historical run.
@@ -92,6 +100,8 @@ synthetic images/checkpoints and never count as scientific evidence.
 historical notebook by its original path, source revision and preserved SHA256.
 [Historical design](docs/HISTORY.md), [S10 results](docs/ISSUE7_RESULTS.md) and the
 [module audit](docs/REFACTOR.md) preserve study context and remaining limitations.
+The [development matrix record](docs/DEVELOPMENT_RESULTS.md) preserves the six
+completed evaluations and identifies unfinished #7 analysis after benchmarking stopped.
 [Issue #13](https://github.com/truong51972/vehicle-detection/issues/13) restructures
 the workflow; [#7](https://github.com/truong51972/vehicle-detection/issues/7)
 retains the development analysis/selection deliverables. Neither implies a final-test

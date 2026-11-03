@@ -1,9 +1,11 @@
 """Development-only native validation and saved-result reuse; never imports training."""
 
 import importlib.metadata as md
+import platform
 from pathlib import Path
 
 import numpy as np
+import torch
 from ultralytics import YOLO
 from ultralytics.models.yolo.detect import DetectionValidator
 
@@ -131,6 +133,13 @@ def evaluate_development(
                 "baseline.py",
             )
         },
+        "hardware": {
+            "platform": platform.platform(),
+            "cuda_runtime": torch.version.cuda,
+            "gpu": torch.cuda.get_device_name(int(config["device"]))
+            if str(config["device"]).isdigit() and torch.cuda.is_available()
+            else None,
+        },
         "versions": {p: md.version(p) for p in ("ultralytics", "torch", "numpy", "opencv-python")},
     }
     cached = reuse_evaluation(output / "native_result.json", identity)
@@ -202,7 +211,7 @@ def evaluate_development(
                 "recall": float(metrics.box.r[i]) if i is not None else None,
             }
         )
-    artifacts = [*output.glob("*.png"), output / "paired_stats.npz"]
+    artifacts = [*output.glob("*.png"), *output.glob("*.jpg"), output / "paired_stats.npz"]
     if not (output / "confusion_matrix_normalized.png").is_file():
         raise ValueError("Missing native evaluation plots")
     result = {
