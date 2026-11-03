@@ -43,10 +43,12 @@ def _implementation():
     }
 
 
-def calibrate_policy(protocol, dataset_root, *, seed=2026, sample_size=256, per_operator=12):
-    """Fit quantile thresholds and compare two mild strengths with skip on calibration only."""
+def calibrate_policy(
+    protocol, dataset_root, *, seed=2026, sample_size=256, per_operator=12, min_support=12
+):
+    """Fit v2 on seeded route samples; insufficiently supported routes remain uncalibrated."""
     validate_protocol(protocol)
-    for value in (sample_size, per_operator):
+    for value in (sample_size, per_operator, min_support):
         if isinstance(value, bool) or not isinstance(value, int) or value < 1:
             raise ValueError("Calibration sample sizes must be positive integers")
     rows = sorted(protocol["splits"]["calibration"], key=lambda r: r["id"])
@@ -85,7 +87,14 @@ def calibrate_policy(protocol, dataset_root, *, seed=2026, sample_size=256, per_
         "denoise": [{"strength": v} for v in (2.0, 3.0)],
         "sharpen": [{"amount": v, "sigma": 1.0} for v in (0.15, 0.3)],
     }
-    tuning = []
+    noise_diagnostics = {
+        "status": "unvalidated_proxy",
+        "sample_count": len(table),
+        "zero_count": int((table.noise == 0).sum()),
+        "maximum": float(table.noise.max()),
+        "initial_routing_threshold": recipes["adaptive"]["noise_above"],
+    }
+    tuning, route_support = [], {}
     for operator, settings in candidates.items():
         # Evaluate the actual priority route, including any previously disabled operator.
         eligible = []
@@ -93,14 +102,14 @@ def calibrate_policy(protocol, dataset_root, *, seed=2026, sample_size=256, per_
             _, decisions, _ = apply_recipe(images[row["id"]], "adaptive", recipes)
             if decisions and decisions[0]["name"] == operator:
                 eligible.append(row["id"])
-            if len(eligible) == per_operator:
-                break
-        before = {i: _jpeg_scores(images[i]) for i in eligible}
+        candidate_ids = sorted(rng.sample(eligible, min(per_operator, len(eligible))))
+        supported = len(candidate_ids) >= min_support
+        before = {i: _jpeg_scores(images[i]) for i in candidate_ids} if supported else {}
         best_delta, best_setting = 0.0, None  # Skip wins ties and unsupported routes.
         for setting in settings:
             trial = {**recipes, operator: setting}
             deltas = []
-            for sample_id in eligible:
+            for sample_id in candidate_ids if supported else []:
                 output, _, _ = apply_recipe(images[sample_id], operator, trial)
                 after = _jpeg_scores(output)
                 deltas.append(proxy_loss(after) - proxy_loss(before[sample_id]))
@@ -109,7 +118,7 @@ def calibrate_policy(protocol, dataset_root, *, seed=2026, sample_size=256, per_
                 {
                     "operator": operator,
                     "settings": setting,
-                    "ids": eligible,
+                    "ids": candidate_ids,
                     "mean_proxy_loss_delta": delta,
                 }
             )
@@ -125,14 +134,29 @@ def calibrate_policy(protocol, dataset_root, *, seed=2026, sample_size=256, per_
                 "sharpen": {"sharpness_min": 0.0, "sharpness_below": 0.0},
             }
             recipes["adaptive"].update(disable[operator])
+        route_support[operator] = {
+            "eligible_count": len(eligible),
+            "candidate_count": len(candidate_ids),
+            "candidate_ids": candidate_ids,
+            "minimum_support": min_support,
+            "status": "uncalibrated_insufficient_support"
+            if not supported
+            else (
+                "proxy_calibrated_filter" if best_setting is not None else "proxy_calibrated_skip"
+            ),
+        }
     validate_recipes(recipes)
     policy = {
-        "version": "issue6-policy-v1",
+        "version": "issue6-policy-v2",
         "protocol_id": protocol["manifest_id"],
         "implementation": _implementation(),
         "seed": seed,
         "sample_size": sample_size,
         "per_operator": per_operator,
+        "minimum_support": min_support,
+        "candidate_selection": "seeded uniform image sample over all eligible route cases",
+        "route_support": route_support,
+        "noise_diagnostics": noise_diagnostics,
         "calibration_rows_sha256": digest(selected),
         "calibration_ids": [r["id"] for r in selected],
         "sample_summary": summarize(selected),
@@ -145,6 +169,8 @@ def calibrate_policy(protocol, dataset_root, *, seed=2026, sample_size=256, per_
             "At most one filter; fixed priority Gamma, CLAHE, Denoise, Sharpen, otherwise skip.",
             "Quality loss is a heuristic proxy; lower loss does not prove higher detection AP.",
             "Small candidate support can miss adverse cases; inspect paired pilot examples.",
+            "Minimum support is an engineering gate, not a statistical adequacy guarantee.",
+            "Noise proxy is unvalidated and can collapse to zero; unsupported routes stay off.",
             "No development-validation or final-test outcome enters recipe fitting.",
         ],
     }
@@ -156,6 +182,10 @@ def validate_policy(policy, protocol):
     validate_protocol(protocol)
     if policy["policy_id"] != digest({k: v for k, v in policy.items() if k != "policy_id"}):
         raise ValueError("Policy checksum changed")
+    if policy["version"] != "issue6-policy-v2":
+        raise ValueError(
+            "Frozen v1 policy requires its recorded source revision; use a new v2 root"
+        )
     if (
         policy["protocol_id"] != protocol["manifest_id"]
         or policy["implementation"] != _implementation()
@@ -171,6 +201,36 @@ def validate_policy(policy, protocol):
     ):
         raise ValueError("Policy must use only frozen calibration IDs")
     validate_recipes(policy["recipes"])
+    minimum = policy["minimum_support"]
+    if isinstance(minimum, bool) or not isinstance(minimum, int) or minimum < 1:
+        raise ValueError("Policy minimum support must be a positive integer")
+    if set(policy["route_support"]) != {"gamma", "clahe", "denoise", "sharpen"}:
+        raise ValueError("Missing policy route support")
+    settings = policy["recipes"]["adaptive"]
+    disabled = {
+        "gamma": settings["brightness_below"] == 0,
+        "clahe": settings["contrast_below"] == 0,
+        "denoise": settings["noise_above"] == 1,
+        "sharpen": settings["sharpness_min"] == settings["sharpness_below"],
+    }
+    for operator, support in policy["route_support"].items():
+        candidates = support["candidate_ids"]
+        supported = len(candidates) >= minimum
+        valid_statuses = (
+            {"proxy_calibrated_filter", "proxy_calibrated_skip"}
+            if supported
+            else {"uncalibrated_insufficient_support"}
+        )
+        if (
+            len(set(candidates)) != len(candidates)
+            or set(candidates) - set(ids)
+            or support["candidate_count"] != len(candidates)
+            or support["eligible_count"] < len(candidates)
+            or support["minimum_support"] != minimum
+            or support["status"] not in valid_statuses
+            or (support["status"] != "proxy_calibrated_filter" and not disabled[operator])
+        ):
+            raise ValueError("Policy route support/status mismatch")
     if policy["recipes"]["adaptive"]["max_filters"] != 1:
         raise ValueError("Issue #6 policy permits at most one operator")
     return policy
@@ -230,7 +290,11 @@ def export_pair(partitions, converted, destination, policy, protocol, subsets, n
             output_format="jpg",
             jpeg_quality=95,
         )
-    assert verify_alignment([destination / b for b in tables]) == len(expected)
+    verified_count = verify_alignment([destination / b for b in tables])
+    if verified_count != len(expected):
+        raise ValueError(
+            f"Paired export count mismatch: expected {len(expected)}, got {verified_count}"
+        )
     return tables
 
 

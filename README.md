@@ -31,7 +31,7 @@ Select the project `.venv` kernel and run:
    sources, freeze training/calibration/development-validation/final-test roles,
    show distributions and drift, and export only development Raw.
 2. [02_adaptive_preprocessing.ipynb](notebooks/phase2/02_adaptive_preprocessing.ipynb):
-   freeze nested S10/S20 training subsets, calibrate a bounded pixel-only policy on
+   freeze nested S10/S20 training subsets, calibrate a bounded v2 pixel-only policy on
    calibration data, export paired Raw/Adaptive S10 JPEG95 images, and inspect
    support, quality proxies, adverse examples, offline latency and storage.
 3. [03_finetuning_benchmark.ipynb](notebooks/phase2/03_finetuning_benchmark.ipynb):
@@ -39,6 +39,8 @@ Select the project `.venv` kernel and run:
    mapping, native AP/precision/recall/plots and verified result-cache reuse.
 
 Issue #6 is documented in [the Adaptive execution record](docs/ISSUE6_RESULTS.md).
+The [v2 review follow-up](docs/ISSUE6_REVIEW.md) explains the minimum-support gate
+and preserves the original v1 results independently.
 Issue #7 will extend notebook 03 with progressive partial fine-tuning.
 Issue #8 releases the final test only after protocol/model/policy freeze.
 See [the issue #5 execution record](docs/ISSUE5_RESULTS.md).
@@ -124,19 +126,30 @@ S20 is a frozen manifest for a later scaling decision, not another automatic exp
 No development or final-test images are read by notebook 02. Existing issue #5
 development exports and historical YOLO11 artifacts remain independent.
 
-Adaptive thresholds use a seeded 256-image calibration sample; two mild strengths
-per operator are compared with skip on up to 12 routed calibration images.
+Adaptive thresholds use a seeded 256-image calibration sample. V2 enumerates all
+eligible cases per route and samples up to 12 with the seeded RNG, instead of
+taking the first IDs. Two mild strengths are compared with skip only when at least
+12 candidates are available. Smaller populations are explicitly **uncalibrated
+and disabled**. The policy records eligible/candidate counts, minimum support and
+filter/skip/uncalibrated status. This gate does not establish statistical adequacy.
 The frozen policy runs at most one of Gamma, CLAHE, Denoise or Sharpen; otherwise
 it skips. Weather/time/scene labels are used only in subsequent subgroup reports.
 Quality-loss weights are heuristic, and better quality scores do not prove better
 detection. Adverse cases and sparse calibration support remain limitations.
 
-`runs/issue6-v1/` holds immutable subsets/policy, conversion, paired dataset roots,
-per-image decisions/costs and decoded-JPEG quality deltas. `docs/issue6/` holds
+`runs/issue6-v2/` holds immutable subsets/policy, conversion, paired dataset roots,
+per-image decisions/costs and decoded-JPEG quality deltas. `docs/issue6-v2/` holds
 compressed full-pool/subset membership, recipe, provenance and compact figures.
 Changed source IDs, parent protocol, recipe or implementation require a fresh
 version/root. A sampled storage estimate gates export; retain additional headroom
 because this is not a worst-case bound. No source images are overwritten.
+
+The original v1 reports/datasets remain under `docs/issue6/` and
+`runs/issue6-v1/`. Its [executed notebook](notebooks/phase2/evidence/02_adaptive_preprocessing_v1.ipynb)
+retains every embedded chart and example image byte-for-byte. Replay v1 with source
+revision `7380eed`; the current implementation explicitly rejects v1 policies.
+Do not relabel old timing or quality evidence as v2. The noise estimator remains
+unvalidated and often reports zero; the new diagnostics disclose this limitation.
 
 ## WSL migration and history
 

@@ -1,8 +1,10 @@
 # Issue #6: nested Raw / Adaptive pilots
 
 This implements [issue #6](https://github.com/truong51972/vehicle-detection/issues/6)
-on the merged issue #5 protocol. The new execution entrypoint is
-[notebook 02](../notebooks/phase2/02_adaptive_preprocessing.ipynb).
+on the merged issue #5 protocol. The original v1 execution is preserved in
+[the evidence notebook](../notebooks/phase2/evidence/02_adaptive_preprocessing_v1.ipynb).
+The [review follow-up](ISSUE6_REVIEW.md) documents v2; figures and measurements in
+this report continue to describe v1 at revision `7380eed`.
 No detector inference, optimizer steps or development/final-test image inspection
 are part of this issue. Historical YOLO11 notebooks and issue #5 exports remain
 independent; the owner's existing historical notebook outputs were preserved.
@@ -70,7 +72,10 @@ The proxy loss penalizes darkness, flat contrast, estimated noise, very low
 sharpness and black/white saturation. Its fixed weights are heuristic. Candidate
 loss reduction is not detection improvement, and aggregate changes can conceal
 washed-out night scenes, noise amplification, lost texture or halos. The small
-calibration sample and five-image CLAHE support limit generalization.
+calibration sample and five-image CLAHE support limit generalization. Under the
+new v2 minimum of 12, the historical CLAHE fit is **uncalibrated/insufficiently
+supported**; historical Denoise/Sharpen are also uncalibrated. V1 nevertheless
+applied its recorded CLAHE recipe; this disclosure does not change those artifacts.
 
 ## Paired exports and diagnostics
 

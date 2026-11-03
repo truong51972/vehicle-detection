@@ -1,4 +1,6 @@
 import copy
+import subprocess
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -105,9 +107,135 @@ def test_calibration_only_and_stale_policy_guards(frozen, bdd, monkeypatch, tmp_
     changed["policy_id"] = digest({k: v for k, v in changed.items() if k != "policy_id"})
     with pytest.raises(ValueError, match="only frozen calibration"):
         validate_policy(changed, protocol)
+    changed = copy.deepcopy(policy)
+    changed["route_support"]["gamma"]["status"] = "proxy_calibrated_filter"
+    changed["policy_id"] = digest({k: v for k, v in changed.items() if k != "policy_id"})
+    with pytest.raises(ValueError, match="support/status mismatch"):
+        validate_policy(changed, protocol)
+    changed = copy.deepcopy(policy)
+    changed["recipes"]["adaptive"]["brightness_below"] = 0.2
+    changed["policy_id"] = digest({k: v for k, v in changed.items() if k != "policy_id"})
+    with pytest.raises(ValueError, match="support/status mismatch"):
+        validate_policy(changed, protocol)
     Path(next(iter(allowed))).write_bytes(b"changed")
     with pytest.raises(ValueError, match="source changed"):
         calibrate_policy(protocol, bdd)
+
+
+@pytest.mark.parametrize("population,improve", [(5, False), (40, False), (40, True)])
+def test_seeded_candidate_sampling_and_minimum_support(
+    frozen, bdd, monkeypatch, population, improve
+):
+    protocol, _ = frozen
+    template = protocol["splits"]["calibration"][0]
+    protocol["splits"]["calibration"] = [
+        {**template, "id": f"candidate-{i:03}"} for i in range(population)
+    ]
+    protocol["summaries"]["calibration"] = summarize(protocol["splits"]["calibration"])
+    protocol["manifest_id"] = digest({k: v for k, v in protocol.items() if k != "manifest_id"})
+    scores = dict(
+        brightness=0.1,
+        contrast=0.2,
+        noise=0.0,
+        sharpness=100.0,
+        black_fraction=0.0,
+        white_fraction=0.0,
+    )
+    monkeypatch.setattr(adaptive, "quality", lambda image: scores)
+    monkeypatch.setattr(preprocess, "quality", lambda image: scores)
+    if population < 12:
+
+        def no_fitting(image):
+            pytest.fail("Insufficiently supported routes must not fit candidate strengths")
+
+        monkeypatch.setattr(adaptive, "_jpeg_scores", no_fitting)
+    elif improve:
+        monkeypatch.setattr(
+            adaptive,
+            "_jpeg_scores",
+            lambda image: {**scores, "brightness": float(image.mean() / 255 * 0.2)},
+        )
+    policy = calibrate_policy(protocol, bdd, sample_size=population)
+    assert policy == calibrate_policy(protocol, bdd, sample_size=population)
+    assert policy["version"] == "issue6-policy-v2"
+    support = policy["route_support"]["gamma"]
+    assert support["eligible_count"] == population
+    assert support["candidate_count"] == min(population, 12)
+    if population < 12:
+        assert support["status"] == "uncalibrated_insufficient_support"
+    else:
+        assert support["status"] == (
+            "proxy_calibrated_filter" if improve else "proxy_calibrated_skip"
+        )
+        assert support["candidate_ids"] != [f"candidate-{i:03}" for i in range(12)]
+    assert policy["recipes"]["adaptive"]["brightness_below"] == (0.12 if improve else 0)
+    assert policy["noise_diagnostics"]["zero_count"] == population
+    assert policy["noise_diagnostics"]["maximum"] == 0
+    assert policy["noise_diagnostics"]["initial_routing_threshold"] == 0.035
+    for operator in ("clahe", "denoise", "sharpen"):
+        assert policy["route_support"][operator]["eligible_count"] == 0
+        assert policy["route_support"][operator]["status"] == "uncalibrated_insufficient_support"
+    with pytest.raises(ValueError, match="positive integers"):
+        calibrate_policy(protocol, bdd, min_support=0)
+    with pytest.raises(ValueError, match="Frozen v1 policy"):
+        validate_policy(read_json("docs/issue6/policy.json"), protocol)
+
+
+@pytest.mark.parametrize("wrong_count", [False, True])
+def test_optimized_python_executes_deep_pair_verification(frozen, bdd, tmp_path, wrong_count):
+    protocol, records = frozen
+    subsets = build_subsets(protocol, attempts=2)
+    policy = calibrate_policy(protocol, bdd, sample_size=2, per_operator=1)
+    partitions = training_records(protocol, subsets, "S10", records, bdd)
+    converted = tmp_path / "conversion"
+    write_json(converted / "conversion.json", {"fixture": True})
+    for row in partitions["train"]:
+        path = converted / "labels/train" / f"{row['id']}.txt"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("0 0.4 0.4 0.2 0.2\n")
+    inputs = tmp_path / "inputs.json"
+    write_json(
+        inputs,
+        {"protocol": protocol, "subsets": subsets, "policy": policy, "partitions": partitions},
+    )
+    output = tmp_path / "S10"
+    script = """
+import sys
+from vehicle_detection import adaptive
+from vehicle_detection.common import read_json
+if __debug__:
+    raise RuntimeError("Regression must execute under optimized Python")
+inputs = read_json(sys.argv[1])
+if sys.argv[4] == "True":
+    real_verify = adaptive.verify_alignment
+    def wrong_count(*args, **kwargs):
+        return real_verify(*args, **kwargs) + 1
+    adaptive.verify_alignment = wrong_count
+adaptive.export_pair(inputs["partitions"], sys.argv[2], sys.argv[3], inputs["policy"],
+                     inputs["protocol"], inputs["subsets"], "S10")
+"""
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-O",
+            "-c",
+            script,
+            str(inputs),
+            str(converted),
+            str(output),
+            str(wrong_count),
+        ],
+        capture_output=True,
+        text=True,
+        timeout=30,
+    )
+    for branch in ("raw", "adaptive"):
+        assert (output / branch / "verified.json").is_file(), result.stderr
+    if wrong_count:
+        assert result.returncode != 0
+        assert "Paired export count mismatch" in result.stderr
+    else:
+        assert result.returncode == 0, result.stderr
 
 
 @pytest.mark.parametrize("route", ["gamma", "clahe", "denoise", "sharpen", "skip"])
