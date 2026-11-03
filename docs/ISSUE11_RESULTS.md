@@ -1,5 +1,12 @@
 # Issue #11: calibration-only synthetic robustness research
 
+**Statistical review update:** this is the original v1 descriptive study record.
+Its bootstrap intervals and shortlist gate are superseded by the
+[fixed-estimand v2 review](ISSUE11_BOOTSTRAP_REVIEW.md). Native six-class point
+estimates, negative findings and no-v3 conclusion are unchanged. The original
+executed notebook is preserved in the evidence archive; current notebook 02b
+contains the corrected analysis from the same saved detections.
+
 [Issue #11](https://github.com/truong51972/vehicle-detection/issues/11) extends
 the Raw/Adaptive study with independent corruption/operator experiments before
 fine-tuning or final evaluation. The self-contained
@@ -88,7 +95,10 @@ Workers are explicitly zero for the bounded pilot. The full inference protocol
 and software/hardware identities are saved. There is no training or development/
 final-test pixel access.
 
-## Measured results
+## Historical v1 measured results (intervals superseded)
+
+The nominal intervals below are retained for provenance only. Use analysis v2's
+fixed-target estimates, intervals and gates for current inference decisions.
 
 The notebook completed a real-data run and a complete cache replay on **2026-11-03**.
 Clean calibration Raw **mAP50:95 is 0.157082**; this is a separate population from

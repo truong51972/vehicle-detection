@@ -176,7 +176,7 @@ def test_native_statistics_pairing_and_bootstrap(pilot):
         for r in selected["rows"]
     }
     assert native_ap(before, list(before)) > 0.9
-    interval = paired_interval(before, before, selected, resamples=5)
+    interval = paired_interval(before, before, selected, resamples=5, min_class_groups=1)
     assert interval["recovery_ci_low"] == interval["recovery_ci_high"] == 0
     with pytest.raises(ValueError, match="identical"):
         paired_interval(before, {}, selected)

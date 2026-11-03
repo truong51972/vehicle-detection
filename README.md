@@ -35,8 +35,8 @@ Select the project `.venv` kernel and run:
    calibration data, export paired Raw/Adaptive S10 JPEG95 images, and inspect
    support, quality proxies, adverse examples, offline latency and storage.
 3. [02b_synthetic_robustness.ipynb](notebooks/phase2/02b_synthetic_robustness.ipynb):
-   issue #11 calibration-only corruption/operator screen with real frozen YOLO26n
-   metrics, matched-condition recovery, estimator errors and paired uncertainty.
+   issue #11 fixed-class reanalysis of the saved real YOLO26n calibration screen,
+   with audited draws, per-class exclusions and bounded final-test specification.
 4. [03_finetuning_benchmark.ipynb](notebooks/phase2/03_finetuning_benchmark.ipynb):
    currently **pretrained development validation only**, including six-class
    mapping, native AP/precision/recall/plots and verified result-cache reuse.
@@ -46,6 +46,8 @@ The [v2 review follow-up](docs/ISSUE6_REVIEW.md) explains the minimum-support ga
 and preserves the original v1 results independently.
 The [issue #11 research record](docs/ISSUE11_RESULTS.md) adds a separately versioned
 synthetic robustness study. Its experiments never replace clean BDD evaluation.
+The [fixed-estimand review](docs/ISSUE11_BOOTSTRAP_REVIEW.md) supersedes its original
+bootstrap intervals and shortlist gate without rerunning inference.
 Issue #7 will extend notebook 03 with progressive partial fine-tuning.
 Issue #8 releases the final test only after protocol/model/policy freeze.
 See [the issue #5 execution record](docs/ISSUE5_RESULTS.md).
@@ -137,8 +139,8 @@ taking the first IDs. Two mild strengths are compared with skip only when at lea
 12 candidates are available. Smaller populations are explicitly **uncalibrated
 and disabled**. The policy records eligible/candidate counts, minimum support and
 filter/skip/uncalibrated status. This gate does not establish statistical adequacy.
-The frozen policy runs at most one of Gamma, CLAHE, Denoise or Sharpen; otherwise
-it skips. Weather/time/scene labels are used only in subsequent subgroup reports.
+The actual frozen v2 treatment is **Gamma-or-Skip**. CLAHE, Denoise and Sharpen
+remain disabled, not validated routes. Weather/time/scene labels are used only in subgroup reports.
 Quality-loss weights are heuristic, and better quality scores do not prove better
 detection. Adverse cases and sparse calibration support remain limitations.
 
@@ -158,7 +160,7 @@ unvalidated and often reports zero; the new diagnostics disclose this limitation
 
 ## Synthetic robustness research
 
-Notebook 02b freezes a 256-image whole-group calibration pilot and a bounded
+The original executed v1 study froze a 256-image whole-group calibration pilot and a bounded
 45-dataset matrix: six corruption families at three severities, independent
 moderate-severity operator screens, clean safety controls and a frozen-v2 baseline.
 It includes bilateral filtering and percentile luminance stretch alongside the
@@ -168,20 +170,32 @@ single final JPEG95 stage. Natural clean and synthetic AP remain separate.
 
 `runs/issue11-v1/` holds the pilot, labels, datasets, per-image native matching
 statistics and safe identity-checked metric caches. `docs/issue11-v1/` contains
-compact configuration, membership, result/support/uncertainty tables, diagnostics,
-the versioned policy decision and an unexecuted final robustness specification.
-Frozen v1/v2 artifacts and helpers remain unchanged. Selected notebook image
+the original descriptive study, whose variable-class intervals are superseded.
+Current notebook 02b verifies those original statistics under their recorded identities
+and writes the corrected analysis to `runs/issue11-v2/` and `docs/issue11-v2/`.
+It fixes the inferential target before resampling (five supported classes in this
+pilot), records every draw's support and missing-class exclusions, and uses the same
+target for recovery, CI, clean safety and shortlist gates. Six-class native AP stays descriptive.
+Frozen Issue #6 artifacts/helpers remain unchanged. Selected notebook image
 embeds are intentional review evidence; exported image roots/weights stay ignored.
 
 The pilot's AP/clean-safety/latency gates can shortlist operators, but independent
 calibration-group router confirmation is required before deploying Adaptive v3.
-Until then downstream work retains the exact v2 baseline. Synthetic corruptions
+Until then downstream work retains the exact v2 **Gamma-or-Skip** baseline. Synthetic corruptions
 are approximations, and a better synthetic quality score is not detector recovery
 or evidence of real-world camera robustness.
 
-Notebook 02b requires the completed issue #5 protocol and pinned local
-`weights/yolo26n.pt`. On a fresh checkout, run notebook 03's existing pretrained-only
-baseline after notebook 01 to obtain/check that checkpoint before notebook 02b.
+The current notebook requires the original saved pilot/statistics/figures, not a GPU,
+raw BDD pixels or fresh model predictions. The original complete
+[v1 notebook](notebooks/phase2/evidence/02b_synthetic_robustness_v1.ipynb) is preserved
+byte-for-byte; replay its image/model experiment with revision `98d7a1f` and its
+original prerequisites. Do not rewrite old inference metadata to match new code.
+
+The unexecuted #8 spec explicitly limits final evaluation to clean plus moderate/
+severe shot/read noise, motion and veil, with Raw/Gamma-or-Skip and three model
+states: 42 evaluations / 408,660 image passes. Prepare one condition pair at a time;
+keep natural and synthetic reporting separate. See the versioned specification for
+calibration-based disk/inference estimates and the one-time release/cache gates.
 
 ## WSL migration and history
 

@@ -1,0 +1,451 @@
+{
+  "budget": {
+    "cost_limitations": "calibration extrapolation; excludes I/O, codec, AP/plots and startup; not end-to-end",
+    "dataset_variants": 14,
+    "disk_policy": "one condition pair at a time; all three models before image cleanup",
+    "evaluations": 42,
+    "full_retention_image_GiB": 132.0274797012462,
+    "image_size_basis": "largest pilot mean; 1.5x headroom; not a worst-case bound",
+    "max_simultaneous_datasets": 2,
+    "model_stage_basis_ms": 1.7708551445139165,
+    "model_stage_estimate_seconds": 1447.3553267141142,
+    "model_stage_headroom_factor": 2,
+    "natural_image_passes": 58380,
+    "prepared_image_files": 136220,
+    "scratch_GiB": 5,
+    "serial_corruption_estimate_seconds": 7381.143798983612,
+    "serial_router_estimate_seconds": 515.909530229219,
+    "streaming_image_GiB": 18.861068528749456,
+    "synthetic_image_passes": 350280,
+    "total_image_passes": 408660
+  },
+  "code_sha256": "ff0b6d0dbc395ca6ea62cafea5e598d117f2f6cba99054be37dc6f176d334f92",
+  "conditions": [
+    {
+      "family": "clean",
+      "severity": 0
+    },
+    {
+      "family": "shot_read",
+      "severity": 2
+    },
+    {
+      "family": "shot_read",
+      "severity": 3
+    },
+    {
+      "family": "motion",
+      "severity": 2
+    },
+    {
+      "family": "motion",
+      "severity": 3
+    },
+    {
+      "family": "veil",
+      "severity": 2
+    },
+    {
+      "family": "veil",
+      "severity": 3
+    }
+  ],
+  "confirmation_gate_id": "2778fc8887cbabb1874600a84ac47309620dc60827ff19169bb8d822a8c1be2d",
+  "corruptions": {
+    "motion": [
+      {
+        "size": 5
+      },
+      {
+        "size": 11
+      },
+      {
+        "size": 21
+      }
+    ],
+    "shot_read": [
+      {
+        "photons": 800,
+        "read_sigma": 0.003
+      },
+      {
+        "photons": 200,
+        "read_sigma": 0.008
+      },
+      {
+        "photons": 50,
+        "read_sigma": 0.02
+      }
+    ],
+    "veil": [
+      {
+        "alpha": 0.1
+      },
+      {
+        "alpha": 0.25
+      },
+      {
+        "alpha": 0.4
+      }
+    ]
+  },
+  "encoding": {
+    "format": "jpg",
+    "quality": 95
+  },
+  "evaluation_matrix": [
+    {
+      "family": "clean",
+      "images": 9730,
+      "model": "pretrained YOLO26n",
+      "severity": 0,
+      "treatment": "Raw"
+    },
+    {
+      "family": "clean",
+      "images": 9730,
+      "model": "Raw-trained YOLO26n",
+      "severity": 0,
+      "treatment": "Raw"
+    },
+    {
+      "family": "clean",
+      "images": 9730,
+      "model": "Gamma-or-Skip-trained YOLO26n",
+      "severity": 0,
+      "treatment": "Raw"
+    },
+    {
+      "family": "clean",
+      "images": 9730,
+      "model": "pretrained YOLO26n",
+      "severity": 0,
+      "treatment": "Gamma-or-Skip"
+    },
+    {
+      "family": "clean",
+      "images": 9730,
+      "model": "Raw-trained YOLO26n",
+      "severity": 0,
+      "treatment": "Gamma-or-Skip"
+    },
+    {
+      "family": "clean",
+      "images": 9730,
+      "model": "Gamma-or-Skip-trained YOLO26n",
+      "severity": 0,
+      "treatment": "Gamma-or-Skip"
+    },
+    {
+      "family": "shot_read",
+      "images": 9730,
+      "model": "pretrained YOLO26n",
+      "severity": 2,
+      "treatment": "Raw"
+    },
+    {
+      "family": "shot_read",
+      "images": 9730,
+      "model": "Raw-trained YOLO26n",
+      "severity": 2,
+      "treatment": "Raw"
+    },
+    {
+      "family": "shot_read",
+      "images": 9730,
+      "model": "Gamma-or-Skip-trained YOLO26n",
+      "severity": 2,
+      "treatment": "Raw"
+    },
+    {
+      "family": "shot_read",
+      "images": 9730,
+      "model": "pretrained YOLO26n",
+      "severity": 2,
+      "treatment": "Gamma-or-Skip"
+    },
+    {
+      "family": "shot_read",
+      "images": 9730,
+      "model": "Raw-trained YOLO26n",
+      "severity": 2,
+      "treatment": "Gamma-or-Skip"
+    },
+    {
+      "family": "shot_read",
+      "images": 9730,
+      "model": "Gamma-or-Skip-trained YOLO26n",
+      "severity": 2,
+      "treatment": "Gamma-or-Skip"
+    },
+    {
+      "family": "shot_read",
+      "images": 9730,
+      "model": "pretrained YOLO26n",
+      "severity": 3,
+      "treatment": "Raw"
+    },
+    {
+      "family": "shot_read",
+      "images": 9730,
+      "model": "Raw-trained YOLO26n",
+      "severity": 3,
+      "treatment": "Raw"
+    },
+    {
+      "family": "shot_read",
+      "images": 9730,
+      "model": "Gamma-or-Skip-trained YOLO26n",
+      "severity": 3,
+      "treatment": "Raw"
+    },
+    {
+      "family": "shot_read",
+      "images": 9730,
+      "model": "pretrained YOLO26n",
+      "severity": 3,
+      "treatment": "Gamma-or-Skip"
+    },
+    {
+      "family": "shot_read",
+      "images": 9730,
+      "model": "Raw-trained YOLO26n",
+      "severity": 3,
+      "treatment": "Gamma-or-Skip"
+    },
+    {
+      "family": "shot_read",
+      "images": 9730,
+      "model": "Gamma-or-Skip-trained YOLO26n",
+      "severity": 3,
+      "treatment": "Gamma-or-Skip"
+    },
+    {
+      "family": "motion",
+      "images": 9730,
+      "model": "pretrained YOLO26n",
+      "severity": 2,
+      "treatment": "Raw"
+    },
+    {
+      "family": "motion",
+      "images": 9730,
+      "model": "Raw-trained YOLO26n",
+      "severity": 2,
+      "treatment": "Raw"
+    },
+    {
+      "family": "motion",
+      "images": 9730,
+      "model": "Gamma-or-Skip-trained YOLO26n",
+      "severity": 2,
+      "treatment": "Raw"
+    },
+    {
+      "family": "motion",
+      "images": 9730,
+      "model": "pretrained YOLO26n",
+      "severity": 2,
+      "treatment": "Gamma-or-Skip"
+    },
+    {
+      "family": "motion",
+      "images": 9730,
+      "model": "Raw-trained YOLO26n",
+      "severity": 2,
+      "treatment": "Gamma-or-Skip"
+    },
+    {
+      "family": "motion",
+      "images": 9730,
+      "model": "Gamma-or-Skip-trained YOLO26n",
+      "severity": 2,
+      "treatment": "Gamma-or-Skip"
+    },
+    {
+      "family": "motion",
+      "images": 9730,
+      "model": "pretrained YOLO26n",
+      "severity": 3,
+      "treatment": "Raw"
+    },
+    {
+      "family": "motion",
+      "images": 9730,
+      "model": "Raw-trained YOLO26n",
+      "severity": 3,
+      "treatment": "Raw"
+    },
+    {
+      "family": "motion",
+      "images": 9730,
+      "model": "Gamma-or-Skip-trained YOLO26n",
+      "severity": 3,
+      "treatment": "Raw"
+    },
+    {
+      "family": "motion",
+      "images": 9730,
+      "model": "pretrained YOLO26n",
+      "severity": 3,
+      "treatment": "Gamma-or-Skip"
+    },
+    {
+      "family": "motion",
+      "images": 9730,
+      "model": "Raw-trained YOLO26n",
+      "severity": 3,
+      "treatment": "Gamma-or-Skip"
+    },
+    {
+      "family": "motion",
+      "images": 9730,
+      "model": "Gamma-or-Skip-trained YOLO26n",
+      "severity": 3,
+      "treatment": "Gamma-or-Skip"
+    },
+    {
+      "family": "veil",
+      "images": 9730,
+      "model": "pretrained YOLO26n",
+      "severity": 2,
+      "treatment": "Raw"
+    },
+    {
+      "family": "veil",
+      "images": 9730,
+      "model": "Raw-trained YOLO26n",
+      "severity": 2,
+      "treatment": "Raw"
+    },
+    {
+      "family": "veil",
+      "images": 9730,
+      "model": "Gamma-or-Skip-trained YOLO26n",
+      "severity": 2,
+      "treatment": "Raw"
+    },
+    {
+      "family": "veil",
+      "images": 9730,
+      "model": "pretrained YOLO26n",
+      "severity": 2,
+      "treatment": "Gamma-or-Skip"
+    },
+    {
+      "family": "veil",
+      "images": 9730,
+      "model": "Raw-trained YOLO26n",
+      "severity": 2,
+      "treatment": "Gamma-or-Skip"
+    },
+    {
+      "family": "veil",
+      "images": 9730,
+      "model": "Gamma-or-Skip-trained YOLO26n",
+      "severity": 2,
+      "treatment": "Gamma-or-Skip"
+    },
+    {
+      "family": "veil",
+      "images": 9730,
+      "model": "pretrained YOLO26n",
+      "severity": 3,
+      "treatment": "Raw"
+    },
+    {
+      "family": "veil",
+      "images": 9730,
+      "model": "Raw-trained YOLO26n",
+      "severity": 3,
+      "treatment": "Raw"
+    },
+    {
+      "family": "veil",
+      "images": 9730,
+      "model": "Gamma-or-Skip-trained YOLO26n",
+      "severity": 3,
+      "treatment": "Raw"
+    },
+    {
+      "family": "veil",
+      "images": 9730,
+      "model": "pretrained YOLO26n",
+      "severity": 3,
+      "treatment": "Gamma-or-Skip"
+    },
+    {
+      "family": "veil",
+      "images": 9730,
+      "model": "Raw-trained YOLO26n",
+      "severity": 3,
+      "treatment": "Gamma-or-Skip"
+    },
+    {
+      "family": "veil",
+      "images": 9730,
+      "model": "Gamma-or-Skip-trained YOLO26n",
+      "severity": 3,
+      "treatment": "Gamma-or-Skip"
+    }
+  ],
+  "excluded": "all screened standalone operators; defocus/exposure stay calibration-only",
+  "models": [
+    "pretrained YOLO26n",
+    "Raw-trained YOLO26n",
+    "Gamma-or-Skip-trained YOLO26n"
+  ],
+  "natural_benchmark": "six clean evaluations; natural prevalence; separate reporting",
+  "policy_id": "1ac3fb9bb94b132f70d3e168b5ef15a54b616444e535b9a3bb265682a6fce0ef",
+  "policy_label": "Gamma-or-Skip",
+  "primary_metric": "native descriptive mAP50:95; fixed supported-class recovery inference",
+  "protocol_id": "680090b8eef098fbe10c77e632aacbfd3d6854d8489d7518e20f062e032b6e44",
+  "release_gate": [
+    "freeze exact trained checkpoint hashes and verify semantic class mappings",
+    "freeze model/policy/protocol/spec before any final results; no retuning afterward",
+    "complete final pixel/geometry/content leakage checks; no silent ID drops",
+    "identity-check checkpoint/data/settings/code and retained prediction-statistic caches",
+    "enforce this exact matrix; expanding scope requires a new version before release",
+    "one final release; unchanged identity cache replay only, never test-driven selection"
+  ],
+  "reservation_metadata_id": "b6f0bf7fbe2c528bce0ba0be98ef588175b26d2780bdc912cea53ebb56cc0304",
+  "reserved_images": 9730,
+  "role": "final_test",
+  "seed": 2026,
+  "settings": {
+    "agnostic_nms": false,
+    "augment": false,
+    "batch": 32,
+    "conf": 0.001,
+    "deterministic": true,
+    "device": "0",
+    "imgsz": 640,
+    "iou": 0.7,
+    "max_det": 300,
+    "nms": false,
+    "plots": true,
+    "quantize": 32,
+    "rect": true,
+    "seed": 2026,
+    "verbose": false,
+    "workers": 0
+  },
+  "source_id_parity": "identical reserved source IDs/groups/GT in every condition/treatment",
+  "spec_id": "912a3e3e02ca5e403912b6825e39ed993c95f9ceff506d31435d3de42ca26106",
+  "status": "specification_only_not_executed",
+  "synthetic_benchmark": "36 evaluations; never blend with natural clean AP",
+  "treatments": [
+    "Raw",
+    "Gamma-or-Skip"
+  ],
+  "uncertainty": {
+    "class_set": "freeze from final-source GT support before comparing models/conditions",
+    "excluded_classes": "descriptive AP only; never impute absent-class AP",
+    "limit": "Support gate is an engineering minimum, not statistical adequacy",
+    "minimum_source_groups": 5,
+    "missing_class_draw": "exclude macro draw; no AP imputation or redraw",
+    "point_and_gate": "same target as CI; audit invalid draws and per-class support",
+    "version": "fixed-supported-macro-v2"
+  },
+  "version": "issue11-final-stress-spec-v2"
+}

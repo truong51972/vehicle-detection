@@ -42,6 +42,8 @@ are:
 - #7: progressive partial fine-tuning of neck/head with backbone frozen; scale
   paired subsets only when development-validation evidence justifies it.
 - #8: lock protocol and execute the final 3×2 model/input benchmark once.
+  The reviewed #11 specification bounds additional synthetic stress to six
+  conditions and labels frozen v2 as Gamma-or-Skip; natural results stay separate.
 
 The new notebook sequence lives in `notebooks/phase2/`. Notebook 01 handles the
 data contract; notebook 02 calibrates Adaptive and exports matched nested pilots;
@@ -60,3 +62,5 @@ See [issue #6 evidence and limitations](ISSUE6_RESULTS.md) for nested subsets an
 the frozen Adaptive policy. Quality proxies alone do not establish detection gains.
 The [PR review follow-up](ISSUE6_REVIEW.md) introduces a separately measured v2
 policy with minimum-support gates and retains the original executed v1 notebook.
+The [issue #11 statistical review](ISSUE11_BOOTSTRAP_REVIEW.md) fixes the bootstrap
+class target, preserves native point estimates and records the no-v3 confirmation gate.
