@@ -146,6 +146,11 @@ def train_branch(experiment, branch, output, *, resume=False):
     }
     if yaml.safe_load(data.read_text()) != expected:
         raise ValueError("Training YAML changed")
+    # One cheap manifest/inventory check, never rehash/decode every training image.
+    root = Path(experiment["training"][branch]["path"])
+    verify_alignment([root], deep=False)
+    if read_json(root / "verified.json")["files_identity"] != experiment["training"][branch]["files_identity"]:
+        raise ValueError("Frozen training export identity changed")
     run = output / branch
     args_path = run / "args.yaml"
     if args_path.is_file():
