@@ -239,8 +239,7 @@ def verify_alignment(datasets, *, deep=True):
             # Regular training/development exports are owned files, not redirections.
             # Historical raw_original deliberately uses validated source-image links.
             if label.is_symlink() or (
-                export["variant"] != "raw_original"
-                and image_path.is_symlink()
+                export["variant"] != "raw_original" and image_path.is_symlink()
             ):
                 raise ValueError(f"Unexpected exported symlink: {row['id']}")
             if deep and (
