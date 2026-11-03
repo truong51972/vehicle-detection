@@ -30,7 +30,7 @@ artifacts; missing or mismatched artifacts fail rather than launching upstream w
    evaluations and `MEASURE_LOADERS=True` to collect missing isolated CPU loader
    measurements. Supported condition/group uncertainty is computed once from saved
    native matches. `BOOTSTRAP_RESAMPLES=0` reports points by default; set 100 for
-   the prospective group analysis. Absent optional loader costs are marked pending.
+   the prospective group analysis.
    Valid caches are reused with either execution opt-in. Checkpoint/scale selection
    and final-test release remain separate. Changed inputs
    require a new output root. This notebook never imports the training runner.

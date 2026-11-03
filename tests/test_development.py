@@ -1,7 +1,6 @@
 """Development boundaries and cache failures use fixtures, never claimed GPU results."""
 
 import pytest
-import yaml
 from test_adaptive import frozen as frozen
 from test_finetuning import pair_inputs as pair_inputs
 from test_study import bdd as bdd
@@ -9,68 +8,16 @@ from test_study import bdd as bdd
 from vehicle_detection import evaluation
 from vehicle_detection.common import digest, file_hash, read_json, write_json
 from vehicle_detection.datasets import export_development_pair
-from vehicle_detection.evaluation import completed_checkpoints, evaluate_development
+from vehicle_detection.evaluation import evaluate_development
 from vehicle_detection.finetuning import prepare_pair
 
 
-def test_native_best_checkpoints_need_no_custom_completion_receipts(pair_inputs):
-    pair = prepare_pair(*pair_inputs)
-    output = pair_inputs[-1]
+def test_explicit_checkpoint_has_no_native_or_legacy_receipt_dependency(pair_inputs):
+    protocol, _, policy, _, _, raw, checkpoint, output = pair_inputs
     assert not (output / "raw/complete.json").exists()
-    for branch in ("raw", "adaptive"):
-        run = output / branch
-        (run / "weights").mkdir(parents=True)
-        (run / "weights/best.pt").write_bytes(b"fixture native weights")
-        (run / "args.yaml").write_text(
-            yaml.safe_dump(
-                {
-                    "data": str(output / f"{branch}.yaml"),
-                    "freeze": pair["freeze"],
-                    **{k: pair["settings"][k] for k in ("batch", "epochs", "imgsz")},
-                }
-            )
-        )
-    checkpoints = completed_checkpoints(output, pair_inputs[0])
-    assert set(checkpoints) == {"raw", "adaptive"}
-    assert all(path.name == "best.pt" for path in checkpoints.values())
-    args_path = output / "raw/args.yaml"
-    args = yaml.safe_load(args_path.read_text())
-    args["data"] = "/foreign/test-dataset.yaml"
-    args_path.write_text(yaml.safe_dump(args))
-    with pytest.raises(ValueError, match="identity changed"):
-        completed_checkpoints(output, pair_inputs[0])
-
-
-def test_legacy_completed_training_receipts_are_read_only(pair_inputs):
-    pair = prepare_pair(*pair_inputs)
-    output = pair_inputs[-1]
-    pair = {**pair, "version": "paired-s10-v2"}
-    pair["experiment_id"] = digest(pair)
-    write_json(output / "pair.json", pair)
-    for branch in ("raw", "adaptive"):
-        run = output / branch
-        identity = {"pair": pair, "branch": branch, "data": str(output / f"{branch}.yaml")}
-        identity["run_id"] = digest(identity)
-        write_json(run / "identity.json", identity)
-        artifacts = {}
-        for name in ("weights/best.pt", "weights/last.pt", "results.csv"):
-            path = run / name
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_bytes(b"legacy receipt fixture")
-            artifacts[name] = file_hash(path)
-        receipt = {
-            "run_id": identity["run_id"],
-            "artifacts": artifacts,
-            "budget": {"epochs": 1},
-            "final_test_accessed": False,
-        }
-        receipt["checksum"] = digest(receipt)
-        write_json(run / "complete.json", receipt)
-    paths = completed_checkpoints(output, pair_inputs[0])
-    assert set(paths) == {"raw", "adaptive"}
-    paths["raw"].write_bytes(b"stale")
-    with pytest.raises(ValueError, match="artifact changed"):
-        completed_checkpoints(output, pair_inputs[0])
+    assert not (output / "raw/args.yaml").exists()
+    with pytest.raises(FileNotFoundError, match="ALLOW_INFERENCE"):
+        evaluate_development(protocol, policy, raw, checkpoint, output / "evaluation")
 
 
 def test_development_pair_and_cache_reuse_never_repair_missing_inputs(pair_inputs, monkeypatch):

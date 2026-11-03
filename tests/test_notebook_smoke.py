@@ -85,16 +85,13 @@ training.TRAIN_SETTINGS.update(epochs=1, batch=2, nbs=2, imgsz=64, workers=0, de
     run(
         "04_eval_and_report.ipynb",
         setup=setup,
-        overrides="ALLOW_INFERENCE = True\nMEASURE_LOADERS = True\nBOOTSTRAP_RESAMPLES = 2\n"
+        overrides="ALLOW_INFERENCE = True\nBOOTSTRAP_RESAMPLES = 2\n"
         "import vehicle_detection.evaluation as evaluation\n"
         "original = evaluation.evaluate_development\n"
         "def evaluate_development(*args, **kwargs):\n"
         '    return original(*args, settings={"device":"cpu", "batch":2, '
         '"imgsz":64, "workers":0}, **kwargs)',
     )
-    # Missing optional loader measurements must not block saved-result reporting.
-    for branch in ("raw", "adaptive"):
-        shutil.rmtree(project / f"runs/development-v1/loader-{branch}")
     # Reuse the exact same saved settings in a fresh kernel. Any upstream work is fatal.
     guard = (
         setup
