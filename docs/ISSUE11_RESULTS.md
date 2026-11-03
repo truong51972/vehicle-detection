@@ -10,7 +10,7 @@ contains the corrected analysis from the same saved detections.
 [Issue #11](https://github.com/truong51972/vehicle-detection/issues/11) extends
 the Raw/Adaptive study with independent corruption/operator experiments before
 fine-tuning or final evaluation. The self-contained
-[executed research notebook](../notebooks/phase2/02b_synthetic_robustness.ipynb)
+[executed research notebook](../notebooks/archive/phase2/02b_synthetic_robustness.ipynb)
 contains configuration, reasoning, actual native detector metrics, uncertainty,
 quality diagnostics and selected real predictions. Large datasets, checkpoints
 and full per-image statistics stay under gitignored `runs/issue11-v1/`.

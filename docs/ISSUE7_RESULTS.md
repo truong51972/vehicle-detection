@@ -1,5 +1,10 @@
 # Issue #7: completed paired S10 training
 
+Follow-up: the [partial development completion record](DEVELOPMENT_RESULTS.md)
+preserves newly completed six-class inference and identifies analysis deferred
+when further benchmarking stopped. The historical training evidence below remains
+unchanged.
+
 Both full YOLO26n S10 branches completed on **2026-11-03**, independently from
 the same pinned pretrained checkpoint, on the same RTX 5060 Ti. Raw and frozen
 **Gamma-or-Skip** training used the same **4,890 image IDs and labels**, seed 2026,

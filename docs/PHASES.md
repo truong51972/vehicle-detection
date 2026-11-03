@@ -45,14 +45,12 @@ are:
   The reviewed #11 specification bounds additional synthetic stress to six
   conditions and labels frozen v2 as Gamma-or-Skip; natural results stay separate.
 
-The new notebook sequence lives in `notebooks/phase2/`. Notebook 01 handles the
-data contract; notebook 02 calibrates Adaptive and exports matched nested pilots;
-notebook 03 retains pretrained validation and now prepares guarded paired S10
-partial fine-tuning. Both full S10 branches are complete; see the
-[S10 results report](ISSUE7_RESULTS.md) and
-[issue #7 implementation record](ISSUE7_IMPLEMENTATION.md). The development
-matrix, uncertainty analysis and model/data-scale selection remain pending.
-No optimizer steps are part of #5 or #6.
+The active workflow is four independent notebooks directly under `notebooks/`:
+data initialization, preprocessing research, training, then evaluation/reporting.
+See [the usage guide](../README.md) and [preserved evidence](../notebooks/archive/README.md).
+Both historical S10 branches are complete; development analysis and model/scale
+selection remain separate scientific deliverables. No downstream phase runs an
+upstream phase to repair missing artifacts.
 
 Official train supplies training pool, calibration and development validation.
 Official val minus prior exposures and disclosed exclusions supplies final test.

@@ -1,4 +1,4 @@
-"""File utilities for the two study notebooks."""
+"""File utilities shared by the independent study notebooks."""
 
 import hashlib
 import json
@@ -56,3 +56,22 @@ def reuse_evaluation(path, identity, *, force=False):
         if file_hash(path.parent / name) != expected:
             raise ValueError("Evaluation artifact changed; force reevaluation")
     return result
+
+
+def freeze_json(path, value):
+    """Publish immutable JSON once; repeated equal writes leave evidence untouched."""
+    path = Path(path)
+    if path.exists():
+        if read_json(path) != value:
+            raise ValueError("Immutable identity changed; use a new version/root")
+    else:
+        write_json(path, value)
+
+
+def require_paths(**paths):
+    """Fail before phase work when declared input artifacts are missing."""
+    missing = [f"{name}: {path}" for name, path in paths.items() if not Path(path).exists()]
+    if missing:
+        raise FileNotFoundError(
+            "Missing required artifacts (prepare the owning phase): " + "; ".join(missing)
+        )

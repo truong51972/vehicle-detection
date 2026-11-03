@@ -2,9 +2,9 @@
 
 This supersedes the variable-class v1 bootstrap intervals and shortlist gate in
 [the original findings](ISSUE11_RESULTS.md). Native predictions and six-class
-descriptive AP are unchanged. The [executed analysis v2 notebook](../notebooks/phase2/02b_synthetic_robustness.ipynb)
+descriptive AP are unchanged. The [executed analysis v2 notebook](../notebooks/archive/phase2/02b_synthetic_robustness.ipynb)
 verifies and reuses original saved statistics **without inference**. The complete
-[original notebook](../notebooks/phase2/evidence/02b_synthetic_robustness_v1.ipynb),
+[original notebook](../notebooks/archive/phase2/evidence/02b_synthetic_robustness_v1.ipynb),
 all files under `docs/issue11-v1/` and archived Issue #6 v1/v2 evidence remain
 byte-identical. No inference identity is migrated or rewritten.
 
