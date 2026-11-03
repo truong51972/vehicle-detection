@@ -9,7 +9,7 @@ from ultralytics.models.yolo.detect import DetectionValidator
 
 from .adaptive import validate_policy
 from .baseline import PRETRAINED_SHA256, VAL_SETTINGS, VehicleValidator, verify_coco_names
-from .common import digest, file_hash, freeze_json, read_json, reuse_evaluation, write_json
+from .common import digest, file_hash, freeze_json, read_json, require_paths, reuse_evaluation, write_json
 from .data import CLASSES
 from .datasets import verify_role
 from .evaluation_stats import MatchingStats
@@ -58,6 +58,7 @@ def evaluate_development(
     config = {**VAL_SETTINGS, "half": False, **(settings or {})}
     if config["nms"] is not False or config["augment"] or config["half"] or not config["plots"]:
         raise ValueError("Use fixed FP32 NMS-free native validation and plots")
+    require_paths(checkpoint=checkpoint)
     weights_hash = file_hash(checkpoint)
     if pretrained and weights_hash != PRETRAINED_SHA256:
         raise ValueError("Expected the unchanged pinned pretrained YOLO26n checkpoint")

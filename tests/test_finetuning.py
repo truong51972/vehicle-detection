@@ -22,7 +22,7 @@ from vehicle_detection.finetuning import (  # noqa: E402
     prepare_pair,
     train_branch,
 )
-from vehicle_detection.offline import export_variant  # noqa: E402
+from vehicle_detection.offline import export_variant, verify_alignment  # noqa: E402
 from vehicle_detection.protocol import development_records  # noqa: E402
 from vehicle_detection.subsets import build_subsets, training_records  # noqa: E402
 
@@ -55,6 +55,7 @@ def pair_inputs(frozen, bdd, tmp_path, monkeypatch):
     development = tmp_path / "dev"
     export_pair(partitions, conversion, pair, policy, protocol, subsets, "S10")
     export_variant(dev, conversion, development, "raw_reencoded", policy["recipes"])
+    verify_alignment([development])  # Reflect notebook 01's deep export publication.
     checkpoint = tmp_path / "weights.pt"
     checkpoint.write_bytes(b"fixture checkpoint; never detector evidence")
     monkeypatch.setattr(finetuning, "PRETRAINED_SHA256", file_hash(checkpoint))
