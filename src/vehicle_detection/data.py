@@ -15,7 +15,7 @@ CLASSES = ["car", "truck", "bus", "train", "motorcycle", "bicycle"]
 ALIASES = {"motor": "motorcycle", "bike": "bicycle"}
 
 
-def scan_bdd(root):
+def scan_bdd(root, *, strict=True):
     root = Path(root).resolve()
     image_roots = list(root.glob("**/images/100k"))
     if len(image_roots) != 1:
@@ -29,6 +29,7 @@ def scan_bdd(root):
                     raise ValueError(f"Ambiguous image: {key}")
                 paths[key] = str(path)
     records, audit, sources, seen, missing_examples = [], Counter(), {}, set(), []
+    missing_ids = {"train": [], "val": []}
     for split in ("train", "val"):
         candidates = [
             p
@@ -56,6 +57,7 @@ def scan_bdd(root):
                 seen.add(sample_id)
                 if (split, name) not in paths:
                     audit[f"missing_images:{split}"] += 1
+                    missing_ids[split].append(sample_id)
                     if len(missing_examples) < 10:
                         missing_examples.append(sample_id)
                     continue
@@ -65,7 +67,7 @@ def scan_bdd(root):
                     if category not in CLASSES:
                         audit["ignored_nonvehicle_or_polygon_labels"] += 1
                         continue
-                    if not isinstance(label.get("box2d"), dict):
+                    if strict and not isinstance(label.get("box2d"), dict):
                         raise ValueError(f"Vehicle without box2d: {sample_id}")
                     labels.append(label)
                 records.append(
@@ -75,6 +77,7 @@ def scan_bdd(root):
                         "path": paths[split, name],
                         "official_split": split,
                         "group": frame.get("videoName") or sample_id,
+                        "group_source": "videoName" if frame.get("videoName") else "sample_id",
                         "attributes": frame.get("attributes") or {},
                         "labels": labels,
                     }
@@ -87,7 +90,11 @@ def scan_bdd(root):
         raise ValueError("Both official splits require usable detection box2d annotations")
     return (
         sorted(records, key=lambda r: r["id"]),
-        {**dict(audit), "missing_image_examples": missing_examples},
+        {
+            **dict(audit),
+            "missing_image_examples": missing_examples,
+            "missing_image_ids": missing_ids,
+        },
         sources,
     )
 

@@ -1,4 +1,10 @@
-# Phase 2: full raw baseline in progress
+# Historical YOLO11n execution snapshot (superseded protocol)
+
+This is the PR #3 snapshot, preserved for traceability. The current study follows
+[parent #4](https://github.com/truong51972/vehicle-detection/issues/4), starting
+with [issue #5's YOLO26n data protocol and pretrained baseline](ISSUE5_RESULTS.md).
+The local YOLO11 notebook may contain later progress; the numbers below describe
+only the original recorded observation. Original paths/identities are historical.
 
 The full raw YOLO11n run is active on the available BDD100K data and GPU. The
 snapshot below proves actual full-data training and native evaluation; it is

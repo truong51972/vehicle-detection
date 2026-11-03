@@ -26,30 +26,29 @@ This verifies feasibility and a reproducible starting workflow. Full fine-tuning
 robustness benchmarks and research-grade accuracy claims are not Phase 1 gates.
 Phase 1 was merged in PR #2; its executed pilot evidence remains in that history.
 
-## Phase 2: full BDD100K fine-tuning and controlled benchmark
+## Phase 2: YOLO26n Raw / Adaptive study
 
-Phase 2 starts with the full raw baseline in the same two notebooks. See
-[the execution record](PHASE2_RESULTS.md) for actual progress. Items remain unchecked
-until their experiments and evidence are complete:
+[Parent #4](https://github.com/truong51972/vehicle-detection/issues/4) supersedes
+this document's former full-data YOLO11 plan. Its sequential implementation issues
+are:
 
-- [ ] Freeze a study protocol, compute/storage budget and untouched final test set.
-  Exclude all exposed IDs in `notebooks/test_exposure.json`; make model/recipe
-  choices on train-derived tune only.
-- [ ] Run the full original-raw baseline first with appropriate training duration;
-  preserve independent native checkpoints and evaluation identities.
-- [ ] Add the same-encoding raw control and selected preprocessing variants at full
-  scale, with aligned IDs/labels/splits and separate offline preparation/storage costs.
-- [ ] Calibrate adaptive thresholds on train/tune, freeze parameters and evaluate
-  the filter/skip policy. Existing defaults are uncalibrated heuristics.
-- [ ] Evaluate adverse conditions and robustness, including carefully scoped natural
-  condition slices and synthetic stress tests. Avoid tuning on final test outcomes.
-- [ ] Run the frozen-checkpoint input comparisons and separately trained model
-  comparisons with native AP, class/condition support, confusion/PR and failure analysis.
-  Add representative mean/p50/p95 costs with warm-up and synchronized CUDA timing;
-  measure online end-to-end latency separately if claiming deployment performance.
-- [ ] Repeat independent seeds and quantify uncertainty (including paired/bootstrap
-  analysis where appropriate); report accuracy/cost tradeoffs and limitations.
+- #5: audit and freeze four disjoint data roles; run untouched YOLO26n on Raw
+  development validation, with semantic COCO→vehicle mapping and native metrics.
+- #6: calibrate Adaptive using calibration only; create representative nested
+  S10/S20 training subsets and matched Raw/Adaptive exports.
+- #7: progressive partial fine-tuning of neck/head with backbone frozen; scale
+  paired subsets only when development-validation evidence justifies it.
+- #8: lock protocol and execute the final 3×2 model/input benchmark once.
 
-The current run prioritizes full raw training before exporting additional variants.
-Official-val holdout pixels remain unprepared throughout development/calibration. Do not mark Issue #1 complete until the agreed research requirements
-and their evidence have been reviewed.
+The new notebook sequence lives in `notebooks/phase2/`. Notebook 01 handles the
+data contract; notebook 02 arrives with #6; notebook 03 initially runs pretrained
+validation and will be extended with #7. No optimizer steps are part of #5.
+
+Official train supplies training pool, calibration and development validation.
+Official val minus prior exposures and disclosed exclusions supplies final test.
+Final-test pixels/performance stay closed during development. Image-content
+leakage checks against final test remain deferred to its controlled release.
+
+The two original notebooks and [PR #3 execution snapshot](PHASE2_RESULTS.md)
+preserve historical YOLO11 evidence independently. They are not YOLO26 outcomes.
+See [issue #5 evidence and limitations](ISSUE5_RESULTS.md) for the current protocol.
