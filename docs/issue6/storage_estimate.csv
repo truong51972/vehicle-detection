@@ -1,0 +1,3 @@
+variant,sample_images,planned_images,mean_bytes_per_image,estimated_GiB,p90_budget_GiB
+raw_reencoded,16,4890,145261.875,0.6615468941163272,0.8328843489289284
+adaptive,16,4890,145261.875,0.6615468941163272,0.8328843489289284

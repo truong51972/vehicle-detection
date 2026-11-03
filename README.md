@@ -30,12 +30,16 @@ Select the project `.venv` kernel and run:
 1. [01_data_protocol.ipynb](notebooks/phase2/01_data_protocol.ipynb): discover/audit
    sources, freeze training/calibration/development-validation/final-test roles,
    show distributions and drift, and export only development Raw.
-2. [03_finetuning_benchmark.ipynb](notebooks/phase2/03_finetuning_benchmark.ipynb):
+2. [02_adaptive_preprocessing.ipynb](notebooks/phase2/02_adaptive_preprocessing.ipynb):
+   freeze nested S10/S20 training subsets, calibrate a bounded pixel-only policy on
+   calibration data, export paired Raw/Adaptive S10 JPEG95 images, and inspect
+   support, quality proxies, adverse examples, offline latency and storage.
+3. [03_finetuning_benchmark.ipynb](notebooks/phase2/03_finetuning_benchmark.ipynb):
    currently **pretrained development validation only**, including six-class
    mapping, native AP/precision/recall/plots and verified result-cache reuse.
 
-Issue #6 will add notebook 02 for Adaptive calibration and nested training
-subsets. Issue #7 will extend notebook 03 with progressive partial fine-tuning.
+Issue #6 is documented in [the Adaptive execution record](docs/ISSUE6_RESULTS.md).
+Issue #7 will extend notebook 03 with progressive partial fine-tuning.
 Issue #8 releases the final test only after protocol/model/policy freeze.
 See [the issue #5 execution record](docs/ISSUE5_RESULTS.md).
 
@@ -104,6 +108,35 @@ this setting is explicit and must remain fixed for later comparisons.
 Identities include checkpoint/data/adapter hashes, settings, versions, hardware
 and plot hashes. Changed inputs require a new experiment root. Native average
 exported-file stage timing is not application end-to-end or batch-1 latency.
+
+## Nested pilots and Adaptive calibration
+
+Notebook 02 reads the immutable issue #5 protocol without changing data roles.
+S10/S20 (optional S40) are nested by image ID, retaining whole locked groups.
+Selection minimizes drift across 128 seeded group orders using class presence and
+instances, conditions and their intersections, class × condition support, object
+sizes and negative frames. Percentages approximate image counts when needed;
+rare and missing combinations are reported rather than oversampled.
+
+The default materialization is **S10 only**, with exactly **Raw and Adaptive**.
+Both use JPEG quality 95, source dimensions and byte-identical native YOLO labels.
+S20 is a frozen manifest for a later scaling decision, not another automatic export.
+No development or final-test images are read by notebook 02. Existing issue #5
+development exports and historical YOLO11 artifacts remain independent.
+
+Adaptive thresholds use a seeded 256-image calibration sample; two mild strengths
+per operator are compared with skip on up to 12 routed calibration images.
+The frozen policy runs at most one of Gamma, CLAHE, Denoise or Sharpen; otherwise
+it skips. Weather/time/scene labels are used only in subsequent subgroup reports.
+Quality-loss weights are heuristic, and better quality scores do not prove better
+detection. Adverse cases and sparse calibration support remain limitations.
+
+`runs/issue6-v1/` holds immutable subsets/policy, conversion, paired dataset roots,
+per-image decisions/costs and decoded-JPEG quality deltas. `docs/issue6/` holds
+compressed full-pool/subset membership, recipe, provenance and compact figures.
+Changed source IDs, parent protocol, recipe or implementation require a fresh
+version/root. A sampled storage estimate gates export; retain additional headroom
+because this is not a worst-case bound. No source images are overwritten.
 
 ## WSL migration and history
 

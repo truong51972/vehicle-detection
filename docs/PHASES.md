@@ -41,8 +41,9 @@ are:
 - #8: lock protocol and execute the final 3×2 model/input benchmark once.
 
 The new notebook sequence lives in `notebooks/phase2/`. Notebook 01 handles the
-data contract; notebook 02 arrives with #6; notebook 03 initially runs pretrained
-validation and will be extended with #7. No optimizer steps are part of #5.
+data contract; notebook 02 calibrates Adaptive and exports matched nested pilots;
+notebook 03 initially runs pretrained validation and will be extended with #7.
+No optimizer steps are part of #5 or #6.
 
 Official train supplies training pool, calibration and development validation.
 Official val minus prior exposures and disclosed exclusions supplies final test.
@@ -52,3 +53,5 @@ leakage checks against final test remain deferred to its controlled release.
 The two original notebooks and [PR #3 execution snapshot](PHASE2_RESULTS.md)
 preserve historical YOLO11 evidence independently. They are not YOLO26 outcomes.
 See [issue #5 evidence and limitations](ISSUE5_RESULTS.md) for the current protocol.
+See [issue #6 evidence and limitations](ISSUE6_RESULTS.md) for nested subsets and
+the frozen Adaptive policy. Quality proxies alone do not establish detection gains.
