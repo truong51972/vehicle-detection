@@ -22,12 +22,19 @@ def load_stats(path):
         }
 
 
-def class_ap(stats, ids):
-    """Native AP by represented class; absent classes have no invented AP value."""
+def class_ap(stats, ids, *, detailed=False):
+    """Native AP by represented class; optional AP50 and AP50:95 for reporting."""
+    if not ids:
+        return {}
     arrays = {k: np.concatenate([stats[i][k] for i in ids], axis=0) for k in STAT_KEYS}
     if not len(arrays["target_cls"]):
         return {}
     values = ap_per_class(arrays["tp"], arrays["conf"], arrays["pred_cls"], arrays["target_cls"])
+    if detailed:
+        return {
+            int(cls): {"AP50": float(ap[0]), "AP50_95": float(ap.mean())}
+            for cls, ap in zip(values[6], values[5], strict=True)
+        }
     return {int(cls): float(ap.mean()) for cls, ap in zip(values[6], values[5], strict=True)}
 
 
