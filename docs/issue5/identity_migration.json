@@ -1,0 +1,151 @@
+{
+  "canonical_baseline_summary_sha256": "56e02e03885f8bdcb50de20a08beb142e89b0fd9268924a2d7e60de086c63010",
+  "canonical_cache_identity_sha256": "429a4334666d55ee442caf6ef597a8a7472f6f46d2fdb8cc507a13414ace8ff2",
+  "canonical_changes": [
+    "remove optional historical_diff",
+    "refresh protocol code hash"
+  ],
+  "canonical_manifest_id": "680090b8eef098fbe10c77e632aacbfd3d6854d8489d7518e20f062e032b6e44",
+  "canonical_protocol_summary_sha256": "f021e9317374c916e0f07f08742ab32c5b90281f2e9e8daf7cc14e3bc1abe962",
+  "class_condition_audit_sha256": "c154626e39825c58199fc44324072084f58902767e8b7bee08cf586c263f061a",
+  "inference_rerun": false,
+  "kind": "identity metadata migration; no new inference",
+  "membership_sha256": "02c532371deae481582f9c9083a7a0f54c0fe4ded937513e5cf4b3925b6e8376",
+  "original_baseline_summary_sha256": "715d27d7608b03c7be14745ef1bbe282e93a5ad2f32f2b02f371d0fccf61cd4a",
+  "original_execution_identity": {
+    "adapter_sha256": "446d4b2318a42cf4399f230ed121a964b671717e2624b5a7e305656e5ac6a422",
+    "checkpoint_sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+    "checkpoint_url": "https://github.com/ultralytics/assets/releases/download/v8.4.0/yolo26n.pt",
+    "export": {
+      "conversion": {
+        "box_convention": "continuous",
+        "classes": [
+          "car",
+          "truck",
+          "bus",
+          "train",
+          "motorcycle",
+          "bicycle"
+        ],
+        "coco_category_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "geometry_tolerance_pixels": 0.01,
+        "versions": {
+          "bdd100k": "1.0.1",
+          "scalabel": "0.3.1",
+          "ultralytics": "8.4.198"
+        },
+        "yolo_category_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "encoding": {
+        "format": "jpg",
+        "jpeg_quality": 95,
+        "opencv": "4.14.0"
+      },
+      "operator_code": "354f19a51ba613f7bd0109fe5fcb7f86b98423059081500d96640ad2e29bb27b",
+      "recipe": {},
+      "source": "2e48cfd8c4327b74131bba5d593ae0fd67968154463138adfee58c41c58b9405",
+      "variant": "raw_reencoded"
+    },
+    "files_identity": "8ec437c64bcf6d72c8c93a78be85b48275a41a5df3cba37b2234bd57da91de98",
+    "hardware": {
+      "cuda_runtime": "13.2",
+      "gpu": "NVIDIA GeForce RTX 5060 Ti",
+      "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39"
+    },
+    "input": "Raw JPEG95",
+    "manifest_id": "b308ba62bca6c59f167ae2fa39026a80eece8b542a99d544d7e5b3c079395186",
+    "mapping": {
+      "1": 5,
+      "2": 0,
+      "3": 4,
+      "5": 2,
+      "6": 3,
+      "7": 1
+    },
+    "role": "development_validation",
+    "settings": {
+      "agnostic_nms": false,
+      "augment": false,
+      "batch": 32,
+      "conf": 0.001,
+      "deterministic": true,
+      "device": "0",
+      "imgsz": 640,
+      "iou": 0.7,
+      "max_det": 300,
+      "nms": false,
+      "plots": true,
+      "quantize": 32,
+      "rect": true,
+      "seed": 2026,
+      "verbose": false,
+      "workers": 8
+    },
+    "versions": {
+      "numpy": "2.4.6",
+      "opencv-python": "4.14.0.94",
+      "torch": "2.15.0",
+      "torchvision": "0.29.2",
+      "ultralytics": "8.4.198"
+    }
+  },
+  "original_manifest_id": "b308ba62bca6c59f167ae2fa39026a80eece8b542a99d544d7e5b3c079395186",
+  "original_protocol_summary_sha256": "2574e402733010f6ec70d760296eadc4736a633332f249800b8467923601e32d",
+  "source_commit": "b03e535be2aca78a6c727ae47df5c90c69d47e7e",
+  "split_version": "issue5-v1; membership and allocation unchanged",
+  "unchanged_checkpoint_sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+  "unchanged_mapping": {
+    "1": 5,
+    "2": 0,
+    "3": 4,
+    "5": 2,
+    "6": 3,
+    "7": 1
+  },
+  "unchanged_raw_files_identity": "8ec437c64bcf6d72c8c93a78be85b48275a41a5df3cba37b2234bd57da91de98",
+  "unchanged_result_checksum": "f9ac12f466058bee73db19bc7d22cfca84657047f6ef4e3cb77c1bc04c23c82c",
+  "unchanged_settings": {
+    "agnostic_nms": false,
+    "augment": false,
+    "batch": 32,
+    "conf": 0.001,
+    "deterministic": true,
+    "device": "0",
+    "imgsz": 640,
+    "iou": 0.7,
+    "max_det": 300,
+    "nms": false,
+    "plots": true,
+    "quantize": 32,
+    "rect": true,
+    "seed": 2026,
+    "verbose": false,
+    "workers": 8
+  },
+  "verification": {
+    "allocation_config_score_exclusions_unchanged": true,
+    "cache_reuse_passed_with_YOLO_val_forbidden": true,
+    "checkpoint_mapping_settings_adapter_unchanged": true,
+    "compact_membership_byte_identical": true,
+    "entire_split_records_labels_metadata_hashes_unchanged": true,
+    "final_test_pixels_not_accessed": true,
+    "history_separate_from_canonical_manifest": true,
+    "native_result_metrics_runtime_timing_plot_hashes_unchanged": true,
+    "raw_export_deep_verified": true,
+    "source_annotations_rehashed": true
+  }
+}

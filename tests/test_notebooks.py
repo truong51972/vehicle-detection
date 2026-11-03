@@ -5,8 +5,13 @@ from pathlib import Path
 
 
 def test_notebook_sources_and_committed_execution_outputs():
-    paths = sorted(Path("notebooks").glob("0*.ipynb"))
-    assert len(paths) == 2
+    paths = sorted(Path("notebooks").rglob("0*.ipynb"))
+    assert {p.name for p in paths} == {
+        "01_data_preparation.ipynb",
+        "02_training_benchmark.ipynb",
+        "01_data_protocol.ipynb",
+        "03_finetuning_benchmark.ipynb",
+    }
     for path in paths:
         notebook = json.loads(path.read_text())
         code_cells = [c for c in notebook["cells"] if c["cell_type"] == "code"]
