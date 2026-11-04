@@ -39,10 +39,8 @@ def export_variant(
     *,
     output_format="jpg",
     jpeg_quality=95,
-    classes=None,
 ):
     validate_recipes(recipes)
-    classes = CLASSES if classes is None else list(classes)
     if variant == "raw":
         raise ValueError("Choose raw_original or raw_reencoded explicitly")
     encoding = encoding_policy(output_format, jpeg_quality)
@@ -51,6 +49,8 @@ def export_variant(
     if original:
         encoding = {**encoding, "format": "original", "jpeg_quality": None}
     destination, converted = Path(destination).resolve(), Path(converted).resolve()
+    conversion = read_json(converted / "conversion.json")
+    classes = conversion.get("classes", CLASSES)
     records = [(split, r) for split, rows in partitions.items() for r in rows]
     source_paths, parents = {}, {}
     for _, r in records:
@@ -79,7 +79,7 @@ def export_variant(
         "encoding": encoding,
         "source": digest([(s, r["id"], r["sha256"], labels[r["id"]]) for s, r in records]),
         "operator_code": file_hash(Path(__file__).with_name("preprocess.py")),
-        "conversion": read_json(converted / "conversion.json"),
+        "conversion": conversion,
     }
     destination.mkdir(parents=True, exist_ok=True)
     identity_path = destination / "export.json"
@@ -197,15 +197,16 @@ def export_variant(
     return table
 
 
-def verify_alignment(datasets, *, deep=True, classes=None):
+def verify_alignment(datasets, *, deep=True):
     """Deep export verification, or a cheap immutable-manifest/inventory check for training."""
-    classes = CLASSES if classes is None else list(classes)
     reference = None
     for directory in map(Path, datasets):
         meta = pd.read_csv(directory / "metadata.csv")
         if meta["id"].duplicated().any():
             raise ValueError("Duplicate exported IDs")
         current = {}
+        export = read_json(directory / "export.json")
+        classes = export["conversion"].get("classes", CLASSES)
         yaml_data = yaml.safe_load((directory / "data.yaml").read_text())
         if (
             yaml_data["names"] != dict(enumerate(classes))
@@ -226,7 +227,6 @@ def verify_alignment(datasets, *, deep=True, classes=None):
                 raise ValueError(f"Export image ID mismatch: {directory}/{split}")
             if {p.stem for p in (directory / "labels" / split).glob("*.txt")} != expected:
                 raise ValueError(f"Export label ID mismatch: {directory}/{split}")
-        export = read_json(directory / "export.json")
         stamp = {
             "export_sha256": file_hash(directory / "export.json"),
             "metadata_sha256": file_hash(directory / "metadata.csv"),
