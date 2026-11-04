@@ -46,6 +46,78 @@ that every class benefits. Do not compare these five-class macro scores with the
 the class denominator and model heads differ. No common-five historical model
 comparison was run.
 
+## Actual Gamma/Skip routes: matched inference-input effects
+
+The review follow-up reads **actual frozen Adaptive export `decisions`**, not a
+new router or a night proxy. All route IDs belong to the frozen development
+population and pair with the Raw export, with equal source hashes, labels,
+geometry and JPEG95 controls. [Full-population route counts](route_populations.csv):
+
+- **Gamma applied: 3,307 images (23.6637%), 2,286 source groups.**
+- **Skip: 10,668 images (76.3363%), 6,720 source groups.**
+
+Images partition exactly; 748 groups contain images from both routes, so route
+group counts are not additive. The earlier CPU sample's 30/128 Gamma count is
+not the population prevalence estimate.
+
+[Time-of-day cross-tab](route_timeofday.csv), Gamma / Skip image counts:
+
+- Night: **3,280 / 2,355**.
+- Daytime: **20 / 7,276**.
+- Dawn/dusk: **6 / 1,019**.
+- Undefined: **1 / 18**.
+
+Thus 99.18% of Gamma-applied images are night images, but 2,355 night images were
+assigned Skip. **Night is context, not the actual brightness<0.12 Gamma route.**
+
+![Descriptive matched input effects by frozen export route](route_deltas.png)
+
+On the **same 3,307 Gamma IDs** for each fixed model, all five GT classes are
+present. Native Raw → Adaptive **mAP50:95 / mAP50**:
+
+- Pretrained: **0.09704660 → 0.10238297 / 0.17623210 → 0.18355817**;
+  mAP50:95 delta **+0.5336 percentage points**.
+- Raw-trained: **0.14741678 → 0.15042493 / 0.26584644 → 0.26998578**;
+  mAP50:95 delta **+0.3008 points**.
+- Adaptive-trained: **0.14745082 → 0.15246382 / 0.26261287 → 0.26939947**;
+  mAP50:95 delta **+0.5013 points**.
+
+The **Skip control is exact for all three models**: all 10,668 paired recorded
+JPEG hashes agree, every saved native TP/confidence/predicted-class/GT-class
+array agrees, and both AP deltas are exactly zero. See
+[Skip checks](route_skip_control.csv). This isolates the observed input changes
+to Gamma-applied images rather than a Skip encoding or pairing difference.
+
+[Matched route/time-of-day results](route_comparisons.csv) also show positive
+Gamma∩night mAP50:95 deltas of **+0.6732 / +0.3711 / +0.5032 points** for the
+three models, respectively; Skip∩night deltas remain zero. The descriptive gain
+concentrates on the actual Gamma population, which is predominantly night.
+Only 27 Gamma images are outside night, split into tiny strata; no robust
+daytime/night contrast or general Gamma benefit is established.
+
+All comparisons keep the same source IDs and GT-supported class target on both
+input sides. [Per-class AP and support](route_classes.csv) retain absent AP as
+undefined and label fewer than five source groups insufficient. Full Gamma
+support includes only 63 motorcycle objects in 54 groups and 98 bicycle objects
+in 67 groups. Tiny contextual slices can have different represented-class
+denominators; do not compare their macro AP levels to infer a condition effect.
+Precision/recall use native subset max-F1 operating points above confidence
+0.001; failure examples below use confidence 0.25 / IoU0.50.
+
+**Route deltas are descriptive, with no route-specific uncertainty or robust
+causal claim.** These compare inference inputs with weights held fixed. The
+earlier **+0.2492–0.2771-point training-branch difference** compares different
+checkpoints on the overall population and must not be attributed to inference
+Gamma. AP is nonlinear: prevalence-weighting the route AP deltas does not
+reconstruct the overall AP delta.
+
+Notebook 04 reproduces the route tables/plot from metadata and cached matches,
+then reuses `routes-v1/summary.json`. [Route provenance](route_provenance.json)
+and [validation](route_validation.json) record the inputs and guarded replay.
+No new inference, training, pixel reads, routing or final-test access was needed;
+101 protected overall/historical/checkpoint/lock files retained hashes and
+timestamps. The original six-cell evidence and candidate lock are unchanged.
+
 ## Support, sizes and failures
 
 Overall instances / image presence / source groups:
@@ -125,7 +197,9 @@ All six aggregate AP metrics were reproduced from saved native matches. The
 fresh-kernel cache-only Run All blocks model construction/inference, training,
 upstream phases and analysis recomputation, and checks unchanged saved evaluation
 and checkpoint files. [Validation receipts](validation.json) record those checks.
-The full suite passes **107 tests**; Ruff lint/format and package build pass.
+The original full suite passed **107 tests**; the route follow-up passes
+**110 tests**, including partition/pairing, subset AP, cache-only reuse and an
+unexpected Skip-match regression. Ruff lint/format and package build pass.
 
 The [development candidate lock](candidate_lock.json) retains pinned pretrained
 plus **both** S10 best checkpoints and frozen v2; no winner, S20 expansion or

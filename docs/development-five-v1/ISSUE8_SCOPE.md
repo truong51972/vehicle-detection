@@ -31,6 +31,18 @@ and freeze final size semantics before opening holdout. Native mean validation
 timings and a small offline CPU sample do not replace #8's synchronized p50/p95,
 end-to-end latency or peak-VRAM measurements.
 
+Carry the route analysis forward using the actual frozen export decisions and
+matched Raw/Adaptive IDs for each fixed model. Development Gamma covers 3,307
+images (23.6637%); 3,280 are night, but another 2,355 night images are Skip.
+Night is not a substitute for the brightness-triggered Gamma population, and
+these prevalence figures do not predict the reserved population. Verify Skip
+JPEG/native-match equivalence before attributing any input delta to Gamma.
+The development route deltas are descriptive without route-specific intervals;
+freeze support/class-denominator and group-uncertainty rules before making a
+robust final route claim. Keep inference-input effects separate from the
+single-seed training-branch comparison; macro AP deltas are not additive across
+routes. The existing development candidate/checkpoint lock is unchanged.
+
 The separate synthetic robustness matrix requested by #8 still needs an exact
 five-class protocol, conditions, severities, seeds and budget before release.
 It is not run or silently dropped by issue #22. Freeze that scope before any

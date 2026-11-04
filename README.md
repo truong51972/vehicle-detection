@@ -33,6 +33,8 @@ artifacts; missing or mismatched artifacts fail rather than launching upstream w
    `BOOTSTRAP_RESAMPLES=0` reports points by default; set 100 for
    exploratory source-group uncertainty. Object-size image-presence slices overlap
    and retain all GT/predictions; they are not area-restricted AP.
+   Route tables read actual frozen Gamma/Skip export decisions and compare cached
+   Raw/Adaptive matches for each fixed model; route deltas are descriptive.
    Valid caches are reused with either execution opt-in. Checkpoint/scale selection
    and final-test release remain separate. Changed inputs
    require a new output root. This notebook never imports the training runner.
