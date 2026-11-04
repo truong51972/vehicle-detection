@@ -132,8 +132,14 @@ def development_report(protocol, policy, checkpoints, directory, output, plan, *
             )
             continue
         if resamples:
-            interval = paired_interval(stats[before], stats[after], pilot, resamples=resamples)
-            status = "exploratory"
+            try:
+                interval = paired_interval(stats[before], stats[after], pilot, resamples=resamples)
+                status = "exploratory"
+            except ValueError as exc:
+                if "Fewer than two valid fixed-class draws" not in str(exc):
+                    raise
+                interval = {"estimand": support, "reason": str(exc)}
+                status = "unsupported"
         else:
             ids = list(stats[before])
             a, b = class_ap(stats[before], ids), class_ap(stats[after], ids)

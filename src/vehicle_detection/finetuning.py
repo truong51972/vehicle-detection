@@ -178,11 +178,12 @@ def train_branch(experiment, branch, output, *, resume=False):
     run = output / branch
     args_path = run / "args.yaml"
     if args_path.is_file():
+        # Ultralytics owns the run; its saved args must still match the declared study.
         args = yaml.safe_load(args_path.read_text())
         if (
             args.get("data") != str(data)
             or args.get("freeze") != experiment["freeze"]
-            or any(args.get(k) != experiment["settings"][k] for k in ("batch", "epochs", "imgsz"))
+            or any(args.get(k) != value for k, value in experiment["settings"].items())
         ):
             raise ValueError("Native run settings changed; select a new output root")
     elif run.exists() and any(run.iterdir()):

@@ -74,8 +74,9 @@ A protocol binds four disjoint roles, groups/duplicate safeguards, source hashes
 boxes and classes. A policy binds calibration-only IDs and the frozen operator code.
 An export binds IDs/labels/geometry, recipes and JPEG95, with a deep-verification
 receipt. New training binds verified exports, initial checkpoint, native freeze and
-shared settings in a short study manifest; Ultralytics owns optimization, weights,
-history and resume. Native resume is epoch-boundary continuation, not bitwise
+shared settings in a short study manifest; native `args.yaml` is checked against
+the declared settings on reuse. Ultralytics owns optimization, weights, history
+and resume. Native resume is epoch-boundary continuation, not bitwise
 reproducibility or an atomic last-checkpoint guarantee. Evaluation binds the
 explicit checkpoint, verified development export, native settings and metric plots.
 Raw and Adaptive always retain the same IDs and GT. COCO-80 pretrained predictions

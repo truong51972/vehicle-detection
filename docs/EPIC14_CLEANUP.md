@@ -25,7 +25,9 @@ six-class runs. The separate derived five-class labels and training belong to
 
 - Each native training branch starts independently from the pinned original
   `yolo26n.pt`; `freeze=11`, shared declared seed/settings, 20 epochs and
-  original augmentation policy remain unchanged. Resume is native, not bitwise.
+  original augmentation policy remain unchanged. Native `args.yaml` is compared
+  against every declared training setting before reuse or resume; this does not
+  reintroduce a custom trainer or checkpoint receipt. Resume is native, not bitwise.
 - Raw/Adaptive exports retain identical image IDs, source roles, label digests,
   source geometry and JPEG95 behavior. The original six-class `train` category
   is **not** modified here. The derived five-class taxonomy belongs to #20.
@@ -34,13 +36,16 @@ six-class runs. The separate derived five-class labels and training belong to
   fresh development inference verifies file hashes and label geometry.
 - Report-only `Restart & Run All` reuses hashed artifacts. Historical
   `development-native-v1/v2` and `development-analysis-v1/v2` cache identities
-  remain read-only. New results use `development-native-v3` and
-  `development-analysis-v3`; changing checkpoint, dataset, mapping, config or
-  source-group plan changes the cache key.
+  remain read-only. New cache **identity schemas** use `development-native-v3`
+  and `development-analysis-v3` even when the notebook output directory is
+  named `development-native-v1`; changing checkpoint, dataset, mapping, config
+  or source-group plan changes the cache key.
 - Native overall/per-class metrics are not comparable across different
   six/five-class denominators. Group bootstrap has no AP imputation for missing
-  required classes, and two overall contrasts are *exploratory*, not evidence of
-  training-seed uncertainty. No final-test inference is triggered.
+  required classes; when fewer than two valid fixed-class draws exist, the
+  comparison is `unsupported` rather than reporting an invented CI. The two
+  overall contrasts are *exploratory*, not evidence of training-seed uncertainty.
+  No final-test inference is triggered.
 
 ## Validation limits
 

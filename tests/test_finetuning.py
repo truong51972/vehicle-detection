@@ -144,9 +144,7 @@ def test_native_training_uses_same_pretrained_and_reuses_outputs(pair_inputs, mo
                     {
                         "data": kwargs["data"],
                         "freeze": kwargs["freeze"],
-                        "epochs": kwargs["epochs"],
-                        "batch": kwargs["batch"],
-                        "imgsz": kwargs["imgsz"],
+                        **{key: kwargs[key] for key in TRAIN_SETTINGS},
                     },
                     stream,
                 )
@@ -165,6 +163,13 @@ def test_native_training_uses_same_pretrained_and_reuses_outputs(pair_inputs, mo
     assert all(settings["freeze"] == 11 for _, settings in calls)
     assert train_branch(experiment, "raw", pair_inputs[-1]) == raw
     assert len(calls) == 2
+    args_path = pair_inputs[-1] / "raw/args.yaml"
+    original = yaml.safe_load(args_path.read_text())
+    for key, changed in (("lr0", 0.1), ("seed", 1), ("mosaic", 1.0)):
+        args_path.write_text(yaml.safe_dump({**original, key: changed}))
+        with pytest.raises(ValueError, match="Native run settings changed"):
+            train_branch(experiment, "raw", pair_inputs[-1])
+    args_path.write_text(yaml.safe_dump(original))
     train_branch(experiment, "raw", pair_inputs[-1], resume=True)
     assert calls[-1][0].endswith("/raw/weights/last.pt")
     assert calls[-1][1] == {"resume": True}
