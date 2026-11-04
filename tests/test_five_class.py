@@ -41,6 +41,7 @@ def test_label_remapping_keeps_order_coordinates_and_negative_frames(tmp_path):
         path.write_text(value)
     before = {name: file_hash(source / "labels/train" / f"{name}.txt") for name in labels}
     identity = derive_labels(source, destination, {"train": rows})
+    assert identity["classes"] == FIVE_CLASSES
     assert identity == derive_labels(source, destination, {"train": rows})
     assert (destination / "labels/train/mixed.txt").read_text() == (
         "0 0.125 0.25 0.1 0.2\n3 0.51 0.62 0.2 0.2\n"
