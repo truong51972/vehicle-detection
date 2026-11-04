@@ -83,7 +83,9 @@ def derive_labels(source, destination, partitions):
         "mapping": {str(k): v for k, v in SIX_TO_FIVE.items()},
         "source_conversion_sha256": file_hash(source / "conversion.json"),
         "source_labels_sha256": digest(sorted(source_files)),
-        "role_ids_sha256": digest({s: sorted(r["id"] for r in rows) for s, rows in partitions.items()}),
+        "role_ids_sha256": digest(
+            {s: sorted(r["id"] for r in rows) for s, rows in partitions.items()}
+        ),
         "box_convention": "continuous",
         "summary": summary,
         "final_test_pixels_accessed": False,

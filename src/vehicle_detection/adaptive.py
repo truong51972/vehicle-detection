@@ -245,7 +245,9 @@ def freeze_policy(path, policy, protocol):
         write_json(path, policy)
 
 
-def export_pair(partitions, converted, destination, policy, protocol, subsets, name, *, classes=None):
+def export_pair(
+    partitions, converted, destination, policy, protocol, subsets, name, *, classes=None
+):
     """Bind both native exports to the frozen subset and calibration recipe before writing."""
     from .subsets import validate_subsets
 
