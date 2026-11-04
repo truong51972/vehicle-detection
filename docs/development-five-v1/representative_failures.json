@@ -1,0 +1,59 @@
+{
+  "IoU": 0.5,
+  "display_confidence": 0.25,
+  "examples": [
+    {
+      "adaptive": {
+        "FN": 23,
+        "FP": 3
+      },
+      "id": "00f42f6b-b1ca1f6c",
+      "native_batch": 2,
+      "pretrained": {
+        "FN": 25,
+        "FP": 3
+      },
+      "raw": {
+        "FN": 23,
+        "FP": 2
+      },
+      "tile_index_zero_based": 2
+    },
+    {
+      "adaptive": {
+        "FN": 20,
+        "FP": 4
+      },
+      "id": "00f89335-2ef7949d",
+      "native_batch": 2,
+      "pretrained": {
+        "FN": 22,
+        "FP": 2
+      },
+      "raw": {
+        "FN": 20,
+        "FP": 4
+      },
+      "tile_index_zero_based": 4
+    },
+    {
+      "adaptive": {
+        "FN": 14,
+        "FP": 1
+      },
+      "id": "00a1176f-5121b501",
+      "native_batch": 1,
+      "pretrained": {
+        "FN": 15,
+        "FP": 0
+      },
+      "raw": {
+        "FN": 14,
+        "FP": 3
+      },
+      "tile_index_zero_based": 14
+    }
+  ],
+  "native_plots": "runs/development-five-v1/<model>-raw/val_batch<batch>_pred.jpg and _labels.jpg",
+  "scope": "Three crowded failure examples from the first 16 displayed tiles in each of the first three native batches, selected by Raw-trained FN then FP count. Raw-input cells only; same IDs for all models. Descriptive selection, not failure prevalence."
+}

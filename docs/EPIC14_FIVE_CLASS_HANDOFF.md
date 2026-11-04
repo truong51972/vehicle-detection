@@ -30,22 +30,24 @@ see [the issue #21 results](ISSUE21_RESULTS.md). Five-class evaluation remains #
 
 ## Next implementation tasks (keep small)
 
+Current local follow-through: #20 and #21 are closed; both five-class S10 branches
+completed 20 epochs with best epoch 6 under `runs/training-five-s10-v1/`.
+The new [#22 development report](development-five-v1/RESULTS.md) records the six
+native evaluations and subsequent candidate/holdout scope.
+
 1. **#20:** The five-class-only Run All path and real BDD100K verification below
-   are complete. Review the evidence before closing the issue. S20 remains
+   are complete and the issue is closed. S20 remains
    membership/annotation-only; final-test images stay sealed.
 2. **#21:** Both five-class native S10 branches completed 20 epochs in
    `runs/training-five-s10-v1/`, using the existing five-class exports and native
    `freeze=11`. Raw resumed after epoch 12; Adaptive started independently from
    the pinned original pretrained weights. See the results report for saved
    histories, costs, checkpoint hashes, native CPU smoke and notebook evidence.
-3. **#22:** Extend the existing COCO→BDD baseline adapter for the five-class map
-   `{2:0, 7:1, 5:2, 3:3, 1:4}`. Keep the historical six-class adapter intact.
-   Make only the changes needed in the **existing** evaluator and notebook 04
-   to read five-class native labels, preserve the six-class historical adapter,
-   and report the existing 3×2 paired analysis. Use native YOLO AP/matching.
-   Do not implement custom metrics, a generic taxonomy registry, model wrapper,
-   or another cache/experiment framework. Keep bootstrap exploratory with
-   missing-class AP unsupported. No final-test pixels; opt-in inference only.
+3. **#22:** Six five-class development cells, native COCO mapping fixtures,
+   support-aware reports, 100-draw paired group intervals and cache-only notebook
+   replay are complete locally and ready for review. Historical six-class replay
+   remains supported. See the development report for costs, size-slice limitations
+   and the proposed #8 scope; final-test pixels remain sealed.
 
 ## Run and verification
 

@@ -140,7 +140,7 @@ for target in ["vehicle_detection.data.scan_bdd", "vehicle_detection.protocol.bu
 
         checkpoint = project / "runs/training-five-s10-v1" / branch / "weights/best.pt"
         assert len(YOLO(str(checkpoint)).names) == 5
-    # Notebook 04 retains its historical six-class contract until issue #22.
+    # Keep six-class evaluation replay covered alongside five-class training.
     run(
         "03_training.ipynb",
         setup=train_setup,
@@ -152,10 +152,19 @@ for target in ["vehicle_detection.data.scan_bdd", "vehicle_detection.protocol.bu
     )
     (project / "docs/development-v1").mkdir()
     shutil.copy(repository / "docs/development-v1/PLAN.md", project / "docs/development-v1")
+    eval_paths = (
+        'PROTOCOL_PATH = ROOT / "runs/data-v1/protocol.json"\n'
+        'POLICY_PATH = ROOT / "runs/preprocessing-v1/policy.json"\n'
+        'TRAIN_ROOT = ROOT / "runs/training-native-s10-v1"\n'
+        'INPUTS = {"raw": ROOT / "runs/data-v1/datasets/raw", '
+        '"adaptive": ROOT / "runs/preprocessing-v1/development/adaptive"}\n'
+        'OUTPUT = ROOT / "runs/development-native-v1"\n'
+        'PLAN = ROOT / "docs/development-v1/PLAN.md"\n'
+    )
     run(
         "04_eval_and_report.ipynb",
         setup=setup,
-        overrides="ALLOW_INFERENCE = True\nBOOTSTRAP_RESAMPLES = 2\n"
+        overrides=eval_paths + "ALLOW_INFERENCE = True\nBOOTSTRAP_RESAMPLES = 2\n"
         "import vehicle_detection.evaluation as evaluation\n"
         "original = evaluation.evaluate_development\n"
         "def evaluate_development(*args, **kwargs):\n"
@@ -183,7 +192,8 @@ patch("vehicle_detection.evaluation.YOLO",
     run(
         "04_eval_and_report.ipynb",
         setup=guard,
-        overrides="BOOTSTRAP_RESAMPLES = 2\nimport vehicle_detection.evaluation as evaluation\n"
+        overrides=eval_paths
+        + "BOOTSTRAP_RESAMPLES = 2\nimport vehicle_detection.evaluation as evaluation\n"
         "original = evaluation.evaluate_development\n"
         "def evaluate_development(*args, **kwargs):\n"
         '    return original(*args, settings={"device":"cpu", "batch":2, '

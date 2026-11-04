@@ -1,12 +1,14 @@
-"""Historical six-class COCO→BDD prediction adapter; native YOLO computes metrics."""
+"""Five/six-class COCO→BDD prediction adapter; native YOLO computes metrics."""
 
 import torch
 from ultralytics.models.yolo.detect import DetectionValidator
 from ultralytics.utils.metrics import ConfusionMatrix
 
 from .data import CLASSES
+from .five_class import FIVE_CLASSES
 
 COCO_TO_VEHICLE = {2: 0, 7: 1, 5: 2, 6: 3, 3: 4, 1: 5}
+COCO_TO_FIVE = {2: 0, 7: 1, 5: 2, 3: 3, 1: 4}
 PRETRAINED_URL = "https://github.com/ultralytics/assets/releases/download/v8.4.0/yolo26n.pt"
 PRETRAINED_SHA256 = "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef"
 VAL_SETTINGS = {
@@ -36,11 +38,11 @@ def verify_coco_names(names):
         raise ValueError("Expected COCO-80 names/IDs; pretrained class semantics differ")
 
 
-def remap_predictions(pred):
+def remap_predictions(pred, mapping=COCO_TO_VEHICLE):
     """Filter native postprocessed predictions; keep boxes, scores and auxiliary rows aligned."""
     classes = pred["cls"]
     mapped = torch.full_like(classes, -1)
-    for source, target in COCO_TO_VEHICLE.items():
+    for source, target in mapping.items():
         mapped[classes == source] = target
     keep = mapped >= 0
     return {**{k: v[keep] for k, v in pred.items()}, "cls": mapped[keep]}
@@ -51,18 +53,25 @@ class VehicleValidator(DetectionValidator):
 
     def init_metrics(self, model):
         verify_coco_names(model.names)
+        names = list(self.data["names"].values())
         if (
             self.training
             or self.args.split != "val"
-            or self.data["names"] != dict(enumerate(CLASSES))
+            or names not in (CLASSES, FIVE_CLASSES)
+            or self.data["names"] != dict(enumerate(names))
         ):
-            raise ValueError("Pretrained adapter requires six-class development validation only")
+            raise ValueError(
+                "Pretrained adapter requires five/six-class development validation only"
+            )
+        self.vehicle_mapping = COCO_TO_FIVE if names == FIVE_CLASSES else COCO_TO_VEHICLE
         super().init_metrics(model)
-        self.names = dict(enumerate(CLASSES))
-        self.nc = len(CLASSES)
+        self.names = dict(enumerate(names))
+        self.nc = len(names)
         self.class_map = list(range(1, self.nc + 1))
         self.metrics.names = self.names
         self.confusion_matrix = ConfusionMatrix(names=self.names)
 
     def postprocess(self, preds):
-        return [remap_predictions(pred) for pred in super().postprocess(preds)]
+        return [
+            remap_predictions(pred, self.vehicle_mapping) for pred in super().postprocess(preds)
+        ]

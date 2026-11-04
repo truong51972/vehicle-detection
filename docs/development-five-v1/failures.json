@@ -1,0 +1,442 @@
+{
+  "errors": [
+    {
+      "evaluation": "pretrained-raw",
+      "false_negatives_at_025": 56,
+      "false_positives_at_025": 0,
+      "id": "9a95b4e6-eaacb487"
+    },
+    {
+      "evaluation": "pretrained-raw",
+      "false_negatives_at_025": 47,
+      "false_positives_at_025": 0,
+      "id": "8e3e208e-a1498ea0"
+    },
+    {
+      "evaluation": "pretrained-raw",
+      "false_negatives_at_025": 46,
+      "false_positives_at_025": 1,
+      "id": "131db8a7-1afcfc95"
+    },
+    {
+      "evaluation": "pretrained-raw",
+      "false_negatives_at_025": 45,
+      "false_positives_at_025": 2,
+      "id": "655025a3-199b5489"
+    },
+    {
+      "evaluation": "pretrained-raw",
+      "false_negatives_at_025": 44,
+      "false_positives_at_025": 0,
+      "id": "7daef12e-031f1b87"
+    },
+    {
+      "evaluation": "pretrained-raw",
+      "false_negatives_at_025": 43,
+      "false_positives_at_025": 2,
+      "id": "0512b710-fb1a1718"
+    },
+    {
+      "evaluation": "pretrained-raw",
+      "false_negatives_at_025": 42,
+      "false_positives_at_025": 1,
+      "id": "63c35c1e-310d3ace"
+    },
+    {
+      "evaluation": "pretrained-raw",
+      "false_negatives_at_025": 39,
+      "false_positives_at_025": 2,
+      "id": "40976fb7-6f7be170"
+    },
+    {
+      "evaluation": "pretrained-raw",
+      "false_negatives_at_025": 39,
+      "false_positives_at_025": 1,
+      "id": "0fba84f9-73b520ee"
+    },
+    {
+      "evaluation": "pretrained-raw",
+      "false_negatives_at_025": 39,
+      "false_positives_at_025": 1,
+      "id": "5ed8046a-6a4e5de4"
+    },
+    {
+      "evaluation": "pretrained-raw",
+      "false_negatives_at_025": 39,
+      "false_positives_at_025": 0,
+      "id": "a62ce0ff-434a9286"
+    },
+    {
+      "evaluation": "pretrained-raw",
+      "false_negatives_at_025": 38,
+      "false_positives_at_025": 2,
+      "id": "30853278-13d158f8"
+    },
+    {
+      "evaluation": "pretrained-adaptive",
+      "false_negatives_at_025": 56,
+      "false_positives_at_025": 0,
+      "id": "9a95b4e6-eaacb487"
+    },
+    {
+      "evaluation": "pretrained-adaptive",
+      "false_negatives_at_025": 47,
+      "false_positives_at_025": 0,
+      "id": "8e3e208e-a1498ea0"
+    },
+    {
+      "evaluation": "pretrained-adaptive",
+      "false_negatives_at_025": 46,
+      "false_positives_at_025": 1,
+      "id": "131db8a7-1afcfc95"
+    },
+    {
+      "evaluation": "pretrained-adaptive",
+      "false_negatives_at_025": 45,
+      "false_positives_at_025": 2,
+      "id": "655025a3-199b5489"
+    },
+    {
+      "evaluation": "pretrained-adaptive",
+      "false_negatives_at_025": 44,
+      "false_positives_at_025": 0,
+      "id": "7daef12e-031f1b87"
+    },
+    {
+      "evaluation": "pretrained-adaptive",
+      "false_negatives_at_025": 43,
+      "false_positives_at_025": 2,
+      "id": "0512b710-fb1a1718"
+    },
+    {
+      "evaluation": "pretrained-adaptive",
+      "false_negatives_at_025": 42,
+      "false_positives_at_025": 1,
+      "id": "63c35c1e-310d3ace"
+    },
+    {
+      "evaluation": "pretrained-adaptive",
+      "false_negatives_at_025": 39,
+      "false_positives_at_025": 2,
+      "id": "40976fb7-6f7be170"
+    },
+    {
+      "evaluation": "pretrained-adaptive",
+      "false_negatives_at_025": 39,
+      "false_positives_at_025": 1,
+      "id": "0fba84f9-73b520ee"
+    },
+    {
+      "evaluation": "pretrained-adaptive",
+      "false_negatives_at_025": 39,
+      "false_positives_at_025": 1,
+      "id": "5ed8046a-6a4e5de4"
+    },
+    {
+      "evaluation": "pretrained-adaptive",
+      "false_negatives_at_025": 39,
+      "false_positives_at_025": 0,
+      "id": "a62ce0ff-434a9286"
+    },
+    {
+      "evaluation": "pretrained-adaptive",
+      "false_negatives_at_025": 38,
+      "false_positives_at_025": 2,
+      "id": "30853278-13d158f8"
+    },
+    {
+      "evaluation": "raw-raw",
+      "false_negatives_at_025": 56,
+      "false_positives_at_025": 0,
+      "id": "9a95b4e6-eaacb487"
+    },
+    {
+      "evaluation": "raw-raw",
+      "false_negatives_at_025": 46,
+      "false_positives_at_025": 2,
+      "id": "8e3e208e-a1498ea0"
+    },
+    {
+      "evaluation": "raw-raw",
+      "false_negatives_at_025": 44,
+      "false_positives_at_025": 2,
+      "id": "7daef12e-031f1b87"
+    },
+    {
+      "evaluation": "raw-raw",
+      "false_negatives_at_025": 44,
+      "false_positives_at_025": 1,
+      "id": "131db8a7-1afcfc95"
+    },
+    {
+      "evaluation": "raw-raw",
+      "false_negatives_at_025": 43,
+      "false_positives_at_025": 3,
+      "id": "655025a3-199b5489"
+    },
+    {
+      "evaluation": "raw-raw",
+      "false_negatives_at_025": 42,
+      "false_positives_at_025": 0,
+      "id": "0512b710-fb1a1718"
+    },
+    {
+      "evaluation": "raw-raw",
+      "false_negatives_at_025": 40,
+      "false_positives_at_025": 1,
+      "id": "63c35c1e-310d3ace"
+    },
+    {
+      "evaluation": "raw-raw",
+      "false_negatives_at_025": 39,
+      "false_positives_at_025": 3,
+      "id": "30853278-13d158f8"
+    },
+    {
+      "evaluation": "raw-raw",
+      "false_negatives_at_025": 39,
+      "false_positives_at_025": 2,
+      "id": "0fba84f9-73b520ee"
+    },
+    {
+      "evaluation": "raw-raw",
+      "false_negatives_at_025": 37,
+      "false_positives_at_025": 0,
+      "id": "a62ce0ff-434a9286"
+    },
+    {
+      "evaluation": "raw-raw",
+      "false_negatives_at_025": 36,
+      "false_positives_at_025": 2,
+      "id": "40976fb7-6f7be170"
+    },
+    {
+      "evaluation": "raw-raw",
+      "false_negatives_at_025": 36,
+      "false_positives_at_025": 1,
+      "id": "4923bc51-e5ce95fc"
+    },
+    {
+      "evaluation": "raw-adaptive",
+      "false_negatives_at_025": 56,
+      "false_positives_at_025": 0,
+      "id": "9a95b4e6-eaacb487"
+    },
+    {
+      "evaluation": "raw-adaptive",
+      "false_negatives_at_025": 46,
+      "false_positives_at_025": 2,
+      "id": "8e3e208e-a1498ea0"
+    },
+    {
+      "evaluation": "raw-adaptive",
+      "false_negatives_at_025": 44,
+      "false_positives_at_025": 2,
+      "id": "7daef12e-031f1b87"
+    },
+    {
+      "evaluation": "raw-adaptive",
+      "false_negatives_at_025": 44,
+      "false_positives_at_025": 1,
+      "id": "131db8a7-1afcfc95"
+    },
+    {
+      "evaluation": "raw-adaptive",
+      "false_negatives_at_025": 43,
+      "false_positives_at_025": 3,
+      "id": "655025a3-199b5489"
+    },
+    {
+      "evaluation": "raw-adaptive",
+      "false_negatives_at_025": 42,
+      "false_positives_at_025": 0,
+      "id": "0512b710-fb1a1718"
+    },
+    {
+      "evaluation": "raw-adaptive",
+      "false_negatives_at_025": 40,
+      "false_positives_at_025": 1,
+      "id": "63c35c1e-310d3ace"
+    },
+    {
+      "evaluation": "raw-adaptive",
+      "false_negatives_at_025": 39,
+      "false_positives_at_025": 3,
+      "id": "30853278-13d158f8"
+    },
+    {
+      "evaluation": "raw-adaptive",
+      "false_negatives_at_025": 39,
+      "false_positives_at_025": 2,
+      "id": "0fba84f9-73b520ee"
+    },
+    {
+      "evaluation": "raw-adaptive",
+      "false_negatives_at_025": 37,
+      "false_positives_at_025": 0,
+      "id": "a62ce0ff-434a9286"
+    },
+    {
+      "evaluation": "raw-adaptive",
+      "false_negatives_at_025": 36,
+      "false_positives_at_025": 2,
+      "id": "40976fb7-6f7be170"
+    },
+    {
+      "evaluation": "raw-adaptive",
+      "false_negatives_at_025": 36,
+      "false_positives_at_025": 1,
+      "id": "4923bc51-e5ce95fc"
+    },
+    {
+      "evaluation": "adaptive-raw",
+      "false_negatives_at_025": 56,
+      "false_positives_at_025": 0,
+      "id": "9a95b4e6-eaacb487"
+    },
+    {
+      "evaluation": "adaptive-raw",
+      "false_negatives_at_025": 46,
+      "false_positives_at_025": 1,
+      "id": "8e3e208e-a1498ea0"
+    },
+    {
+      "evaluation": "adaptive-raw",
+      "false_negatives_at_025": 44,
+      "false_positives_at_025": 3,
+      "id": "131db8a7-1afcfc95"
+    },
+    {
+      "evaluation": "adaptive-raw",
+      "false_negatives_at_025": 44,
+      "false_positives_at_025": 3,
+      "id": "7daef12e-031f1b87"
+    },
+    {
+      "evaluation": "adaptive-raw",
+      "false_negatives_at_025": 43,
+      "false_positives_at_025": 2,
+      "id": "0512b710-fb1a1718"
+    },
+    {
+      "evaluation": "adaptive-raw",
+      "false_negatives_at_025": 43,
+      "false_positives_at_025": 2,
+      "id": "655025a3-199b5489"
+    },
+    {
+      "evaluation": "adaptive-raw",
+      "false_negatives_at_025": 40,
+      "false_positives_at_025": 4,
+      "id": "30853278-13d158f8"
+    },
+    {
+      "evaluation": "adaptive-raw",
+      "false_negatives_at_025": 40,
+      "false_positives_at_025": 1,
+      "id": "63c35c1e-310d3ace"
+    },
+    {
+      "evaluation": "adaptive-raw",
+      "false_negatives_at_025": 39,
+      "false_positives_at_025": 3,
+      "id": "0fba84f9-73b520ee"
+    },
+    {
+      "evaluation": "adaptive-raw",
+      "false_negatives_at_025": 37,
+      "false_positives_at_025": 1,
+      "id": "5ed8046a-6a4e5de4"
+    },
+    {
+      "evaluation": "adaptive-raw",
+      "false_negatives_at_025": 37,
+      "false_positives_at_025": 0,
+      "id": "a62ce0ff-434a9286"
+    },
+    {
+      "evaluation": "adaptive-raw",
+      "false_negatives_at_025": 36,
+      "false_positives_at_025": 1,
+      "id": "40976fb7-6f7be170"
+    },
+    {
+      "evaluation": "adaptive-adaptive",
+      "false_negatives_at_025": 56,
+      "false_positives_at_025": 0,
+      "id": "9a95b4e6-eaacb487"
+    },
+    {
+      "evaluation": "adaptive-adaptive",
+      "false_negatives_at_025": 46,
+      "false_positives_at_025": 1,
+      "id": "8e3e208e-a1498ea0"
+    },
+    {
+      "evaluation": "adaptive-adaptive",
+      "false_negatives_at_025": 44,
+      "false_positives_at_025": 3,
+      "id": "131db8a7-1afcfc95"
+    },
+    {
+      "evaluation": "adaptive-adaptive",
+      "false_negatives_at_025": 44,
+      "false_positives_at_025": 3,
+      "id": "7daef12e-031f1b87"
+    },
+    {
+      "evaluation": "adaptive-adaptive",
+      "false_negatives_at_025": 43,
+      "false_positives_at_025": 2,
+      "id": "0512b710-fb1a1718"
+    },
+    {
+      "evaluation": "adaptive-adaptive",
+      "false_negatives_at_025": 43,
+      "false_positives_at_025": 2,
+      "id": "655025a3-199b5489"
+    },
+    {
+      "evaluation": "adaptive-adaptive",
+      "false_negatives_at_025": 40,
+      "false_positives_at_025": 4,
+      "id": "30853278-13d158f8"
+    },
+    {
+      "evaluation": "adaptive-adaptive",
+      "false_negatives_at_025": 40,
+      "false_positives_at_025": 1,
+      "id": "63c35c1e-310d3ace"
+    },
+    {
+      "evaluation": "adaptive-adaptive",
+      "false_negatives_at_025": 39,
+      "false_positives_at_025": 3,
+      "id": "0fba84f9-73b520ee"
+    },
+    {
+      "evaluation": "adaptive-adaptive",
+      "false_negatives_at_025": 37,
+      "false_positives_at_025": 1,
+      "id": "5ed8046a-6a4e5de4"
+    },
+    {
+      "evaluation": "adaptive-adaptive",
+      "false_negatives_at_025": 37,
+      "false_positives_at_025": 0,
+      "id": "a62ce0ff-434a9286"
+    },
+    {
+      "evaluation": "adaptive-adaptive",
+      "false_negatives_at_025": 36,
+      "false_positives_at_025": 1,
+      "id": "40976fb7-6f7be170"
+    }
+  ],
+  "limitation": "Count-ranked crowded frames; not an unbiased failure-rate sample. Native GT/prediction plots are local gitignored artifacts.",
+  "native_plot_directory": "runs/development-five-v1/<evaluation>/val_batch*_pred.jpg",
+  "thresholds": {
+    "IoU": 0.5,
+    "confidence": 0.25
+  }
+}

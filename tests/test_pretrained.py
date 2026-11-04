@@ -10,12 +10,14 @@ torch = pytest.importorskip("torch")
 pytest.importorskip("ultralytics")
 
 from vehicle_detection.baseline import (  # noqa: E402
+    COCO_TO_FIVE,
     COCO_TO_VEHICLE,
     VehicleValidator,
     remap_predictions,
     verify_coco_names,
 )
 from vehicle_detection.data import CLASSES  # noqa: E402
+from vehicle_detection.five_class import FIVE_CLASSES  # noqa: E402
 
 
 def coco_names():
@@ -44,35 +46,41 @@ def test_semantic_mapping_filters_and_keeps_rows_aligned():
     assert empty["bboxes"].shape == (0, 4)
 
 
-def test_native_postprocessing_matching_and_ap_use_vehicle_ids(tmp_path):
+@pytest.mark.parametrize(
+    "names,mapping", [(CLASSES, COCO_TO_VEHICLE), (FIVE_CLASSES, COCO_TO_FIVE)]
+)
+def test_native_postprocessing_matching_and_ap_use_vehicle_ids(tmp_path, names, mapping):
     validator = VehicleValidator(
         save_dir=tmp_path, args={"split": "val", "plots": False, "nms": False}
     )
     validator.training = False
-    validator.data = {"val": "images/tune", "names": dict(enumerate(CLASSES))}
+    validator.data = {"val": "images/tune", "names": dict(enumerate(names))}
     validator.dataloader = SimpleNamespace(dataset=SimpleNamespace(labels=[]))
     model = SimpleNamespace(names=coco_names(), end2end=True)
     validator.init_metrics(model)
-    assert validator.nc == 6 and validator.metrics.names == dict(enumerate(CLASSES))
-    assert validator.confusion_matrix.matrix.shape == (7, 7)
-    raw = torch.tensor([[[0.0, 0.0, 10.0, 10.0, 0.99, 2.0], [20.0, 20.0, 30.0, 30.0, 0.9, 0.0]]])
+    assert validator.nc == len(names) and validator.metrics.names == dict(enumerate(names))
+    assert validator.confusion_matrix.matrix.shape == (len(names) + 1, len(names) + 1)
+    sources = list(mapping) + [0] + ([6] if names == FIVE_CLASSES else [])
+    raw = torch.tensor(
+        [[[i * 20.0, 0.0, i * 20.0 + 10, 10.0, 0.99, float(c)] for i, c in enumerate(sources)]]
+    )
     pred = validator.postprocess(raw)[0]
-    assert pred["cls"].tolist() == [0]
-    target = {"bboxes": torch.tensor([[0.0, 0.0, 10.0, 10.0]]), "cls": torch.tensor([0.0])}
+    assert pred["cls"].tolist() == list(range(len(names)))
+    target = {"bboxes": raw[0, : len(names), :4], "cls": torch.arange(len(names)).float()}
     matches = validator._process_batch(pred, target)
-    assert matches["tp"].shape == (1, 10) and matches["tp"].all()
+    assert matches["tp"].shape == (len(names), 10) and matches["tp"].all()
     validator.metrics.update_stats(
         {
             **matches,
-            "target_cls": np.array([0]),
-            "target_img": np.array([0]),
+            "target_cls": np.arange(len(names)),
+            "target_img": np.arange(len(names)),
             "conf": pred["conf"].numpy(),
             "pred_cls": pred["cls"].numpy(),
             "im_name": "fixture.jpg",
         }
     )
     validator.get_stats()
-    assert validator.metrics.box.ap_class_index.tolist() == [0]
+    assert validator.metrics.box.ap_class_index.tolist() == list(range(len(names)))
     assert validator.metrics.box.map > 0.99
     validator.args.split = "test"
     with pytest.raises(ValueError, match="development validation"):

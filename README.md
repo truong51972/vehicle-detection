@@ -22,15 +22,17 @@ artifacts; missing or mismatched artifacts fail rather than launching upstream w
    `results.csv`, `args.yaml` and a small paired dataset manifest.
    `RESUME` explicitly opts in to native `last.pt` continuation.
 4. [04_eval_and_report.ipynb](notebooks/04_eval_and_report.ipynb) consumes existing
-   explicit native checkpoints (including historical six-class weights) and frozen
+   explicit native checkpoints (default: five-class S10; historical six-class weights
+   remain supported) and frozen
    Raw/Adaptive development inputs. Reports native
    pretrained / Raw-trained / Adaptive-trained × Raw / Adaptive metrics, per-class
-   AP, latency, plots and representative errors under `runs/development-native-v1/`.
+   AP, latency, plots and representative errors under `runs/development-five-v1/`.
    **Default: saved-result reuse.** Set `ALLOW_INFERENCE=True` to fill missing
    evaluations. Natural condition slices are descriptive; two matched
    Raw-trained vs Adaptive-trained contrasts use native saved matches.
    `BOOTSTRAP_RESAMPLES=0` reports points by default; set 100 for
-   exploratory source-group uncertainty.
+   exploratory source-group uncertainty. Object-size image-presence slices overlap
+   and retain all GT/predictions; they are not area-restricted AP.
    Valid caches are reused with either execution opt-in. Checkpoint/scale selection
    and final-test release remain separate. Changed inputs
    require a new output root. This notebook never imports the training runner.
@@ -41,9 +43,13 @@ under `runs/preprocessing-five-v1/`. Configure `PROTOCOL_PATH`, `FROZEN_SUBSETS`
 `TRAIN_CONVERSION`, `DEV_CONVERSION` and `FROZEN_POLICY` to the existing artifacts.
 It drops railway train boxes and retains every selected image ID, negative frame
 and surviving coordinate byte. Set `FIVE_CLASS_ONLY=False` only when preparing a
-fresh six-class output root. Five-class training and evaluation are not yet wired
-into notebooks 03/04;
-see [the handoff checklist](docs/EPIC14_FIVE_CLASS_HANDOFF.md).
+fresh six-class output root. Notebook 03 defaults to the separate five-class
+exports and training root described below. Notebook 04 defaults to the completed local five-class
+S10 checkpoints and development exports; see the
+[evaluation plan](docs/development-five-v1/PLAN.md) and
+[handoff checklist](docs/EPIC14_FIVE_CLASS_HANDOFF.md).
+The [five-class development report](docs/development-five-v1/RESULTS.md) records
+the six-cell matrix, support, paired group uncertainty, costs and holdout scope.
 
 No notebook invokes another notebook. You can run phase 04 while training is idle,
 or edit its chart cells and Run All against valid saved results. Final-test execution
@@ -102,7 +108,9 @@ and resume. Native resume is epoch-boundary continuation, not bitwise
 reproducibility or an atomic last-checkpoint guarantee. Evaluation binds the
 explicit checkpoint, verified development export, native settings and metric plots.
 Raw and Adaptive always retain the same IDs and GT. COCO-80 pretrained predictions
-map to the six vehicle classes; fine-tuned six-class heads use native IDs/AP directly.
+map to the explicit five/six vehicle classes; fine-tuned heads use native IDs/AP.
+Five-class mapping drops railway predictions and maps motorcycle/bicycle to 3/4.
+Five-vs-six macro-mAP cannot establish an algorithmic gain because the denominator changes.
 
 Defaults use new output roots so recorded results are preserved. To inspect the
 completed S10 experiments without rerunning earlier phases, configure notebook 04:
@@ -115,6 +123,7 @@ completed S10 experiments without rerunning earlier phases, configure notebook 0
   matrix, or a separately prepared export from the same original sources, labels
   and frozen policy. Phase 02 exposes `RAW_DEVELOPMENT` / `DEV_CONVERSION`.
 - `OUTPUT`: `runs/development-v1` for the completed native evaluation caches.
+- `PLAN`: `docs/development-v1/PLAN.md` for the historical six-class analysis.
 
 Original training receipts remain available as historical evidence, but the new
 evaluator does not require or parse them.
