@@ -27,7 +27,12 @@ def derive_labels(source, destination, partitions):
         raise ValueError("Only training/development labels may be materialized")
     conversion = read_json(source / "conversion.json")
     if "classes" in conversion and conversion["classes"] != [
-        "car", "truck", "bus", "train", "motorcycle", "bicycle"
+        "car",
+        "truck",
+        "bus",
+        "train",
+        "motorcycle",
+        "bicycle",
     ]:
         raise ValueError("Expected historical six-class source conversion")
     if "box_convention" in conversion and conversion["box_convention"] != "continuous":
@@ -60,7 +65,7 @@ def derive_labels(source, destination, partitions):
                 observed.append(cls)
                 mapped = SIX_TO_FIVE[cls]
                 if mapped is not None:
-                    separator = line[len(parts[0]):]
+                    separator = line[len(parts[0]) :]
                     kept.append(str(mapped) + separator)
                     counter[f"instances:{FIVE_CLASSES[mapped]}"] += 1
                 else:
