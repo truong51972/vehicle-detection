@@ -15,6 +15,9 @@ Branch: `feat/epic14-five-class-prep` (do **not** merge until validated).
   six-class conversion/metadata and does not materialize final-test images.
 - `tests/test_five_class.py` exercises mapping, preserved source files,
   all-negative frames and paired native export verification.
+- `support_audit` summarizes class presence/instances, object sizes, new negative
+  frames and natural conditions for all four frozen roles **from annotations only**.
+  It does not open final-test pixels.
 
 ## Next implementation tasks (delegate, keep small)
 

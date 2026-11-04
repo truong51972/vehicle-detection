@@ -14,6 +14,31 @@ def remap_boxes(boxes):
     return [[SIX_TO_FIVE[cls], *coords] for cls, *coords in boxes if SIX_TO_FIVE[cls] is not None]
 
 
+def support_audit(rows):
+    """Annotation-only five-class support; safe for the sealed final-test role."""
+    counts = Counter(images=len(rows))
+    for row in rows:
+        old = [int(box[0]) for box in row["boxes"]]
+        mapped = remap_boxes(row["boxes"])
+        for cls in old:
+            counts[f"old_instances:{cls}"] += 1
+        for cls in set(old):
+            counts[f"old_presence:{cls}"] += 1
+        for cls, x1, y1, x2, y2 in mapped:
+            counts[f"new_instances:{FIVE_CLASSES[cls]}"] += 1
+            area = (x2 - x1) * (y2 - y1)
+            size = "small" if area < 32**2 else "medium" if area < 96**2 else "large"
+            counts[f"new_size:{size}"] += 1
+        for cls in {box[0] for box in mapped}:
+            counts[f"new_presence:{FIVE_CLASSES[cls]}"] += 1
+        counts["old_negative_images"] += int(not old)
+        counts["new_negative_images"] += int(not mapped)
+        counts["newly_negative_images"] += int(bool(old) and not mapped)
+        for axis in ("weather", "timeofday", "scene"):
+            counts[f"{axis}:{row['attributes'][axis]}"] += 1
+    return dict(counts)
+
+
 def derive_labels(source, destination, partitions):
     """Derive labels from verified six-class YOLO files, never from final-test pixels.
 

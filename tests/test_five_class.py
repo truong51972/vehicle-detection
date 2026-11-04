@@ -7,7 +7,13 @@ from test_study import recipes as recipes
 
 from vehicle_detection.common import file_hash, write_json
 from vehicle_detection.datasets import verify_role
-from vehicle_detection.five_class import FIVE_CLASSES, SIX_TO_FIVE, derive_labels, remap_boxes
+from vehicle_detection.five_class import (
+    FIVE_CLASSES,
+    SIX_TO_FIVE,
+    derive_labels,
+    remap_boxes,
+    support_audit,
+)
 from vehicle_detection.offline import export_variant, verify_alignment
 
 
@@ -45,6 +51,14 @@ def test_label_remapping_keeps_order_coordinates_and_negative_frames(tmp_path):
     assert identity["summary"]["train"]["new_negative_images"] == 1
     assert identity["summary"]["train"]["negative_images"] == 2
     assert remap_boxes(rows[0]["boxes"]) == [[0, 1, 2, 9, 12], [3, 2, 3, 8, 10]]
+    audited = support_audit([
+        {**row, "attributes": {"weather": "clear", "timeofday": "daytime", "scene": "city"}}
+        for row in rows
+    ])
+    assert audited["newly_negative_images"] == 1
+    assert audited["old_instances:3"] == 2
+    assert audited["new_instances:car"] == 1
+    assert audited["new_instances:motorcycle"] == 1
     assert [file_hash(source / "labels/train" / f"{name}.txt") for name in labels] == [
         before[name] for name in labels
     ]
