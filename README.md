@@ -35,13 +35,14 @@ artifacts; missing or mismatched artifacts fail rather than launching upstream w
    and final-test release remain separate. Changed inputs
    require a new output root. This notebook never imports the training runner.
 
-The draft **#20 five-class derivation section** at the end of notebook 02
-creates outputs under `runs/preprocessing-five-v1/`, without changing its source
-labels. It drops railway train boxes and retains all image IDs (including
-newly negative frames). **Do not run this draft notebook against immutable
-six-class evidence yet:** earlier cells still execute the original export phase.
-Codex must separate that execution before #20 is accepted. Five-class training
-and evaluation are not yet wired into notebooks 03/04;
+Notebook 02 defaults to **`FIVE_CLASS_ONLY=True`**: it reads frozen six-class
+subsets/conversions, skips historical sections 2–7, and derives separate inputs
+under `runs/preprocessing-five-v1/`. Configure `PROTOCOL_PATH`, `FROZEN_SUBSETS`,
+`TRAIN_CONVERSION`, `DEV_CONVERSION` and `FROZEN_POLICY` to the existing artifacts.
+It drops railway train boxes and retains every selected image ID, negative frame
+and surviving coordinate byte. Set `FIVE_CLASS_ONLY=False` only when preparing a
+fresh six-class output root. Five-class training and evaluation are not yet wired
+into notebooks 03/04;
 see [the handoff checklist](docs/EPIC14_FIVE_CLASS_HANDOFF.md).
 
 No notebook invokes another notebook. You can run phase 04 while training is idle,

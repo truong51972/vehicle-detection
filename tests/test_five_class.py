@@ -59,6 +59,9 @@ def test_label_remapping_keeps_order_coordinates_and_negative_frames(tmp_path):
     assert audited["old_instances:3"] == 2
     assert audited["new_instances:car"] == 1
     assert audited["new_instances:motorcycle"] == 1
+    assert audited["old_size:train:small"] == 2
+    assert audited["new_size:motorcycle:small"] == 1
+    assert audited["new_condition:motorcycle:weather:clear"] == 1
     assert [file_hash(source / "labels/train" / f"{name}.txt") for name in labels] == [
         before[name] for name in labels
     ]
@@ -69,6 +72,36 @@ def test_label_remapping_keeps_order_coordinates_and_negative_frames(tmp_path):
     (destination / "labels/train/mixed.txt").write_text("tampered\n")
     with pytest.raises(ValueError, match="Derived label changed"):
         derive_labels(source, destination, {"train": rows})
+
+
+def test_all_class_ids_preserve_coordinate_bytes_and_line_endings(tmp_path):
+    source, destination = tmp_path / "six", tmp_path / "five"
+    write_json(
+        source / "conversion.json",
+        {
+            "classes": ["car", "truck", "bus", "train", "motorcycle", "bicycle"],
+            "box_convention": "continuous",
+        },
+    )
+    label = source / "labels/train/all.txt"
+    label.parent.mkdir(parents=True)
+    lines = [f"  {cls}\t0.123456 0.234567 0.0100 0.0200\r\n".encode() for cls in range(6)]
+    lines[-1] = lines[-1].rstrip(b"\r\n")
+    label.write_bytes(b"".join(lines))
+    rows = [{"id": "all", "boxes": [[cls, 0, 0, 1, 1] for cls in range(6)]}]
+    derive_labels(source, destination, {"train": rows})
+    assert (destination / "labels/train/all.txt").read_bytes() == b"".join(
+        lines[:3] + [lines[4].replace(b"4", b"3", 1), lines[5].replace(b"5", b"4", 1)]
+    )
+    assert label.read_bytes() == b"".join(lines)
+
+    target = destination / "labels/train/all.txt"
+    target.unlink()
+    victim = tmp_path / "absent-historical-label.txt"
+    target.symlink_to(victim)
+    with pytest.raises(ValueError, match="Derived label changed"):
+        derive_labels(source, destination, {"train": rows})
+    assert not victim.exists()
 
 
 def test_five_class_export_reuses_native_verification_and_keeps_six_class_source(tmp_path, recipes):

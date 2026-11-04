@@ -24,11 +24,16 @@ def support_audit(rows):
             counts[f"old_instances:{cls}"] += 1
         for cls in set(old):
             counts[f"old_presence:{cls}"] += 1
+        for cls, x1, y1, x2, y2 in row["boxes"]:
+            area = (x2 - x1) * (y2 - y1)
+            size = "small" if area < 32**2 else "medium" if area < 96**2 else "large"
+            counts[f"old_size:{SIX_CLASSES[cls]}:{size}"] += 1
         for cls, x1, y1, x2, y2 in mapped:
             counts[f"new_instances:{FIVE_CLASSES[cls]}"] += 1
             area = (x2 - x1) * (y2 - y1)
             size = "small" if area < 32**2 else "medium" if area < 96**2 else "large"
             counts[f"new_size:{size}"] += 1
+            counts[f"new_size:{FIVE_CLASSES[cls]}:{size}"] += 1
         for cls in {box[0] for box in mapped}:
             counts[f"new_presence:{FIVE_CLASSES[cls]}"] += 1
         counts["old_negative_images"] += int(not old)
@@ -36,6 +41,10 @@ def support_audit(rows):
         counts["newly_negative_images"] += int(bool(old) and not mapped)
         for axis in ("weather", "timeofday", "scene"):
             counts[f"{axis}:{row['attributes'][axis]}"] += 1
+            for cls in old:
+                counts[f"old_condition:{SIX_CLASSES[cls]}:{axis}:{row['attributes'][axis]}"] += 1
+            for cls, *_ in mapped:
+                counts[f"new_condition:{FIVE_CLASSES[cls]}:{axis}:{row['attributes'][axis]}"] += 1
     return dict(counts)
 
 
@@ -60,16 +69,16 @@ def derive_labels(source, destination, partitions):
             label = source / "labels" / split / f"{row['id']}.txt"
             if label.is_symlink() or not label.is_file():
                 raise ValueError(f"Missing/unsafe historical label: {label}")
-            lines = label.read_text().splitlines(keepends=True)
+            lines = label.read_bytes().splitlines(keepends=True)
             classes = [line.split()[0] for line in lines]
-            if classes != [str(box[0]) for box in row["boxes"]]:
+            if classes != [str(box[0]).encode() for box in row["boxes"]]:
                 raise ValueError(f"Historical label class order changed: {label}")
             output = []
             for line, cls in zip(lines, classes, strict=True):
                 target = SIX_TO_FIVE[int(cls)]
                 if target is not None:
-                    output.append(str(target) + line[len(cls) :])
-            derived[split, row["id"]] = "".join(output)
+                    output.append(line.replace(cls, str(target).encode(), 1))
+            derived[split, row["id"]] = b"".join(output)
 
     identity = {
         "version": "five-class-labels-v1",
@@ -87,9 +96,11 @@ def derive_labels(source, destination, partitions):
     for (split, sample_id), content in derived.items():
         target = destination / "labels" / split / f"{sample_id}.txt"
         target.parent.mkdir(parents=True, exist_ok=True)
+        if target.is_symlink():
+            raise ValueError(f"Derived label changed: {target}")
         if target.exists():
-            if target.is_symlink() or target.read_text() != content:
+            if target.read_bytes() != content:
                 raise ValueError(f"Derived label changed: {target}")
         else:
-            target.write_text(content)
+            target.write_bytes(content)
     return identity
