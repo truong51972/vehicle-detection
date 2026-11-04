@@ -35,6 +35,13 @@ artifacts; missing or mismatched artifacts fail rather than launching upstream w
    and final-test release remain separate. Changed inputs
    require a new output root. This notebook never imports the training runner.
 
+The optional **#20 five-class derivation section** at the end of notebook 02 writes
+only under `runs/preprocessing-five-v1/`. It retains the original six-class
+source labels and historical runs, maps railway train to DROP, and keeps every
+training/development image ID (including newly negative frames). The five-class
+artifacts are not yet wired to the default notebook 03/04 execution paths;
+see [the delegation checklist](docs/EPIC14_FIVE_CLASS_HANDOFF.md).
+
 No notebook invokes another notebook. You can run phase 04 while training is idle,
 or edit its chart cells and Run All against valid saved results. Final-test execution
 remains locked pending the separate explicit model/protocol release for evaluation.
