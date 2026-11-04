@@ -6,6 +6,8 @@ import numpy as np
 import pandas as pd
 
 from .common import read_json
+from .data import CLASSES
+from .five_class import FIVE_CLASSES, SIX_TO_FIVE
 from .offline import verify_alignment
 
 
@@ -25,6 +27,15 @@ def verify_role(directory, records, split, variant, recipes=None, *, deep=True):
         or (recipes is not None and export["recipe"] != recipes)
     ):
         raise ValueError("Export treatment/encoding differs from the frozen policy")
+    classes = export["conversion"].get("classes", CLASSES)
+    if classes == FIVE_CLASSES:
+        if export["conversion"].get("mapping") != {str(k): v for k, v in SIX_TO_FIVE.items()}:
+            raise ValueError("Unexpected five-class conversion mapping")
+        class_map = SIX_TO_FIVE
+    elif classes == CLASSES:
+        class_map = None
+    else:
+        raise ValueError("Unsupported export taxonomy")
     for row in meta.to_dict("records"):
         source = selected[row["id"]]
         image = directory / "images" / split / f"{row['id']}.jpg"
@@ -43,13 +54,14 @@ def verify_role(directory, records, split, variant, recipes=None, *, deep=True):
             actual = [list(map(float, line.split())) for line in label.read_text().splitlines()]
             expected = [
                 [
-                    c,
+                    class_map[c] if class_map is not None else c,
                     (x1 + x2) / 2 / source["width"],
                     (y1 + y2) / 2 / source["height"],
                     (x2 - x1) / source["width"],
                     (y2 - y1) / source["height"],
                 ]
                 for c, x1, y1, x2, y2 in source["boxes"]
+                if class_map is None or class_map[c] is not None
             ]
             if len(actual) != len(expected) or any(len(box) != 5 for box in actual):
                 raise ValueError("Export labels differ from the frozen boxes")
@@ -91,7 +103,11 @@ def export_development_pair(protocol, policy, raw, converted, destination):
         for r in meta.to_dict("records")
     ]
     export_variant(
-        {"tune": records}, converted, destination / "adaptive", "adaptive", policy["recipes"]
+        {"tune": records},
+        converted,
+        destination / "adaptive",
+        "adaptive",
+        policy["recipes"],
     )
     verify_role(destination / "adaptive", rows, "tune", "adaptive", policy["recipes"])
     verify_alignment([raw, destination / "adaptive"], deep=False)

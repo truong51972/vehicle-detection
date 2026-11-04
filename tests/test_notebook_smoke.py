@@ -60,7 +60,51 @@ def test_four_fresh_kernels_and_cached_evaluation_without_upstream_work(bdd, tmp
     decision["reason"] = "Fixture policy, never research evidence"
     decision["decision_id"] = digest({k: v for k, v in decision.items() if k != "decision_id"})
     write_json(project / "docs/issue11-v2/v3_decision.json", decision)
-    run("02_data_preprocessing.ipynb", cwd=project / "notebooks")
+    run(
+        "02_data_preprocessing.ipynb",
+        overrides="FIVE_CLASS_ONLY = False",
+        cwd=project / "notebooks",
+    )
+    historical_roots = [
+        project / "runs/data-v1",
+        project / "runs/preprocessing-v1",
+        project / "docs/preprocessing-v1",
+    ]
+
+    def historical_snapshot():
+        return {
+            str(path): (file_hash(path), path.stat().st_mtime_ns)
+            for root in historical_roots
+            for path in root.rglob("*")
+            if path.is_file()
+        }
+
+    before = historical_snapshot()
+    analysis = project / "docs/issue11-v2"
+    saved_analysis = project / "docs/issue11-v2-saved"
+    analysis.rename(saved_analysis)
+    run(
+        "02_data_preprocessing.ipynb",
+        setup="""from unittest.mock import patch
+import cv2
+for target in ["vehicle_detection.data.convert_labels",
+               "vehicle_detection.subsets.build_subsets",
+               "vehicle_detection.subsets.freeze_subsets",
+               "vehicle_detection.adaptive.calibrate_policy"]:
+    patch(target, side_effect=AssertionError("Historical phase triggered")).start()
+original_imread = cv2.imread
+def guarded_imread(path, *args, **kwargs):
+    assert "/val/" not in str(path), "Reserved pixels accessed"
+    return original_imread(path, *args, **kwargs)
+patch.object(cv2, "imread", side_effect=guarded_imread).start()
+""",
+    )
+    saved_analysis.rename(analysis)
+    assert historical_snapshot() == before
+    five = read_json(project / "runs/preprocessing-five-v1/summary.json")
+    assert five["role_support_annotation_only"]["final_test"]["images"] == len(
+        protocol["splits"]["final_test"]
+    )
 
     config = yaml_model_load("yolo26n.yaml")
     config["end2end"] = True

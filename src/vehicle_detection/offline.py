@@ -31,7 +31,14 @@ def encoding_policy(output_format, jpeg_quality):
 
 
 def export_variant(
-    partitions, converted, destination, variant, recipes, *, output_format="jpg", jpeg_quality=95
+    partitions,
+    converted,
+    destination,
+    variant,
+    recipes,
+    *,
+    output_format="jpg",
+    jpeg_quality=95,
 ):
     validate_recipes(recipes)
     if variant == "raw":
@@ -64,13 +71,15 @@ def export_variant(
                         f"Invalid JPEG end marker; native YOLO would re-encode: {source}"
                     )
     labels = {r["id"]: file_hash(converted / "labels" / s / f"{r['id']}.txt") for s, r in records}
+    conversion = read_json(converted / "conversion.json")
+    classes = conversion.get("classes", CLASSES)
     identity = {
         "variant": variant,
         "recipe": recipes if recipe == "adaptive" else recipes[recipe],
         "encoding": encoding,
         "source": digest([(s, r["id"], r["sha256"], labels[r["id"]]) for s, r in records]),
         "operator_code": file_hash(Path(__file__).with_name("preprocess.py")),
-        "conversion": read_json(converted / "conversion.json"),
+        "conversion": conversion,
     }
     destination.mkdir(parents=True, exist_ok=True)
     identity_path = destination / "export.json"
@@ -177,7 +186,7 @@ def export_variant(
                 "train": "images/train",
                 "val": "images/tune",
                 "test": "images/test",
-                "names": dict(enumerate(CLASSES)),
+                "names": dict(enumerate(classes)),
             }
         )
     )
@@ -196,9 +205,11 @@ def verify_alignment(datasets, *, deep=True):
         if meta["id"].duplicated().any():
             raise ValueError("Duplicate exported IDs")
         current = {}
+        export = read_json(directory / "export.json")
+        classes = export["conversion"].get("classes", CLASSES)
         yaml_data = yaml.safe_load((directory / "data.yaml").read_text())
         if (
-            yaml_data["names"] != dict(enumerate(CLASSES))
+            yaml_data["names"] != dict(enumerate(classes))
             or yaml_data["val"] != "images/tune"
             or yaml_data["test"] != "images/test"
             or yaml_data["train"] != "images/train"
@@ -216,7 +227,6 @@ def verify_alignment(datasets, *, deep=True):
                 raise ValueError(f"Export image ID mismatch: {directory}/{split}")
             if {p.stem for p in (directory / "labels" / split).glob("*.txt")} != expected:
                 raise ValueError(f"Export label ID mismatch: {directory}/{split}")
-        export = read_json(directory / "export.json")
         stamp = {
             "export_sha256": file_hash(directory / "export.json"),
             "metadata_sha256": file_hash(directory / "metadata.csv"),
