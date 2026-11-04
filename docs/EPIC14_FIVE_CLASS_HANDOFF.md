@@ -17,6 +17,7 @@ Branch: `feat/epic14-five-class-prep` (do **not** merge until validated).
   Section 8 reads verified frozen subsets/conversions, checks the original
   annotation hashes, and uses the existing exporters and deep role/geometry checks.
   Only fresh six-class preparation should set `FIVE_CLASS_ONLY=False`.
+  Historical v3 decision/screening artifacts are required only in that six-class path.
 - `tests/test_five_class.py` exercises mapping, preserved source files,
   all-negative frames and paired native export verification. It also checks all
   six input IDs, unchanged whitespace/CRLF bytes and rejection of broken output
@@ -71,6 +72,9 @@ FROZEN_POLICY = ROOT / "docs/issue6-v2/policy.json"
 Check `runs/preprocessing-five-v1/summary.json`,
 negative-frame counts, matched IDs/labels and `verified.json` under both
 branches. Inspect actual artifacts before authorizing full training.
+The five-class summary reports data/support, not measured pixel-access telemetry.
+Evidence for no reserved-pixel access comes from the guarded notebook smoke test
+and the recorded preservation audit (`validation.json`) below.
 
 ## Local verification — 2026-11-04
 

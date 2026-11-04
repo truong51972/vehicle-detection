@@ -80,6 +80,9 @@ def test_four_fresh_kernels_and_cached_evaluation_without_upstream_work(bdd, tmp
         }
 
     before = historical_snapshot()
+    analysis = project / "docs/issue11-v2"
+    saved_analysis = project / "docs/issue11-v2-saved"
+    analysis.rename(saved_analysis)
     run(
         "02_data_preprocessing.ipynb",
         setup="""from unittest.mock import patch
@@ -96,9 +99,9 @@ def guarded_imread(path, *args, **kwargs):
 patch.object(cv2, "imread", side_effect=guarded_imread).start()
 """,
     )
+    saved_analysis.rename(analysis)
     assert historical_snapshot() == before
     five = read_json(project / "runs/preprocessing-five-v1/summary.json")
-    assert five["final_test_pixels_accessed"] is False
     assert five["role_support_annotation_only"]["final_test"]["images"] == len(
         protocol["splits"]["final_test"]
     )
