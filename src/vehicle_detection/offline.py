@@ -31,9 +31,18 @@ def encoding_policy(output_format, jpeg_quality):
 
 
 def export_variant(
-    partitions, converted, destination, variant, recipes, *, output_format="jpg", jpeg_quality=95
+    partitions,
+    converted,
+    destination,
+    variant,
+    recipes,
+    *,
+    output_format="jpg",
+    jpeg_quality=95,
+    classes=None,
 ):
     validate_recipes(recipes)
+    classes = CLASSES if classes is None else list(classes)
     if variant == "raw":
         raise ValueError("Choose raw_original or raw_reencoded explicitly")
     encoding = encoding_policy(output_format, jpeg_quality)
@@ -177,7 +186,7 @@ def export_variant(
                 "train": "images/train",
                 "val": "images/tune",
                 "test": "images/test",
-                "names": dict(enumerate(CLASSES)),
+                "names": dict(enumerate(classes)),
             }
         )
     )
@@ -188,8 +197,9 @@ def export_variant(
     return table
 
 
-def verify_alignment(datasets, *, deep=True):
+def verify_alignment(datasets, *, deep=True, classes=None):
     """Deep export verification, or a cheap immutable-manifest/inventory check for training."""
+    classes = CLASSES if classes is None else list(classes)
     reference = None
     for directory in map(Path, datasets):
         meta = pd.read_csv(directory / "metadata.csv")
@@ -198,7 +208,7 @@ def verify_alignment(datasets, *, deep=True):
         current = {}
         yaml_data = yaml.safe_load((directory / "data.yaml").read_text())
         if (
-            yaml_data["names"] != dict(enumerate(CLASSES))
+            yaml_data["names"] != dict(enumerate(classes))
             or yaml_data["val"] != "images/tune"
             or yaml_data["test"] != "images/test"
             or yaml_data["train"] != "images/train"

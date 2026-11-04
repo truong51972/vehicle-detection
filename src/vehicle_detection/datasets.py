@@ -9,7 +9,9 @@ from .common import read_json
 from .offline import verify_alignment
 
 
-def verify_role(directory, records, split, variant, recipes=None, *, deep=True):
+def verify_role(
+    directory, records, split, variant, recipes=None, *, deep=True, classes=None, class_map=None
+):
     """Check frozen roles/inventory cheaply; read label geometry only on deep export audit."""
     directory = Path(directory).resolve()
     meta = pd.read_csv(directory / "metadata.csv")
@@ -43,20 +45,21 @@ def verify_role(directory, records, split, variant, recipes=None, *, deep=True):
             actual = [list(map(float, line.split())) for line in label.read_text().splitlines()]
             expected = [
                 [
-                    c,
+                    class_map[c] if class_map is not None else c,
                     (x1 + x2) / 2 / source["width"],
                     (y1 + y2) / 2 / source["height"],
                     (x2 - x1) / source["width"],
                     (y2 - y1) / source["height"],
                 ]
                 for c, x1, y1, x2, y2 in source["boxes"]
+                if class_map is None or class_map[c] is not None
             ]
             if len(actual) != len(expected) or any(len(box) != 5 for box in actual):
                 raise ValueError("Export labels differ from the frozen boxes")
             # Native labels preserve source order; sorting rounded centers can swap tied boxes.
             if actual and not np.allclose(actual, expected, atol=1e-6, rtol=0):
                 raise ValueError("Export labels differ from the frozen boxes")
-    verify_alignment([directory], deep=deep)
+    verify_alignment([directory], deep=deep, classes=classes)
     return {
         "path": str(directory),
         "export": export,
@@ -65,7 +68,9 @@ def verify_role(directory, records, split, variant, recipes=None, *, deep=True):
     }
 
 
-def export_development_pair(protocol, policy, raw, converted, destination):
+def export_development_pair(
+    protocol, policy, raw, converted, destination, *, classes=None, class_map=None
+):
     """Prepare Adaptive dev from original sources, sharing frozen Raw labels/JPEG95."""
     from .adaptive import validate_policy
     from .common import digest, freeze_json
@@ -74,7 +79,9 @@ def export_development_pair(protocol, policy, raw, converted, destination):
     validate_policy(policy, protocol)
     raw, converted, destination = map(Path, (raw, converted, destination))
     rows = protocol["splits"]["development_validation"]
-    reference = verify_role(raw, rows, "tune", "raw_reencoded")
+    reference = verify_role(
+        raw, rows, "tune", "raw_reencoded", classes=classes, class_map=class_map
+    )
     freeze_json(
         destination / "pair.json",
         {
@@ -91,8 +98,21 @@ def export_development_pair(protocol, policy, raw, converted, destination):
         for r in meta.to_dict("records")
     ]
     export_variant(
-        {"tune": records}, converted, destination / "adaptive", "adaptive", policy["recipes"]
+        {"tune": records},
+        converted,
+        destination / "adaptive",
+        "adaptive",
+        policy["recipes"],
+        classes=classes,
     )
-    verify_role(destination / "adaptive", rows, "tune", "adaptive", policy["recipes"])
-    verify_alignment([raw, destination / "adaptive"], deep=False)
+    verify_role(
+        destination / "adaptive",
+        rows,
+        "tune",
+        "adaptive",
+        policy["recipes"],
+        classes=classes,
+        class_map=class_map,
+    )
+    verify_alignment([raw, destination / "adaptive"], deep=False, classes=classes)
     return {"raw": raw, "adaptive": destination / "adaptive"}

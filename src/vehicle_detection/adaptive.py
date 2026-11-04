@@ -245,7 +245,7 @@ def freeze_policy(path, policy, protocol):
         write_json(path, policy)
 
 
-def export_pair(partitions, converted, destination, policy, protocol, subsets, name):
+def export_pair(partitions, converted, destination, policy, protocol, subsets, name, *, classes=None):
     """Bind both native exports to the frozen subset and calibration recipe before writing."""
     from .subsets import validate_subsets
 
@@ -271,6 +271,9 @@ def export_pair(partitions, converted, destination, policy, protocol, subsets, n
         "exporter_code": file_hash(Path(__file__).with_name("offline.py")),
         "encoding": policy["encoding"],
     }
+    if classes is not None:
+        identity["classes"] = list(classes)
+        identity["conversion"] = read_json(Path(converted) / "conversion.json")
     identity_path = destination / "pair.json"
     if identity_path.exists():
         if read_json(identity_path) != identity:
@@ -289,8 +292,9 @@ def export_pair(partitions, converted, destination, policy, protocol, subsets, n
             copy.deepcopy(policy["recipes"]),
             output_format="jpg",
             jpeg_quality=95,
+            classes=classes,
         )
-    verified_count = verify_alignment([destination / b for b in tables])
+    verified_count = verify_alignment([destination / b for b in tables], classes=classes)
     if verified_count != len(expected):
         raise ValueError(
             f"Paired export count mismatch: expected {len(expected)}, got {verified_count}"
@@ -298,10 +302,10 @@ def export_pair(partitions, converted, destination, policy, protocol, subsets, n
     return tables
 
 
-def paired_quality(destination):
+def paired_quality(destination, *, classes=None):
     """Measure decoded JPEGs from both branches, so reported deltas share compression."""
     destination = Path(destination)
-    verify_alignment([destination / b for b in ("raw", "adaptive")])
+    verify_alignment([destination / b for b in ("raw", "adaptive")], classes=classes)
     raw = pd.read_csv(destination / "raw/metadata.csv").set_index("id")
     adaptive = pd.read_csv(destination / "adaptive/metadata.csv").set_index("id")
     rows = []
