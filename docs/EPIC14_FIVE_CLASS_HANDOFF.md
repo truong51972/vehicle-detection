@@ -21,12 +21,13 @@ Branch: `feat/epic14-five-class-prep` (do **not** merge until validated).
 
 ## Next implementation tasks (delegate, keep small)
 
-1. **#20:** Validate new section 8 on actual BDD100K; profile cost/disk use,
-   count old/new instances by role and attributes, confirm no role leakage and
-   zero source modifications. Because notebook 02 still executes the historic
-   six-class stages first, decide whether a small explicit `FIVE_ONLY` execution
-   path is needed to avoid rereading/rewriting those outputs on subsequent runs.
-   Do not invent a new export framework. Mark #20 complete only after verification.
+1. **#20 (blocker before real Run All):** Notebook 02 currently executes the
+   historical six-class export cells before section 8, even when only five-class
+   outputs are wanted. Make the smallest change that allows five-class derivation
+   from **existing** verified artifacts without rewriting six-class files. Do not
+   add a notebook orchestrator or generic export framework. Then validate on
+   actual BDD100K, including source preservation, counts, role IDs and disk cost.
+   Mark #20 complete only after that verification.
 2. **#21:** Adapt the *existing* `prepare_pair`/training notebook to consume
    `runs/preprocessing-five-v1/datasets/S10` and
    `runs/preprocessing-five-v1/development/raw`; preserve native YOLO
@@ -35,10 +36,12 @@ Branch: `feat/epic14-five-class-prep` (do **not** merge until validated).
    Add a tiny CPU smoke fixture; **do not fabricate full-data training**.
 3. **#22:** Extend the existing COCO→BDD baseline adapter for the five-class map
    `{2:0, 7:1, 5:2, 3:3, 1:4}`. Keep the historical six-class adapter intact.
-   Parameterize development evaluation, saved matching stats, class support,
-   3×2 report and notebook 04 cache identities by explicit class names.
-   Ensure one seed's bootstrap is described as exploratory and omit missing AP.
-   No final-test pixels; no full inference without explicit opt-in.
+   Make only the changes needed in the **existing** evaluator and notebook 04
+   to read five-class native labels, preserve the six-class historical adapter,
+   and report the existing 3×2 paired analysis. Use native YOLO AP/matching.
+   Do not implement custom metrics, a generic taxonomy registry, model wrapper,
+   or another cache/experiment framework. Keep bootstrap exploratory with
+   missing-class AP unsupported. No final-test pixels; opt-in inference only.
 
 ## Run and verification
 
@@ -50,8 +53,8 @@ uv run --extra study ruff check .
 uv run --extra study ruff format --check .
 ```
 
-Then run notebook 02 using a checkout containing the existing BDD100K and
-frozen six-class artifacts. Check `runs/preprocessing-five-v1/summary.json`,
+After fixing the historical-export side effect above, run notebook 02 using
+existing BDD100K and frozen six-class artifacts. Check `runs/preprocessing-five-v1/summary.json`,
 negative-frame counts, matched IDs/labels and `verified.json` under both
 branches. Inspect actual artifacts before authorizing full training.
 
