@@ -5,6 +5,7 @@ from pathlib import Path
 
 from .common import digest, file_hash, freeze_json, read_json
 from .data import CLASSES as SIX_CLASSES
+
 FIVE_CLASSES = ["car", "truck", "bus", "motorcycle", "bicycle"]
 SIX_TO_FIVE = {0: 0, 1: 1, 2: 2, 3: None, 4: 3, 5: 4}
 
