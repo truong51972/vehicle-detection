@@ -51,10 +51,12 @@ def test_label_remapping_keeps_order_coordinates_and_negative_frames(tmp_path):
     assert identity["summary"]["train"]["new_negative_images"] == 1
     assert identity["summary"]["train"]["negative_images"] == 2
     assert remap_boxes(rows[0]["boxes"]) == [[0, 1, 2, 9, 12], [3, 2, 3, 8, 10]]
-    audited = support_audit([
-        {**row, "attributes": {"weather": "clear", "timeofday": "daytime", "scene": "city"}}
-        for row in rows
-    ])
+    audited = support_audit(
+        [
+            {**row, "attributes": {"weather": "clear", "timeofday": "daytime", "scene": "city"}}
+            for row in rows
+        ]
+    )
     assert audited["newly_negative_images"] == 1
     assert audited["old_instances:3"] == 2
     assert audited["new_instances:car"] == 1
