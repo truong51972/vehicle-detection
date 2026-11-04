@@ -4,8 +4,7 @@ from collections import Counter
 from pathlib import Path
 
 from .common import digest, file_hash, freeze_json, read_json
-
-SIX_CLASSES = ["car", "truck", "bus", "train", "motorcycle", "bicycle"]
+from .data import CLASSES as SIX_CLASSES
 FIVE_CLASSES = ["car", "truck", "bus", "motorcycle", "bicycle"]
 SIX_TO_FIVE = {0: 0, 1: 1, 2: 2, 3: None, 4: 3, 5: 4}
 
@@ -47,10 +46,7 @@ def derive_labels(source, destination, partitions):
     if not partitions or set(partitions) - {"train", "tune"}:
         raise ValueError("Only training/development labels may be materialized")
     conversion = read_json(source / "conversion.json")
-    if (
-        conversion.get("classes") != SIX_CLASSES
-        or conversion.get("box_convention") != "continuous"
-    ):
+    if conversion.get("classes") != SIX_CLASSES or conversion.get("box_convention") != "continuous":
         raise ValueError("Expected verified six-class continuous-label conversion")
 
     derived = {}

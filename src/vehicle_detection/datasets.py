@@ -29,9 +29,7 @@ def verify_role(directory, records, split, variant, recipes=None, *, deep=True):
         raise ValueError("Export treatment/encoding differs from the frozen policy")
     classes = export["conversion"].get("classes", CLASSES)
     if classes == FIVE_CLASSES:
-        if export["conversion"].get("mapping") != {
-            str(k): v for k, v in SIX_TO_FIVE.items()
-        }:
+        if export["conversion"].get("mapping") != {str(k): v for k, v in SIX_TO_FIVE.items()}:
             raise ValueError("Unexpected five-class conversion mapping")
         class_map = SIX_TO_FIVE
     elif classes == CLASSES:
