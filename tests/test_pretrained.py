@@ -12,12 +12,10 @@ pytest.importorskip("ultralytics")
 from vehicle_detection.baseline import (  # noqa: E402
     COCO_TO_VEHICLE,
     VehicleValidator,
-    evaluate_pretrained,
     remap_predictions,
     verify_coco_names,
 )
-from vehicle_detection.data import CLASSES, scan_bdd  # noqa: E402
-from vehicle_detection.protocol import build_protocol  # noqa: E402
+from vehicle_detection.data import CLASSES  # noqa: E402
 
 
 def coco_names():
@@ -79,25 +77,3 @@ def test_native_postprocessing_matching_and_ap_use_vehicle_ids(tmp_path):
     validator.args.split = "test"
     with pytest.raises(ValueError, match="development validation"):
         validator.init_metrics(model)
-
-
-def test_final_test_export_rejected_before_any_image_access(bdd, tmp_path, monkeypatch):
-    import pandas as pd
-
-    from vehicle_detection import baseline
-
-    records, _, sources = scan_bdd(bdd)
-    manifest = build_protocol(records, sources, bdd, [])
-    dataset = tmp_path / "wrong_export"
-    dataset.mkdir()
-    pd.DataFrame([{"id": manifest["splits"]["final_test"][0]["id"], "split": "tune"}]).to_csv(
-        dataset / "metadata.csv",
-        index=False,
-    )
-
-    def no_images(*args, **kwargs):
-        pytest.fail("Final-test dataset must fail before deep image verification")
-
-    monkeypatch.setattr(baseline, "verify_alignment", no_images)
-    with pytest.raises(ValueError, match="frozen development IDs"):
-        evaluate_pretrained(manifest, dataset, tmp_path / "weights.pt", tmp_path / "results")

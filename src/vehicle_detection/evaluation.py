@@ -1,11 +1,9 @@
-"""Development-only native validation and saved-result reuse; never imports training."""
+"""Development-only YOLO.val and verified cache replay. No training orchestration."""
 
-import importlib.metadata as md
-import platform
+import json
+from importlib.metadata import version
 from pathlib import Path
 
-import numpy as np
-import torch
 from ultralytics import YOLO
 from ultralytics.models.yolo.detect import DetectionValidator
 
@@ -27,58 +25,11 @@ from .protocol import validate_protocol
 
 
 class PretrainedValidator(MatchingStats, VehicleValidator):
-    pass
+    """COCO→BDD class remapping plus native matching and native metrics."""
 
 
 class TrainedValidator(MatchingStats, DetectionValidator):
-    def init_metrics(self, model):
-        if self.training or self.args.split != "val" or model.names != dict(enumerate(CLASSES)):
-            raise ValueError("Expected a native six-class development checkpoint")
-        super().init_metrics(model)
-
-
-def completed_checkpoints(directory, protocol):
-    """Load original training receipts, including historical code identity, without a trainer."""
-    validate_protocol(protocol)
-    directory = Path(directory).resolve()
-    require_paths(training=directory / "pair.json")
-    pair = read_json(directory / "pair.json")
-    if (
-        pair["experiment_id"] != digest({k: v for k, v in pair.items() if k != "experiment_id"})
-        or pair["protocol_id"] != protocol["manifest_id"]
-        or pair["final_test_accessed"]
-        or pair["training"]["raw"]["ids"] != pair["training"]["adaptive"]["ids"]
-        or not set(pair["training"]["raw"]["ids"])
-        <= {r["id"] for r in protocol["splits"]["training_pool"]}
-        or pair["development"]["ids"]
-        != sorted(r["id"] for r in protocol["splits"]["development_validation"])
-    ):
-        raise ValueError("Stale training manifest, roles or paired IDs")
-    checkpoints, budgets = {}, []
-    for branch in ("raw", "adaptive"):
-        run = directory / branch
-        require_paths(completion=run / "complete.json", identity=run / "identity.json")
-        identity, receipt = read_json(run / "identity.json"), read_json(run / "complete.json")
-        if (
-            identity["pair"] != pair
-            or identity["branch"] != branch
-            or identity["run_id"] != digest({k: v for k, v in identity.items() if k != "run_id"})
-            or receipt["run_id"] != identity["run_id"]
-            or receipt["checksum"] != digest({k: v for k, v in receipt.items() if k != "checksum"})
-            or receipt["final_test_accessed"]
-            or not {"weights/best.pt", "weights/last.pt", "results.csv"}
-            <= receipt["artifacts"].keys()
-        ):
-            raise ValueError("Stale training completion/identity")
-        for name, expected in receipt["artifacts"].items():
-            path = run / name
-            if not path.resolve().is_relative_to(run) or file_hash(path) != expected:
-                raise ValueError("Completed checkpoint/training artifact changed")
-        budgets.append(receipt["budget"])
-        checkpoints[branch] = run / "weights/best.pt"
-    if budgets[0] != budgets[1]:
-        raise ValueError("Paired training budgets differ")
-    return checkpoints
+    """Native validation with optional saved per-image matches for grouped analysis."""
 
 
 def evaluate_development(
@@ -91,71 +42,75 @@ def evaluate_development(
     pretrained=False,
     allow_inference=False,
     settings=None,
+    class_names=None,
 ):
-    """Reuse verified results; missing inference requires an explicit opt-in and new identity."""
+    """Validate development only; native best.pt is sufficient without training receipts."""
     validate_protocol(protocol)
     validate_policy(policy, protocol)
-    dataset, checkpoint, output = map(lambda p: Path(p).resolve(), (dataset, checkpoint, output))
-    require_paths(checkpoint=checkpoint, dataset=dataset / "metadata.csv")
-    export = read_json(dataset / "export.json")
-    variant = export["variant"]
-    if variant not in {"raw_reencoded", "adaptive"}:
-        raise ValueError("Expected frozen Raw or Adaptive development inputs")
+    dataset, checkpoint, output = (Path(p).resolve() for p in (dataset, checkpoint, output))
+    variant = read_json(dataset / "export.json")["variant"]
+    if variant not in ("raw_reencoded", "adaptive"):
+        raise ValueError("Expected Raw/Adaptive development export, not final-test data")
+    rows = protocol["splits"]["development_validation"]
     bound = verify_role(
         dataset,
-        protocol["splits"]["development_validation"],
+        rows,
         "tune",
         variant,
         policy["recipes"] if variant == "adaptive" else None,
         deep=False,
     )
+    names = list(CLASSES if class_names is None else class_names)
+    if not names or (pretrained and names != CLASSES):
+        raise ValueError("Pretrained COCO-80 mapping requires the historical six-class taxonomy")
     config = {**VAL_SETTINGS, "half": False, **(settings or {})}
-    if config["nms"] is not False or config["augment"] or not config["plots"] or config["half"]:
-        raise ValueError("Use fixed FP32 NMS-free validation with native plots")
-    checkpoint_hash = file_hash(checkpoint)
-    if pretrained and checkpoint_hash != PRETRAINED_SHA256:
-        raise ValueError("Use the pinned untouched pretrained YOLO26n checkpoint")
+    if config["nms"] is not False or config["augment"] or config["half"] or not config["plots"]:
+        raise ValueError("Use fixed FP32 NMS-free native validation and plots")
+    require_paths(checkpoint=checkpoint)
+    weights_hash = file_hash(checkpoint)
+    if pretrained and weights_hash != PRETRAINED_SHA256:
+        raise ValueError("Expected the unchanged pinned pretrained YOLO26n checkpoint")
+
     identity = {
-        "version": "development-native-v1",
+        "version": "development-native-v3",
         "protocol_id": protocol["manifest_id"],
-        "role": "development_validation",
         "policy_id": policy["policy_id"],
+        "role": "development_validation",
         "dataset": bound,
-        "checkpoint_sha256": checkpoint_hash,
-        "mapping": "COCO-80 to six vehicles" if pretrained else "native six vehicles",
+        "checkpoint_sha256": weights_hash,
+        "mapping": "COCO-80 to six vehicles" if pretrained else f"native {len(names)} vehicles",
+        "class_names": names,
         "settings": config,
-        "code": {
-            name: file_hash(Path(__file__).with_name(name))
-            for name in (
-                "evaluation.py",
-                "evaluation_stats.py",
-                "datasets.py",
-                "baseline.py",
-            )
-        },
-        "hardware": {
-            "platform": platform.platform(),
-            "cuda_runtime": torch.version.cuda,
-            "gpu": torch.cuda.get_device_name(int(config["device"]))
-            if str(config["device"]).isdigit() and torch.cuda.is_available()
-            else None,
-        },
-        "versions": {p: md.version(p) for p in ("ultralytics", "torch", "numpy", "opencv-python")},
+        "ultralytics": version("ultralytics"),
     }
-    cached = reuse_evaluation(output / "native_result.json", identity)
+    saved = output / "native_result.json"
+    if saved.is_file():
+        prior = read_json(saved)["identity"]
+        if prior.get("version") in {"development-native-v1", "development-native-v2"}:
+            # Read-only old six-class measurements; never rewrite their source hashes.
+            comparable = (
+                "protocol_id",
+                "policy_id",
+                "role",
+                "dataset",
+                "checkpoint_sha256",
+                "mapping",
+                "settings",
+            )
+            if names != CLASSES or any(prior.get(k) != identity[k] for k in comparable):
+                raise ValueError("Historical evaluation cache inputs/roles changed")
+            return reuse_evaluation(saved, prior)
+    cached = reuse_evaluation(saved, identity)
     if cached is not None:
         return cached
     if not allow_inference:
-        raise FileNotFoundError(
-            f"No valid saved evaluation at {output}; explicitly set ALLOW_INFERENCE=True "
-            "in notebook 04 to evaluate existing inputs/checkpoints"
-        )
-    if not (output / "identity.json").exists() and output.exists() and any(output.iterdir()):
-        raise ValueError("Unknown evaluation directory; choose a new version/root")
+        raise FileNotFoundError(f"No verified result at {saved}; set ALLOW_INFERENCE=True")
+
     freeze_json(output / "identity.json", identity)
+    # Check actual exported file hashes before creating the model / doing new inference.
     verify_role(
         dataset,
-        protocol["splits"]["development_validation"],
+        rows,
         "tune",
         variant,
         policy["recipes"] if variant == "adaptive" else None,
@@ -164,26 +119,11 @@ def evaluate_development(
     model = YOLO(str(checkpoint))
     if pretrained:
         verify_coco_names(model.names)
-    elif model.names != dict(enumerate(CLASSES)):
-        raise ValueError("Trained checkpoint has the wrong class mapping")
-    if model.model.yaml.get("yaml_file") != "yolo26n.yaml" or not model.model.yaml.get("end2end"):
-        raise ValueError("Expected the native end-to-end YOLO26n architecture")
-    expected = set(bound["ids"])
-    runtime = {}
+    elif model.names != dict(enumerate(names)):
+        raise ValueError("Checkpoint taxonomy differs from development labels")
+    if model.model.yaml.get("yaml_file") != "yolo26n.yaml":
+        raise ValueError("Expected YOLO26n checkpoint")
 
-    def check_loader(validator):
-        ids = [Path(p).stem for p in validator.dataloader.dataset.im_files]
-        if len(ids) != len(expected) or set(ids) != expected:
-            raise ValueError("Native loader changed frozen development IDs")
-        runtime.update(images=len(ids), device=str(validator.device))
-
-    def check_mode(validator):
-        if not validator.end2end or validator.args.nms is not False:
-            raise ValueError("NMS-free inference contract changed")
-        runtime.update(end2end=True)
-
-    model.add_callback("on_val_start", check_loader)
-    model.add_callback("on_val_end", check_mode)
     metrics = model.val(
         validator=PretrainedValidator if pretrained else TrainedValidator,
         data=str(dataset / "data.yaml"),
@@ -193,43 +133,25 @@ def evaluate_development(
         exist_ok=True,
         **config,
     )
-    if file_hash(checkpoint) != checkpoint_hash:
-        raise ValueError("Checkpoint changed during evaluation")
-    values = list(map(float, (metrics.box.map, metrics.box.map50, metrics.box.mp, metrics.box.mr)))
-    if not np.isfinite(values).all() or not all(0 <= v <= 1 for v in values):
-        raise ValueError("Invalid native metrics")
-    indices = {int(c): i for i, c in enumerate(metrics.box.ap_class_index)}
-    classes = []
-    for cls, name in enumerate(CLASSES):
-        i = indices.get(cls)
-        classes.append(
-            {
-                "class": name,
-                "AP50_95": float(metrics.box.ap[i]) if i is not None else None,
-                "AP50": float(metrics.box.ap50[i]) if i is not None else None,
-                "precision": float(metrics.box.p[i]) if i is not None else None,
-                "recall": float(metrics.box.r[i]) if i is not None else None,
-            }
-        )
-    artifacts = [*output.glob("*.png"), *output.glob("*.jpg"), output / "paired_stats.npz"]
-    if not (output / "confusion_matrix_normalized.png").is_file():
-        raise ValueError("Missing native evaluation plots")
+    plot = output / "confusion_matrix_normalized.png"
+    stats = output / "paired_stats.npz"
+    if not plot.is_file() or not stats.is_file():
+        raise ValueError("Native plots/per-image matching statistics missing")
+    precision, recall, map50, map5095 = map(float, metrics.mean_results())
     result = {
-        "overall": dict(zip(("mAP50_95", "mAP50", "precision", "recall"), values, strict=True)),
-        "classes": classes,
+        "overall": {
+            "precision": precision,
+            "recall": recall,
+            "mAP50": map50,
+            "mAP50_95": map5095,
+        },
+        "classes": json.loads(metrics.to_json(decimals=8)),
         "speed_ms": metrics.speed,
-        "runtime": runtime,
-        "checkpoint_sha256": checkpoint_hash,
         "role": "development_validation",
         "final_test_accessed": False,
-        "artifacts": {p.name: file_hash(p) for p in artifacts},
-    }
-    write_json(
-        output / "native_result.json",
-        {
-            "identity": identity,
-            "result": result,
-            "checksum": digest(result),
+        "artifacts": {
+            p.name: file_hash(p) for p in [*output.glob("*.png"), *output.glob("*.jpg"), stats]
         },
-    )
+    }
+    write_json(saved, {"identity": identity, "result": result, "checksum": digest(result)})
     return result

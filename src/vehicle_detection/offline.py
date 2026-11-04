@@ -216,6 +216,7 @@ def verify_alignment(datasets, *, deep=True):
                 raise ValueError(f"Export image ID mismatch: {directory}/{split}")
             if {p.stem for p in (directory / "labels" / split).glob("*.txt")} != expected:
                 raise ValueError(f"Export label ID mismatch: {directory}/{split}")
+        export = read_json(directory / "export.json")
         stamp = {
             "export_sha256": file_hash(directory / "export.json"),
             "metadata_sha256": file_hash(directory / "metadata.csv"),
@@ -235,6 +236,12 @@ def verify_alignment(datasets, *, deep=True):
             label = directory / "labels" / row["split"] / f"{row['id']}.txt"
             if not image_path.is_file() or not label.is_file():
                 raise ValueError(f"Missing exported image/label: {row['id']}")
+            # Regular training/development exports are owned files, not redirections.
+            # Historical raw_original deliberately uses validated source-image links.
+            if label.is_symlink() or (
+                export.get("variant") != "raw_original" and image_path.is_symlink()
+            ):
+                raise ValueError(f"Unexpected exported symlink: {row['id']}")
             if deep and (
                 file_hash(image_path) != row["output_sha256"]
                 or file_hash(label) != row["label_sha256"]

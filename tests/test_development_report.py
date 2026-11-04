@@ -84,17 +84,48 @@ def test_report_preserves_pairs_supports_and_reuses_without_recomputing(
     )
     result = reporting.development_report(*args, resamples=5)
     overall = [r for r in result["comparisons"] if r["axis"] == "overall"]
-    assert len(overall) == 7 and all(r["recovery"] == 0 for r in overall)
+    assert len(overall) == 2 and all(r["recovery"] == 0 for r in overall)
     assert all(r["valid_draws"] == 5 for r in overall)
-    assert all(
-        r["status"] == "unsupported" for r in result["comparisons"] if r["condition"] == "rare"
-    )
+    assert any(r["condition"] == "rare" and r["images"] == 1 for r in result["conditions"])
 
     def no_bootstrap(*args, **kwargs):
         pytest.fail("Valid saved report should not recompute bootstrap")
 
+    original_interval = reporting.paired_interval
     monkeypatch.setattr(reporting, "paired_interval", no_bootstrap)
     assert reporting.development_report(*args, resamples=5) == result
+
+    def no_valid_draws(*args, **kwargs):
+        raise ValueError("Fewer than two valid fixed-class draws; interval is not estimable")
+
+    monkeypatch.setattr(reporting, "paired_interval", no_valid_draws)
+    unsupported_args = (*args[:4], tmp_path / "unsupported", args[-1])
+    unsupported = reporting.development_report(*unsupported_args, resamples=2)
+    assert len(unsupported["comparisons"]) == 2
+    assert all(row["status"] == "unsupported" for row in unsupported["comparisons"])
+    assert all("recovery_ci_low" not in row for row in unsupported["comparisons"])
+
+    def invalid_ground_truth(*args, **kwargs):
+        raise ValueError("Paired ground truth changed")
+
+    monkeypatch.setattr(reporting, "paired_interval", invalid_ground_truth)
+    with pytest.raises(ValueError, match="Paired ground truth changed"):
+        invalid_args = (*args[:4], tmp_path / "invalid", args[-1])
+        reporting.development_report(*invalid_args, resamples=2)
+    monkeypatch.setattr(reporting, "paired_interval", original_interval)
+
+    # Historical summary source hashes remain valid and readable without recomputation.
+    historical = read_json(tmp_path / "report/summary.json")
+    historical["identity"]["version"] = "development-analysis-v1"
+    historical["identity"]["code_sha256"] = "original-study-report"
+    historical["identity"]["statistics_code_sha256"] = "original-native-ap"
+    historical["result"]["provenance"] = historical["identity"]
+    historical["checksum"] = digest(historical["result"])
+    write_json(tmp_path / "report/summary.json", historical)
+    assert reporting.development_report(*args, resamples=5) == historical["result"]
+    with pytest.raises(ValueError, match="Historical analysis inputs/settings"):
+        reporting.development_report(*args, resamples=0)
+
     point_args = (*args[:4], tmp_path / "points-only", args[-1])
     points = reporting.development_report(*point_args, resamples=0)
     overall_points = [r for r in points["comparisons"] if r["axis"] == "overall"]
