@@ -22,13 +22,14 @@ from vehicle_detection.finetuning import (  # noqa: E402
     prepare_pair,
     train_branch,
 )
+from vehicle_detection.five_class import FIVE_CLASSES, derive_labels  # noqa: E402
 from vehicle_detection.offline import export_variant, verify_alignment  # noqa: E402
 from vehicle_detection.protocol import development_records  # noqa: E402
 from vehicle_detection.subsets import build_subsets, training_records  # noqa: E402
 
 
-@pytest.fixture
-def pair_inputs(frozen, bdd, tmp_path, monkeypatch):
+@pytest.fixture(params=[CLASSES, FIVE_CLASSES], ids=["six-class", "five-class"])
+def pair_inputs(frozen, bdd, tmp_path, monkeypatch, request):
     protocol, records = frozen
     subsets = build_subsets(protocol, attempts=2)
     policy = calibrate_policy(protocol, bdd, sample_size=2, per_operator=1)
@@ -37,7 +38,7 @@ def pair_inputs(frozen, bdd, tmp_path, monkeypatch):
     partitions = training_records(protocol, subsets, "S10", records, bdd)
     dev = development_records(protocol, records, bdd)
     conversion = tmp_path / "conversion"
-    write_json(conversion / "conversion.json", {"fixture": True})
+    write_json(conversion / "conversion.json", {"classes": CLASSES, "box_convention": "continuous"})
     by_id = {r["id"]: r for rows in protocol["splits"].values() for r in rows}
     for split, rows in {**partitions, **dev}.items():
         for record in rows:
@@ -51,6 +52,14 @@ def pair_inputs(frozen, bdd, tmp_path, monkeypatch):
                     for c, x1, y1, x2, y2 in row["boxes"]
                 )
             )
+    if request.param == FIVE_CLASSES:
+        derived = tmp_path / "five-conversion"
+        derive_labels(
+            conversion,
+            derived,
+            {s: [by_id[r["id"]] for r in rows] for s, rows in {**partitions, **dev}.items()},
+        )
+        conversion = derived
     pair = tmp_path / "S10"
     development = tmp_path / "dev"
     export_pair(partitions, conversion, pair, policy, protocol, subsets, "S10")
@@ -84,7 +93,8 @@ def test_pair_binds_roles_and_native_settings_without_training(pair_inputs):
         yaml.safe_load((pair_inputs[-1] / f"{b}.yaml").read_text()) for b in ("raw", "adaptive")
     ]
     assert configs[0]["val"] == configs[1]["val"]
-    assert all("test" not in c and c["names"] == dict(enumerate(CLASSES)) for c in configs)
+    classes = experiment["training"]["raw"]["export"]["conversion"]["classes"]
+    assert all("test" not in c and c["names"] == dict(enumerate(classes)) for c in configs)
     changed = list(pair_inputs)
     changed[3] = {**changed[3], "retained_policy_id": "different"}
     with pytest.raises(ValueError, match="frozen decision"):
@@ -150,7 +160,8 @@ def test_native_training_uses_same_pretrained_and_reuses_outputs(pair_inputs, mo
                 )
             pd.DataFrame(
                 {
-                    "epoch": range(experiment["settings"]["epochs"]),
+                    "epoch": range(1, experiment["settings"]["epochs"] + 1),
+                    "time": range(10, 10 * (experiment["settings"]["epochs"] + 1), 10),
                     "metrics/mAP50-95(B)": [0.1] * experiment["settings"]["epochs"],
                 }
             ).to_csv(run / "results.csv", index=False)
@@ -159,6 +170,9 @@ def test_native_training_uses_same_pretrained_and_reuses_outputs(pair_inputs, mo
     raw = train_branch(experiment, "raw", pair_inputs[-1])
     adaptive = train_branch(experiment, "adaptive", pair_inputs[-1])
     assert raw["budget"] == adaptive["budget"]
+    assert raw["best_epoch"] == raw["final_epoch"] == 20
+    assert raw["training_validation_seconds"] == 200
+    assert raw["timing_reset_epochs"] == []
     assert [p for p, _ in calls] == [str(pair_inputs[-2])] * 2
     assert all(settings["freeze"] == 11 for _, settings in calls)
     assert train_branch(experiment, "raw", pair_inputs[-1]) == raw
@@ -173,6 +187,17 @@ def test_native_training_uses_same_pretrained_and_reuses_outputs(pair_inputs, mo
     train_branch(experiment, "raw", pair_inputs[-1], resume=True)
     assert calls[-1][0].endswith("/raw/weights/last.pt")
     assert calls[-1][1] == {"resume": True}
+    history = pair_inputs[-1] / "raw/results.csv"
+    table = pd.read_csv(history)
+    table.loc[12:, "time"] = range(10, 90, 10)
+    table.to_csv(history, index=False)
+    resumed = train_branch(experiment, "raw", pair_inputs[-1])
+    assert resumed["training_validation_seconds"] == 200
+    assert resumed["timing_reset_epochs"] == [13]
+    table.loc[19, "epoch"] = 19
+    table.to_csv(history, index=False)
+    with pytest.raises(ValueError, match="epoch budget"):
+        train_branch(experiment, "raw", pair_inputs[-1])
 
 
 def test_changed_dataset_yaml_native_args_and_symlinks_rejected(pair_inputs, monkeypatch):
@@ -209,6 +234,36 @@ def test_installed_yolo26_boundary_and_disabled_augmentation():
     assert not any(TRAIN_SETTINGS[k] for k in ("mosaic", "hsv_v", "fliplr", "scale"))
 
 
+def test_pair_rejects_mixed_taxonomy(pair_inputs, monkeypatch):
+    original = finetuning.verify_role
+
+    def verify(*args, **kwargs):
+        result = original(*args, **kwargs)
+        if args[2] == "tune":
+            classes = result["export"]["conversion"]["classes"]
+            result["export"]["conversion"]["classes"] = (
+                FIVE_CLASSES if classes == CLASSES else CLASSES
+            )
+        return result
+
+    monkeypatch.setattr(finetuning, "verify_role", verify)
+    with pytest.raises(ValueError, match="same taxonomy"):
+        prepare_pair(*pair_inputs)
+
+
+def test_pair_rejects_foreign_starting_weights_and_run_root(pair_inputs):
+    checkpoint, output = pair_inputs[-2:]
+    original = checkpoint.read_bytes()
+    checkpoint.write_bytes(b"a previous fine-tuned checkpoint")
+    with pytest.raises(ValueError, match="pinned pretrained"):
+        prepare_pair(*pair_inputs)
+    checkpoint.write_bytes(original)
+    output.mkdir()
+    (output / "previous-run.txt").touch()
+    with pytest.raises(ValueError, match="Unknown training directory"):
+        prepare_pair(*pair_inputs)
+
+
 def test_real_native_one_epoch_smoke(pair_inputs, monkeypatch):
     """Tiny CPU integration, not a scientific or GPU benchmark."""
     from ultralytics import YOLO as NativeYOLO
@@ -242,3 +297,10 @@ def test_real_native_one_epoch_smoke(pair_inputs, monkeypatch):
     assert runs[0]["budget"] == runs[1]["budget"]
     assert runs[0]["budget"]["epochs"] == 1
     assert all((pair_inputs[-1] / b / "weights/best.pt").is_file() for b in ("raw", "adaptive"))
+    classes = experiment["training"]["raw"]["export"]["conversion"]["classes"]
+    for branch in ("raw", "adaptive"):
+        for name in ("best", "last"):
+            loaded = NativeYOLO(str(pair_inputs[-1] / branch / f"weights/{name}.pt"))
+            assert loaded.names == dict(enumerate(classes))
+            assert loaded.model.model[-1].nc == len(classes)
+            assert backbone_boundary(loaded.model) == 11

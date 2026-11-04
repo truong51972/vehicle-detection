@@ -16,9 +16,9 @@ artifacts; missing or mismatched artifacts fail rather than launching upstream w
    IDs, native labels, geometry and JPEG95 encoding. Writes
    `runs/preprocessing-v1/` and `docs/preprocessing-v1/`. S20 is a manifest only.
 3. [03_training.ipynb](notebooks/03_training.ipynb) consumes prepared inputs and
-   a local pinned `weights/yolo26n.pt`; runs both native YOLO26n partial fine-tuning
+   a local pinned `weights/yolo26n.pt`; runs both native five-class YOLO26n partial fine-tuning
    branches with equal initialization/budgets and shared Raw development validation.
-   Writes `runs/training-native-s10-v1/`: native `best.pt`, `last.pt`,
+   Writes `runs/training-five-s10-v1/`: native `best.pt`, `last.pt`,
    `results.csv`, `args.yaml` and a small paired dataset manifest.
    `RESUME` explicitly opts in to native `last.pt` continuation.
 4. [04_eval_and_report.ipynb](notebooks/04_eval_and_report.ipynb) consumes existing
@@ -62,7 +62,8 @@ uv run --extra study jupyter lab notebooks/
 
 Use the `.venv` kernel. Repository-root and `notebooks/` launch directories both
 work. Every notebook starts with a purpose, artifact contract and linked numbered
-outline. The six-class taxonomy, including railway `train`, is unchanged. Extract
+outline. Notebook 03 uses the separate five-class exports from notebook 02;
+historical six-class evidence remains unchanged. Extract
 BDD detection images/annotations under `data/bdd100k/`; nested Kaggle
 layouts are supported. Keep data/runs on the WSL-native filesystem.
 
@@ -77,6 +78,17 @@ The local pretrained checkpoint must match SHA256
 `9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef`.
 Notebooks fail if it is absent; they never silently download a model or the dataset.
 Large images, model weights and run caches remain gitignored.
+
+Notebook 03 defaults to the preserved local protocol at `runs/issue5-v1/protocol.json`,
+subsets at `runs/issue6-v2/subsets.json`, frozen `docs/issue6-v2/policy.json`, and
+five-class S10/development exports under `runs/preprocessing-five-v1/`.
+It runs both branches sequentially for 20 epochs with identical settings and writes
+native histories plus `summary.json`. Use a fresh `TRAIN_ROOT` for a new study;
+never initialize from a historical six-class fine-tuned checkpoint.
+The completed [five-class S10 report](docs/ISSUE21_RESULTS.md) includes saved
+convergence plots, native histories, checkpoint hashes and the Raw interruption/
+resume disclosure. Notebook 03 reuses completed runs and writes `convergence.png`;
+its native CSV timing totals sum visible resume sessions, excluding partial work.
 
 ## Artifact contracts and existing experiments
 
