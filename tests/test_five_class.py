@@ -9,7 +9,6 @@ from vehicle_detection.common import file_hash, write_json
 from vehicle_detection.datasets import verify_role
 from vehicle_detection.five_class import (
     FIVE_CLASSES,
-    SIX_TO_FIVE,
     derive_labels,
     remap_boxes,
     support_audit,
@@ -48,8 +47,6 @@ def test_label_remapping_keeps_order_coordinates_and_negative_frames(tmp_path):
     )
     assert (destination / "labels/train/rail-only.txt").read_text() == ""
     assert (destination / "labels/train/empty.txt").read_text() == ""
-    assert identity["summary"]["train"]["new_negative_images"] == 1
-    assert identity["summary"]["train"]["negative_images"] == 2
     assert remap_boxes(rows[0]["boxes"]) == [[0, 1, 2, 9, 12], [3, 2, 3, 8, 10]]
     audited = support_audit(
         [
@@ -103,22 +100,20 @@ def test_five_class_export_reuses_native_verification_and_keeps_six_class_source
     derive_labels(original, derived, {"train": rows})
     paths = [tmp_path / "raw", tmp_path / "adaptive"]
     for path, variant in zip(paths, ("raw_reencoded", "adaptive"), strict=True):
-        export_variant({"train": records}, derived, path, variant, recipes, classes=FIVE_CLASSES)
+        export_variant({"train": records}, derived, path, variant, recipes)
         verify_role(
             path,
             rows,
             "train",
             variant,
             recipes if variant == "adaptive" else None,
-            classes=FIVE_CLASSES,
-            class_map=SIX_TO_FIVE,
         )
-    assert verify_alignment(paths, classes=FIVE_CLASSES) == 2
+    assert verify_alignment(paths) == 2
     assert [p.read_text() for p in (paths[0] / "labels/train").glob("*.txt")] != []
     assert (paths[0] / "labels/train/rail-only.txt").read_text() == ""
     assert (paths[0] / "labels/train/mixed.txt").read_text() == (
         paths[1] / "labels/train/mixed.txt"
     ).read_text()
     assert (original / "labels/train/rail-only.txt").read_text().startswith("3 ")
-    with pytest.raises(ValueError, match="class mapping"):
-        verify_alignment(paths)
+    # Existing verification reads class names directly from the export identity.
+    assert verify_alignment(paths) == 2

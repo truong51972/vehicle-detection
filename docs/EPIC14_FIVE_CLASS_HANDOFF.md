@@ -7,9 +7,9 @@ Branch: `feat/epic14-five-class-prep` (do **not** merge until validated).
 - `src/vehicle_detection/five_class.py` provides explicit six→five YOLO-ID remapping,
   dropping **railway train only** (`3→DROP`) and preserving all surviving numeric
   coordinates and image IDs. Negative-only frames remain present.
-- `export_variant`, `verify_alignment`, `verify_role`, `export_pair` and
-  `export_development_pair` accept optional class information. Historical
-  six-class callers still use their original defaults.
+- Existing exporter and verifier functions derive class names and mapping
+  from `conversion.json` / `export.json`, without adding taxonomy parameters
+  to the call chain. Historical six-class behavior remains the default.
 - Notebook 02 has a **new section 8** deriving a separate S10 training and
   development pair under `runs/preprocessing-five-v1/`. It reads previous
   six-class conversion/metadata and does not materialize final-test images.
