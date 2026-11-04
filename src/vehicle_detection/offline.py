@@ -49,8 +49,6 @@ def export_variant(
     if original:
         encoding = {**encoding, "format": "original", "jpeg_quality": None}
     destination, converted = Path(destination).resolve(), Path(converted).resolve()
-    conversion = read_json(converted / "conversion.json")
-    classes = conversion.get("classes", CLASSES)
     records = [(split, r) for split, rows in partitions.items() for r in rows]
     source_paths, parents = {}, {}
     for _, r in records:
@@ -73,6 +71,8 @@ def export_variant(
                         f"Invalid JPEG end marker; native YOLO would re-encode: {source}"
                     )
     labels = {r["id"]: file_hash(converted / "labels" / s / f"{r['id']}.txt") for s, r in records}
+    conversion = read_json(converted / "conversion.json")
+    classes = conversion.get("classes", CLASSES)
     identity = {
         "variant": variant,
         "recipe": recipes if recipe == "adaptive" else recipes[recipe],
