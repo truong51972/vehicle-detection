@@ -11,15 +11,19 @@ pytest.importorskip("ultralytics")
 
 from vehicle_detection import development_report as reporting  # noqa: E402
 from vehicle_detection.common import digest, file_hash, read_json, write_json  # noqa: E402
+from vehicle_detection.data import CLASSES  # noqa: E402
+from vehicle_detection.five_class import FIVE_CLASSES, remap_boxes  # noqa: E402
 from vehicle_detection.protocol import summarize  # noqa: E402
 
 
+@pytest.mark.parametrize("class_names", [CLASSES, FIVE_CLASSES])
 def test_report_preserves_pairs_supports_and_reuses_without_recomputing(
-    frozen, tmp_path, monkeypatch
+    frozen, tmp_path, monkeypatch, class_names
 ):
     protocol, _ = frozen
     protocol = copy.deepcopy(protocol)
     template = protocol["splits"]["development_validation"][0]
+    template["boxes"] = [[c, 0, 0, 16, 16] for c in range(6)]
     rows = []
     for i in range(8):
         row = {
@@ -43,7 +47,10 @@ def test_report_preserves_pairs_supports_and_reuses_without_recomputing(
         for treatment in ("raw", "adaptive"):
             root = tmp_path / "evaluations" / f"{model}-{treatment}"
             root.mkdir(parents=True)
-            labels = np.array([int(b[0]) for b in rows[0]["boxes"]])
+            boxes = (
+                remap_boxes(rows[0]["boxes"]) if class_names == FIVE_CLASSES else rows[0]["boxes"]
+            )
+            labels = np.array([int(b[0]) for b in boxes])
             arrays = {
                 "tp": np.ones((len(labels), 10), bool),
                 "conf": np.full(len(labels), 0.9),
@@ -61,6 +68,7 @@ def test_report_preserves_pairs_supports_and_reuses_without_recomputing(
                 "policy_id": "fixture",
                 "checkpoint_sha256": file_hash(checkpoints[model]),
                 "settings": {"fixture": True},
+                "class_names": class_names,
             }
             result = {
                 "overall": {"mAP50_95": 0.995, "mAP50": 0.995},
@@ -86,6 +94,16 @@ def test_report_preserves_pairs_supports_and_reuses_without_recomputing(
     overall = [r for r in result["comparisons"] if r["axis"] == "overall"]
     assert len(overall) == 2 and all(r["recovery"] == 0 for r in overall)
     assert all(r["valid_draws"] == 5 for r in overall)
+    assert all(r["estimand"]["class_names"] == class_names for r in overall)
+    rare = next(r for r in result["conditions"] if r["condition"] == "rare")
+    assert len(rare["classes"]) == len(class_names)
+    assert all(
+        c["source_groups"] == 1 and c["status"] == "insufficient" for c in rare["classes"].values()
+    )
+    empty = next(r for r in result["conditions"] if r["condition"] == "large")
+    assert empty["mAP50_95"] is None
+    assert all(c["AP50_95"] is None for c in empty["classes"].values())
+    assert all(r["instances"] == 8 for r in result["object_size_support"] if r["size"] == "small")
     assert any(r["condition"] == "rare" and r["images"] == 1 for r in result["conditions"])
 
     def no_bootstrap(*args, **kwargs):

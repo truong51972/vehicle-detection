@@ -60,9 +60,10 @@ def evaluate_development(
         policy["recipes"] if variant == "adaptive" else None,
         deep=False,
     )
-    names = list(CLASSES if class_names is None else class_names)
-    if not names or (pretrained and names != CLASSES):
-        raise ValueError("Pretrained COCO-80 mapping requires the historical six-class taxonomy")
+    exported_names = bound["export"]["conversion"].get("classes", CLASSES)
+    names = list(exported_names if class_names is None else class_names)
+    if names != exported_names:
+        raise ValueError("Evaluation taxonomy differs from development labels")
     config = {**VAL_SETTINGS, "half": False, **(settings or {})}
     if config["nms"] is not False or config["augment"] or config["half"] or not config["plots"]:
         raise ValueError("Use fixed FP32 NMS-free native validation and plots")
@@ -78,7 +79,9 @@ def evaluate_development(
         "role": "development_validation",
         "dataset": bound,
         "checkpoint_sha256": weights_hash,
-        "mapping": "COCO-80 to six vehicles" if pretrained else f"native {len(names)} vehicles",
+        "mapping": ("COCO-80 to six vehicles" if names == CLASSES else "COCO-80 to five vehicles")
+        if pretrained
+        else f"native {len(names)} vehicles",
         "class_names": names,
         "settings": config,
         "ultralytics": version("ultralytics"),

@@ -32,8 +32,13 @@ def class_ap(stats, ids, *, detailed=False):
     values = ap_per_class(arrays["tp"], arrays["conf"], arrays["pred_cls"], arrays["target_cls"])
     if detailed:
         return {
-            int(cls): {"AP50": float(ap[0]), "AP50_95": float(ap.mean())}
-            for cls, ap in zip(values[6], values[5], strict=True)
+            int(cls): {
+                "AP50": float(ap[0]),
+                "AP50_95": float(ap.mean()),
+                "precision": float(p),
+                "recall": float(r),
+            }
+            for cls, ap, p, r in zip(values[6], values[5], values[2], values[3], strict=True)
         }
     return {int(cls): float(ap.mean()) for cls, ap in zip(values[6], values[5], strict=True)}
 
@@ -47,13 +52,13 @@ def native_ap(stats, ids, *, classes=None):
     return float(np.mean([values[cls] for cls in target]))
 
 
-def bootstrap_support(stats, pilot, *, min_class_groups=5):
+def bootstrap_support(stats, pilot, *, min_class_groups=5, class_names=CLASSES):
     if type(min_class_groups) is not int or min_class_groups < 1:
         raise ValueError("Minimum class groups must be a positive integer")
     if set(stats) != {r["id"] for r in pilot["rows"]}:
         raise ValueError("Statistics must contain identical evaluation IDs")
     support = []
-    for cls, name in enumerate(CLASSES):
+    for cls, name in enumerate(class_names):
         counts = {r["id"]: int(np.sum(stats[r["id"]]["target_cls"] == cls)) for r in pilot["rows"]}
         groups = {r["group"] for r in pilot["rows"] if counts[r["id"]]}
         support.append(
@@ -73,7 +78,7 @@ def bootstrap_support(stats, pilot, *, min_class_groups=5):
     return {
         "version": "fixed-supported-macro-v2",
         "class_ids": included,
-        "class_names": [CLASSES[c] for c in included],
+        "class_names": [class_names[c] for c in included],
         "minimum_source_groups": min_class_groups,
         "support": support,
         "missing_class_draw": "exclude macro draw; no AP imputation or redraw",
@@ -82,7 +87,9 @@ def bootstrap_support(stats, pilot, *, min_class_groups=5):
     }
 
 
-def paired_interval(before, after, pilot, *, resamples=100, seed=2026, min_class_groups=5):
+def paired_interval(
+    before, after, pilot, *, resamples=100, seed=2026, min_class_groups=5, class_names=CLASSES
+):
     if set(before) != set(after) or set(before) != {r["id"] for r in pilot["rows"]}:
         raise ValueError("Paired statistics must contain identical evaluation IDs")
     if type(resamples) is not int or resamples < 2:
@@ -90,7 +97,9 @@ def paired_interval(before, after, pilot, *, resamples=100, seed=2026, min_class
     for sample_id in before:
         if not np.array_equal(before[sample_id]["target_cls"], after[sample_id]["target_cls"]):
             raise ValueError("Paired ground truth changed")
-    policy = bootstrap_support(before, pilot, min_class_groups=min_class_groups)
+    policy = bootstrap_support(
+        before, pilot, min_class_groups=min_class_groups, class_names=class_names
+    )
     target = policy["class_ids"]
     groups = {}
     for row in pilot["rows"]:
@@ -111,7 +120,7 @@ def paired_interval(before, after, pilot, *, resamples=100, seed=2026, min_class
         if recovery is not None:
             deltas.append(recovery)
         support = []
-        for c in range(len(CLASSES)):
+        for c in range(len(class_names)):
             support.append(
                 {
                     "class_id": c,

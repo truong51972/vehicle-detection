@@ -1,0 +1,19 @@
+{
+  "final_test_accessed": false,
+  "inference_training_pixels_and_rerouting_forbidden": true,
+  "notebook_replay": {
+    "cached_evaluation_and_checkpoint_files_unchanged": 93,
+    "final_test_accessed": false,
+    "fresh_kernel_run_all": true,
+    "inference_training_upstream_and_reaggregation_forbidden": true,
+    "wall_seconds": 45.0929392140024
+  },
+  "tests": {
+    "build": true,
+    "pytest_passed": 110,
+    "ruff_check": true,
+    "ruff_format": true
+  },
+  "unchanged_files": 101,
+  "wall_seconds": 30.264537865994498
+}

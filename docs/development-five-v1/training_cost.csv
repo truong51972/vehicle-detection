@@ -1,0 +1,3 @@
+branch,training_images,training_groups,epochs,native_elapsed_seconds,images_per_elapsed_second
+raw,4890,2974,20,1477.6529999999998,66.18603961823244
+adaptive,4890,2974,20,1439.3,67.94969776974919

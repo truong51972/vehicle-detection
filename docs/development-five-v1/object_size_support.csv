@@ -1,0 +1,16 @@
+class,images,instances,size,source_groups,status
+car,11591,62058,small,7311,descriptive
+truck,809,1031,small,766,descriptive
+bus,327,385,small,315,descriptive
+motorcycle,146,172,small,142,descriptive
+bicycle,276,387,small,267,descriptive
+car,12708,53667,medium,7761,descriptive
+truck,1965,2534,medium,1716,descriptive
+bus,808,936,medium,761,descriptive
+motorcycle,233,274,medium,218,descriptive
+bicycle,551,814,medium,509,descriptive
+car,10733,26816,large,6873,descriptive
+truck,1993,2400,large,1758,descriptive
+bus,854,955,large,796,descriptive
+motorcycle,105,116,large,101,descriptive
+bicycle,177,229,large,172,descriptive

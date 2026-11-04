@@ -1,0 +1,51 @@
+{
+  "final_test_accessed": false,
+  "native_metrics": {
+    "final_test_accessed": false,
+    "native_metric_checks": [
+      {
+        "evaluation": "pretrained-raw",
+        "native_ap_reproduced": true,
+        "source_ids": 13975
+      },
+      {
+        "evaluation": "pretrained-adaptive",
+        "native_ap_reproduced": true,
+        "source_ids": 13975
+      },
+      {
+        "evaluation": "raw-raw",
+        "native_ap_reproduced": true,
+        "source_ids": 13975
+      },
+      {
+        "evaluation": "raw-adaptive",
+        "native_ap_reproduced": true,
+        "source_ids": 13975
+      },
+      {
+        "evaluation": "adaptive-raw",
+        "native_ap_reproduced": true,
+        "source_ids": 13975
+      },
+      {
+        "evaluation": "adaptive-adaptive",
+        "native_ap_reproduced": true,
+        "source_ids": 13975
+      }
+    ]
+  },
+  "notebook": {
+    "cached_evaluation_and_checkpoint_files_unchanged": 93,
+    "final_test_accessed": false,
+    "fresh_kernel_run_all": true,
+    "inference_training_upstream_and_reaggregation_forbidden": true,
+    "wall_seconds": 48.69181858700176
+  },
+  "tests": {
+    "build": true,
+    "pytest_passed": 107,
+    "ruff_check": true,
+    "ruff_format": true
+  }
+}

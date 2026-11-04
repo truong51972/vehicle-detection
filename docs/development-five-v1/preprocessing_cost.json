@@ -1,0 +1,49 @@
+{
+  "adaptive_routes_first_repeat": {
+    "gamma": 30,
+    "skip": 98
+  },
+  "environment": {
+    "opencv": "4.14.0",
+    "opencv_threads": 1,
+    "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39"
+  },
+  "final_test_accessed": false,
+  "full_receipt_sha256": "2834c12962d2dd1aca3d5df2404917304e98df470bac7dc56bf2aed01b5c2da3",
+  "images": 128,
+  "operator_sha256": "354f19a51ba613f7bd0109fe5fcb7f86b98423059081500d96640ad2e29bb27b",
+  "policy_id": "1ac3fb9bb94b132f70d3e168b5ef15a54b616444e535b9a3bb265682a6fce0ef",
+  "sample_ids_sha256": "3a4c1153dadbddd119706af3db01dce474aba077ea77bb9da5dc78221613f058",
+  "scope": "128 seeded development source images \u00d7 3 CPU repeats, 8 warmup images, one OpenCV thread, alternating branch order. Recipe includes quality/routing; encode is in-memory JPEG95. Decode is shared per paired image. Excludes disk writes, hashing, labels, model/GPU, online application I/O; warm filesystem-cache sample, not full-export or end-to-end throughput. Measured separately after inference.",
+  "seed": 2026,
+  "summary": {
+    "adaptive": {
+      "decode_ms_mean": 1.915934424516763,
+      "decode_ms_p50": 1.8251205001433846,
+      "decode_ms_p95": 2.635049302261904,
+      "decode_recipe_encode_ms_mean": 7.492822866993265,
+      "decode_recipe_encode_ms_p50": 7.035984999674838,
+      "decode_recipe_encode_ms_p95": 10.230922801565612,
+      "encode_ms_mean": 1.4331866743191313,
+      "encode_ms_p50": 1.417800500348676,
+      "encode_ms_p95": 1.803032552197692,
+      "recipe_ms_mean": 4.143701768157371,
+      "recipe_ms_p50": 3.4411705019010697,
+      "recipe_ms_p95": 7.0782527520350405
+    },
+    "raw": {
+      "decode_ms_mean": 1.915934424516763,
+      "decode_ms_p50": 1.8251205001433846,
+      "decode_ms_p95": 2.635049302261904,
+      "decode_recipe_encode_ms_mean": 6.612403687446052,
+      "decode_recipe_encode_ms_p50": 6.561375001183478,
+      "decode_recipe_encode_ms_p95": 7.7722606551105855,
+      "encode_ms_mean": 1.4138900417037803,
+      "encode_ms_p50": 1.4093799982219934,
+      "encode_ms_p95": 1.7748941987520082,
+      "recipe_ms_mean": 3.2825792212255087,
+      "recipe_ms_p50": 3.225060998374829,
+      "recipe_ms_p95": 3.9123740494687804
+    }
+  }
+}

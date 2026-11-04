@@ -1,0 +1,1073 @@
+{
+  "evaluations": [
+    {
+      "evaluation": "pretrained-raw",
+      "identity": {
+        "checkpoint_sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+        "class_names": [
+          "car",
+          "truck",
+          "bus",
+          "motorcycle",
+          "bicycle"
+        ],
+        "dataset": {
+          "export": {
+            "conversion": {
+              "classes": [
+                "car",
+                "truck",
+                "bus",
+                "motorcycle",
+                "bicycle"
+              ],
+              "mapping": {
+                "0": 0,
+                "1": 1,
+                "2": 2,
+                "3": null,
+                "4": 3,
+                "5": 4
+              },
+              "role_ids_sha256": "ca21d320fbf72ce44befc9fe51bd94f657227f6e508f19093b61c43d80b706e4",
+              "source_conversion_sha256": "77396544fd69fbeb7ec5b29a3916a366f6c085dc80d2dabef7ebf8d0693953e2",
+              "version": "five-class-labels-v1"
+            },
+            "encoding": {
+              "format": "jpg",
+              "jpeg_quality": 95,
+              "opencv": "4.14.0"
+            },
+            "operator_code": "354f19a51ba613f7bd0109fe5fcb7f86b98423059081500d96640ad2e29bb27b",
+            "recipe": {},
+            "source": "5e4315f680041c010e402b5935f7b990f16d8c2e33792385147ca742e9c5f3dc",
+            "variant": "raw_reencoded"
+          },
+          "files_identity": "b6a76c60a121996586efb8bf79cb31fba8d4e30797951c65e0807ff14949c2f4",
+          "ids": {
+            "count": 13975,
+            "sha256": "bf2957e6f237c3c2373f9913117933e6de0ae3c7d3bcf5aa700362efa0e71ff3"
+          },
+          "path": "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/development/raw"
+        },
+        "mapping": "COCO-80 to five vehicles",
+        "policy_id": "1ac3fb9bb94b132f70d3e168b5ef15a54b616444e535b9a3bb265682a6fce0ef",
+        "protocol_id": "680090b8eef098fbe10c77e632aacbfd3d6854d8489d7518e20f062e032b6e44",
+        "role": "development_validation",
+        "settings": {
+          "agnostic_nms": false,
+          "augment": false,
+          "batch": 32,
+          "conf": 0.001,
+          "deterministic": true,
+          "device": "0",
+          "half": false,
+          "imgsz": 640,
+          "iou": 0.7,
+          "max_det": 300,
+          "nms": false,
+          "plots": true,
+          "quantize": 32,
+          "rect": true,
+          "seed": 2026,
+          "verbose": false,
+          "workers": 8
+        },
+        "ultralytics": "8.4.198",
+        "version": "development-native-v3"
+      },
+      "native_result_sha256": "da4e806ada6b9e751552d1168613c481c692f879e131f827d7a33fcbdd260887",
+      "result": {
+        "artifacts": {
+          "BoxF1_curve.png": "867c382cccd5dc8333961ee90c02c542702925d0b226bbdeb6f18a58438b54ca",
+          "BoxPR_curve.png": "55538e9bebc22dfc68f73f0bde31be3b06a881fe8223731034b2133036252a28",
+          "BoxP_curve.png": "96d37115bbcf9d790fdbd0654522c666000a3352c1e20c8d59a1b97850ffd074",
+          "BoxR_curve.png": "4ef63e5a50bcabe890a27ef20efe68e9adc6f851f09f66b808babcac7cb0473e",
+          "confusion_matrix.png": "3f01f232ab0980d19729f9b679749a68524732def7275e6c70e933fbdac3181a",
+          "confusion_matrix_normalized.png": "911c1a60c42ac47a27fe6548006a4fc8fa456506629a913d6a8f5b34e0136232",
+          "paired_stats.npz": "346c48edb0cce852c3696206915f962431abe4d6f72df06b20f1193bafa477b2",
+          "val_batch0_labels.jpg": "dd1ab544c36e80a0c6fbec9b34fdd08113135c3909b5a8df13897fb55a8d3741",
+          "val_batch0_pred.jpg": "1b1b8d3ccd6f3d9889a3d4c5c7bf7734c2c55337a7b5669414f963cec4b5e25d",
+          "val_batch1_labels.jpg": "b0ee32f13447f0467cb65a902a8d1c28d5a0669ed27bd2c25835b3c393cc183a",
+          "val_batch1_pred.jpg": "7cd8f649f1c303480748f89e46adc38e89872b857ecdc04e1536737c44420256",
+          "val_batch2_labels.jpg": "6221533e6427073ca49ad7ce1ae73de084f15be9cc776fd4f2bed9fd502a591b",
+          "val_batch2_pred.jpg": "82f381bfa0248de90be534fde58d0284575170c345c4c29e4aa9dfb60b357ff7"
+        },
+        "classes": [
+          {
+            "Box-F1": 0.51580558,
+            "Box-P": 0.66268625,
+            "Box-R": 0.42222238,
+            "Class": "car",
+            "Images": 13820,
+            "Instances": 142541,
+            "mAP50": 0.49578986,
+            "mAP50-95": 0.28246473,
+            "mAP75": 0.27677212
+          },
+          {
+            "Box-F1": 0.29397548,
+            "Box-P": 0.25893541,
+            "Box-R": 0.33998324,
+            "Class": "truck",
+            "Images": 3773,
+            "Instances": 5965,
+            "mAP50": 0.22900769,
+            "mAP50-95": 0.16694395,
+            "mAP75": 0.18506569
+          },
+          {
+            "Box-F1": 0.3455924,
+            "Box-P": 0.34762315,
+            "Box-R": 0.34358524,
+            "Class": "bus",
+            "Images": 1759,
+            "Instances": 2276,
+            "mAP50": 0.27675632,
+            "mAP50-95": 0.21232416,
+            "mAP75": 0.2381866
+          },
+          {
+            "Box-F1": 0.20130491,
+            "Box-P": 0.32451527,
+            "Box-R": 0.14590747,
+            "Class": "motorcycle",
+            "Images": 435,
+            "Instances": 562,
+            "mAP50": 0.13061855,
+            "mAP50-95": 0.06248465,
+            "mAP75": 0.0637093
+          },
+          {
+            "Box-F1": 0.2265529,
+            "Box-P": 0.61031246,
+            "Box-R": 0.13909259,
+            "Class": "bicycle",
+            "Images": 872,
+            "Instances": 1430,
+            "mAP50": 0.19416861,
+            "mAP50-95": 0.08492984,
+            "mAP75": 0.06304075
+          }
+        ],
+        "final_test_accessed": false,
+        "overall": {
+          "mAP50": 0.2652682042906983,
+          "mAP50_95": 0.16182946481839572,
+          "precision": 0.4408145084784018,
+          "recall": 0.2781581832409477
+        },
+        "role": "development_validation",
+        "speed_ms": {
+          "inference": 1.2176563229976425,
+          "loss": 0.00017795677914089243,
+          "postprocess": 0.7043137384655849,
+          "preprocess": 0.25649453967843827
+        }
+      }
+    },
+    {
+      "evaluation": "pretrained-adaptive",
+      "identity": {
+        "checkpoint_sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+        "class_names": [
+          "car",
+          "truck",
+          "bus",
+          "motorcycle",
+          "bicycle"
+        ],
+        "dataset": {
+          "export": {
+            "conversion": {
+              "classes": [
+                "car",
+                "truck",
+                "bus",
+                "motorcycle",
+                "bicycle"
+              ],
+              "mapping": {
+                "0": 0,
+                "1": 1,
+                "2": 2,
+                "3": null,
+                "4": 3,
+                "5": 4
+              },
+              "role_ids_sha256": "ca21d320fbf72ce44befc9fe51bd94f657227f6e508f19093b61c43d80b706e4",
+              "source_conversion_sha256": "77396544fd69fbeb7ec5b29a3916a366f6c085dc80d2dabef7ebf8d0693953e2",
+              "version": "five-class-labels-v1"
+            },
+            "encoding": {
+              "format": "jpg",
+              "jpeg_quality": 95,
+              "opencv": "4.14.0"
+            },
+            "operator_code": "354f19a51ba613f7bd0109fe5fcb7f86b98423059081500d96640ad2e29bb27b",
+            "recipe": {
+              "adaptive": {
+                "brightness_below": 0.12,
+                "contrast_below": 0.0,
+                "max_filters": 1,
+                "noise_above": 1.0,
+                "sharpness_below": 0.0,
+                "sharpness_min": 0.0
+              },
+              "clahe": {
+                "clip_limit": 1.2,
+                "grid_size": 8
+              },
+              "denoise": {
+                "strength": 2.0
+              },
+              "gamma": {
+                "gamma": 0.85
+              },
+              "raw": {},
+              "sharpen": {
+                "amount": 0.15,
+                "sigma": 1.0
+              }
+            },
+            "source": "5e4315f680041c010e402b5935f7b990f16d8c2e33792385147ca742e9c5f3dc",
+            "variant": "adaptive"
+          },
+          "files_identity": "aada92a470e332bb72598ca10bc32b523bb5cccef2a52a798fb615693a40c540",
+          "ids": {
+            "count": 13975,
+            "sha256": "bf2957e6f237c3c2373f9913117933e6de0ae3c7d3bcf5aa700362efa0e71ff3"
+          },
+          "path": "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/development/adaptive"
+        },
+        "mapping": "COCO-80 to five vehicles",
+        "policy_id": "1ac3fb9bb94b132f70d3e168b5ef15a54b616444e535b9a3bb265682a6fce0ef",
+        "protocol_id": "680090b8eef098fbe10c77e632aacbfd3d6854d8489d7518e20f062e032b6e44",
+        "role": "development_validation",
+        "settings": {
+          "agnostic_nms": false,
+          "augment": false,
+          "batch": 32,
+          "conf": 0.001,
+          "deterministic": true,
+          "device": "0",
+          "half": false,
+          "imgsz": 640,
+          "iou": 0.7,
+          "max_det": 300,
+          "nms": false,
+          "plots": true,
+          "quantize": 32,
+          "rect": true,
+          "seed": 2026,
+          "verbose": false,
+          "workers": 8
+        },
+        "ultralytics": "8.4.198",
+        "version": "development-native-v3"
+      },
+      "native_result_sha256": "4227f7a388185d9e0d83b2c91c35696407e93075f887d8d281fe6f386c093277",
+      "result": {
+        "artifacts": {
+          "BoxF1_curve.png": "fafb57e487088d1f0ecd0ecdb972e369ac4c45ee9d0c110771dcb81121fdabcb",
+          "BoxPR_curve.png": "eebc3fb23054f26e3b889ee58fe32381749947fa97f2303e7518e7b8e724302c",
+          "BoxP_curve.png": "e3517a23959a67ccb13010eca5a24042125d7b50790647d376d3b88026588792",
+          "BoxR_curve.png": "4faf9ed7078e7a1f028da4dfc582c966efd1582696239eb0c745566696360df2",
+          "confusion_matrix.png": "0ee121def38008d8c8151db1290c6149c96760aa55311746562e6cb0d7a39992",
+          "confusion_matrix_normalized.png": "2ce17f21f41d309ae4926669c6aa9f61b67420705921def3d6a1b678997daa36",
+          "paired_stats.npz": "88b72d251d0d2c220ccec245e515a369cd3021ea7fcec91d4ba06f4aa85a3025",
+          "val_batch0_labels.jpg": "5cedefebd7f467dfd74372477fbafc30e91ab2e0309c20bed3c361be46bd5e79",
+          "val_batch0_pred.jpg": "059949dfe1c7b5317310e0c365bac6742d3e35dedc99124ded052c426289dc72",
+          "val_batch1_labels.jpg": "33661e01bd4561c8f93ebaefcc8ba65ad099b27cb058b5cd1a70ebffd9a4fca1",
+          "val_batch1_pred.jpg": "d044b4848c31e5fb99c343f8629521aa97ad5fd4752b88801009550dee920683",
+          "val_batch2_labels.jpg": "c9fb5e45b106fba32a05f63f6c6d9097d7bb5cfe568ab535171ee0e1dd5d4e80",
+          "val_batch2_pred.jpg": "d64ef7197b4ba60f516cf6bf4a4c1007c3197f1c86db434097c833ab385ae380"
+        },
+        "classes": [
+          {
+            "Box-F1": 0.51659308,
+            "Box-P": 0.66326443,
+            "Box-R": 0.42304319,
+            "Class": "car",
+            "Images": 13820,
+            "Instances": 142541,
+            "mAP50": 0.4964165,
+            "mAP50-95": 0.28237512,
+            "mAP75": 0.27625814
+          },
+          {
+            "Box-F1": 0.29535623,
+            "Box-P": 0.26088814,
+            "Box-R": 0.34031852,
+            "Class": "truck",
+            "Images": 3773,
+            "Instances": 5965,
+            "mAP50": 0.22920256,
+            "mAP50-95": 0.16706348,
+            "mAP75": 0.18524738
+          },
+          {
+            "Box-F1": 0.3479635,
+            "Box-P": 0.35153486,
+            "Box-R": 0.34446397,
+            "Class": "bus",
+            "Images": 1759,
+            "Instances": 2276,
+            "mAP50": 0.27741386,
+            "mAP50-95": 0.21292292,
+            "mAP75": 0.23921943
+          },
+          {
+            "Box-F1": 0.1996515,
+            "Box-P": 0.3247614,
+            "Box-R": 0.14412811,
+            "Class": "motorcycle",
+            "Images": 435,
+            "Instances": 562,
+            "mAP50": 0.13028049,
+            "mAP50-95": 0.06274182,
+            "mAP75": 0.06330214
+          },
+          {
+            "Box-F1": 0.22568118,
+            "Box-P": 0.62376181,
+            "Box-R": 0.13776224,
+            "Class": "bicycle",
+            "Images": 872,
+            "Instances": 1430,
+            "mAP50": 0.19546042,
+            "mAP50-95": 0.08570924,
+            "mAP75": 0.06401392
+          }
+        ],
+        "final_test_accessed": false,
+        "overall": {
+          "mAP50": 0.26575476678265897,
+          "mAP50_95": 0.16216251499334303,
+          "precision": 0.4448421265445625,
+          "recall": 0.2779432085677876
+        },
+        "role": "development_validation",
+        "speed_ms": {
+          "inference": 1.202605021327683,
+          "loss": 0.00023668615875535766,
+          "postprocess": 0.6775891024617051,
+          "preprocess": 0.2586279830420331
+        }
+      }
+    },
+    {
+      "evaluation": "raw-raw",
+      "identity": {
+        "checkpoint_sha256": "2d5464636781977c61e811a28285b9b8949575eec8a9ce8800a0fa24e9acc38d",
+        "class_names": [
+          "car",
+          "truck",
+          "bus",
+          "motorcycle",
+          "bicycle"
+        ],
+        "dataset": {
+          "export": {
+            "conversion": {
+              "classes": [
+                "car",
+                "truck",
+                "bus",
+                "motorcycle",
+                "bicycle"
+              ],
+              "mapping": {
+                "0": 0,
+                "1": 1,
+                "2": 2,
+                "3": null,
+                "4": 3,
+                "5": 4
+              },
+              "role_ids_sha256": "ca21d320fbf72ce44befc9fe51bd94f657227f6e508f19093b61c43d80b706e4",
+              "source_conversion_sha256": "77396544fd69fbeb7ec5b29a3916a366f6c085dc80d2dabef7ebf8d0693953e2",
+              "version": "five-class-labels-v1"
+            },
+            "encoding": {
+              "format": "jpg",
+              "jpeg_quality": 95,
+              "opencv": "4.14.0"
+            },
+            "operator_code": "354f19a51ba613f7bd0109fe5fcb7f86b98423059081500d96640ad2e29bb27b",
+            "recipe": {},
+            "source": "5e4315f680041c010e402b5935f7b990f16d8c2e33792385147ca742e9c5f3dc",
+            "variant": "raw_reencoded"
+          },
+          "files_identity": "b6a76c60a121996586efb8bf79cb31fba8d4e30797951c65e0807ff14949c2f4",
+          "ids": {
+            "count": 13975,
+            "sha256": "bf2957e6f237c3c2373f9913117933e6de0ae3c7d3bcf5aa700362efa0e71ff3"
+          },
+          "path": "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/development/raw"
+        },
+        "mapping": "native 5 vehicles",
+        "policy_id": "1ac3fb9bb94b132f70d3e168b5ef15a54b616444e535b9a3bb265682a6fce0ef",
+        "protocol_id": "680090b8eef098fbe10c77e632aacbfd3d6854d8489d7518e20f062e032b6e44",
+        "role": "development_validation",
+        "settings": {
+          "agnostic_nms": false,
+          "augment": false,
+          "batch": 32,
+          "conf": 0.001,
+          "deterministic": true,
+          "device": "0",
+          "half": false,
+          "imgsz": 640,
+          "iou": 0.7,
+          "max_det": 300,
+          "nms": false,
+          "plots": true,
+          "quantize": 32,
+          "rect": true,
+          "seed": 2026,
+          "verbose": false,
+          "workers": 8
+        },
+        "ultralytics": "8.4.198",
+        "version": "development-native-v3"
+      },
+      "native_result_sha256": "f14c040cc455e16360b92a19a360b9a042f07005ab17e0fed331d26a656c91f4",
+      "result": {
+        "artifacts": {
+          "BoxF1_curve.png": "e54a0d85480ed77e3383673e2bb3ccb2daf344b2f2d9d51c1b2815bb4f62eb92",
+          "BoxPR_curve.png": "ad5dcea292c37d16f1e244e26af5455267ef535a337d3f276a5fbc369c160c31",
+          "BoxP_curve.png": "b3e7213556f234d070ea1a98d545c22d4872660425f94c2e2c3e0aa07d8ff4b8",
+          "BoxR_curve.png": "3d0fbfea5b53ee5ba2949679943b1bfd1cfe2f3787854897321c55098b0b9b46",
+          "confusion_matrix.png": "80135f89b606a3406191ec1ba1e78de5ed2c130108bb6ee23eb31573b90fbe00",
+          "confusion_matrix_normalized.png": "ec9bfa8e5c4e81adee15aa3faa6c8a990dfac90c4946627457d7376e02631052",
+          "paired_stats.npz": "c2be8abcff00ee3dab38155ae83f4b7fd7d5b5986eb543d0935b0f45ccec96f4",
+          "val_batch0_labels.jpg": "dd1ab544c36e80a0c6fbec9b34fdd08113135c3909b5a8df13897fb55a8d3741",
+          "val_batch0_pred.jpg": "e564d23b0fa796043727708a614b1604d6f2f2fbf7e0721f79c969409b5f3c6f",
+          "val_batch1_labels.jpg": "b0ee32f13447f0467cb65a902a8d1c28d5a0669ed27bd2c25835b3c393cc183a",
+          "val_batch1_pred.jpg": "2716c5a311c4a1725cdd7a22208b0bd6213e1bacadbb638afd47913083f7cbb9",
+          "val_batch2_labels.jpg": "6221533e6427073ca49ad7ce1ae73de084f15be9cc776fd4f2bed9fd502a591b",
+          "val_batch2_pred.jpg": "af45794f15037b3220d267080701e858aa2dcd812a194b7ada1f13fd3f94a283"
+        },
+        "classes": [
+          {
+            "Box-F1": 0.58973384,
+            "Box-P": 0.63260544,
+            "Box-R": 0.55230425,
+            "Class": "car",
+            "Images": 13820,
+            "Instances": 142541,
+            "mAP50": 0.59526932,
+            "mAP50-95": 0.33781298,
+            "mAP75": 0.33144409
+          },
+          {
+            "Box-F1": 0.39046346,
+            "Box-P": 0.51706748,
+            "Box-R": 0.31366303,
+            "Class": "truck",
+            "Images": 3773,
+            "Instances": 5965,
+            "mAP50": 0.34309297,
+            "mAP50-95": 0.22368842,
+            "mAP75": 0.24446272
+          },
+          {
+            "Box-F1": 0.37713807,
+            "Box-P": 0.44978994,
+            "Box-R": 0.32469244,
+            "Class": "bus",
+            "Images": 1759,
+            "Instances": 2276,
+            "mAP50": 0.31853733,
+            "mAP50-95": 0.2270604,
+            "mAP75": 0.25782097
+          },
+          {
+            "Box-F1": 0.22712939,
+            "Box-P": 0.3802673,
+            "Box-R": 0.16192171,
+            "Class": "motorcycle",
+            "Images": 435,
+            "Instances": 562,
+            "mAP50": 0.15317678,
+            "mAP50-95": 0.07124891,
+            "mAP75": 0.0468032
+          },
+          {
+            "Box-F1": 0.28027087,
+            "Box-P": 0.55551455,
+            "Box-R": 0.18741259,
+            "Class": "bicycle",
+            "Images": 872,
+            "Instances": 1430,
+            "mAP50": 0.23003269,
+            "mAP50-95": 0.09396961,
+            "mAP75": 0.05974534
+          }
+        ],
+        "final_test_accessed": false,
+        "overall": {
+          "mAP50": 0.3280218185314996,
+          "mAP50_95": 0.19075606533024295,
+          "precision": 0.5070489409149902,
+          "recall": 0.3079988044301482
+        },
+        "role": "development_validation",
+        "speed_ms": {
+          "inference": 1.1331822095220794,
+          "loss": 0.00014849202161778117,
+          "postprocess": 0.12139648880079815,
+          "preprocess": 0.25139127814457524
+        }
+      }
+    },
+    {
+      "evaluation": "raw-adaptive",
+      "identity": {
+        "checkpoint_sha256": "2d5464636781977c61e811a28285b9b8949575eec8a9ce8800a0fa24e9acc38d",
+        "class_names": [
+          "car",
+          "truck",
+          "bus",
+          "motorcycle",
+          "bicycle"
+        ],
+        "dataset": {
+          "export": {
+            "conversion": {
+              "classes": [
+                "car",
+                "truck",
+                "bus",
+                "motorcycle",
+                "bicycle"
+              ],
+              "mapping": {
+                "0": 0,
+                "1": 1,
+                "2": 2,
+                "3": null,
+                "4": 3,
+                "5": 4
+              },
+              "role_ids_sha256": "ca21d320fbf72ce44befc9fe51bd94f657227f6e508f19093b61c43d80b706e4",
+              "source_conversion_sha256": "77396544fd69fbeb7ec5b29a3916a366f6c085dc80d2dabef7ebf8d0693953e2",
+              "version": "five-class-labels-v1"
+            },
+            "encoding": {
+              "format": "jpg",
+              "jpeg_quality": 95,
+              "opencv": "4.14.0"
+            },
+            "operator_code": "354f19a51ba613f7bd0109fe5fcb7f86b98423059081500d96640ad2e29bb27b",
+            "recipe": {
+              "adaptive": {
+                "brightness_below": 0.12,
+                "contrast_below": 0.0,
+                "max_filters": 1,
+                "noise_above": 1.0,
+                "sharpness_below": 0.0,
+                "sharpness_min": 0.0
+              },
+              "clahe": {
+                "clip_limit": 1.2,
+                "grid_size": 8
+              },
+              "denoise": {
+                "strength": 2.0
+              },
+              "gamma": {
+                "gamma": 0.85
+              },
+              "raw": {},
+              "sharpen": {
+                "amount": 0.15,
+                "sigma": 1.0
+              }
+            },
+            "source": "5e4315f680041c010e402b5935f7b990f16d8c2e33792385147ca742e9c5f3dc",
+            "variant": "adaptive"
+          },
+          "files_identity": "aada92a470e332bb72598ca10bc32b523bb5cccef2a52a798fb615693a40c540",
+          "ids": {
+            "count": 13975,
+            "sha256": "bf2957e6f237c3c2373f9913117933e6de0ae3c7d3bcf5aa700362efa0e71ff3"
+          },
+          "path": "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/development/adaptive"
+        },
+        "mapping": "native 5 vehicles",
+        "policy_id": "1ac3fb9bb94b132f70d3e168b5ef15a54b616444e535b9a3bb265682a6fce0ef",
+        "protocol_id": "680090b8eef098fbe10c77e632aacbfd3d6854d8489d7518e20f062e032b6e44",
+        "role": "development_validation",
+        "settings": {
+          "agnostic_nms": false,
+          "augment": false,
+          "batch": 32,
+          "conf": 0.001,
+          "deterministic": true,
+          "device": "0",
+          "half": false,
+          "imgsz": 640,
+          "iou": 0.7,
+          "max_det": 300,
+          "nms": false,
+          "plots": true,
+          "quantize": 32,
+          "rect": true,
+          "seed": 2026,
+          "verbose": false,
+          "workers": 8
+        },
+        "ultralytics": "8.4.198",
+        "version": "development-native-v3"
+      },
+      "native_result_sha256": "d4a45284eb9b9fef4e105093fdbec89fa511de967ab5656da36c703c5d8c8ca8",
+      "result": {
+        "artifacts": {
+          "BoxF1_curve.png": "309cbaff497428bb39bcad8f8b0e460a2e9609ee1fe42c0b87a51ee118433a12",
+          "BoxPR_curve.png": "a93e39825c9163072f4a7d32ed6a94bb80e4367221a911616fadc9912310759f",
+          "BoxP_curve.png": "e308b6d265795a66f2b489572ec453241672fd127e1ea94f4ee5bda0e210174d",
+          "BoxR_curve.png": "1139ae11d4e9592c8c6e32adece6b1cadc5532f40e847fe7586fb837f0b59f50",
+          "confusion_matrix.png": "c89e106d3331640a6c6bf839b749f8eeef605c24aad9907990099ecb03343cd2",
+          "confusion_matrix_normalized.png": "db102f0e67cb67433bf282ca8a5eea2d5cb82b83f2931611650320d7c5ea0285",
+          "paired_stats.npz": "23f0f0926bbf40a890ad24a62835437661df91093ead1bbb4f380522bdd609c5",
+          "val_batch0_labels.jpg": "5cedefebd7f467dfd74372477fbafc30e91ab2e0309c20bed3c361be46bd5e79",
+          "val_batch0_pred.jpg": "d9f2849e158c92f9f068d19164859edfc51770210ced8133911bf0664bf943a6",
+          "val_batch1_labels.jpg": "33661e01bd4561c8f93ebaefcc8ba65ad099b27cb058b5cd1a70ebffd9a4fca1",
+          "val_batch1_pred.jpg": "ff8a97eed2dddb4acb5b816c4bd115c77cf4bf3bd8dc0af7d0f9d48059972db5",
+          "val_batch2_labels.jpg": "c9fb5e45b106fba32a05f63f6c6d9097d7bb5cfe568ab535171ee0e1dd5d4e80",
+          "val_batch2_pred.jpg": "ccd5622d101c3a8b2ce705d924f02e18a219a55ba994665724e7e1a4c1baaad1"
+        },
+        "classes": [
+          {
+            "Box-F1": 0.58965529,
+            "Box-P": 0.62780666,
+            "Box-R": 0.55587515,
+            "Class": "car",
+            "Images": 13820,
+            "Instances": 142541,
+            "mAP50": 0.59554242,
+            "mAP50-95": 0.33779715,
+            "mAP75": 0.3316001
+          },
+          {
+            "Box-F1": 0.38933706,
+            "Box-P": 0.51224083,
+            "Box-R": 0.31399832,
+            "Class": "truck",
+            "Images": 3773,
+            "Instances": 5965,
+            "mAP50": 0.34311169,
+            "mAP50-95": 0.22379996,
+            "mAP75": 0.24400631
+          },
+          {
+            "Box-F1": 0.37979287,
+            "Box-P": 0.44979246,
+            "Box-R": 0.32864675,
+            "Class": "bus",
+            "Images": 1759,
+            "Instances": 2276,
+            "mAP50": 0.31889581,
+            "mAP50-95": 0.22726458,
+            "mAP75": 0.25834762
+          },
+          {
+            "Box-F1": 0.22746092,
+            "Box-P": 0.37257497,
+            "Box-R": 0.16370107,
+            "Class": "motorcycle",
+            "Images": 435,
+            "Instances": 562,
+            "mAP50": 0.15222461,
+            "mAP50-95": 0.07098335,
+            "mAP75": 0.04656951
+          },
+          {
+            "Box-F1": 0.2819453,
+            "Box-P": 0.55368875,
+            "Box-R": 0.18912509,
+            "Class": "bicycle",
+            "Images": 872,
+            "Instances": 1430,
+            "mAP50": 0.23034391,
+            "mAP50-95": 0.09445373,
+            "mAP75": 0.0602048
+          }
+        ],
+        "final_test_accessed": false,
+        "overall": {
+          "mAP50": 0.3280236900494654,
+          "mAP50_95": 0.19085975411227848,
+          "precision": 0.5032207340336655,
+          "recall": 0.31026927578152297
+        },
+        "role": "development_validation",
+        "speed_ms": {
+          "inference": 1.1581766664688617,
+          "loss": 0.00016976071772380517,
+          "postprocess": 0.12382270132634232,
+          "preprocess": 0.24256311370453867
+        }
+      }
+    },
+    {
+      "evaluation": "adaptive-raw",
+      "identity": {
+        "checkpoint_sha256": "dac387f119a2fb547e107be86a2f59052ff58c75ef5c29e714b8a4fb2029baea",
+        "class_names": [
+          "car",
+          "truck",
+          "bus",
+          "motorcycle",
+          "bicycle"
+        ],
+        "dataset": {
+          "export": {
+            "conversion": {
+              "classes": [
+                "car",
+                "truck",
+                "bus",
+                "motorcycle",
+                "bicycle"
+              ],
+              "mapping": {
+                "0": 0,
+                "1": 1,
+                "2": 2,
+                "3": null,
+                "4": 3,
+                "5": 4
+              },
+              "role_ids_sha256": "ca21d320fbf72ce44befc9fe51bd94f657227f6e508f19093b61c43d80b706e4",
+              "source_conversion_sha256": "77396544fd69fbeb7ec5b29a3916a366f6c085dc80d2dabef7ebf8d0693953e2",
+              "version": "five-class-labels-v1"
+            },
+            "encoding": {
+              "format": "jpg",
+              "jpeg_quality": 95,
+              "opencv": "4.14.0"
+            },
+            "operator_code": "354f19a51ba613f7bd0109fe5fcb7f86b98423059081500d96640ad2e29bb27b",
+            "recipe": {},
+            "source": "5e4315f680041c010e402b5935f7b990f16d8c2e33792385147ca742e9c5f3dc",
+            "variant": "raw_reencoded"
+          },
+          "files_identity": "b6a76c60a121996586efb8bf79cb31fba8d4e30797951c65e0807ff14949c2f4",
+          "ids": {
+            "count": 13975,
+            "sha256": "bf2957e6f237c3c2373f9913117933e6de0ae3c7d3bcf5aa700362efa0e71ff3"
+          },
+          "path": "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/development/raw"
+        },
+        "mapping": "native 5 vehicles",
+        "policy_id": "1ac3fb9bb94b132f70d3e168b5ef15a54b616444e535b9a3bb265682a6fce0ef",
+        "protocol_id": "680090b8eef098fbe10c77e632aacbfd3d6854d8489d7518e20f062e032b6e44",
+        "role": "development_validation",
+        "settings": {
+          "agnostic_nms": false,
+          "augment": false,
+          "batch": 32,
+          "conf": 0.001,
+          "deterministic": true,
+          "device": "0",
+          "half": false,
+          "imgsz": 640,
+          "iou": 0.7,
+          "max_det": 300,
+          "nms": false,
+          "plots": true,
+          "quantize": 32,
+          "rect": true,
+          "seed": 2026,
+          "verbose": false,
+          "workers": 8
+        },
+        "ultralytics": "8.4.198",
+        "version": "development-native-v3"
+      },
+      "native_result_sha256": "f0542c07dfa27fcaf6b80c04b48129c414955fe54ffae8f7b3448d9d1c24b2d7",
+      "result": {
+        "artifacts": {
+          "BoxF1_curve.png": "53adf79f46aa2cc7aef493e1d26e31e2a08ba4a39a81601167d1acd57b51ffda",
+          "BoxPR_curve.png": "ceb407c22700e742509bde6923601cff38255442e54df5ad0c2f3eb92d2f439f",
+          "BoxP_curve.png": "7460c07eed04eb710116f35453a8ed9082361e67d837c1f117e9c48880083b34",
+          "BoxR_curve.png": "2bfd747e22e20e4fcd750ebc39a136c3412cf36392951087c997091a9b5c50cc",
+          "confusion_matrix.png": "84f01899ed56b0f58cfb9c5cdedd7e28d7eb6d3c30cd426eb4c1396f99c3af4d",
+          "confusion_matrix_normalized.png": "0b76bf46ab81ebe3b56f9970c734576a3aca26bf191ac1e413df85ac7e0b20c8",
+          "paired_stats.npz": "80818cc5fb89c3030a42b6ed61cf869b211cbe2c81086b98d5e0b7c2382a1c0b",
+          "val_batch0_labels.jpg": "dd1ab544c36e80a0c6fbec9b34fdd08113135c3909b5a8df13897fb55a8d3741",
+          "val_batch0_pred.jpg": "2a35a96d26061e1a022644432895a9ad7b52571717d1875124e3dd4f1298ac7d",
+          "val_batch1_labels.jpg": "b0ee32f13447f0467cb65a902a8d1c28d5a0669ed27bd2c25835b3c393cc183a",
+          "val_batch1_pred.jpg": "a2a441990194e7dc7ebd02cd9e5ac88cefcb392cc1d20d5d962d83a22312935a",
+          "val_batch2_labels.jpg": "6221533e6427073ca49ad7ce1ae73de084f15be9cc776fd4f2bed9fd502a591b",
+          "val_batch2_pred.jpg": "2ae7a70d885602ec8e6d4e0e9708d841dab16d929c231b4d58013681427f4d45"
+        },
+        "classes": [
+          {
+            "Box-F1": 0.58514665,
+            "Box-P": 0.6180776,
+            "Box-R": 0.55554729,
+            "Class": "car",
+            "Images": 13820,
+            "Instances": 142541,
+            "mAP50": 0.59428811,
+            "mAP50-95": 0.33759106,
+            "mAP75": 0.33172727
+          },
+          {
+            "Box-F1": 0.39144914,
+            "Box-P": 0.50347805,
+            "Box-R": 0.32020117,
+            "Class": "truck",
+            "Images": 3773,
+            "Instances": 5965,
+            "mAP50": 0.34610325,
+            "mAP50-95": 0.22584323,
+            "mAP75": 0.24643797
+          },
+          {
+            "Box-F1": 0.37689465,
+            "Box-P": 0.57099214,
+            "Box-R": 0.28127931,
+            "Class": "bus",
+            "Images": 1759,
+            "Instances": 2276,
+            "mAP50": 0.3264513,
+            "mAP50-95": 0.23386591,
+            "mAP75": 0.26485194
+          },
+          {
+            "Box-F1": 0.23495694,
+            "Box-P": 0.32171389,
+            "Box-R": 0.18505338,
+            "Class": "motorcycle",
+            "Images": 435,
+            "Instances": 562,
+            "mAP50": 0.16273776,
+            "mAP50-95": 0.07690371,
+            "mAP75": 0.06633196
+          },
+          {
+            "Box-F1": 0.2829523,
+            "Box-P": 0.50064901,
+            "Box-R": 0.1972028,
+            "Class": "bicycle",
+            "Images": 872,
+            "Instances": 1430,
+            "mAP50": 0.22417572,
+            "mAP50-95": 0.09203559,
+            "mAP75": 0.05256944
+          }
+        ],
+        "final_test_accessed": false,
+        "overall": {
+          "mAP50": 0.33075122729990475,
+          "mAP50_95": 0.19324789854963995,
+          "precision": 0.5029821374827699,
+          "recall": 0.3078567920936063
+        },
+        "role": "development_validation",
+        "speed_ms": {
+          "inference": 1.1463634588222322,
+          "loss": 0.0001632292017304007,
+          "postprocess": 0.12302944192905246,
+          "preprocess": 0.2544957829745734
+        }
+      }
+    },
+    {
+      "evaluation": "adaptive-adaptive",
+      "identity": {
+        "checkpoint_sha256": "dac387f119a2fb547e107be86a2f59052ff58c75ef5c29e714b8a4fb2029baea",
+        "class_names": [
+          "car",
+          "truck",
+          "bus",
+          "motorcycle",
+          "bicycle"
+        ],
+        "dataset": {
+          "export": {
+            "conversion": {
+              "classes": [
+                "car",
+                "truck",
+                "bus",
+                "motorcycle",
+                "bicycle"
+              ],
+              "mapping": {
+                "0": 0,
+                "1": 1,
+                "2": 2,
+                "3": null,
+                "4": 3,
+                "5": 4
+              },
+              "role_ids_sha256": "ca21d320fbf72ce44befc9fe51bd94f657227f6e508f19093b61c43d80b706e4",
+              "source_conversion_sha256": "77396544fd69fbeb7ec5b29a3916a366f6c085dc80d2dabef7ebf8d0693953e2",
+              "version": "five-class-labels-v1"
+            },
+            "encoding": {
+              "format": "jpg",
+              "jpeg_quality": 95,
+              "opencv": "4.14.0"
+            },
+            "operator_code": "354f19a51ba613f7bd0109fe5fcb7f86b98423059081500d96640ad2e29bb27b",
+            "recipe": {
+              "adaptive": {
+                "brightness_below": 0.12,
+                "contrast_below": 0.0,
+                "max_filters": 1,
+                "noise_above": 1.0,
+                "sharpness_below": 0.0,
+                "sharpness_min": 0.0
+              },
+              "clahe": {
+                "clip_limit": 1.2,
+                "grid_size": 8
+              },
+              "denoise": {
+                "strength": 2.0
+              },
+              "gamma": {
+                "gamma": 0.85
+              },
+              "raw": {},
+              "sharpen": {
+                "amount": 0.15,
+                "sigma": 1.0
+              }
+            },
+            "source": "5e4315f680041c010e402b5935f7b990f16d8c2e33792385147ca742e9c5f3dc",
+            "variant": "adaptive"
+          },
+          "files_identity": "aada92a470e332bb72598ca10bc32b523bb5cccef2a52a798fb615693a40c540",
+          "ids": {
+            "count": 13975,
+            "sha256": "bf2957e6f237c3c2373f9913117933e6de0ae3c7d3bcf5aa700362efa0e71ff3"
+          },
+          "path": "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/development/adaptive"
+        },
+        "mapping": "native 5 vehicles",
+        "policy_id": "1ac3fb9bb94b132f70d3e168b5ef15a54b616444e535b9a3bb265682a6fce0ef",
+        "protocol_id": "680090b8eef098fbe10c77e632aacbfd3d6854d8489d7518e20f062e032b6e44",
+        "role": "development_validation",
+        "settings": {
+          "agnostic_nms": false,
+          "augment": false,
+          "batch": 32,
+          "conf": 0.001,
+          "deterministic": true,
+          "device": "0",
+          "half": false,
+          "imgsz": 640,
+          "iou": 0.7,
+          "max_det": 300,
+          "nms": false,
+          "plots": true,
+          "quantize": 32,
+          "rect": true,
+          "seed": 2026,
+          "verbose": false,
+          "workers": 8
+        },
+        "ultralytics": "8.4.198",
+        "version": "development-native-v3"
+      },
+      "native_result_sha256": "1c63019cc5c17d22dfd82a870989fa077369f32373396ce7955826e9cb47231e",
+      "result": {
+        "artifacts": {
+          "BoxF1_curve.png": "b742e1d1d95e638bd4ae8ae9e9159ce1dc390500c399503a6e2e8df5c1fb7819",
+          "BoxPR_curve.png": "c3b7dc1f7dd5ccde5656f11e79eefa9ca4dc3e570ee1292230491f3a3691e380",
+          "BoxP_curve.png": "81787f2c072acc2ad800dd3ae4c475c3561dadfa82d05f23e192b1c635347b8c",
+          "BoxR_curve.png": "ebfb74f503813fc4f86bcc36adf6475e8d1690fa64d73f1221d60b2567d5ba89",
+          "confusion_matrix.png": "38245b63e10818f98260ac18089f62ae7dfece0703ac12acb6d45fc4fd7ad529",
+          "confusion_matrix_normalized.png": "4586bb38b62f4eb7827eb7874ab16edc1d1cd40dffa8afa00c76399d38091293",
+          "paired_stats.npz": "b60b22ebef4b73ee3ef85fec1e74d5b7bee3c90b8ccca20a12c58b07902d7bc8",
+          "val_batch0_labels.jpg": "5cedefebd7f467dfd74372477fbafc30e91ab2e0309c20bed3c361be46bd5e79",
+          "val_batch0_pred.jpg": "b11e82631fa48811f55befce4cb3ceed4ca3175f3394fdae5fbf84e80ea4525b",
+          "val_batch1_labels.jpg": "33661e01bd4561c8f93ebaefcc8ba65ad099b27cb058b5cd1a70ebffd9a4fca1",
+          "val_batch1_pred.jpg": "924838ee7b7ef247ce842d664d2458920ff92bae7477f58849934a9bc38283c4",
+          "val_batch2_labels.jpg": "c9fb5e45b106fba32a05f63f6c6d9097d7bb5cfe568ab535171ee0e1dd5d4e80",
+          "val_batch2_pred.jpg": "907f5a040db07f78bcd29a46a300a1d7c8a69b7bc3850f08fd9f57725eb62d4b"
+        },
+        "classes": [
+          {
+            "Box-F1": 0.58609641,
+            "Box-P": 0.61555723,
+            "Box-R": 0.55932679,
+            "Class": "car",
+            "Images": 13820,
+            "Instances": 142541,
+            "mAP50": 0.59580267,
+            "mAP50-95": 0.33820561,
+            "mAP75": 0.33206426
+          },
+          {
+            "Box-F1": 0.39190755,
+            "Box-P": 0.50375161,
+            "Box-R": 0.32070411,
+            "Class": "truck",
+            "Images": 3773,
+            "Instances": 5965,
+            "mAP50": 0.34752314,
+            "mAP50-95": 0.22708371,
+            "mAP75": 0.2478531
+          },
+          {
+            "Box-F1": 0.37759956,
+            "Box-P": 0.57366917,
+            "Box-R": 0.28141654,
+            "Class": "bus",
+            "Images": 1759,
+            "Instances": 2276,
+            "mAP50": 0.32643692,
+            "mAP50-95": 0.23391971,
+            "mAP75": 0.26496448
+          },
+          {
+            "Box-F1": 0.23192006,
+            "Box-P": 0.31450686,
+            "Box-R": 0.18368576,
+            "Class": "motorcycle",
+            "Images": 435,
+            "Instances": 562,
+            "mAP50": 0.16157942,
+            "mAP50-95": 0.07653775,
+            "mAP75": 0.06564765
+          },
+          {
+            "Box-F1": 0.28538377,
+            "Box-P": 0.50334195,
+            "Box-R": 0.1991482,
+            "Class": "bicycle",
+            "Images": 872,
+            "Instances": 1430,
+            "mAP50": 0.22483032,
+            "mAP50-95": 0.0924075,
+            "mAP75": 0.0531759
+          }
+        ],
+        "final_test_accessed": false,
+        "overall": {
+          "mAP50": 0.3312344939603188,
+          "mAP50_95": 0.19363085672929078,
+          "precision": 0.502165363883085,
+          "recall": 0.30885627941229166
+        },
+        "role": "development_validation",
+        "speed_ms": {
+          "inference": 1.1330049588565325,
+          "loss": 0.00015861273912732925,
+          "postprocess": 0.1268564955299522,
+          "preprocess": 0.28015430598296487
+        }
+      }
+    }
+  ],
+  "final_test_accessed": false
+}

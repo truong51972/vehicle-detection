@@ -1,0 +1,352 @@
+{
+  "comparisons": [
+    {
+      "after": "adaptive-raw",
+      "after_ap": 0.19324789854963995,
+      "axis": "overall",
+      "before": "raw-raw",
+      "before_ap": 0.19075606533024297,
+      "condition": "all",
+      "estimand": {
+        "class_ids": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "class_names": [
+          "car",
+          "truck",
+          "bus",
+          "motorcycle",
+          "bicycle"
+        ],
+        "limit": "Support gate is an engineering minimum, not statistical adequacy",
+        "minimum_source_groups": 5,
+        "missing_class_draw": "exclude macro draw; no AP imputation or redraw",
+        "population": "fixed supported classes; percentile CI conditional on their presence",
+        "support": [
+          {
+            "class": "car",
+            "class_id": 0,
+            "images": 13820,
+            "included": true,
+            "instances": 142541,
+            "reason": null,
+            "source_groups": 8198
+          },
+          {
+            "class": "truck",
+            "class_id": 1,
+            "images": 3773,
+            "included": true,
+            "instances": 5965,
+            "reason": null,
+            "source_groups": 3043
+          },
+          {
+            "class": "bus",
+            "class_id": 2,
+            "images": 1759,
+            "included": true,
+            "instances": 2276,
+            "reason": null,
+            "source_groups": 1549
+          },
+          {
+            "class": "motorcycle",
+            "class_id": 3,
+            "images": 435,
+            "included": true,
+            "instances": 562,
+            "reason": null,
+            "source_groups": 408
+          },
+          {
+            "class": "bicycle",
+            "class_id": 4,
+            "images": 872,
+            "included": true,
+            "instances": 1430,
+            "reason": null,
+            "source_groups": 794
+          }
+        ],
+        "version": "fixed-supported-macro-v2"
+      },
+      "groups": 8258,
+      "images": 13975,
+      "interval": "fixed macro AP; conditional 95% group CI; no multiplicity correction",
+      "invalid_draws": 0,
+      "per_class": [
+        {
+          "after_ap": 0.337591055243797,
+          "before_ap": 0.3378129836651967,
+          "ci_high": 0.00036701286129932353,
+          "ci_low": -0.000858259968907954,
+          "class": "car",
+          "class_id": 0,
+          "excluded_draws": 0,
+          "images": 13820,
+          "included": true,
+          "instances": 142541,
+          "present_draws": 100,
+          "reason": null,
+          "recovery": -0.00022192842139967528,
+          "source_groups": 8198,
+          "valid_draws": 100
+        },
+        {
+          "after_ap": 0.22584322832297707,
+          "before_ap": 0.22368842372733808,
+          "ci_high": 0.0056589944781275615,
+          "ci_low": -0.0025543808432191804,
+          "class": "truck",
+          "class_id": 1,
+          "excluded_draws": 0,
+          "images": 3773,
+          "included": true,
+          "instances": 5965,
+          "present_draws": 100,
+          "reason": null,
+          "recovery": 0.0021548045956389927,
+          "source_groups": 3043,
+          "valid_draws": 100
+        },
+        {
+          "after_ap": 0.23386590971743154,
+          "before_ap": 0.22706039925287508,
+          "ci_high": 0.014320997782140372,
+          "ci_low": 0.000984795881838084,
+          "class": "bus",
+          "class_id": 2,
+          "excluded_draws": 0,
+          "images": 1759,
+          "included": true,
+          "instances": 2276,
+          "present_draws": 100,
+          "reason": null,
+          "recovery": 0.0068055104645564635,
+          "source_groups": 1549,
+          "valid_draws": 100
+        },
+        {
+          "after_ap": 0.07690371394264793,
+          "before_ap": 0.07124891027842466,
+          "ci_high": 0.012238781142444762,
+          "ci_low": -0.0020701445074949405,
+          "class": "motorcycle",
+          "class_id": 3,
+          "excluded_draws": 0,
+          "images": 435,
+          "included": true,
+          "instances": 562,
+          "present_draws": 100,
+          "reason": null,
+          "recovery": 0.0056548036642232735,
+          "source_groups": 408,
+          "valid_draws": 100
+        },
+        {
+          "after_ap": 0.09203558552134619,
+          "before_ap": 0.09396960972738028,
+          "ci_high": 0.0032459139019639094,
+          "ci_low": -0.006058631549489806,
+          "class": "bicycle",
+          "class_id": 4,
+          "excluded_draws": 0,
+          "images": 872,
+          "included": true,
+          "instances": 1430,
+          "present_draws": 100,
+          "reason": null,
+          "recovery": -0.001934024206034085,
+          "source_groups": 794,
+          "valid_draws": 100
+        }
+      ],
+      "recovery": 0.002491833219396994,
+      "recovery_ci_high": 0.00471435154729651,
+      "recovery_ci_low": 0.00018309881262501616,
+      "resamples": 100,
+      "status": "exploratory",
+      "valid_draws": 100
+    },
+    {
+      "after": "adaptive-adaptive",
+      "after_ap": 0.19363085672929073,
+      "axis": "overall",
+      "before": "raw-adaptive",
+      "before_ap": 0.1908597541122785,
+      "condition": "all",
+      "estimand": {
+        "class_ids": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "class_names": [
+          "car",
+          "truck",
+          "bus",
+          "motorcycle",
+          "bicycle"
+        ],
+        "limit": "Support gate is an engineering minimum, not statistical adequacy",
+        "minimum_source_groups": 5,
+        "missing_class_draw": "exclude macro draw; no AP imputation or redraw",
+        "population": "fixed supported classes; percentile CI conditional on their presence",
+        "support": [
+          {
+            "class": "car",
+            "class_id": 0,
+            "images": 13820,
+            "included": true,
+            "instances": 142541,
+            "reason": null,
+            "source_groups": 8198
+          },
+          {
+            "class": "truck",
+            "class_id": 1,
+            "images": 3773,
+            "included": true,
+            "instances": 5965,
+            "reason": null,
+            "source_groups": 3043
+          },
+          {
+            "class": "bus",
+            "class_id": 2,
+            "images": 1759,
+            "included": true,
+            "instances": 2276,
+            "reason": null,
+            "source_groups": 1549
+          },
+          {
+            "class": "motorcycle",
+            "class_id": 3,
+            "images": 435,
+            "included": true,
+            "instances": 562,
+            "reason": null,
+            "source_groups": 408
+          },
+          {
+            "class": "bicycle",
+            "class_id": 4,
+            "images": 872,
+            "included": true,
+            "instances": 1430,
+            "reason": null,
+            "source_groups": 794
+          }
+        ],
+        "version": "fixed-supported-macro-v2"
+      },
+      "groups": 8258,
+      "images": 13975,
+      "interval": "fixed macro AP; conditional 95% group CI; no multiplicity correction",
+      "invalid_draws": 0,
+      "per_class": [
+        {
+          "after_ap": 0.33820561189875764,
+          "before_ap": 0.33779714931944527,
+          "ci_high": 0.0009349959473712846,
+          "ci_low": -0.0002617532020846913,
+          "class": "car",
+          "class_id": 0,
+          "excluded_draws": 0,
+          "images": 13820,
+          "included": true,
+          "instances": 142541,
+          "present_draws": 100,
+          "reason": null,
+          "recovery": 0.0004084625793123742,
+          "source_groups": 8198,
+          "valid_draws": 100
+        },
+        {
+          "after_ap": 0.22708371410948125,
+          "before_ap": 0.223799956237048,
+          "ci_high": 0.007426750757391555,
+          "ci_low": -0.001022464713228687,
+          "class": "truck",
+          "class_id": 1,
+          "excluded_draws": 0,
+          "images": 3773,
+          "included": true,
+          "instances": 5965,
+          "present_draws": 100,
+          "reason": null,
+          "recovery": 0.0032837578724332628,
+          "source_groups": 3043,
+          "valid_draws": 100
+        },
+        {
+          "after_ap": 0.23391970922329558,
+          "before_ap": 0.2272645843066327,
+          "ci_high": 0.014169120103362737,
+          "ci_low": 0.000861424438589508,
+          "class": "bus",
+          "class_id": 2,
+          "excluded_draws": 0,
+          "images": 1759,
+          "included": true,
+          "instances": 2276,
+          "present_draws": 100,
+          "reason": null,
+          "recovery": 0.006655124916662869,
+          "source_groups": 1549,
+          "valid_draws": 100
+        },
+        {
+          "after_ap": 0.07653774955981055,
+          "before_ap": 0.07098334962411028,
+          "ci_high": 0.012406769879221053,
+          "ci_low": -0.0014821838273232414,
+          "class": "motorcycle",
+          "class_id": 3,
+          "excluded_draws": 0,
+          "images": 435,
+          "included": true,
+          "instances": 562,
+          "present_draws": 100,
+          "reason": null,
+          "recovery": 0.005554399935700269,
+          "source_groups": 408,
+          "valid_draws": 100
+        },
+        {
+          "after_ap": 0.09240749885510871,
+          "before_ap": 0.09445373107415628,
+          "ci_high": 0.0032659010790556963,
+          "ci_low": -0.006055342405207091,
+          "class": "bicycle",
+          "class_id": 4,
+          "excluded_draws": 0,
+          "images": 872,
+          "included": true,
+          "instances": 1430,
+          "present_draws": 100,
+          "reason": null,
+          "recovery": -0.002046232219047567,
+          "source_groups": 794,
+          "valid_draws": 100
+        }
+      ],
+      "recovery": 0.0027711026170122418,
+      "recovery_ci_high": 0.004898437550285928,
+      "recovery_ci_low": 0.0002950856703243448,
+      "resamples": 100,
+      "status": "exploratory",
+      "valid_draws": 100
+    }
+  ],
+  "full_analysis_sha256": "66133119b25c8baddfa0411af829939bbf0b4bf3d3b25769f6e3886cadd9ed82",
+  "limitation": "Single-seed, exploratory two-contrast paired group analysis; conditional support is descriptive; no multiplicity adjustment"
+}

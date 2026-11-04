@@ -10,8 +10,10 @@ from vehicle_detection.common import digest, file_hash, read_json, write_json
 from vehicle_detection.data import CLASSES
 from vehicle_detection.datasets import export_development_pair
 from vehicle_detection.evaluation import evaluate_development
+from vehicle_detection.five_class import FIVE_CLASSES, derive_labels
+from vehicle_detection.offline import export_variant, verify_alignment
 
-# The historical evaluator is migrated separately in issue #22.
+# Keep six-class fixtures while deriving five-class inputs explicitly below.
 pytestmark = pytest.mark.parametrize("pair_inputs", [CLASSES], indirect=True)
 
 
@@ -91,3 +93,61 @@ def test_final_role_and_changed_manifest_rejected_before_pixels(pair_inputs, mon
     protocol["seed"] = -1
     with pytest.raises(ValueError, match="checksum"):
         evaluate_development(protocol, policy, raw, checkpoint, output)
+
+
+def test_five_class_taxonomy_inferred_and_bound_in_cache(pair_inputs, monkeypatch):
+    from types import SimpleNamespace
+
+    import pandas as pd
+
+    protocol, _, policy, _, _, raw, checkpoint, output = pair_inputs
+    conversion = raw.parent / "conversion"
+    write_json(
+        conversion / "conversion.json",
+        {
+            "classes": ["car", "truck", "bus", "train", "motorcycle", "bicycle"],
+            "box_convention": "continuous",
+        },
+    )
+    derived = raw.parent / "five-labels"
+    derive_labels(conversion, derived, {"tune": protocol["splits"]["development_validation"]})
+    records = [
+        {"id": r["id"], "path": r["source"], "sha256": r["source_sha256"]}
+        for r in pd.read_csv(raw / "metadata.csv").to_dict("records")
+    ]
+    five = raw.parent / "five-dev"
+    export_variant({"tune": records}, derived, five, "raw_reencoded", policy["recipes"])
+    verify_alignment([five])
+    monkeypatch.setattr(evaluation, "PRETRAINED_SHA256", file_hash(checkpoint))
+
+    def no_model(*args, **kwargs):
+        raise RuntimeError("Fixture stops before inference")
+
+    monkeypatch.setattr(evaluation, "YOLO", no_model)
+    args = protocol, policy, five, checkpoint, output
+    with pytest.raises(RuntimeError, match="Fixture stops"):
+        evaluate_development(*args, pretrained=True, allow_inference=True)
+    identity = read_json(output / "identity.json")
+    assert identity["class_names"] == FIVE_CLASSES
+    assert identity["mapping"] == "COCO-80 to five vehicles"
+    result = {"artifacts": {}}
+    write_json(
+        output / "native_result.json",
+        {
+            "identity": identity,
+            "result": result,
+            "checksum": digest(result),
+        },
+    )
+    assert evaluate_development(*args, pretrained=True) == result
+    with pytest.raises(ValueError, match="taxonomy"):
+        evaluate_development(*args, pretrained=True, class_names=["wrong"])
+    with pytest.raises(ValueError, match="identity/checksum"):
+        evaluate_development(*args, pretrained=True, settings={"batch": 1})
+    monkeypatch.setattr(
+        evaluation, "YOLO", lambda *a: SimpleNamespace(names=dict.fromkeys(range(80)))
+    )
+    with pytest.raises(ValueError, match="Checkpoint taxonomy"):
+        evaluate_development(
+            protocol, policy, five, checkpoint, output / "wrong-head", allow_inference=True
+        )
