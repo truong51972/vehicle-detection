@@ -1,0 +1,240 @@
+{
+  "branches": {
+    "adaptive": {
+      "args_sha256": "c70a49622ffb96ae815dd3cce06a03773c15b41445d10d5575da5e99ac61906f",
+      "best_epoch": 6,
+      "best_metrics": {
+        "metrics/mAP50(B)": 0.33086,
+        "metrics/mAP50-95(B)": 0.19336,
+        "metrics/precision(B)": 0.50428,
+        "metrics/recall(B)": 0.30639
+      },
+      "checkpoints": {
+        "best": {
+          "bytes": 5435077,
+          "loads_with_five_class_head": true,
+          "native_version": "8.4.198",
+          "path": "runs/training-five-s10-v1/adaptive/weights/best.pt",
+          "saved_at": "2026-11-04T21:59:20.364606+07:00",
+          "sha256": "dac387f119a2fb547e107be86a2f59052ff58c75ef5c29e714b8a4fb2029baea"
+        },
+        "last": {
+          "bytes": 5435077,
+          "loads_with_five_class_head": true,
+          "native_version": "8.4.198",
+          "path": "runs/training-five-s10-v1/adaptive/weights/last.pt",
+          "saved_at": "2026-11-04T22:15:46.314926+07:00",
+          "sha256": "f48ae4bc9f098d17e25882e6baba272ede0e8dfba0cf1ab93977cc0f4c9b84ef"
+        }
+      },
+      "conversion": {
+        "classes": [
+          "car",
+          "truck",
+          "bus",
+          "motorcycle",
+          "bicycle"
+        ],
+        "mapping": {
+          "0": 0,
+          "1": 1,
+          "2": 2,
+          "3": null,
+          "4": 3,
+          "5": 4
+        },
+        "role_ids_sha256": "1998fbe049b8beb61dc068a76f8e6c05cb0c0343bf1311110e962d07f3f6c169",
+        "source_conversion_sha256": "77396544fd69fbeb7ec5b29a3916a366f6c085dc80d2dabef7ebf8d0693953e2",
+        "version": "five-class-labels-v1"
+      },
+      "final_epoch": 20,
+      "final_metrics": {
+        "metrics/mAP50(B)": 0.31746,
+        "metrics/mAP50-95(B)": 0.18336,
+        "metrics/precision(B)": 0.5032,
+        "metrics/recall(B)": 0.295
+      },
+      "history_sha256": "e541ac422bad2aa3f8da3488f6c5f08f6555fbec22e10b671eaa4472ddf432bd",
+      "interruption": null,
+      "native_timing_segments": [
+        {
+          "first_epoch": 1,
+          "last_epoch": 20,
+          "seconds": 1439.3
+        }
+      ],
+      "training_files_identity": "e5b09a2c513584b7b83afe32001971494e2b54112f4460e447d5cc99bb75d026",
+      "training_validation_seconds": 1439.3
+    },
+    "raw": {
+      "args_sha256": "2cbd989861710451dc11650b0f10c655c13290caba76828c683fa1d409f4349e",
+      "best_epoch": 6,
+      "best_metrics": {
+        "metrics/mAP50(B)": 0.32805,
+        "metrics/mAP50-95(B)": 0.19078,
+        "metrics/precision(B)": 0.50452,
+        "metrics/recall(B)": 0.30837
+      },
+      "checkpoints": {
+        "best": {
+          "bytes": 5435013,
+          "loads_with_five_class_head": true,
+          "native_version": "8.4.198",
+          "path": "runs/training-five-s10-v1/raw/weights/best.pt",
+          "saved_at": "2026-11-04T21:23:29.545639+07:00",
+          "sha256": "2d5464636781977c61e811a28285b9b8949575eec8a9ce8800a0fa24e9acc38d"
+        },
+        "last": {
+          "bytes": 5436293,
+          "loads_with_five_class_head": true,
+          "native_version": "8.4.198",
+          "path": "runs/training-five-s10-v1/raw/weights/last.pt",
+          "saved_at": "2026-11-04T21:50:52.149410+07:00",
+          "sha256": "797ef0b2457d90c50f2c4ba748f6f2c76af6badd4047c23d38d064ee5a1cb387"
+        }
+      },
+      "conversion": {
+        "classes": [
+          "car",
+          "truck",
+          "bus",
+          "motorcycle",
+          "bicycle"
+        ],
+        "mapping": {
+          "0": 0,
+          "1": 1,
+          "2": 2,
+          "3": null,
+          "4": 3,
+          "5": 4
+        },
+        "role_ids_sha256": "1998fbe049b8beb61dc068a76f8e6c05cb0c0343bf1311110e962d07f3f6c169",
+        "source_conversion_sha256": "77396544fd69fbeb7ec5b29a3916a366f6c085dc80d2dabef7ebf8d0693953e2",
+        "version": "five-class-labels-v1"
+      },
+      "final_epoch": 20,
+      "final_metrics": {
+        "metrics/mAP50(B)": 0.31657,
+        "metrics/mAP50-95(B)": 0.18101,
+        "metrics/precision(B)": 0.49907,
+        "metrics/recall(B)": 0.30276
+      },
+      "history_sha256": "c47578631bb984033b71a7fac7d9e30264658225893b57c3f4a58e57900cbd90",
+      "interruption": {
+        "bitwise_resume": false,
+        "cause": "unconfirmed",
+        "kernel_died_during_epoch": 13,
+        "resumed_after_epoch": 12
+      },
+      "native_timing_segments": [
+        {
+          "first_epoch": 1,
+          "last_epoch": 12,
+          "seconds": 890.597
+        },
+        {
+          "first_epoch": 13,
+          "last_epoch": 20,
+          "seconds": 587.056
+        }
+      ],
+      "training_files_identity": "25dbb97306e25b61bd0a031ee2322448133e4ff76c5873a45c9373ee2d9d48c2",
+      "training_validation_seconds": 1477.653
+    }
+  },
+  "classes": [
+    "car",
+    "truck",
+    "bus",
+    "motorcycle",
+    "bicycle"
+  ],
+  "convergence_plot": {
+    "path": "docs/issue21/s10_convergence.png",
+    "sha256": "b8f5aab1e69aa5bd7a3a2a1aa281476524def8e98664e3aff397fb19dd46ca73"
+  },
+  "development_files_identity": "b6a76c60a121996586efb8bf79cb31fba8d4e30797951c65e0807ff14949c2f4",
+  "development_images": 13975,
+  "execution_source": "Local training changes based on 99d9af2; finalized and committed after execution in this PR.",
+  "final_test_accessed": false,
+  "freeze": 11,
+  "metric_source": "Native results.csv saved epoch metrics, checked against checkpoint train_metrics; no fresh inference.",
+  "offline_preprocessing": "Separate export phase; instrumented/resumed five-class export timings are not performance evidence.",
+  "pair_manifest_sha256": "e31a093d8d16e3f8febb223bbbd8a7f0c48510093eca81a0b0073b9d1a52eb9f",
+  "policy_decision_id": "33a47ce82c437e234b237e0d00f14db37b5bc2467b8187e5fff5c00e8c3b891c",
+  "policy_id": "1ac3fb9bb94b132f70d3e168b5ef15a54b616444e535b9a3bb265682a6fce0ef",
+  "protocol_id": "680090b8eef098fbe10c77e632aacbfd3d6854d8489d7518e20f062e032b6e44",
+  "report_generated_at": "2026-11-04T15:47:54.672413+00:00",
+  "run_root": "runs/training-five-s10-v1",
+  "runtime": {
+    "cuda": "13.2",
+    "gpu": "NVIDIA GeForce RTX 5060 Ti",
+    "torch": "2.15.0+cu132",
+    "ultralytics": "8.4.198"
+  },
+  "settings": {
+    "agnostic_nms": false,
+    "amp": false,
+    "augment": false,
+    "augmentations": [],
+    "batch": 16,
+    "bgr": 0,
+    "cache": false,
+    "channels_last": false,
+    "close_mosaic": 0,
+    "cls_remap": true,
+    "compile": false,
+    "conf": 0.001,
+    "copy_paste": 0,
+    "cos_lr": true,
+    "cutmix": 0,
+    "degrees": 0,
+    "deterministic": true,
+    "device": "0",
+    "epochs": 20,
+    "fliplr": 0,
+    "flipud": 0,
+    "fraction": 1.0,
+    "hsv_h": 0,
+    "hsv_s": 0,
+    "hsv_v": 0,
+    "imgsz": 640,
+    "iou": 0.7,
+    "lr0": 0.001,
+    "lrf": 0.01,
+    "max_det": 300,
+    "mixup": 0,
+    "mosaic": 0,
+    "multi_scale": 0,
+    "nbs": 64,
+    "nms": false,
+    "optimizer": "AdamW",
+    "patience": 0,
+    "perspective": 0,
+    "plots": true,
+    "quantize": 32,
+    "rect": false,
+    "save": true,
+    "scale": 0,
+    "seed": 2026,
+    "shear": 0,
+    "translate": 0,
+    "val": true,
+    "verbose": false,
+    "warmup_bias_lr": 0.0,
+    "warmup_epochs": 3.0,
+    "weight_decay": 0.0005,
+    "workers": 8
+  },
+  "starting_weights": {
+    "nc": 80,
+    "path": "weights/yolo26n.pt",
+    "sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef"
+  },
+  "subsets_id": "8a9ba46aa120f0e1d113d4bd907bc8ef5e82ab9bb3bd533d863812deb3f30b4f",
+  "timing_scope": "Sum of visible native timing segments: training plus per-epoch validation. Excludes discarded partial-epoch work, setup, downtime and final best-checkpoint validation.",
+  "training_images": 4890,
+  "validation_input": "Raw development only",
+  "version": "five-class-native-s10-v1"
+}

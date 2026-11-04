@@ -1,6 +1,7 @@
-# Epic #14 — Five-class handoff for Codex (WIP)
+# Epic #14 — Five-class handoff for Codex
 
-Branch: `feat/epic14-five-class-prep` (do **not** merge until validated).
+Five-class preparation merged in PR #24. Fresh paired S10 training is complete;
+see [the issue #21 results](ISSUE21_RESULTS.md). Five-class evaluation remains #22.
 
 ## Already prepared
 
@@ -32,12 +33,11 @@ Branch: `feat/epic14-five-class-prep` (do **not** merge until validated).
 1. **#20:** The five-class-only Run All path and real BDD100K verification below
    are complete. Review the evidence before closing the issue. S20 remains
    membership/annotation-only; final-test images stay sealed.
-2. **#21:** Adapt the *existing* `prepare_pair`/training notebook to consume
-   `runs/preprocessing-five-v1/datasets/S10` and
-   `runs/preprocessing-five-v1/development/raw`; preserve native YOLO
-   `freeze=11`, equal optimizer/seed/settings, independent pretrained
-   initialization, explicit versioned output paths and `last.pt` resume.
-   Add a tiny CPU smoke fixture; **do not fabricate full-data training**.
+2. **#21:** Both five-class native S10 branches completed 20 epochs in
+   `runs/training-five-s10-v1/`, using the existing five-class exports and native
+   `freeze=11`. Raw resumed after epoch 12; Adaptive started independently from
+   the pinned original pretrained weights. See the results report for saved
+   histories, costs, checkpoint hashes, native CPU smoke and notebook evidence.
 3. **#22:** Extend the existing COCO→BDD baseline adapter for the five-class map
    `{2:0, 7:1, 5:2, 3:3, 1:4}`. Keep the historical six-class adapter intact.
    Make only the changes needed in the **existing** evaluator and notebook 04
@@ -108,5 +108,5 @@ and the recorded preservation audit (`validation.json`) below.
   pixels. S20 remains membership-only until a separate decision.
 - The five-class and six-class macro-mAP denominators differ: never claim accuracy
   improved simply because a class was removed.
-- Keep #14 open until #20–#22 are genuinely completed; this draft PR is only
-  preparatory code, not experimental results.
+- Keep #14 open until #20–#22 are genuinely completed. Training completion does
+  not imply a five-class pretrained baseline, 3×2 evaluation or final-test release.

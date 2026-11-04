@@ -117,6 +117,12 @@ def prepare_pair(protocol, subsets, policy, decision, pair, development, checkpo
         "raw_reencoded",
         deep=False,
     )
+    classes = training["raw"]["export"]["conversion"].get("classes", CLASSES)
+    if any(
+        dataset["export"]["conversion"].get("classes", CLASSES) != classes
+        for dataset in (training["adaptive"], development_export)
+    ):
+        raise ValueError("Training and development exports must use the same taxonomy")
     if file_hash(checkpoint) != PRETRAINED_SHA256:
         raise ValueError("Use the unchanged pinned pretrained YOLO26n checkpoint")
     model = YOLO(str(checkpoint))
@@ -143,7 +149,7 @@ def prepare_pair(protocol, subsets, policy, decision, pair, development, checkpo
             "path": str(output),
             "train": str(Path(dataset["path"]) / "images/train"),
             "val": str(development / "images/tune"),
-            "names": dict(enumerate(CLASSES)),
+            "names": dict(enumerate(classes)),
         }
         path = output / f"{branch}.yaml"
         if path.exists() and yaml.safe_load(path.read_text()) != config:
@@ -159,11 +165,12 @@ def train_branch(experiment, branch, output, *, resume=False):
     if branch not in ("raw", "adaptive") or read_json(output / "pair.json") != experiment:
         raise ValueError("Unknown branch or changed paired experiment")
     data = output / f"{branch}.yaml"
+    classes = experiment["training"][branch]["export"]["conversion"].get("classes", CLASSES)
     expected = {
         "path": str(output),
         "train": str(Path(experiment["training"][branch]["path"]) / "images/train"),
         "val": str(Path(experiment["development"]["path"]) / "images/tune"),
-        "names": dict(enumerate(CLASSES)),
+        "names": dict(enumerate(classes)),
     }
     if yaml.safe_load(data.read_text()) != expected:
         raise ValueError("Training YAML changed")
@@ -210,15 +217,23 @@ def train_branch(experiment, branch, output, *, resume=False):
         if not path.is_file():
             raise FileNotFoundError(f"Native training did not publish {path}")
     table = pd.read_csv(history)
-    if len(table) != experiment["settings"]["epochs"]:
+    if table["epoch"].tolist() != list(range(1, experiment["settings"]["epochs"] + 1)):
         raise ValueError("Native training has not completed the declared epoch budget")
     metric = "metrics/mAP50-95(B)"
+    elapsed = table["time"]
+    increments = elapsed.diff()
+    # shortcut: clock resets infer sessions, use retained logs if a restart has no visible reset.
+    seconds = increments.where(increments >= 0, elapsed).sum()
     result = {
         "budget": {
             "epochs": len(table),
             "images_per_epoch": len(experiment["training"][branch]["ids"]),
         },
-        "best_epoch": int(table[metric].idxmax()) + 1 if metric in table else None,
+        # Native best.pt is replaced on equal fitness, so the last tied maximum wins.
+        "best_epoch": int(table.loc[table[metric] == table[metric].max(), "epoch"].iloc[-1]),
+        "final_epoch": int(table["epoch"].iloc[-1]),
+        "training_validation_seconds": float(seconds),
+        "timing_reset_epochs": table.loc[increments < 0, "epoch"].astype(int).tolist(),
         "best_checkpoint": str(best),
         "last_checkpoint": str(last),
     }

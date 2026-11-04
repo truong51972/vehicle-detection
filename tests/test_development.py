@@ -7,8 +7,12 @@ from test_study import bdd as bdd
 
 from vehicle_detection import evaluation
 from vehicle_detection.common import digest, file_hash, read_json, write_json
+from vehicle_detection.data import CLASSES
 from vehicle_detection.datasets import export_development_pair
 from vehicle_detection.evaluation import evaluate_development
+
+# The historical evaluator is migrated separately in issue #22.
+pytestmark = pytest.mark.parametrize("pair_inputs", [CLASSES], indirect=True)
 
 
 def test_explicit_checkpoint_has_no_native_or_legacy_receipt_dependency(pair_inputs):

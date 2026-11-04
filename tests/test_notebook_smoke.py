@@ -123,7 +123,33 @@ baseline.PRETRAINED_SHA256 = {file_hash(checkpoint)!r}
 training.TRAIN_SETTINGS.update(epochs=1, batch=2, nbs=2, imgsz=64, workers=0, device="cpu")
 """
     )
-    run("03_training.ipynb", setup=train_setup)
+    run(
+        "03_training.ipynb",
+        setup=train_setup
+        + """from unittest.mock import patch
+for target in ["vehicle_detection.data.scan_bdd", "vehicle_detection.protocol.build_protocol",
+               "vehicle_detection.adaptive.calibrate_policy",
+               "vehicle_detection.offline.export_variant"]:
+    patch(target, side_effect=AssertionError("Upstream phase triggered")).start()
+""",
+        overrides='PROTOCOL_PATH = ROOT / "runs/data-v1/protocol.json"\n'
+        'SUBSETS_PATH = ROOT / "runs/preprocessing-v1/subsets.json"',
+    )
+    for branch in ("raw", "adaptive"):
+        from ultralytics import YOLO
+
+        checkpoint = project / "runs/training-five-s10-v1" / branch / "weights/best.pt"
+        assert len(YOLO(str(checkpoint)).names) == 5
+    # Notebook 04 retains its historical six-class contract until issue #22.
+    run(
+        "03_training.ipynb",
+        setup=train_setup,
+        overrides='PROTOCOL_PATH = ROOT / "runs/data-v1/protocol.json"\n'
+        'PREPARED = ROOT / "runs/preprocessing-v1"\n'
+        'SUBSETS_PATH = PREPARED / "subsets.json"\n'
+        'RAW_DEVELOPMENT = ROOT / "runs/data-v1/datasets/raw"\n'
+        'TRAIN_ROOT = ROOT / "runs/training-native-s10-v1"',
+    )
     (project / "docs/development-v1").mkdir()
     shutil.copy(repository / "docs/development-v1/PLAN.md", project / "docs/development-v1")
     run(
