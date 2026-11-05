@@ -14,6 +14,11 @@
     "sha256": "07997ff433961d4dc2cd1e93a01aa3b27ff5e0bd533e2aafbe2805aa604d4d66",
     "source_revision": "2df2241f6bf4e09b92499122ad039a9e59f0ad86"
   },
+  "notebooks/03_preprocessing_experiments.ipynb": {
+    "archive": "notebooks/archive/round2-screening/03_preprocessing_experiments.ipynb",
+    "sha256": "74332e912de4e1e638ddebf3e7878ce3803fbe5c9215d085ca12d42f1986a429",
+    "source_revision": "6e9c7af31fffca5c75f787aa1cbfeb1ac99e1566"
+  },
   "notebooks/phase2/01_data_protocol.ipynb": {
     "archive": "notebooks/archive/phase2/01_data_protocol.ipynb",
     "sha256": "5d4ed8206a12a158abf19d49278a6b097804283098df7d319fe944c92a990c0e",

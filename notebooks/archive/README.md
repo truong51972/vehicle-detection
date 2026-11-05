@@ -41,3 +41,8 @@ six-class label-conversion entrypoint before issue #28 changed active notebook 0
 to a read-only five-class audit. Its recorded revision is `99d9af2`. Fresh-kernel
 legacy smoke tests still use this archived entrypoint to create synthetic fixture
 prerequisites; Round 2 notebooks consume saved prerequisites only.
+
+[Round 2 preprocessing screening](round2-screening/03_preprocessing_experiments.ipynb)
+preserves the exact PR #37 notebook before the quality-derived exploration extension.
+The old `docs/round2-preprocessing-v2/evidence_manifest.json` still names its original
+active path; resolve that entry through this archive manifest when checking its hash.

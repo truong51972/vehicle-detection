@@ -1,0 +1,14 @@
+{
+  "confirmation": "metadata only; no predictions",
+  "direct_cost_gates": {
+    "154f3bf1c8b517bd": true,
+    "195f7396fb2ba5a2": true,
+    "f3d79b8b76c731a4": true,
+    "f5f15928dabe8059": true,
+    "frozen_v2": true,
+    "skip": true
+  },
+  "final_holdout": "sealed",
+  "status": "pending_fresh_confirmation",
+  "v3_released": false
+}

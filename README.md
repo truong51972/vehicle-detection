@@ -28,6 +28,12 @@ notebook launches another phase.
    **Study measured: leading Denoise 5 candidate failed confirmation; v2 retained.** See
    [issue 30 results](docs/ISSUE30_RESULTS.md) and
    [experiment contracts and gates](docs/ISSUE30_IMPLEMENTATION.md).
+   Section 6 adds an opt-in quality/threshold search, three measured operator
+   refinements, diverse routing and local threshold refinement. New evidence uses
+   `round2-quality-v2` roots; `round2-quality-v1` remains preserved.
+   Set `RUN_QUALITY_SEARCH=True`; inference and direct runtime each have separate opt-ins.
+   See [review follow-ups and replay](docs/ISSUE30_QUALITY_REVIEW.md) and the
+   [first exploration record](docs/ISSUE30_QUALITY_SEARCH.md).
 
 These use the existing five-class order: **car, truck, bus, motorcycle, bicycle**.
 Original six-class annotations/conversions and frozen Gamma-or-Skip v2 results

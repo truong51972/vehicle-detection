@@ -1,0 +1,8 @@
+{
+  "detector_construction": "blocked",
+  "elapsed_seconds": 69.31,
+  "final_holdout": "sealed",
+  "fresh_kernel_cached_replay": "passed",
+  "historical_hashes_verified": 35,
+  "quality_remeasurement": "blocked"
+}

@@ -94,3 +94,11 @@ def test_active_notebooks_have_navigable_numbered_sections():
         assert all(s["code_cells"] for s in sections), "Avoid empty main sections"
         assert "Configuration" in sections[0]["title"]
         assert "Summary" in sections[-1]["title"]
+
+
+def test_pr37_evidence_is_unchanged_with_original_notebook_archived():
+    evidence = json.loads(Path("docs/round2-preprocessing-v2/evidence_manifest.json").read_text())
+    archives = json.loads(Path("notebooks/archive/manifest.json").read_text())
+    for original, expected in evidence["artifacts"].items():
+        path = archives[original]["archive"] if original in archives else original
+        assert file_hash(path) == expected, original
