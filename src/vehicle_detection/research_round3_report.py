@@ -272,7 +272,8 @@ def build_report():
         for p in REPORT.iterdir()
         if p.name not in ("evidence.json", "validation.json") and p.is_file()
     ]
-    artifacts += [OUTPUT / "sample.json", Path(__file__)]
+    report_source = Path(__file__).resolve().relative_to(Path(__file__).resolve().parents[2])
+    artifacts += [OUTPUT / "sample.json", report_source]
     freeze_json(
         REPORT / "evidence.json",
         {
