@@ -1,0 +1,66 @@
+[
+  {
+    "accuracy_reasons": [
+      "Gain below 0.2 AP percentage points vs skip",
+      "Gain below 0.2 AP percentage points vs frozen_v2"
+    ],
+    "candidate": "bilateral",
+    "mean_ms": 1.8469425769775207,
+    "pareto": false,
+    "passes": true,
+    "passes_accuracy_gates": false,
+    "score": 0.13413449381984943,
+    "worst_scenario_mean_ms": 1.9016037798943823,
+    "worst_scenario_p95_ms": 2.5105657496169442
+  },
+  {
+    "accuracy_reasons": [],
+    "candidate": "frozen_v2",
+    "mean_ms": 3.2232145180330463,
+    "pareto": true,
+    "passes": true,
+    "passes_accuracy_gates": true,
+    "score": 0.1360626498411266,
+    "worst_scenario_mean_ms": 3.512172768121028,
+    "worst_scenario_p95_ms": 6.283629496465437
+  },
+  {
+    "accuracy_reasons": [
+      "Gain below 0.2 AP percentage points vs skip",
+      "Gain below 0.2 AP percentage points vs frozen_v2"
+    ],
+    "candidate": "noise_range",
+    "mean_ms": 2.266549014786297,
+    "pareto": true,
+    "passes": true,
+    "passes_accuracy_gates": false,
+    "score": 0.13548755085037612,
+    "worst_scenario_mean_ms": 3.8046198704222434,
+    "worst_scenario_p95_ms": 5.144258251675637
+  },
+  {
+    "accuracy_reasons": [
+      "Gain below 0.2 AP percentage points vs skip",
+      "Gain below 0.2 AP percentage points vs frozen_v2"
+    ],
+    "candidate": "pr38_locked",
+    "mean_ms": 5.090683812602966,
+    "pareto": false,
+    "passes": true,
+    "passes_accuracy_gates": false,
+    "score": 0.13590055321506556,
+    "worst_scenario_mean_ms": 5.939482971963154,
+    "worst_scenario_p95_ms": 8.281042501039337
+  },
+  {
+    "accuracy_reasons": [],
+    "candidate": "skip",
+    "mean_ms": 0.15720481256996283,
+    "pareto": true,
+    "passes": true,
+    "passes_accuracy_gates": true,
+    "score": 0.13540889225879227,
+    "worst_scenario_mean_ms": 0.19502795375103688,
+    "worst_scenario_p95_ms": 0.4309857467887923
+  }
+]
