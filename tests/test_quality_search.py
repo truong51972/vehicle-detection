@@ -13,10 +13,42 @@ from vehicle_detection.evaluation_data import evaluation_sets
 from vehicle_detection.preprocessing_experiments import apply_candidate, calibration_sample
 from vehicle_detection.quality_search import (
     collect_quality,
+    diverse_beam,
     fresh_confirmation,
     quality_summary,
+    route_assignments,
     search_rules,
 )
+
+
+def test_beam_keeps_leaders_and_adds_new_conditions_and_actions():
+    leaders = [
+        {"rules": [{"metric": "contrast", "above": 0.25, "action": f"action-{i}"}]}
+        for i in range(4)
+    ]
+    alternatives = [
+        {"rules": [r]}
+        for r in (
+            {"metric": "brightness", "below": 0.2, "action": "gamma"},
+            {"metric": "noise_highpass", "above": 0.01, "action": "bilateral"},
+            {"metric": "sharpness", "below": 20, "action": "sharpen"},
+            {"metric": "contrast", "below": 0.1, "action": "gamma"},
+        )
+    ]
+    beam = diverse_beam(leaders + alternatives)
+    assert len(beam) == 8
+    assert beam[:4] == [t["rules"][0] for t in leaders]
+    assert {r["metric"] for r in beam} == {"brightness", "contrast", "noise_highpass", "sharpness"}
+    assert diverse_beam([]) == []
+
+
+def test_first_match_can_explicitly_skip_without_later_rules_overriding_it():
+    values = pd.DataFrame({"brightness": [0.1, 0.5, 0.9]})
+    rules = [
+        {"metric": "brightness", "below": 0.2, "action": "skip"},
+        {"metric": "brightness", "below": 0.7, "action": "gamma"},
+    ]
+    assert route_assignments(values, rules).tolist() == ["skip", "gamma", "skip"]
 
 
 def test_quality_uses_exploration_only_and_reports_proxy_limits(prepared, monkeypatch):
@@ -182,6 +214,37 @@ def test_two_rules_can_recover_distinct_cases_while_retaining_skip(search_data):
     selected = result["selected"]
     assert len(selected["rules"]) == 2
     assert selected["metrics"][0]["routes"] == {"gamma": 4, "sharpen": 3, "skip": 3}
+    assert selected["score"] > 0.99
+
+
+def test_one_local_quantile_pass_can_improve_the_quartile_grid(search_data):
+    pytest.importorskip("ultralytics")
+    table, pilot, scenarios, configs, original = search_data
+    rows, qualities = [], []
+    actions = {"clean": {name: {"stats": {}, "costs": {}} for name in configs}}
+    for i in range(20):
+        sample_id = f"refine-{i}"
+        rows.append({**copy.deepcopy(pilot["rows"][i % 10]), "id": sample_id, "group": sample_id})
+        qualities.append(
+            {
+                **table.iloc[i % 10].to_dict(),
+                "id": sample_id,
+                "group": sample_id,
+                "brightness": i / 20,
+            }
+        )
+        for name in configs:
+            values = copy.deepcopy(original["clean"][name]["stats"][f"image-{i % 10}"])
+            values["tp"][:] = i < 11 if name == "gamma" else i >= 11
+            actions["clean"][name]["stats"][sample_id] = values
+            actions["clean"][name]["costs"][sample_id] = 2 if name == "gamma" else 0.1
+    pilot = {**pilot, "rows": rows}
+    quality = pd.DataFrame(qualities)
+    selected = search_rules(
+        quality, pilot, scenarios, configs, actions, max_mean_ms=3, max_p95_ms=3
+    )["selected"]
+    assert len(selected["rules"]) == 1
+    assert selected["rules"][0]["below"] == pytest.approx(quality.brightness.quantile(0.55))
     assert selected["score"] > 0.99
 
 

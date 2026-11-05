@@ -1,0 +1,1081 @@
+{
+  "classes": [
+    {
+      "AP50": 0.4995137491243069,
+      "AP50_95": 0.28459778182017353,
+      "class": "car",
+      "precision": 0.6137188121986931,
+      "recall": 0.44953095684803
+    },
+    {
+      "AP50": 0.2989028524301133,
+      "AP50_95": 0.21024261942489103,
+      "class": "truck",
+      "precision": 0.27156319052496053,
+      "recall": 0.4067796610169492
+    },
+    {
+      "AP50": 0.24497196877315322,
+      "AP50_95": 0.19204098579764117,
+      "class": "bus",
+      "precision": 0.18409451127340082,
+      "recall": 0.27586206896551724
+    },
+    {
+      "AP50": 0.2860645534893878,
+      "AP50_95": 0.16927020522372777,
+      "class": "motorcycle",
+      "precision": 0.543096230307049,
+      "recall": 0.21428571428571427
+    },
+    {
+      "AP50": 0.4700470640889872,
+      "AP50_95": 0.2614472589747841,
+      "class": "bicycle",
+      "precision": 0.7657713172089334,
+      "recall": 0.4
+    }
+  ],
+  "comparisons": [
+    {
+      "FP_rise_images": 27,
+      "TP_loss_images": 29,
+      "after": {
+        "FP50": 216,
+        "TP50": 923
+      },
+      "before": {
+        "FP50": 212,
+        "TP50": 929
+      },
+      "classes": [
+        {
+          "after": {
+            "FP50": 162,
+            "TP50": 874
+          },
+          "before": {
+            "FP50": 154,
+            "TP50": 879
+          },
+          "class": "car",
+          "delta_AP50": 0.0007534077995903221,
+          "delta_AP50_95": -0.0020481099583469775
+        },
+        {
+          "after": {
+            "FP50": 42,
+            "TP50": 37
+          },
+          "before": {
+            "FP50": 44,
+            "TP50": 36
+          },
+          "class": "truck",
+          "delta_AP50": 0.006119302622879075,
+          "delta_AP50_95": 0.003867045067750846
+        },
+        {
+          "after": {
+            "FP50": 12,
+            "TP50": 7
+          },
+          "before": {
+            "FP50": 13,
+            "TP50": 7
+          },
+          "class": "bus",
+          "delta_AP50": -0.0023864745286604483,
+          "delta_AP50_95": -0.0010618926963004705
+        },
+        {
+          "after": {
+            "FP50": 0,
+            "TP50": 3
+          },
+          "before": {
+            "FP50": 1,
+            "TP50": 3
+          },
+          "class": "motorcycle",
+          "delta_AP50": 0.015543500491063844,
+          "delta_AP50_95": 0.010230811000939949
+        },
+        {
+          "after": {
+            "FP50": 0,
+            "TP50": 2
+          },
+          "before": {
+            "FP50": 0,
+            "TP50": 4
+          },
+          "class": "bicycle",
+          "delta_AP50": -0.0015606131667622036,
+          "delta_AP50_95": 0.01271836424572581
+        }
+      ],
+      "control": "skip"
+    },
+    {
+      "FP_rise_images": 26,
+      "TP_loss_images": 27,
+      "after": {
+        "FP50": 216,
+        "TP50": 923
+      },
+      "before": {
+        "FP50": 205,
+        "TP50": 933
+      },
+      "classes": [
+        {
+          "after": {
+            "FP50": 162,
+            "TP50": 874
+          },
+          "before": {
+            "FP50": 147,
+            "TP50": 883
+          },
+          "class": "car",
+          "delta_AP50": -0.0015712428210614693,
+          "delta_AP50_95": -0.002782715514205336
+        },
+        {
+          "after": {
+            "FP50": 42,
+            "TP50": 37
+          },
+          "before": {
+            "FP50": 43,
+            "TP50": 36
+          },
+          "class": "truck",
+          "delta_AP50": 0.007895757334479947,
+          "delta_AP50_95": 0.005068709434525032
+        },
+        {
+          "after": {
+            "FP50": 12,
+            "TP50": 7
+          },
+          "before": {
+            "FP50": 14,
+            "TP50": 7
+          },
+          "class": "bus",
+          "delta_AP50": -0.0033796944007158936,
+          "delta_AP50_95": -0.0018158273874227249
+        },
+        {
+          "after": {
+            "FP50": 0,
+            "TP50": 3
+          },
+          "before": {
+            "FP50": 1,
+            "TP50": 3
+          },
+          "class": "motorcycle",
+          "delta_AP50": 0.015587937731954826,
+          "delta_AP50_95": 0.010193139046917654
+        },
+        {
+          "after": {
+            "FP50": 0,
+            "TP50": 2
+          },
+          "before": {
+            "FP50": 0,
+            "TP50": 4
+          },
+          "class": "bicycle",
+          "delta_AP50": -0.003560613166762261,
+          "delta_AP50_95": 0.011967344724835405
+        }
+      ],
+      "control": "frozen_v2"
+    }
+  ],
+  "failure_examples": [
+    {
+      "action": "gamma_070",
+      "after": {
+        "FP50": 2,
+        "TP50": 5
+      },
+      "before": {
+        "FP50": 2,
+        "TP50": 8
+      },
+      "control": "skip",
+      "delta_FP50": 0,
+      "delta_TP50": -3,
+      "id": "305d597f-e51dde8e"
+    },
+    {
+      "action": "gamma_070",
+      "after": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "before": {
+        "FP50": 2,
+        "TP50": 4
+      },
+      "control": "skip",
+      "delta_FP50": -2,
+      "delta_TP50": -2,
+      "id": "19378927-ceb7f65a"
+    },
+    {
+      "action": "sharpen_015_then_bilateral",
+      "after": {
+        "FP50": 2,
+        "TP50": 5
+      },
+      "before": {
+        "FP50": 1,
+        "TP50": 6
+      },
+      "control": "skip",
+      "delta_FP50": 1,
+      "delta_TP50": -1,
+      "id": "0f11e283-0195cb27"
+    },
+    {
+      "action": "gamma_070",
+      "after": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "before": {
+        "FP50": 0,
+        "TP50": 4
+      },
+      "control": "skip",
+      "delta_FP50": 1,
+      "delta_TP50": -1,
+      "id": "5a796196-6cadfdd2"
+    },
+    {
+      "action": "gamma_070",
+      "after": {
+        "FP50": 3,
+        "TP50": 2
+      },
+      "before": {
+        "FP50": 2,
+        "TP50": 3
+      },
+      "control": "skip",
+      "delta_FP50": 1,
+      "delta_TP50": -1,
+      "id": "7c699702-901cb39b"
+    },
+    {
+      "action": "sharpen_015_then_bilateral",
+      "after": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "before": {
+        "FP50": 0,
+        "TP50": 4
+      },
+      "control": "skip",
+      "delta_FP50": 1,
+      "delta_TP50": -1,
+      "id": "93820c7b-84e176d2"
+    },
+    {
+      "action": "gamma_070",
+      "after": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "before": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "control": "skip",
+      "delta_FP50": 0,
+      "delta_TP50": -1,
+      "id": "06641cdd-225c6990"
+    },
+    {
+      "action": "gamma_070",
+      "after": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "before": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "control": "skip",
+      "delta_FP50": 0,
+      "delta_TP50": -1,
+      "id": "169900a5-27a7d5a6"
+    }
+  ],
+  "limit": "IoU50/conf0.25 counts are illustrative, not a replacement for native AP",
+  "routes": {
+    "gamma_070": 99,
+    "sharpen_015_then_bilateral": 93,
+    "skip": 64
+  },
+  "subgroups": [
+    {
+      "AP50": 0.4995137491243069,
+      "AP50_95": 0.28459778182017353,
+      "class": "car",
+      "delta_AP50_95": -0.0020481099583469775,
+      "groups": 154,
+      "images": 254,
+      "slice": "all",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.2989028524301133,
+      "AP50_95": 0.21024261942489103,
+      "class": "truck",
+      "delta_AP50_95": 0.003867045067750846,
+      "groups": 64,
+      "images": 79,
+      "slice": "all",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.24497196877315322,
+      "AP50_95": 0.19204098579764117,
+      "class": "bus",
+      "delta_AP50_95": -0.0010618926963004705,
+      "groups": 19,
+      "images": 20,
+      "slice": "all",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.2860645534893878,
+      "AP50_95": 0.16927020522372777,
+      "class": "motorcycle",
+      "delta_AP50_95": 0.010230811000939949,
+      "groups": 9,
+      "images": 9,
+      "slice": "all",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.4700470640889872,
+      "AP50_95": 0.2614472589747841,
+      "class": "bicycle",
+      "delta_AP50_95": 0.01271836424572581,
+      "groups": 12,
+      "images": 14,
+      "slice": "all",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.45093844325812826,
+      "AP50_95": 0.2484752012789025,
+      "class": "car",
+      "delta_AP50_95": -0.004704398029763468,
+      "groups": 88,
+      "images": 149,
+      "slice": "weather:clear",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.29015237568574337,
+      "AP50_95": 0.20530161520061702,
+      "class": "truck",
+      "delta_AP50_95": 0.0068130345046995555,
+      "groups": 37,
+      "images": 47,
+      "slice": "weather:clear",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.1450652933418975,
+      "AP50_95": 0.11950985350606122,
+      "class": "bus",
+      "delta_AP50_95": -0.0027803206587257157,
+      "groups": 9,
+      "images": 10,
+      "slice": "weather:clear",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.3915873015873017,
+      "AP50_95": 0.22964078144078143,
+      "class": "motorcycle",
+      "delta_AP50_95": -0.0013425518925519464,
+      "groups": 3,
+      "images": 3,
+      "slice": "weather:clear",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": 0.3784705882352941,
+      "AP50_95": 0.1654422779049747,
+      "class": "bicycle",
+      "delta_AP50_95": -0.0019572300182946756,
+      "groups": 6,
+      "images": 8,
+      "slice": "weather:clear",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.5218282828282828,
+      "AP50_95": 0.18143408062051,
+      "class": "car",
+      "delta_AP50_95": 0.0004006516071873023,
+      "groups": 1,
+      "images": 1,
+      "slice": "weather:foggy",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": null,
+      "AP50_95": null,
+      "class": "truck",
+      "delta_AP50_95": null,
+      "groups": 0,
+      "images": 0,
+      "slice": "weather:foggy",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": null,
+      "AP50_95": null,
+      "class": "bus",
+      "delta_AP50_95": null,
+      "groups": 0,
+      "images": 0,
+      "slice": "weather:foggy",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": null,
+      "AP50_95": null,
+      "class": "motorcycle",
+      "delta_AP50_95": null,
+      "groups": 0,
+      "images": 0,
+      "slice": "weather:foggy",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": null,
+      "AP50_95": null,
+      "class": "bicycle",
+      "delta_AP50_95": null,
+      "groups": 0,
+      "images": 0,
+      "slice": "weather:foggy",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": 0.5657548192461959,
+      "AP50_95": 0.3483188108428268,
+      "class": "car",
+      "delta_AP50_95": -0.0005167649183298595,
+      "groups": 33,
+      "images": 35,
+      "slice": "weather:overcast",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.3803784123278725,
+      "AP50_95": 0.26470724648815935,
+      "class": "truck",
+      "delta_AP50_95": 0.014890785344844393,
+      "groups": 8,
+      "images": 9,
+      "slice": "weather:overcast",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.02145401822700911,
+      "AP50_95": 0.014379038939519468,
+      "class": "bus",
+      "delta_AP50_95": -0.0007477492792743647,
+      "groups": 2,
+      "images": 2,
+      "slice": "weather:overcast",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": 0.05541666666666668,
+      "AP50_95": 0.01247916666666667,
+      "class": "motorcycle",
+      "delta_AP50_95": 0.004145833333333335,
+      "groups": 2,
+      "images": 2,
+      "slice": "weather:overcast",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": 0.7767391304347828,
+      "AP50_95": 0.4612285621581534,
+      "class": "bicycle",
+      "delta_AP50_95": 0.04121630334713294,
+      "groups": 2,
+      "images": 2,
+      "slice": "weather:overcast",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": 0.5288828592975003,
+      "AP50_95": 0.2906276325377023,
+      "class": "car",
+      "delta_AP50_95": 0.0009482630119591606,
+      "groups": 17,
+      "images": 18,
+      "slice": "weather:partly cloudy",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.4413181659035218,
+      "AP50_95": 0.3199619060238805,
+      "class": "truck",
+      "delta_AP50_95": 0.005659410171206247,
+      "groups": 8,
+      "images": 8,
+      "slice": "weather:partly cloudy",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.995,
+      "AP50_95": 0.9949999999999999,
+      "class": "bus",
+      "delta_AP50_95": 0.0,
+      "groups": 1,
+      "images": 1,
+      "slice": "weather:partly cloudy",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": 0.495,
+      "AP50_95": 0.3465,
+      "class": "motorcycle",
+      "delta_AP50_95": 0.0,
+      "groups": 1,
+      "images": 1,
+      "slice": "weather:partly cloudy",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": 0.495,
+      "AP50_95": 0.4455,
+      "class": "bicycle",
+      "delta_AP50_95": 0.0,
+      "groups": 1,
+      "images": 1,
+      "slice": "weather:partly cloudy",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": 0.8916666666666668,
+      "AP50_95": 0.63618807302308,
+      "class": "car",
+      "delta_AP50_95": 0.007728633946735841,
+      "groups": 3,
+      "images": 3,
+      "slice": "weather:rainy",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": null,
+      "AP50_95": null,
+      "class": "truck",
+      "delta_AP50_95": null,
+      "groups": 0,
+      "images": 0,
+      "slice": "weather:rainy",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": 0.995,
+      "AP50_95": 0.796,
+      "class": "bus",
+      "delta_AP50_95": 0.0,
+      "groups": 1,
+      "images": 1,
+      "slice": "weather:rainy",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": null,
+      "AP50_95": null,
+      "class": "motorcycle",
+      "delta_AP50_95": null,
+      "groups": 0,
+      "images": 0,
+      "slice": "weather:rainy",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": 0.335,
+      "AP50_95": 0.201,
+      "class": "bicycle",
+      "delta_AP50_95": 0.0,
+      "groups": 1,
+      "images": 1,
+      "slice": "weather:rainy",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": 0.6085456277326264,
+      "AP50_95": 0.33954703478677095,
+      "class": "car",
+      "delta_AP50_95": -0.003598032516834049,
+      "groups": 13,
+      "images": 20,
+      "slice": "weather:snowy",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.29433803623277305,
+      "AP50_95": 0.17008917697991308,
+      "class": "truck",
+      "delta_AP50_95": 0.006819161086958264,
+      "groups": 8,
+      "images": 8,
+      "slice": "weather:snowy",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.11055555555555555,
+      "AP50_95": 0.06633333333333333,
+      "class": "bus",
+      "delta_AP50_95": -0.00829166666666667,
+      "groups": 1,
+      "images": 1,
+      "slice": "weather:snowy",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": null,
+      "AP50_95": null,
+      "class": "motorcycle",
+      "delta_AP50_95": null,
+      "groups": 0,
+      "images": 0,
+      "slice": "weather:snowy",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": 0.11055555555555555,
+      "AP50_95": 0.021716269841269835,
+      "class": "bicycle",
+      "delta_AP50_95": 0.021716269841269835,
+      "groups": 1,
+      "images": 1,
+      "slice": "weather:snowy",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": 0.5414297733261415,
+      "AP50_95": 0.3374340908648899,
+      "class": "car",
+      "delta_AP50_95": 0.006571207739575591,
+      "groups": 23,
+      "images": 28,
+      "slice": "weather:undefined",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.4221730868002054,
+      "AP50_95": 0.3450274099143652,
+      "class": "truck",
+      "delta_AP50_95": -0.0013485187395579912,
+      "groups": 7,
+      "images": 7,
+      "slice": "weather:undefined",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.5370000000000001,
+      "AP50_95": 0.39776347031963477,
+      "class": "bus",
+      "delta_AP50_95": 0.002157390432748929,
+      "groups": 5,
+      "images": 5,
+      "slice": "weather:undefined",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.3600632911392408,
+      "AP50_95": 0.20684810126582284,
+      "class": "motorcycle",
+      "delta_AP50_95": 0.0003481012658228533,
+      "groups": 3,
+      "images": 3,
+      "slice": "weather:undefined",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": 0.995,
+      "AP50_95": 0.5965,
+      "class": "bicycle",
+      "delta_AP50_95": 0.0,
+      "groups": 1,
+      "images": 1,
+      "slice": "weather:undefined",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": 0.4922818324208161,
+      "AP50_95": 0.27750166435556917,
+      "class": "car",
+      "delta_AP50_95": -0.004042196021438904,
+      "groups": 18,
+      "images": 20,
+      "slice": "timeofday:dawn/dusk",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.5427996502949006,
+      "AP50_95": 0.3771993593724382,
+      "class": "truck",
+      "delta_AP50_95": 0.01767746493816541,
+      "groups": 6,
+      "images": 6,
+      "slice": "timeofday:dawn/dusk",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.4975,
+      "AP50_95": 0.44775,
+      "class": "bus",
+      "delta_AP50_95": 0.0,
+      "groups": 1,
+      "images": 1,
+      "slice": "timeofday:dawn/dusk",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": null,
+      "AP50_95": null,
+      "class": "motorcycle",
+      "delta_AP50_95": null,
+      "groups": 0,
+      "images": 0,
+      "slice": "timeofday:dawn/dusk",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": 0.7099999999999999,
+      "AP50_95": 0.4338,
+      "class": "bicycle",
+      "delta_AP50_95": 0.03762884615384604,
+      "groups": 1,
+      "images": 1,
+      "slice": "timeofday:dawn/dusk",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": 0.556449114506762,
+      "AP50_95": 0.33983594242787635,
+      "class": "car",
+      "delta_AP50_95": 0.0008159223953587147,
+      "groups": 94,
+      "images": 139,
+      "slice": "timeofday:daytime",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.27776175889290466,
+      "AP50_95": 0.20460683722177694,
+      "class": "truck",
+      "delta_AP50_95": 0.00377334059187015,
+      "groups": 46,
+      "images": 58,
+      "slice": "timeofday:daytime",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.30057657960681194,
+      "AP50_95": 0.23423668872032963,
+      "class": "bus",
+      "delta_AP50_95": -0.00042456285246048053,
+      "groups": 13,
+      "images": 14,
+      "slice": "timeofday:daytime",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.3054444444444445,
+      "AP50_95": 0.17698784907902557,
+      "class": "motorcycle",
+      "delta_AP50_95": 0.00019222451579536948,
+      "groups": 9,
+      "images": 9,
+      "slice": "timeofday:daytime",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.5181882284382284,
+      "AP50_95": 0.2844545148401782,
+      "class": "bicycle",
+      "delta_AP50_95": 0.009149831223535687,
+      "groups": 8,
+      "images": 10,
+      "slice": "timeofday:daytime",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.3938875030637911,
+      "AP50_95": 0.1889319665091482,
+      "class": "car",
+      "delta_AP50_95": -0.007489473833126259,
+      "groups": 55,
+      "images": 95,
+      "slice": "timeofday:night",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.26903595690875765,
+      "AP50_95": 0.1632901011075572,
+      "class": "truck",
+      "delta_AP50_95": -0.01569122918856025,
+      "groups": 13,
+      "images": 15,
+      "slice": "timeofday:night",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.1379386290401328,
+      "AP50_95": 0.11740942290791914,
+      "class": "bus",
+      "delta_AP50_95": -0.0029097425430216484,
+      "groups": 5,
+      "images": 5,
+      "slice": "timeofday:night",
+      "status": "descriptive"
+    },
+    {
+      "AP50": null,
+      "AP50_95": null,
+      "class": "motorcycle",
+      "delta_AP50_95": null,
+      "groups": 0,
+      "images": 0,
+      "slice": "timeofday:night",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": 0.027916666666666666,
+      "AP50_95": 0.0065138888888888885,
+      "class": "bicycle",
+      "delta_AP50_95": 0.0065138888888888885,
+      "groups": 3,
+      "images": 3,
+      "slice": "timeofday:night",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": 0.4873601127266438,
+      "AP50_95": 0.27078111320393006,
+      "class": "car",
+      "delta_AP50_95": -0.0026554672386469025,
+      "groups": 101,
+      "images": 153,
+      "slice": "scene:city street",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.30891503281156346,
+      "AP50_95": 0.21824311161291848,
+      "class": "truck",
+      "delta_AP50_95": 0.0009150757527328912,
+      "groups": 42,
+      "images": 50,
+      "slice": "scene:city street",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.28891593106457264,
+      "AP50_95": 0.22645440269598077,
+      "class": "bus",
+      "delta_AP50_95": -0.0022143820565890815,
+      "groups": 17,
+      "images": 17,
+      "slice": "scene:city street",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.2599332772932647,
+      "AP50_95": 0.14984054685220335,
+      "class": "motorcycle",
+      "delta_AP50_95": -0.0008360136243571181,
+      "groups": 8,
+      "images": 8,
+      "slice": "scene:city street",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.44607390286642234,
+      "AP50_95": 0.24798733440851334,
+      "class": "bicycle",
+      "delta_AP50_95": 0.014686674304952935,
+      "groups": 11,
+      "images": 12,
+      "slice": "scene:city street",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.4283706579067843,
+      "AP50_95": 0.2517846778291091,
+      "class": "car",
+      "delta_AP50_95": -0.0012656636224315232,
+      "groups": 52,
+      "images": 63,
+      "slice": "scene:highway",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.3185855583836746,
+      "AP50_95": 0.21925483546278893,
+      "class": "truck",
+      "delta_AP50_95": 0.012883251446973942,
+      "groups": 16,
+      "images": 19,
+      "slice": "scene:highway",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.17378571428571432,
+      "AP50_95": 0.13525714285714288,
+      "class": "bus",
+      "delta_AP50_95": 0.04131424805723874,
+      "groups": 2,
+      "images": 2,
+      "slice": "scene:highway",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": null,
+      "AP50_95": null,
+      "class": "motorcycle",
+      "delta_AP50_95": null,
+      "groups": 0,
+      "images": 0,
+      "slice": "scene:highway",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": 0.995,
+      "AP50_95": 0.44775,
+      "class": "bicycle",
+      "delta_AP50_95": 0.0,
+      "groups": 1,
+      "images": 1,
+      "slice": "scene:highway",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": 0.2700154257507199,
+      "AP50_95": 0.1703778917720418,
+      "class": "car",
+      "delta_AP50_95": -0.011690833119347599,
+      "groups": 1,
+      "images": 1,
+      "slice": "scene:parking lot",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": null,
+      "AP50_95": null,
+      "class": "truck",
+      "delta_AP50_95": null,
+      "groups": 0,
+      "images": 0,
+      "slice": "scene:parking lot",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": null,
+      "AP50_95": null,
+      "class": "bus",
+      "delta_AP50_95": null,
+      "groups": 0,
+      "images": 0,
+      "slice": "scene:parking lot",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": null,
+      "AP50_95": null,
+      "class": "motorcycle",
+      "delta_AP50_95": null,
+      "groups": 0,
+      "images": 0,
+      "slice": "scene:parking lot",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": null,
+      "AP50_95": null,
+      "class": "bicycle",
+      "delta_AP50_95": null,
+      "groups": 0,
+      "images": 0,
+      "slice": "scene:parking lot",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": 0.6437600982295244,
+      "AP50_95": 0.381739077153272,
+      "class": "car",
+      "delta_AP50_95": -0.0019264621274977523,
+      "groups": 27,
+      "images": 37,
+      "slice": "scene:residential",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.2665682793501448,
+      "AP50_95": 0.20024396028974337,
+      "class": "truck",
+      "delta_AP50_95": -0.0005161285584195652,
+      "groups": 9,
+      "images": 10,
+      "slice": "scene:residential",
+      "status": "descriptive"
+    },
+    {
+      "AP50": 0.03569659442724458,
+      "AP50_95": 0.028557275541795664,
+      "class": "bus",
+      "delta_AP50_95": -0.00017901897601146216,
+      "groups": 1,
+      "images": 1,
+      "slice": "scene:residential",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": 0.995,
+      "AP50_95": 0.597,
+      "class": "motorcycle",
+      "delta_AP50_95": 0.0,
+      "groups": 1,
+      "images": 1,
+      "slice": "scene:residential",
+      "status": "insufficient_support"
+    },
+    {
+      "AP50": 0.495,
+      "AP50_95": 0.4455,
+      "class": "bicycle",
+      "delta_AP50_95": 0.0,
+      "groups": 1,
+      "images": 1,
+      "slice": "scene:residential",
+      "status": "insufficient_support"
+    }
+  ]
+}

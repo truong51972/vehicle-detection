@@ -1,0 +1,22 @@
+{
+  "artifacts": {
+    "docs/round2-quality-v2/clean_routing.json": "ba366a06768ee2e8f83e63a2dd30944cc75d5585ad44cc4dd55835e0d3edaa91",
+    "docs/round2-quality-v2/confirmation_support.json": "b1b75075040e9de1d0429d9a9eb662dcdb8a5460871e74ba3b11c511ede6882d",
+    "docs/round2-quality-v2/operator_values.json": "073bfa50b01e8b92058dbf7eea8fb85111d3db57268baf9210b0f4a28e14915f",
+    "docs/round2-quality-v2/overview.png": "cfda9d4640ad593605c00f0b27c7d683d7f2a11ada517f3e68ff5594fb7061d9",
+    "docs/round2-quality-v2/pareto.json": "f1a8383eed01ddedfaffaaa44a038545d7db0125e7ae957e8b05eee90ba1c421",
+    "docs/round2-quality-v2/plan.json": "4c01e11b02f892968ec6a8c4e113b96eb972015c585bd73c02ff21f9121e5915",
+    "docs/round2-quality-v2/quality_summary.json": "fc7e17a3f8b5353dc186fed8a631eebb560140183dd3a5d8df3afd8c44e889d1",
+    "docs/round2-quality-v2/runtime.json": "1c12ea5f1afb1059c3617a1df89a28258d3fa95eba9e6eff1734bb4f1353ca73",
+    "docs/round2-quality-v2/runtime.png": "b52adafafc880a43ca52206c57f4d3f489eb56cbd6bb7dc7863d4223d36ac93f",
+    "docs/round2-quality-v2/search.json": "ce488493f03b9da2bee52702170e38f9668f954a4eecd67baf410a679ba70882",
+    "docs/round2-quality-v2/summary.json": "c4117c30b0e9f062d9cdffc638e1eb71ba28693dbaed186180e1dfbbbeef3072",
+    "runs/round2-quality-v2/confirmation_plan.json": "1630aec1fbf4852931a3e67e11fba806b8c0567773297089156eb129547db486",
+    "runs/round2-quality-v2/operators/measurements.json": "073bfa50b01e8b92058dbf7eea8fb85111d3db57268baf9210b0f4a28e14915f",
+    "runs/round2-quality-v2/operators/plan.json": "3d57bd2b935f860a1c1d12d9846941919dd368035f4848dcaa7a33f9a12fc55f"
+  },
+  "plan_id": "47e723fe05ebc48972360417d79f06ed02e2d9ed04ba23c5bf53db974ba92970",
+  "search_id": "0b9b989e0711dea7c4d4a3d483e500fe4d3a804f1ea5b7ce0090aced18b48277",
+  "status": "pending_fresh_confirmation",
+  "v3_released": false
+}

@@ -1,0 +1,13 @@
+{
+  "confirmation": "metadata only, no predictions",
+  "detector_construction": "blocked",
+  "elapsed_seconds": 82.29,
+  "final_holdout": "sealed",
+  "fresh_kernel_cached_replay": "passed",
+  "native_exploration_evaluations": 30,
+  "native_image_passes": 7680,
+  "operator_inference": "blocked",
+  "prior_evidence": "all PR37 and v1 bound hashes unchanged",
+  "runtime_calls": 46080,
+  "runtime_remeasurement": "blocked"
+}

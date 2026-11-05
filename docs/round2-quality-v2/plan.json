@@ -1,0 +1,69 @@
+{
+  "additional_settings": {
+    "gamma_0775": {
+      "steps": [
+        {
+          "gamma": {
+            "gamma": 0.775
+          }
+        }
+      ]
+    },
+    "sharpen_0075": {
+      "steps": [
+        {
+          "sharpen": {
+            "amount": 0.075,
+            "sigma": 1.0
+          }
+        }
+      ]
+    },
+    "sharpen_0075_then_bilateral": {
+      "steps": [
+        {
+          "sharpen": {
+            "amount": 0.075,
+            "sigma": 1.0
+          }
+        },
+        {
+          "bilateral": {}
+        }
+      ]
+    }
+  },
+  "beam": "four leaders plus four diverse rules",
+  "confirmation_target": 1024,
+  "implementation": {
+    "evaluation_data.py": "a9c8b8c88f31ad6009b96ca8deb4805f15fe53875d8b1068d4da0d1a6052192c",
+    "evaluation_stats.py": "227f0272b00e91790e2e0eece429e1eeb7ee10cc415b5d5fb3f101f2cb4fcd59",
+    "preprocess.py": "354f19a51ba613f7bd0109fe5fcb7f86b98423059081500d96640ad2e29bb27b",
+    "preprocessing_experiments.py": "d9ca01d4f574be530f8d518457158626f03dbaf10d764a7b8d2fdab0f99fdf05",
+    "quality_followup.py": "4084c835665dd334d7c4927b45c25e03582b5eaa3c0f915d69d8fa7b457c466d",
+    "quality_search.py": "5226d5fd780cc9908f3afec1e428194e105da345cae454eab0b14896478d92d0",
+    "stress.py": "8175f20c82debe9221e29f6bc667bdc73946909ad9d4c93e469dfabcc671438b",
+    "stress_eval.py": "5072219da9653205913f696d741f5520362e02b81c80db892b8a18b7d778a07d"
+  },
+  "local_refinement": "one pass +/-0.05 quantile per rule of the eligible leader",
+  "max_mean_ms": 10.0,
+  "max_p95_ms": 25.0,
+  "pilot_id": "645629a609611daccda388835143ba05039f8957b7fc09638e4712c769f73a7c",
+  "plan_id": "47e723fe05ebc48972360417d79f06ed02e2d9ed04ba23c5bf53db974ba92970",
+  "prior_plan_id": "a59dfe62a77b1a0c0676758792c5be829bdf998eca8feab8a1dbac4033ebf833",
+  "prior_search_sha256": "213ac8be87d1dd93d3b7b74b9d139ecde208b2b3206e8f44c9d8007af7393dfc",
+  "purpose": "exploration only; no v3 release or confirmation evaluation",
+  "quality_source_sha256": "adfd7defa7453f6825d9940b2be57732a9837b60fbf98a39c6f1ae05d6c82d2f",
+  "runtime": {
+    "candidates": "controls, two leaders, two v1 leaders",
+    "repeats": 3,
+    "threads": 8
+  },
+  "version": "issue30-quality-search-v2",
+  "versions": {
+    "numpy": "2.4.6",
+    "opencv-python": "4.14.0.94",
+    "pandas": "2.3.3",
+    "ultralytics": "8.4.198"
+  }
+}

@@ -1,5 +1,10 @@
 # Issue 30 — quality-derived exploration increment
 
+This records the preserved **v1** increment at source revision `3df03aa`. The
+active notebook now uses separate v2 outputs for the
+[PR review follow-ups](ISSUE30_QUALITY_REVIEW.md). Replay v1 with its recorded
+revision; do not rewrite its plan hashes to use changed search code.
+
 This increment starts the remaining work in
 [issue #30](https://github.com/truong51972/vehicle-detection/issues/30).
 PR #37's measured rejection, frozen v2, original sources and evidence files stay
