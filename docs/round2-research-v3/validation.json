@@ -11,9 +11,9 @@
     "status": "passed"
   },
   "cpu": "Intel(R) Core(TM) i5-14600KF",
-  "evidence_sha256": "4fe7d46fcbdcd8dab819730b4660cbc30940d514b8f0ca5b4ad459973ba4a855",
+  "evidence_sha256": "d50f7ac30390ab7361f46adc7908ef83aa4d7508ee0ef25d40293391033cc8ac",
   "final_holdout_accessed": false,
-  "native_AP_reaggregation_tolerance": 1e-08,
+  "native_AP_reaggregation_tolerance": 1e-8,
   "native_evaluations": 25,
   "native_image_passes": 12800,
   "plan_id": "f584535c69364e8be613eb998cbca8387b49e38538f2f4dd1c9fc8ce36ac99dd",
