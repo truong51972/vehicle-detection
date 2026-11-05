@@ -1,0 +1,18 @@
+{
+  "cache_only_fresh_kernel": true,
+  "checked_input_hashes": {
+    "docs/issue6-v2/policy.json": "939ce2419171c68b41789a41cfe2b64b31f983eec4c749e6df8824663c7cec5f",
+    "docs/round2-data-v2/audit.json": "9e71edc6b1a136e022c75f5bd6c8c1ae901e226c81d4c3ec5c19c2e19a52072d",
+    "docs/round2-evaluation-v2/evaluation_sets.json": "e9756304bc41a093bf033cdc8f98d7059a79639c53aaa69572bcb259687b9e96",
+    "runs/issue5-v1/protocol.json": "d4292713958ee900175fbc268fda3b44aa04e5bb369817a16bb153f2dded30c0",
+    "runs/issue6-v2/subsets.json": "d952652b4c84bc3aed0e379b6e434c7a1e1e2136074e062962a2017cebc9520c",
+    "weights/yolo26n.pt": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef"
+  },
+  "final_holdout": "no pixel open/decode/hash or materialized labels",
+  "guards": {
+    "historical_write_rejections": 0,
+    "reserved_pixel_rejections": 0
+  },
+  "model_construction_blocked": true,
+  "protected_inputs_unchanged": true
+}
