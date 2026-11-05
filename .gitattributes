@@ -1,0 +1,2 @@
+# Frozen CSV evidence uses CRLF; preserve its recorded checksum.
+docs/round2-preprocessing-v2/sample_support.csv whitespace=cr-at-eol
