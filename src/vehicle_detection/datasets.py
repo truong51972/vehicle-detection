@@ -11,7 +11,28 @@ from .five_class import FIVE_CLASSES, SIX_TO_FIVE
 from .offline import verify_alignment
 
 
-def verify_role(directory, records, split, variant, recipes=None, *, deep=True):
+def verify_label(path, source, class_map=None):
+    """Check native YOLO coordinates against frozen source boxes, including negative frames."""
+    actual = [list(map(float, line.split())) for line in Path(path).read_text().splitlines()]
+    expected = [
+        [
+            class_map[c] if class_map is not None else c,
+            (x1 + x2) / 2 / source["width"],
+            (y1 + y2) / 2 / source["height"],
+            (x2 - x1) / source["width"],
+            (y2 - y1) / source["height"],
+        ]
+        for c, x1, y1, x2, y2 in source["boxes"]
+        if class_map is None or class_map[c] is not None
+    ]
+    if len(actual) != len(expected) or any(len(box) != 5 for box in actual):
+        raise ValueError("Export labels differ from the frozen boxes")
+    # Native labels preserve source order; sorting rounded centers can swap tied boxes.
+    if actual and not np.allclose(actual, expected, atol=1e-6, rtol=0):
+        raise ValueError("Export labels differ from the frozen boxes")
+
+
+def verify_role(directory, records, split, variant, recipes=None, *, deep=True, write_receipt=True):
     """Check frozen roles/inventory cheaply; read label geometry only on deep export audit."""
     directory = Path(directory).resolve()
     meta = pd.read_csv(directory / "metadata.csv")
@@ -51,24 +72,8 @@ def verify_role(directory, records, split, variant, recipes=None, *, deep=True):
                 "Export path, source hash or geometry changed; re-export after relocation"
             )
         if deep:
-            actual = [list(map(float, line.split())) for line in label.read_text().splitlines()]
-            expected = [
-                [
-                    class_map[c] if class_map is not None else c,
-                    (x1 + x2) / 2 / source["width"],
-                    (y1 + y2) / 2 / source["height"],
-                    (x2 - x1) / source["width"],
-                    (y2 - y1) / source["height"],
-                ]
-                for c, x1, y1, x2, y2 in source["boxes"]
-                if class_map is None or class_map[c] is not None
-            ]
-            if len(actual) != len(expected) or any(len(box) != 5 for box in actual):
-                raise ValueError("Export labels differ from the frozen boxes")
-            # Native labels preserve source order; sorting rounded centers can swap tied boxes.
-            if actual and not np.allclose(actual, expected, atol=1e-6, rtol=0):
-                raise ValueError("Export labels differ from the frozen boxes")
-    verify_alignment([directory], deep=deep)
+            verify_label(label, source, class_map)
+    verify_alignment([directory], deep=deep, write_receipt=write_receipt)
     return {
         "path": str(directory),
         "export": export,

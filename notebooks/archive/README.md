@@ -1,11 +1,12 @@
 # Archived notebook evidence
 
-These are the eight original notebooks, moved **byte-for-byte**, including every
-saved output and execution count. They are evidence snapshots; the active interface
-is the four notebooks directly under `notebooks/`.
+These historical notebooks are preserved **byte-for-byte**, including every
+saved output and execution count. The root README distinguishes Round 2 entrypoints
+from the earlier workflow retained directly under `notebooks/`.
 
 [manifest.json](manifest.json) maps original paths to archived paths, SHA256 and the
-source revision at preservation (`2df2241`, the merged training base). Static tests
+source revision at preservation (the original eight use `2df2241`, the merged
+training base). Static tests
 verify every archived byte against this manifest.
 
 - [YOLO11 preparation](01_data_preparation.ipynb) and
@@ -34,3 +35,9 @@ unchanged; use the manifest to locate the preserved bytes. Archive notebooks may
 contain stale prose links/path assumptions by design. Current navigation and phase
 instructions live in the root README. No old report, calibration or inference identity
 was rewritten to claim a replay under new source code.
+
+[Round 1 notebook 01](round1/01_data_init.ipynb) preserves the split-building and
+six-class label-conversion entrypoint before issue #28 changed active notebook 01
+to a read-only five-class audit. Its recorded revision is `99d9af2`. Fresh-kernel
+legacy smoke tests still use this archived entrypoint to create synthetic fixture
+prerequisites; Round 2 notebooks consume saved prerequisites only.

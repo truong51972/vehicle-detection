@@ -1,62 +1,70 @@
 # BDD100K Raw / Adaptive vehicle-detection study
 
-Use these **four independent notebooks**, directly under `notebooks/`. Set the
-configuration/artifact paths at the top, select the project kernel, and choose
-**Restart & Run All**. Each runs only its own phase. Earlier phases supply saved
-artifacts; missing or mismatched artifacts fail rather than launching upstream work.
+Round 2 starts with two independent data-preparation notebooks. Configure the
+saved input paths in section 1, select the project kernel, then choose
+**Restart & Run All**. Missing or stale prerequisites fail with an error; no
+notebook launches another phase.
 
-1. [01_data_init.ipynb](notebooks/01_data_init.ipynb) audits BDD sources, classes,
-   boxes, checksums and leakage; freezes training/calibration/development/final
-   roles; converts labels and exports verified Raw development references.
-   Writes `runs/data-v1/` and compact audits under `docs/data-v1/`.
-2. [02_data_preprocessing.ipynb](notebooks/02_data_preprocessing.ipynb)
-   consumes the frozen protocol and development references. Inspects the original
-   calibration/operator evidence and frozen **v2 Gamma-or-Skip**, freezes nested
-   S10/S20 membership, and exports paired S10 and development inputs with equal
-   IDs, native labels, geometry and JPEG95 encoding. Writes
-   `runs/preprocessing-v1/` and `docs/preprocessing-v1/`. S20 is a manifest only.
-3. [03_training.ipynb](notebooks/03_training.ipynb) consumes prepared inputs and
-   a local pinned `weights/yolo26n.pt`; runs both native five-class YOLO26n partial fine-tuning
-   branches with equal initialization/budgets and shared Raw development validation.
-   Writes `runs/training-five-s10-v1/`: native `best.pt`, `last.pt`,
-   `results.csv`, `args.yaml` and a small paired dataset manifest.
-   `RESUME` explicitly opts in to native `last.pt` continuation.
-4. [04_eval_and_report.ipynb](notebooks/04_eval_and_report.ipynb) consumes existing
-   explicit native checkpoints (default: five-class S10; historical six-class weights
-   remain supported) and frozen
-   Raw/Adaptive development inputs. Reports native
-   pretrained / Raw-trained / Adaptive-trained × Raw / Adaptive metrics, per-class
-   AP, latency, plots and representative errors under `runs/development-five-v1/`.
-   **Default: saved-result reuse.** Set `ALLOW_INFERENCE=True` to fill missing
-   evaluations. Natural condition slices are descriptive; two matched
-   Raw-trained vs Adaptive-trained contrasts use native saved matches.
-   `BOOTSTRAP_RESAMPLES=0` reports points by default; set 100 for
-   exploratory source-group uncertainty. Object-size image-presence slices overlap
-   and retain all GT/predictions; they are not area-restricted AP.
-   Route tables read actual frozen Gamma/Skip export decisions and compare cached
-   Raw/Adaptive matches for each fixed model; route deltas are descriptive.
-   Valid caches are reused with either execution opt-in. Checkpoint/scale selection
-   and final-test release remain separate. Changed inputs
-   require a new output root. This notebook never imports the training runner.
+1. [01_data_init.ipynb](notebooks/01_data_init.ipynb) audits the existing **five-class**
+   #14 artifacts and original BDD sources. It reuses frozen roles/groups, checks
+   original/derived labels and geometry, deep-verifies the Raw/v2 S10 and
+   development pairs **without writing their receipts**, and saves compact support,
+   membership and sampled visual-quality evidence under `docs/round2-data-v2/`.
+   It does not split, convert labels or export images.
+2. [02_evaluation_data_preparation.ipynb](notebooks/02_evaluation_data_preparation.ipynb)
+   reads the saved audit and partitions the existing calibration role into
+   group-disjoint exploration/confirmation halves. It retains all development IDs
+   and freezes clean plus explicitly synthetic low-light, noise and motion-blur
+   recipes at severities 1–3, with fixed seeds and JPEG95 encoding. It saves
+   `docs/round2-evaluation-v2/` manifests, diagnostics and visual examples. Images
+   are prepared in memory from original sources; no bulk export is needed.
 
-Notebook 02 defaults to **`FIVE_CLASS_ONLY=True`**: it reads frozen six-class
-subsets/conversions, skips historical sections 2–7, and derives separate inputs
-under `runs/preprocessing-five-v1/`. Configure `PROTOCOL_PATH`, `FROZEN_SUBSETS`,
-`TRAIN_CONVERSION`, `DEV_CONVERSION` and `FROZEN_POLICY` to the existing artifacts.
-It drops railway train boxes and retains every selected image ID, negative frame
-and surviving coordinate byte. Set `FIVE_CLASS_ONLY=False` only when preparing a
-fresh six-class output root. Notebook 03 defaults to the separate five-class
-exports and training root described below. Notebook 04 defaults to the completed local five-class
-S10 checkpoints and development exports; see the
-[evaluation plan](docs/development-five-v1/PLAN.md) and
-[handoff checklist](docs/EPIC14_FIVE_CLASS_HANDOFF.md).
-The [five-class development report](docs/development-five-v1/RESULTS.md) records
-the six-cell matrix, support, paired group uncertainty, costs and holdout scope.
+Both use the existing five-class order: **car, truck, bus, motorcycle, bicycle**.
+Original six-class annotations/conversions and frozen Gamma-or-Skip v2 results
+remain unchanged. Final-test checks use metadata only: no final image opens,
+hashes, headers, previews, label materialization or evaluation.
 
-No notebook invokes another notebook. You can run phase 04 while training is idle,
-or edit its chart cells and Run All against valid saved results. Final-test execution
-remains locked pending the separate explicit model/protocol release for evaluation.
-Do not use final-test results to choose policies, checkpoints or training size.
+Default prerequisites reflect the preserved local study: `runs/issue5-v1/protocol.json`,
+`runs/issue6-v2/subsets.json`, `docs/issue6-v2/policy.json`,
+`runs/issue6-v2/conversion/S10`, `runs/issue5-v1/conversion` and
+`runs/preprocessing-five-v1/`. Restore those saved inputs or configure their paths;
+Round 2 never regenerates them. See [issue 28 implementation and replay](docs/ISSUE28_IMPLEMENTATION.md).
+
+The remaining Round 2 phases belong to #30 (preprocessing experiments), #33
+(training preparation/fine-tuning) and #35 (development evaluation). No new policy,
+model training or final-test release is part of this data-preparation change.
+
+The earlier workflow remains available for historical replay:
+
+- [Original split-building notebook 01](notebooks/archive/round1/01_data_init.ipynb)
+  is preserved byte-for-byte with its source revision and SHA256 in the archive
+  manifest. It creates six-class `runs/data-v1/` artifacts and is not a Round 2 step.
+- [02_data_preprocessing.ipynb](notebooks/02_data_preprocessing.ipynb) defaults to
+  `FIVE_CLASS_ONLY=True`, deriving the earlier five-class S10/development pairs
+  under `runs/preprocessing-five-v1/` from saved six-class conversions. Its
+  six-class preparation path is explicitly opt-in.
+- [03_training.ipynb](notebooks/03_training.ipynb) defaults to the existing
+  five-class S10 exports from the earlier preprocessing notebook and writes native
+  YOLO26n checkpoints, histories and paired settings under `runs/training-five-s10-v1/`.
+  Both branches share initialization/budgets and Raw development validation.
+  `RESUME` explicitly opts in to native `last.pt` continuation.
+- [04_eval_and_report.ipynb](notebooks/04_eval_and_report.ipynb) defaults to the
+  completed five-class S10 checkpoints/development exports and writes
+  `runs/development-five-v1/`; historical six-class weights remain supported.
+  It reports pretrained/Raw-trained/Adaptive-trained × Raw/Adaptive metrics,
+  per-class AP, latency, plots and representative errors. Saved-result reuse is
+  the default; inference requires `ALLOW_INFERENCE=True`. Set
+  `BOOTSTRAP_RESAMPLES=100` for exploratory source-group uncertainty; the default
+  is zero. Object-size image-presence slices overlap and retain all GT/predictions;
+  they are not area-restricted AP. Gamma/Skip route deltas are descriptive comparisons
+  of cached matches. Checkpoint selection and final-test release remain separate;
+  changed inputs require a new output root. This notebook never imports the trainer.
+
+These are earlier workflow entrypoints, not the new Round 2 phases. See the
+[evaluation plan](docs/development-five-v1/PLAN.md),
+[handoff checklist](docs/EPIC14_FIVE_CLASS_HANDOFF.md) and
+[five-class development report](docs/development-five-v1/RESULTS.md) for the completed
+six-cell matrix, support, paired group uncertainty, costs and holdout scope.
 
 ## Prerequisites
 
@@ -70,8 +78,8 @@ uv run --extra study jupyter lab notebooks/
 
 Use the `.venv` kernel. Repository-root and `notebooks/` launch directories both
 work. Every notebook starts with a purpose, artifact contract and linked numbered
-outline. Notebook 03 uses the separate five-class exports from notebook 02;
-historical six-class evidence remains unchanged. Extract
+outline. The historical six-class taxonomy, including railway `train`, stays unchanged;
+Round 2 reuses its already derived five-class mapping. Extract
 BDD detection images/annotations under `data/bdd100k/`; nested Kaggle
 layouts are supported. Keep data/runs on the WSL-native filesystem.
 

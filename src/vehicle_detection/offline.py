@@ -197,7 +197,7 @@ def export_variant(
     return table
 
 
-def verify_alignment(datasets, *, deep=True):
+def verify_alignment(datasets, *, deep=True, write_receipt=True):
     """Deep export verification, or a cheap immutable-manifest/inventory check for training."""
     reference = None
     for directory in map(Path, datasets):
@@ -274,9 +274,9 @@ def verify_alignment(datasets, *, deep=True):
                 for r in meta.to_dict("records")
             ]
         )
-        if deep:
+        if deep and write_receipt:
             write_json(directory / "verified.json", {**stamp, "files_identity": files_identity})
-        elif verified.get("files_identity") != files_identity:
+        elif not deep and verified.get("files_identity") != files_identity:
             raise ValueError("Verified export manifest changed")
         if reference is not None and current != reference:
             raise ValueError("Variant labels, IDs, dimensions or split assignments differ")

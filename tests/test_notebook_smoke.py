@@ -48,7 +48,7 @@ def test_four_fresh_kernels_and_cached_evaluation_without_upstream_work(bdd, tmp
         ).execute()
         assert all(c.execution_count is not None for c in notebook.cells if c.cell_type == "code")
 
-    run("01_data_init.ipynb")
+    run("archive/round1/01_data_init.ipynb")
     protocol = read_json(project / "runs/data-v1/protocol.json")
     policy = calibrate_policy(protocol, project / "data/bdd100k", sample_size=2, per_operator=1)
     write_json(project / "docs/issue6-v2/policy.json", policy)
