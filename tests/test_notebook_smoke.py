@@ -140,6 +140,38 @@ for target in ["vehicle_detection.data.scan_bdd", "vehicle_detection.protocol.bu
 
         checkpoint = project / "runs/training-five-s10-v1" / branch / "weights/best.pt"
         assert len(YOLO(str(checkpoint)).names) == 5
+    # Round 2 phases reuse the same verified inputs/checkpoints in independent kernels.
+    run(
+        "04_train_data_preparation.ipynb",
+        setup="""from unittest.mock import patch
+for target in ["vehicle_detection.training_preparation.scan_bdd",
+               "vehicle_detection.training_preparation.export_pair",
+               "vehicle_detection.training_preparation.export_variant"]:
+    patch(target, side_effect=AssertionError("Unexpected upstream work")).start()
+""",
+        overrides='PROTOCOL_PATH = ROOT / "runs/data-v1/protocol.json"\n'
+        'SUBSETS_PATH = ROOT / "runs/preprocessing-v1/subsets.json"\n'
+        'TRAIN_CONVERSION = ROOT / "runs/preprocessing-v1/conversion/S10"\n'
+        'DEV_CONVERSION = ROOT / "runs/data-v1/conversion"',
+        cwd=project / "notebooks",
+    )
+    run(
+        "05_model_training.ipynb",
+        setup=train_setup
+        + """from unittest.mock import patch
+from ultralytics import YOLO
+patch.object(YOLO, "train", side_effect=AssertionError("Training triggered on reuse")).start()
+patch("vehicle_detection.training_preparation.prepare_training_data",
+      side_effect=AssertionError("P4 triggered from P5")).start()
+""",
+        overrides='PROTOCOL_PATH = ROOT / "runs/data-v1/protocol.json"\n'
+        'SUBSETS_PATH = ROOT / "runs/preprocessing-v1/subsets.json"\n'
+        "HISTORICAL_PATH = None",
+    )
+    handoff = read_json(project / "docs/round2-training-v1/training.json")
+    assert handoff["branches"]["raw"]["budget"] == handoff["branches"]["adaptive"]["budget"]
+    assert handoff["branches"]["raw"]["final_epoch"] == 1
+    assert not handoff["final_test_accessed"] and not handoff["v3_released"]
     # Keep six-class evaluation replay covered alongside five-class training.
     run(
         "03_training.ipynb",

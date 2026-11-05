@@ -1,6 +1,6 @@
 # BDD100K Raw / Adaptive vehicle-detection study
 
-Round 2 has independent data-preparation and preprocessing-experiment notebooks. Configure the
+Round 2 has independent data preparation, preprocessing research and training notebooks. Configure the
 saved input paths in section 1, select the project kernel, then choose
 **Restart & Run All**. Missing or stale prerequisites fail with an error; no
 notebook launches another phase.
@@ -38,6 +38,20 @@ notebook launches another phase.
    expansion to 512 exploration images, fixed competing hypotheses, early stopping
    and source-group uncertainty; existing notebook/evidence bytes stay preserved.
 
+4. [04_train_data_preparation.ipynb](notebooks/04_train_data_preparation.ipynb)
+   verifies the existing five-class Raw/frozen-v2 S10 pair and shared Raw development
+   input, including source-pixel JPEG95 replay and actual per-image routes. Missing
+   exports can be prepared in a new root from saved six-class labels. It writes
+   `docs/round2-training-v1/preparation.json` and `routes.csv.gz`; no detector runs.
+5. [05_model_training.ipynb](notebooks/05_model_training.ipynb) reads the saved P4
+   receipt and checks paired native YOLO26n training provenance. Defaults verify
+   and reuse the completed #21 Raw/v2 checkpoints, with no new training. Fresh
+   paired training requires a new root and `ALLOW_TRAINING=True`; native resume
+   remains explicit. Checkpoint receipts, native histories and learning curves
+   under `docs/round2-training-v1/` form the #35 handoff. See the
+   [#33 execution contract](docs/ISSUE33_IMPLEMENTATION.md) and
+   [verified-reuse results](docs/ISSUE33_RESULTS.md).
+
 These use the existing five-class order: **car, truck, bus, motorcycle, bicycle**.
 Original six-class annotations/conversions and frozen Gamma-or-Skip v2 results
 remain unchanged. Final-test checks use metadata only: no final image opens,
@@ -49,10 +63,15 @@ Default prerequisites reflect the preserved local study: `runs/issue5-v1/protoco
 `runs/preprocessing-five-v1/`. Restore those saved inputs or configure their paths;
 Round 2 never regenerates them. See [issue 28 implementation and replay](docs/ISSUE28_IMPLEMENTATION.md).
 
-Issue #30 has a completed measured attempt and a rejected candidate; a new v3
-policy selection remains unresolved. Later phases
-belong to #33 (training preparation/fine-tuning) and #35 (development evaluation).
-No new policy, model training or final-test release is claimed by this implementation.
+[Issue #30](https://github.com/truong51972/vehicle-detection/issues/30) is complete:
+PRs #37–#39 found **no demonstrated useful preprocessing improvement** and released
+no v3 policy. Retain **Raw and frozen v2 (Gamma-or-Skip)** for
+[#33](https://github.com/truong51972/vehicle-detection/issues/33) training preparation
+and paired fine-tuning, followed by #35 development evaluation. The
+[research handoff](https://github.com/truong51972/vehicle-detection/issues/30#issuecomment-6664412401)
+preserves the unused confirmation plan and sealed final holdout; further preprocessing
+research requires a separately scoped hypothesis and experiment.
+The training phase verifies reuse of earlier native runs; no final-test release is claimed.
 
 The earlier workflow remains available for historical replay:
 

@@ -1,0 +1,57 @@
+{
+  "artifacts": {
+    "README.md": "29947249536d511631e953b90ef3cdf310a2e273ea3c22406572679c741f570d",
+    "docs/ISSUE33_IMPLEMENTATION.md": "68c5dca888f38aa13a304ce6b625fdb2a3769aa594d92f1f473a775c4794e0bc",
+    "docs/ISSUE33_RESULTS.md": "67415be841cd58a0b2ef1a0b81f07d33165649fa15dd74aecf2b1311f5abbdbb",
+    "docs/issue21/s10_results.json": "61032dceab6574285f605e8915ac5aebc8b93a5f7e1504d3b2c0da89ebc8a7b8",
+    "docs/round2-training-v1/adaptive_results.csv": "e541ac422bad2aa3f8da3488f6c5f08f6555fbec22e10b671eaa4472ddf432bd",
+    "docs/round2-training-v1/convergence.png": "9cd8759238f79daea3b7555e13c8e05b78a806d054357aa65904f40ba1c96df9",
+    "docs/round2-training-v1/preparation.json": "41360fd19189d359dd3b157ed69cc34131edab8e0064158447ffa3a9ca1a0782",
+    "docs/round2-training-v1/raw_results.csv": "c47578631bb984033b71a7fac7d9e30264658225893b57c3f4a58e57900cbd90",
+    "docs/round2-training-v1/routes.csv.gz": "b6197b2d5144ed47ec3aa62978523067711da6de01d130c1a059fe64c8ae0694",
+    "docs/round2-training-v1/training.json": "602953e7dc83c1120598a3d25574a8dd4247463233ec57d8df841301bd91a76d",
+    "notebooks/04_train_data_preparation.ipynb": "66a42b5098bfd27b5c3fe03912c6f74a868556a393bc8b0924aae0626f7ad467",
+    "notebooks/05_model_training.ipynb": "e0cf190a694843e75883eaa1fd7f55f026692372e6ab75a8b1ce92eabed58038",
+    "src/vehicle_detection/training_preparation.py": "47b3ea1964f13d2cac223d69b109fcfdb0ba1c5cd4c644c35fdc49215ca8953a",
+    "src/vehicle_detection/training_report.py": "a6f9817087be894ced686932e7bfcb985fc6d10f9190cda7c5e8646ea421c6c8",
+    "tests/test_notebook_smoke.py": "2784f9b7fba949b4591b0293a5af1afad3a93e5cc5f5de05ad2f1ebcc148a451",
+    "tests/test_notebooks.py": "09a708355251e88b763bddb67a2870cb1e18065e90de7b38a166a41c663c5e8c",
+    "tests/test_training_phases.py": "a4e6ccd1aee03e2e90e52772a9e169057f625178a63a7d44cd8d638c9c0b087b"
+  },
+  "build": "sdist and wheel passed",
+  "confirmation_plan_accessed": false,
+  "final_holdout_pixels_accessed": false,
+  "fresh_kernel_replays": [
+    {
+      "current_notebook_sources_match_executed": true,
+      "cwd": ".",
+      "elapsed_seconds": 252.49210184300318,
+      "executed_copy": "runs/round2-training-v1/04_train_data_preparation.executed.ipynb",
+      "image_reads": 42620,
+      "notebook": "04_train_data_preparation.ipynb",
+      "source_images": 18865,
+      "violations": 0
+    },
+    {
+      "current_notebook_sources_match_executed": true,
+      "cwd": "notebooks",
+      "elapsed_seconds": 15.698365675001696,
+      "executed_copy": "runs/round2-training-v1/05_model_training.executed.ipynb",
+      "image_reads": 0,
+      "notebook": "05_model_training.ipynb",
+      "source_images": 0,
+      "violations": 0
+    }
+  ],
+  "historical_exports_rewritten": false,
+  "historical_training_provenance": "Pair/args/CSV/four checkpoint hashes match preserved issue21 evidence",
+  "new_inference": false,
+  "new_training": false,
+  "ruff": "lint/format passed for 95 files",
+  "tests": {
+    "command": "uv run --extra study pytest -q",
+    "elapsed_seconds": 84.73,
+    "passed": 160
+  },
+  "version": "issue33-validation-v1"
+}
