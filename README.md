@@ -34,6 +34,9 @@ notebook launches another phase.
    Set `RUN_QUALITY_SEARCH=True`; inference and direct runtime each have separate opt-ins.
    See [review follow-ups and replay](docs/ISSUE30_QUALITY_REVIEW.md) and the
    [first exploration record](docs/ISSUE30_QUALITY_SEARCH.md).
+   [Autonomous research round 3](docs/ISSUE30_RESEARCH_ROUND3.md) adds a preregistered
+   expansion to 512 exploration images, fixed competing hypotheses, early stopping
+   and source-group uncertainty; existing notebook/evidence bytes stay preserved.
 
 These use the existing five-class order: **car, truck, bus, motorcycle, bicycle**.
 Original six-class annotations/conversions and frozen Gamma-or-Skip v2 results

@@ -89,3 +89,25 @@ def test_advancement_requires_both_controls_and_all_regression_gates():
     assert not result["bilateral"]["advance"]
     assert "Class regression" in result["bilateral"]["reasons"][0]
     assert result["noise_range"]["advance"]
+
+
+def test_source_group_family_interval_pairs_draws_before_family_average():
+    pytest.importorskip("ultralytics")
+    from vehicle_detection.research_round3_report import family_interval
+
+    scenarios = [
+        {"id": "clean", "family": "clean"},
+        {"id": "mild", "family": "noise"},
+        {"id": "severe", "family": "noise"},
+    ]
+    intervals = {
+        key: {"recovery": gain, "draws": [{"valid": True, "recovery": gain} for _ in range(100)]}
+        for key, gain in (("clean", 0.02), ("mild", 0.06), ("severe", -0.02))
+    }
+    # An absent rare class in any scenario invalidates the entire paired family draw.
+    intervals["mild"]["draws"][0] = {"valid": False, "recovery": None}
+    result = family_interval(intervals, scenarios)
+    assert result["recovery"] == pytest.approx(0.02)
+    assert result["ci95"] == pytest.approx([0.02, 0.02])
+    assert result["valid_draws"] == 99 and result["invalid_draws"] == 1
+    assert result["draws"][0]["missing_scenarios"] == ["mild"]
