@@ -7,7 +7,7 @@
     "bicycle"
   ],
   "corruption_code_sha256": "8175f20c82debe9221e29f6bc667bdc73946909ad9d4c93e469dfabcc671438b",
-  "data_audit_id": "86bc3adb08c69b75973c2e97b1258f1d079117359c8645678c36e9eb28a9f577",
+  "data_audit_id": "03b2f04f4f11cc5adc975f93ec9115e7502864368bc7977dbd33c09e484bf7a0",
   "encoding": {
     "format": "jpg",
     "jpeg_quality": 95,
@@ -20,7 +20,7 @@
     "Development is evaluation only; confirmation is for shortlisted calibration choices.",
     "No final-test IDs or pixels are included; final evaluation belongs to issue 8."
   ],
-  "manifest_id": "20991a617a258a7887beef2aad63fa0c6f6fbcf7cef3d267569ace98fa699308",
+  "manifest_id": "96fe490b8640d149718bd65fa7e0b0afd32ebd1f378a629790c87ebc5b8782ac",
   "mapping": {
     "0": 0,
     "1": 1,
@@ -30,8 +30,8 @@
     "5": 4
   },
   "numpy": "2.4.6",
-  "pixel_pipeline": "original source -> corruption (or copy for clean) -> JPEG95 once",
-  "preparation_code_sha256": "cf0328fb70915dce3128671bc13d72d4ba7691bc6c272853962fec7db67e2ce7",
+  "pixel_pipeline": "original source -> corruption -> optional treatment -> JPEG95 once",
+  "preparation_code_sha256": "a9c8b8c88f31ad6009b96ca8deb4805f15fe53875d8b1068d4da0d1a6052192c",
   "protocol_id": "680090b8eef098fbe10c77e632aacbfd3d6854d8489d7518e20f062e032b6e44",
   "quality_sample_per_set": 4,
   "scenarios": [
@@ -21097,5 +21097,5 @@
       "fe189115-8dabb5b1"
     ]
   },
-  "version": "issue28-evaluation-sets-v1"
+  "version": "issue28-evaluation-sets-v2"
 }

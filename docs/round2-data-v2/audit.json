@@ -1,37 +1,53 @@
 {
   "artifacts": {
-    "/home/truong51972/projects/vehicle-detection/data/bdd100k/bdd100k_labels_release/bdd100k/labels/bdd100k_labels_images_train.json": "c1998792e385fd79213187576ca07d5249563d0ab83ae976688ad60668baca9e",
-    "/home/truong51972/projects/vehicle-detection/data/bdd100k/bdd100k_labels_release/bdd100k/labels/bdd100k_labels_images_val.json": "c835be652f0c002897be51e74deedd16a1dcee0b7230f19c0456fba772f694af",
-    "/home/truong51972/projects/vehicle-detection/docs/issue6-v2/policy.json": "939ce2419171c68b41789a41cfe2b64b31f983eec4c749e6df8824663c7cec5f",
-    "/home/truong51972/projects/vehicle-detection/docs/round2-data-v1/quality_sample.csv": "465ee92c0db4c84e4c763c23295ca6854bff881af23d01e6b4bed2c7f28da20f",
-    "/home/truong51972/projects/vehicle-detection/docs/round2-data-v1/source_role_membership.csv.gz": "cec9ec76e1d5f54dc261b92329ab05aaeb97ac9ef05aee14e82248c4da7f90cf",
-    "/home/truong51972/projects/vehicle-detection/runs/issue5-v1/conversion/conversion.json": "77396544fd69fbeb7ec5b29a3916a366f6c085dc80d2dabef7ebf8d0693953e2",
-    "/home/truong51972/projects/vehicle-detection/runs/issue5-v1/protocol.json": "d4292713958ee900175fbc268fda3b44aa04e5bb369817a16bb153f2dded30c0",
-    "/home/truong51972/projects/vehicle-detection/runs/issue6-v2/conversion/S10/conversion.json": "77396544fd69fbeb7ec5b29a3916a366f6c085dc80d2dabef7ebf8d0693953e2",
-    "/home/truong51972/projects/vehicle-detection/runs/issue6-v2/subsets.json": "d952652b4c84bc3aed0e379b6e434c7a1e1e2136074e062962a2017cebc9520c",
-    "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/conversion/S10/conversion.json": "e4acf048e7948d0340c9a2848f4361999eecef05a694f0388844161e43bf0f39",
-    "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/conversion/development/conversion.json": "22c619a58d8b96be3da8a63d8eb302eb4826b0a22766651624f0feba816be6f6",
-    "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/datasets/S10/adaptive/data.yaml": "84e361b23a47863ec9badd03849803eae115f0816d52ceaf40305f6c159cd7eb",
-    "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/datasets/S10/adaptive/export.json": "bc7d4c1940e9715f73b4fcb30e979ce27d9199e1c55dcfe417d9bb3cdfdf5dab",
-    "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/datasets/S10/adaptive/metadata.csv": "e27e158fda872fce9193fc561b5e23998560b6820f1418ef3893d3febe56e9ab",
-    "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/datasets/S10/adaptive/verified.json": "7fcba40f001f3a12ee7f9b3449e0cd1299ffe254223a3966ee35338343e773bf",
-    "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/datasets/S10/pair.json": "5e0fa1e706f48ed6a11cc37b2f1be786aaa8ba8468cdb257ff3402ac3a5be14e",
-    "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/datasets/S10/raw/data.yaml": "f94002faca010b1a557d187bdae3757f79099261921096a6a4dad2a5e3ed4d06",
-    "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/datasets/S10/raw/export.json": "8b60e86c203515a65934f2e9d75cc161e5d18861c87283ec9629d5e72d3f9571",
-    "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/datasets/S10/raw/metadata.csv": "0c1b5928f6639213ac218a1dc60808a675fb053ab0909a91dae63debd187b441",
-    "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/datasets/S10/raw/verified.json": "025a006d614a7a2a02fd234a5b8d3aad4bf682490fed5dfc4c938756ddacc72a",
-    "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/development/adaptive/data.yaml": "0f90c1e2d2f725e7c1a3e0f199387b200757acb09fd46a4f293600067ae1c7fa",
-    "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/development/adaptive/export.json": "35fb0e31a2ebac2a660ff3d7ec0964d32b9628027a235caf6ca679abb908775f",
-    "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/development/adaptive/metadata.csv": "40c67725fa982d1237befb78a44aebded1ecbba5684d7ad530e3db492e507c66",
-    "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/development/adaptive/verified.json": "ddb97579d50b9c7acd17ef959ad46f30c627b39416c952677649f6ddcea472a3",
-    "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/development/pair.json": "2ba83b50c026b84f9611d835e1f9e28b5a5363092941d0f708403446efbf1d45",
-    "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/development/raw/data.yaml": "0b07ff57812ffdc5cbaa1f34be00348f742d08b6ba3f97bab93fd40c771d4bab",
-    "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/development/raw/export.json": "9201cea8de15afe54b0da8e11173098e286a28d2d8efe0abe9badeb189c2a307",
-    "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/development/raw/metadata.csv": "e8315abaf3da6e32813e465743312770317ca1f791522a5cb22a9a43df951538",
-    "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/development/raw/verified.json": "b8278bf9c314c62fdd00b3f08dab232146f4c15dd10761cf1c632d2300a8ab27",
-    "/home/truong51972/projects/vehicle-detection/runs/preprocessing-five-v1/summary.json": "e001244472d663cbdf813cbf328256eb3cdd28766a8a18a6b5ec2b11ac7ce026"
+    "data": {
+      "bdd100k_labels_release/bdd100k/labels/bdd100k_labels_images_train.json": "c1998792e385fd79213187576ca07d5249563d0ab83ae976688ad60668baca9e",
+      "bdd100k_labels_release/bdd100k/labels/bdd100k_labels_images_val.json": "c835be652f0c002897be51e74deedd16a1dcee0b7230f19c0456fba772f694af"
+    },
+    "development_conversion": {
+      "conversion.json": "77396544fd69fbeb7ec5b29a3916a366f6c085dc80d2dabef7ebf8d0693953e2"
+    },
+    "five": {
+      "conversion/S10/conversion.json": "e4acf048e7948d0340c9a2848f4361999eecef05a694f0388844161e43bf0f39",
+      "conversion/development/conversion.json": "22c619a58d8b96be3da8a63d8eb302eb4826b0a22766651624f0feba816be6f6",
+      "datasets/S10/adaptive/data.yaml": "84e361b23a47863ec9badd03849803eae115f0816d52ceaf40305f6c159cd7eb",
+      "datasets/S10/adaptive/export.json": "bc7d4c1940e9715f73b4fcb30e979ce27d9199e1c55dcfe417d9bb3cdfdf5dab",
+      "datasets/S10/adaptive/metadata.csv": "e27e158fda872fce9193fc561b5e23998560b6820f1418ef3893d3febe56e9ab",
+      "datasets/S10/adaptive/verified.json": "7fcba40f001f3a12ee7f9b3449e0cd1299ffe254223a3966ee35338343e773bf",
+      "datasets/S10/pair.json": "5e0fa1e706f48ed6a11cc37b2f1be786aaa8ba8468cdb257ff3402ac3a5be14e",
+      "datasets/S10/raw/data.yaml": "f94002faca010b1a557d187bdae3757f79099261921096a6a4dad2a5e3ed4d06",
+      "datasets/S10/raw/export.json": "8b60e86c203515a65934f2e9d75cc161e5d18861c87283ec9629d5e72d3f9571",
+      "datasets/S10/raw/metadata.csv": "0c1b5928f6639213ac218a1dc60808a675fb053ab0909a91dae63debd187b441",
+      "datasets/S10/raw/verified.json": "025a006d614a7a2a02fd234a5b8d3aad4bf682490fed5dfc4c938756ddacc72a",
+      "development/adaptive/data.yaml": "0f90c1e2d2f725e7c1a3e0f199387b200757acb09fd46a4f293600067ae1c7fa",
+      "development/adaptive/export.json": "35fb0e31a2ebac2a660ff3d7ec0964d32b9628027a235caf6ca679abb908775f",
+      "development/adaptive/metadata.csv": "40c67725fa982d1237befb78a44aebded1ecbba5684d7ad530e3db492e507c66",
+      "development/adaptive/verified.json": "ddb97579d50b9c7acd17ef959ad46f30c627b39416c952677649f6ddcea472a3",
+      "development/pair.json": "2ba83b50c026b84f9611d835e1f9e28b5a5363092941d0f708403446efbf1d45",
+      "development/raw/data.yaml": "0b07ff57812ffdc5cbaa1f34be00348f742d08b6ba3f97bab93fd40c771d4bab",
+      "development/raw/export.json": "9201cea8de15afe54b0da8e11173098e286a28d2d8efe0abe9badeb189c2a307",
+      "development/raw/metadata.csv": "e8315abaf3da6e32813e465743312770317ca1f791522a5cb22a9a43df951538",
+      "development/raw/verified.json": "b8278bf9c314c62fdd00b3f08dab232146f4c15dd10761cf1c632d2300a8ab27",
+      "summary.json": "e001244472d663cbdf813cbf328256eb3cdd28766a8a18a6b5ec2b11ac7ce026"
+    },
+    "policy": {
+      "policy.json": "939ce2419171c68b41789a41cfe2b64b31f983eec4c749e6df8824663c7cec5f"
+    },
+    "protocol": {
+      "protocol.json": "d4292713958ee900175fbc268fda3b44aa04e5bb369817a16bb153f2dded30c0"
+    },
+    "report": {
+      "quality_sample.csv": "465ee92c0db4c84e4c763c23295ca6854bff881af23d01e6b4bed2c7f28da20f",
+      "source_role_membership.csv.gz": "cec9ec76e1d5f54dc261b92329ab05aaeb97ac9ef05aee14e82248c4da7f90cf"
+    },
+    "subsets": {
+      "subsets.json": "d952652b4c84bc3aed0e379b6e434c7a1e1e2136074e062962a2017cebc9520c"
+    },
+    "training_conversion": {
+      "conversion.json": "77396544fd69fbeb7ec5b29a3916a366f6c085dc80d2dabef7ebf8d0693953e2"
+    }
   },
-  "audit_id": "86bc3adb08c69b75973c2e97b1258f1d079117359c8645678c36e9eb28a9f577",
+  "audit_id": "03b2f04f4f11cc5adc975f93ec9115e7502864368bc7977dbd33c09e484bf7a0",
   "classes": [
     "car",
     "truck",
@@ -1152,5 +1168,5 @@
     }
   },
   "subsets_id": "8a9ba46aa120f0e1d113d4bd907bc8ef5e82ab9bb3bd533d863812deb3f30b4f",
-  "version": "issue28-data-audit-v1"
+  "version": "issue28-data-audit-v2"
 }

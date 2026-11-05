@@ -3,7 +3,6 @@
 from collections import defaultdict
 from pathlib import Path
 
-import cv2
 import numpy as np
 from PIL import Image
 
@@ -31,12 +30,17 @@ def audit_data(protocol, data_root, five_root, subsets, conversions, policy):
         or summary["taxonomy"] != FIVE_CLASSES
     ):
         raise ValueError("Stale five-class summary: protocol/subsets/taxonomy differ")
-    artifacts = {str(five_root / "summary.json"): file_hash(five_root / "summary.json")}
+    artifacts = {
+        "five": {"summary.json": file_hash(five_root / "summary.json")},
+        "data": {},
+        "training_conversion": {},
+        "development_conversion": {},
+    }
     for source in protocol["annotation_sources"].values():
         path = data_root / source["path"]
         if file_hash(path) != source["sha256"]:
             raise ValueError(f"Stale original annotations: {path}")
-        artifacts[str(path)] = source["sha256"]
+        artifacts["data"][source["path"]] = source["sha256"]
     records, discovery, _ = scan_bdd(data_root, strict=False)
     lookup = {r["id"]: r for r in records}
     for role, rows in protocol["splits"].items():
@@ -135,16 +139,14 @@ def audit_data(protocol, data_root, five_root, subsets, conversions, policy):
                 "files_identity": export["files_identity"],
             }
             for filename in ("export.json", "metadata.csv", "verified.json", "data.yaml"):
-                artifacts[str(directory / filename)] = file_hash(directory / filename)
+                path = directory / filename
+                artifacts["five"][str(path.relative_to(five_root))] = file_hash(path)
         verify_alignment([pair / "raw", pair / "adaptive"], deep=False)
-        for path in (
-            conversion / "conversion.json",
-            original / "conversion.json",
-            pair / "pair.json",
-        ):
-            artifacts[str(path)] = file_hash(path)
+        for path in (conversion / "conversion.json", pair / "pair.json"):
+            artifacts["five"][str(path.relative_to(five_root))] = file_hash(path)
+        artifacts[f"{name}_conversion"]["conversion.json"] = file_hash(original / "conversion.json")
     audit = {
-        "version": "issue28-data-audit-v1",
+        "version": "issue28-data-audit-v2",
         "protocol_id": protocol["manifest_id"],
         "subsets_id": subsets["manifest_id"],
         "classes": FIVE_CLASSES,
@@ -158,17 +160,28 @@ def audit_data(protocol, data_root, five_root, subsets, conversions, policy):
     return audit
 
 
-def validate_audit(audit, protocol):
+def validate_audit(audit, protocol, *, roots):
+    """Resolve portable artifact names against the current configured roots, then verify bytes."""
     validate_protocol(protocol)
     if (
-        audit["audit_id"] != digest({k: v for k, v in audit.items() if k != "audit_id"})
+        audit["version"] != "issue28-data-audit-v2"
+        or audit["audit_id"] != digest({k: v for k, v in audit.items() if k != "audit_id"})
         or audit["protocol_id"] != protocol["manifest_id"]
         or audit["classes"] != FIVE_CLASSES
     ):
         raise ValueError("Data audit checksum/protocol/taxonomy changed; rerun notebook 01")
-    for path, expected in audit["artifacts"].items():
-        if file_hash(path) != expected:
-            raise ValueError(f"Audited prerequisite changed; rerun notebook 01: {path}")
+    for name, files in audit["artifacts"].items():
+        if name not in roots:
+            raise ValueError(f"Missing configured audit root: {name}")
+        root = Path(roots[name]).resolve()
+        for relative, expected in files.items():
+            path = root / relative
+            if Path(relative).is_absolute() or ".." in Path(relative).parts:
+                raise ValueError("Audit artifact paths must be root-relative")
+            if not path.resolve().is_relative_to(root):
+                raise ValueError("Audit artifact escapes its configured root")
+            if file_hash(path) != expected:
+                raise ValueError(f"Audited prerequisite changed; rerun notebook 01: {path}")
     return audit
 
 
@@ -210,7 +223,7 @@ def evaluation_sets(protocol, *, seed=2026):
             for severity, params in enumerate(CORRUPTIONS[family], 1)
         )
     manifest = {
-        "version": "issue28-evaluation-sets-v1",
+        "version": "issue28-evaluation-sets-v2",
         "protocol_id": protocol["manifest_id"],
         "classes": FIVE_CLASSES,
         "mapping": {str(k): v for k, v in SIX_TO_FIVE.items()},
@@ -222,7 +235,7 @@ def evaluation_sets(protocol, *, seed=2026):
         "numpy": np.__version__,
         "corruption_code_sha256": file_hash(Path(__file__).with_name("stress.py")),
         "preparation_code_sha256": file_hash(__file__),
-        "pixel_pipeline": "original source -> corruption (or copy for clean) -> JPEG95 once",
+        "pixel_pipeline": "original source -> corruption -> optional treatment -> JPEG95 once",
         "limitations": [
             "Synthetic conditions are controlled approximations, not real camera physics.",
             "Confirmation is disjoint within Round 2; historical v2 used the calibration role.",
@@ -235,10 +248,24 @@ def evaluation_sets(protocol, *, seed=2026):
     return manifest
 
 
-def scenario_image(row, data_root, scenario, *, seed=2026):
-    """Prepare one image in memory from an original train source; never write bulk exports."""
+def scenario_source(row, data_root):
+    """Verify and decode one original source; reuse these pixels within the current experiment."""
     if row["official_split"] != "train" or not row["sha256"]:
         raise ValueError("Only non-final frozen train-role images may be prepared")
+    root = Path(data_root).resolve()
+    path = root / row["source_path"]
+    if not path.is_relative_to(root) or path.resolve() != path:
+        raise ValueError("Unsafe source image path")
+    if file_hash(path) != row["sha256"]:
+        raise ValueError(f"Source image changed: {row['id']}")
+    image = read_image(path)
+    if image.shape != (row["height"], row["width"], 3):
+        raise ValueError("Source image geometry changed")
+    return image
+
+
+def scenario_image(row, data_root, scenario, *, seed=2026):
+    """Return checked corrupted pixels before treatment/encoding; apply JPEG95 once afterward."""
     family, severity = scenario["family"], scenario["severity"]
     if (
         type(seed) is not int
@@ -256,20 +283,4 @@ def scenario_image(row, data_root, scenario, *, seed=2026):
     expected = {} if family == "clean" else CORRUPTIONS[family][severity - 1]
     if scenario["params"] != expected or scenario["synthetic"] != (family != "clean"):
         raise ValueError("Scenario parameters/synthetic label differ from the frozen corruption")
-    root = Path(data_root).resolve()
-    path = root / row["source_path"]
-    if not path.is_relative_to(root) or path.resolve() != path:
-        raise ValueError("Unsafe source image path")
-    if file_hash(path) != row["sha256"]:
-        raise ValueError(f"Source image changed: {row['id']}")
-    image = read_image(path)
-    if image.shape != (row["height"], row["width"], 3):
-        raise ValueError("Source image geometry changed")
-    result = corrupt(image, family, severity, row["id"], seed)
-    ok, encoded = cv2.imencode(".jpg", result, [cv2.IMWRITE_JPEG_QUALITY, 95])
-    if not ok:
-        raise OSError("Scenario JPEG95 encoding failed")
-    decoded = cv2.imdecode(encoded, cv2.IMREAD_COLOR)
-    if decoded is None or decoded.shape != image.shape:
-        raise ValueError("Scenario encoding changed image geometry")
-    return decoded
+    return corrupt(scenario_source(row, data_root), family, severity, row["id"], seed)

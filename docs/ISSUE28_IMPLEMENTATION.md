@@ -32,13 +32,23 @@ manifest. Earlier preprocessing/training/evaluation notebooks retain their paths
 
 ## Outputs and the issue 30 handoff
 
-`docs/round2-data-v1/` contains the immutable `audit.json`, compressed
+`docs/round2-data-v2/` contains the immutable `audit.json`, compressed
 source/role/group membership, five-class role support and deterministic
 visual-quality samples (up to 16 images per non-final role). Final support is
 annotation-only. Quality summaries describe data; they do not select a policy.
 
-`docs/round2-evaluation-v1/` contains `evaluation_sets.json`, compressed membership,
+`docs/round2-evaluation-v2/` contains `evaluation_sets.json`, compressed membership,
 `set_support.csv`, sample diagnostics, visual examples and `summary.json`.
+The audit stores artifact names relative to configured roots (`data`, `five`,
+`training_conversion`, `development_conversion`, `protocol`, `subsets`, `policy`
+and `report`). Both notebooks define `AUDIT_ROOTS`; pass the current roots to
+`validate_audit(audit, protocol, roots=AUDIT_ROOTS)`. Moving a checkout or mounting
+saved inputs elsewhere needs no audit edits or new checksums, provided the bytes
+remain identical. Paths escaping a root and changed bytes are rejected. Historical
+export metadata is kept byte-for-byte; its existing absolute-path constraints
+still apply to a fresh deep re-audit with notebook 01, independently of saved-audit
+replay with notebook 02.
+
 The manifest binds protocol/audit identities, five-class mapping, IDs, seed,
 corruption code, preparation code, NumPy/OpenCV versions and JPEG95 encoding.
 Change inputs, recipes, seeds or sample settings using a new version/output root.
@@ -52,10 +62,13 @@ the calibration role only; the four original data roles are unchanged.
 There are ten paired conditions: clean and explicitly **synthetic** underexposure,
 shot/read noise and motion blur at severities 1, 2 and 3. Parameters reuse
 `stress.CORRUPTIONS`; randomness reuses `stress.corrupt` with recorded IDs and seed.
-Every condition starts from original source pixels and receives one JPEG95
-encoding. Clean uses the same encoding. No bulk image export is required here.
+Every condition starts from original source pixels. Apply any candidate treatment
+before the one final JPEG95 encoding; clean and Raw use that same encoding.
+Notebook 02 explicitly encodes/decodes its Raw previews once after corruption.
+No bulk image export is required here.
 
-For #30, validate the saved audit with `validate_audit` and verify the saved
+For #30, validate the saved audit with
+`validate_audit(audit, protocol, roots=AUDIT_ROOTS)` and verify the saved
 manifest before use (the notebook adds audit and sampling provenance to the
 base manifest):
 
@@ -67,12 +80,27 @@ assert manifest["data_audit_id"] == audit["audit_id"]
 ```
 
 Resolve selected IDs through the saved protocol rows.
-Use `scenario_image(row, DATA_ROOT, scenario, seed=manifest["seed"])` for checked
-in-memory images; it verifies source hashes and geometry before returning decoded
-JPEG95 pixels. Retain the existing five-class mapping and source box order for
-native labels, including empty labels for negative images. Do not re-encode these
-decoded arrays when comparing conditions. Materialized native datasets, if needed
-by #30, must retain the same single-encoding contract.
+`scenario_image(row, DATA_ROOT, scenario, seed=manifest["seed"])` verifies source
+hashes and geometry and returns corrupted pixels **before any new JPEG encoding**.
+Pass these pixels to candidate operators, then encode Raw and treated branches
+once at JPEG95 for native evaluation. Do not filter notebook 02's decoded JPEG
+previews or feed them back into the preparation pipeline.
+
+For broad screening, reuse the existing corruption helper after loading each
+checked source once per experiment:
+
+```python
+source = scenario_source(row, DATA_ROOT)
+for scenario in manifest["scenarios"]:
+    pixels = corrupt(source, scenario["family"], scenario["severity"], row["id"], manifest["seed"])
+```
+
+Apply each candidate to a separate copy of `pixels`, then encode each branch once
+after all operators. `corrupt` preserves the original source array. Reuse is an
+in-memory snapshot for the current experiment; call `scenario_source` again for a
+new experiment to recheck the source. There is no persistent pixel cache or option
+to bypass hashing. Retain the existing five-class mapping and source box order for
+native labels, including empty labels for negative images.
 
 Use exploration for candidate search, confirmation for shortlisted choices and
 development for later evaluation. Historical v2 already used the calibration
@@ -101,8 +129,11 @@ reuse from both launch directories, compare historical contents/mtimes, reproduc
 report contents, and reject changed sampling settings without modifying evidence.
 Additional tests cover deterministic/group-atomic membership, stale originals,
 removed-railway coordinate changes, derived labels, exports and invalid scenarios.
+Review regressions relocate saved artifacts with original paths unavailable, replay
+notebook 02 in a fresh kernel, reject changed relocated bytes, prove preparation
+performs no JPEG encoding, and reuse a checked source without repeated I/O.
 Synthetic fixtures and pixel diagnostics do not count as detection evidence.
-Validation passed: **120 tests**, Ruff lint/format, whitespace checks and `uv build`.
+Validation passed: **123 tests**, Ruff lint/format, whitespace checks and `uv build`.
 
 ```sh
 uv run --extra study pytest -q

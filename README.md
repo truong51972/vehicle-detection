@@ -9,14 +9,14 @@ notebook launches another phase.
    #14 artifacts and original BDD sources. It reuses frozen roles/groups, checks
    original/derived labels and geometry, deep-verifies the Raw/v2 S10 and
    development pairs **without writing their receipts**, and saves compact support,
-   membership and sampled visual-quality evidence under `docs/round2-data-v1/`.
+   membership and sampled visual-quality evidence under `docs/round2-data-v2/`.
    It does not split, convert labels or export images.
 2. [02_evaluation_data_preparation.ipynb](notebooks/02_evaluation_data_preparation.ipynb)
    reads the saved audit and partitions the existing calibration role into
    group-disjoint exploration/confirmation halves. It retains all development IDs
    and freezes clean plus explicitly synthetic low-light, noise and motion-blur
    recipes at severities 1–3, with fixed seeds and JPEG95 encoding. It saves
-   `docs/round2-evaluation-v1/` manifests, diagnostics and visual examples. Images
+   `docs/round2-evaluation-v2/` manifests, diagnostics and visual examples. Images
    are prepared in memory from original sources; no bulk export is needed.
 
 Both use the existing five-class order: **car, truck, bus, motorcycle, bicycle**.

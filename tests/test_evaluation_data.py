@@ -1,6 +1,7 @@
 """Round 2 reuses frozen data and never opens or regenerates final-test inputs."""
 
 import copy
+import shutil
 from pathlib import Path
 
 import cv2
@@ -16,11 +17,14 @@ from vehicle_detection.evaluation_data import (
     audit_data,
     evaluation_sets,
     scenario_image,
+    scenario_source,
     validate_audit,
 )
 from vehicle_detection.five_class import FIVE_CLASSES, derive_labels, support_audit
 from vehicle_detection.offline import export_variant, verify_alignment
+from vehicle_detection.preprocess import gamma
 from vehicle_detection.protocol import build_protocol, development_records, summarize
+from vehicle_detection.stress import corrupt
 from vehicle_detection.subsets import build_subsets, training_records
 
 
@@ -105,6 +109,16 @@ def snapshot(roots):
     }
 
 
+def audit_roots(prepared):
+    _, root, five, _, conversions, _ = prepared
+    return {
+        "data": root,
+        "five": five,
+        "training_conversion": conversions["training"],
+        "development_conversion": conversions["development"],
+    }
+
+
 def test_calibration_halves_are_complete_disjoint_groups_and_reproducible(prepared):
     protocol, *_ = prepared
     before = copy.deepcopy(protocol)
@@ -152,9 +166,7 @@ def test_scenarios_use_original_pixels_shared_encoding_and_reject_final(prepared
         assert output.shape == (row["height"], row["width"], 3)
         assert output.dtype == np.uint8
     clean = cv2.imread(str(source))
-    ok, jpeg = cv2.imencode(".jpg", clean, [cv2.IMWRITE_JPEG_QUALITY, 95])
-    assert ok
-    np.testing.assert_array_equal(outputs[0], cv2.imdecode(jpeg, cv2.IMREAD_COLOR))
+    np.testing.assert_array_equal(outputs[0], clean)
     assert (file_hash(source), source.stat().st_mtime_ns) == before
     monkeypatch.setattr(
         "vehicle_detection.evaluation_data.file_hash", lambda p: pytest.fail("Pixel access")
@@ -166,6 +178,91 @@ def test_scenarios_use_original_pixels_shared_encoding_and_reject_final(prepared
     for severity in (False, 0, 4):
         with pytest.raises(ValueError, match="family/severity"):
             scenario_image(row, root, {**scenarios[1], "severity": severity})
+
+
+def test_raw_and_treated_branches_encode_once_after_corruption(prepared, monkeypatch):
+    protocol, root, *_ = prepared
+    row = protocol["splits"]["calibration"][0]
+    scenarios = evaluation_sets(protocol)["scenarios"]
+    imencode, imdecode = cv2.imencode, cv2.imdecode
+    for scenario in (scenarios[0], scenarios[5]):
+        with monkeypatch.context() as patch:
+            patch.setattr(cv2, "imencode", lambda *a, **k: pytest.fail("Premature encoding"))
+            patch.setattr(cv2, "imdecode", lambda *a, **k: pytest.fail("Premature decoding"))
+            pixels = scenario_image(row, root, scenario)
+        expected = corrupt(
+            cv2.imread(str(root / row["source_path"])),
+            scenario["family"],
+            scenario["severity"],
+            row["id"],
+        )
+        np.testing.assert_array_equal(pixels, expected)
+        for image, reference in ((pixels, expected), (gamma(pixels, 0.7), gamma(expected, 0.7))):
+            ok, actual_jpeg = imencode(".jpg", image, [cv2.IMWRITE_JPEG_QUALITY, 95])
+            assert ok
+            ok, expected_jpeg = imencode(".jpg", reference, [cv2.IMWRITE_JPEG_QUALITY, 95])
+            assert ok and actual_jpeg.tobytes() == expected_jpeg.tobytes()
+            assert imdecode(actual_jpeg, cv2.IMREAD_COLOR).shape == expected.shape
+
+
+def test_checked_source_is_reusable_without_repeated_io(prepared, monkeypatch):
+    protocol, root, *_ = prepared
+    row = protocol["splits"]["calibration"][0]
+    source = scenario_source(row, root)
+    before = source.copy()
+    scenarios = evaluation_sets(protocol)["scenarios"]
+    with monkeypatch.context() as patch:
+        patch.setattr(
+            "vehicle_detection.evaluation_data.file_hash", lambda p: pytest.fail("Repeated hash")
+        )
+        patch.setattr(
+            "vehicle_detection.evaluation_data.read_image", lambda p: pytest.fail("Repeated decode")
+        )
+        for scenario in scenarios:
+            pixels = corrupt(source, scenario["family"], scenario["severity"], row["id"])
+            assert pixels.shape == source.shape
+        with pytest.raises(ValueError, match="non-final"):
+            scenario_source(protocol["splits"]["final_test"][0], root)
+    np.testing.assert_array_equal(source, before)
+    (root / row["source_path"]).write_bytes(b"changed after loading")
+    with pytest.raises(ValueError, match="Source image changed"):
+        scenario_source(row, root)
+
+
+def test_saved_audit_replays_after_relocation_and_still_rejects_changed_bytes(
+    prepared, tmp_path, monkeypatch
+):
+    protocol, *_ = prepared
+    audit = audit_data(*prepared)
+    roots = audit_roots(prepared)
+    relocated = {}
+    for name, root in roots.items():
+        target = tmp_path / "relocated" / name
+        shutil.copytree(root, target)
+        root.rename(root.with_name(root.name + "-unavailable"))
+        relocated[name] = target
+    assert validate_audit(audit, protocol, roots=relocated) == audit
+    original_json = str(audit)
+    assert str(tmp_path) not in original_json
+    for files in audit["artifacts"].values():
+        assert all(not Path(path).is_absolute() for path in files)
+    with pytest.raises(ValueError, match="configured audit root"):
+        validate_audit(audit, protocol, roots={})
+    outside = tmp_path / "outside.json"
+    outside.write_text("must not be read")
+    (relocated["data"] / "escape.json").symlink_to(outside)
+    with monkeypatch.context() as patch:
+        patch.setattr(
+            "vehicle_detection.evaluation_data.file_hash", lambda p: pytest.fail("Escaped read")
+        )
+        for relative in ("../outside.json", str(outside), "escape.json"):
+            unsafe = {**audit, "artifacts": {"data": {relative: "unused"}}}
+            unsafe["audit_id"] = digest({k: v for k, v in unsafe.items() if k != "audit_id"})
+            with pytest.raises(ValueError, match="root-relative|escapes"):
+                validate_audit(unsafe, protocol, roots=relocated)
+    (relocated["five"] / "summary.json").write_bytes(b"changed")
+    with pytest.raises(ValueError, match="prerequisite changed"):
+        validate_audit(audit, protocol, roots=relocated)
 
 
 def test_audit_is_read_only_and_final_images_remain_unopened(prepared, monkeypatch):
@@ -193,13 +290,13 @@ def test_audit_is_read_only_and_final_images_remain_unopened(prepared, monkeypat
         patch.setattr(cv2, "imread", guarded_read)
         audit = audit_data(*prepared)
         assert audit == audit_data(*prepared)
-        assert validate_audit(audit, protocol) == audit
+        assert validate_audit(audit, protocol, roots=audit_roots(prepared)) == audit
     assert snapshot(roots) == before
     assert audit["role_support_annotation_only"]["final_test"]["images"] == 3
     metadata = five / "development/raw/metadata.csv"
     metadata.write_text(metadata.read_text() + "\n")
     with pytest.raises(ValueError, match="prerequisite changed"):
-        validate_audit(audit, protocol)
+        validate_audit(audit, protocol, roots=audit_roots(prepared))
 
 
 @pytest.mark.parametrize(
@@ -277,17 +374,14 @@ for target in ["vehicle_detection.protocol.build_protocol",
             "DATA_ROOT": root,
             "PROTOCOL_PATH": frozen / "protocol.json",
             "OUTPUT": project / ("evaluation" if second else "audit"),
+            "SUBSETS_PATH": frozen / "subsets.json",
+            "POLICY_PATH": frozen / "policy.json",
+            "FIVE_ROOT": five,
+            "TRAIN_CONVERSION": conversions["training"],
+            "DEV_CONVERSION": conversions["development"],
         }
         if second:
             values["AUDIT_PATH"] = project / "audit/audit.json"
-        else:
-            values.update(
-                SUBSETS_PATH=frozen / "subsets.json",
-                POLICY_PATH=frozen / "policy.json",
-                FIVE_ROOT=five,
-                TRAIN_CONVERSION=conversions["training"],
-                DEV_CONVERSION=conversions["development"],
-            )
         overrides = "\n".join(f"{key} = Path({str(value)!r})" for key, value in values.items())
         overrides += "\n" + settings
         config.source = config.source[:position] + overrides + "\n" + config.source[position:]
@@ -332,3 +426,16 @@ for target in ["vehicle_detection.protocol.build_protocol",
             settings="QUALITY_SAMPLE_PER_SET = 1",
         )
     assert snapshot([project / "audit", project / "evaluation"]) == outputs
+    # Relocate the whole fixture and make the original paths unavailable, without rewriting bytes.
+    moved = tmp_path / "moved"
+    for directory in (project, root, five, tmp_path / "six"):
+        shutil.copytree(directory, moved / directory.name)
+        directory.rename(directory.with_name(directory.name + "-unavailable"))
+    project, root, five = moved / "project", moved / root.name, moved / "five"
+    frozen = project / "runs/frozen"
+    conversions = {name: moved / "six" / name for name in conversions}
+    saved_audit = (project / "audit/audit.json").read_bytes()
+    saved_manifest = (project / "evaluation/evaluation_sets.json").read_bytes()
+    run("02_evaluation_data_preparation.ipynb", second=True, cwd=project / "notebooks")
+    assert (project / "audit/audit.json").read_bytes() == saved_audit
+    assert (project / "evaluation/evaluation_sets.json").read_bytes() == saved_manifest
