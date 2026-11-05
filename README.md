@@ -28,6 +28,10 @@ notebook launches another phase.
    **Study measured: leading Denoise 5 candidate failed confirmation; v2 retained.** See
    [issue 30 results](docs/ISSUE30_RESULTS.md) and
    [experiment contracts and gates](docs/ISSUE30_IMPLEMENTATION.md).
+   Section 6 adds an opt-in, exploration-only quality/threshold search using the
+   saved native matches, explicit cost limits and unused confirmation-group planning.
+   Set `RUN_QUALITY_SEARCH=True`; new artifacts use `round2-quality-v1` roots.
+   See [quality search scope and replay](docs/ISSUE30_QUALITY_SEARCH.md).
 
 These use the existing five-class order: **car, truck, bus, motorcycle, bicycle**.
 Original six-class annotations/conversions and frozen Gamma-or-Skip v2 results

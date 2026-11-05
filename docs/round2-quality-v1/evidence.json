@@ -1,0 +1,13 @@
+{
+  "artifacts": {
+    "docs/round2-quality-v1/confirmation_support.json": "0b993ee074013722134262d108d3eddcfb39469c106807ae12f2f3baab73848a",
+    "docs/round2-quality-v1/quality_summary.json": "fc7e17a3f8b5353dc186fed8a631eebb560140183dd3a5d8df3afd8c44e889d1",
+    "docs/round2-quality-v1/search.json": "213ac8be87d1dd93d3b7b74b9d139ecde208b2b3206e8f44c9d8007af7393dfc",
+    "runs/round2-quality-v1/fresh_confirmation.json": "bdfc11273c15312713fc578bc0881ccdc5971bb50a8160fb9995c7d2fdcb5a37",
+    "runs/round2-quality-v1/quality.json": "adfd7defa7453f6825d9940b2be57732a9837b60fbf98a39c6f1ae05d6c82d2f"
+  },
+  "plan_id": "6aeb8bdffee3653b2540217760baa2703986298594c838050595b10fd6eda8b5",
+  "search_id": "9fef8ac9f4062b445d927d59ffd4b29718bd8453cfdaf8d7a92504191baf655f",
+  "status": "pending_fresh_confirmation",
+  "v3_released": false
+}
