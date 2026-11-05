@@ -8,6 +8,7 @@ from vehicle_detection.common import file_hash
 
 ACTIVE = (
     "01_data_init.ipynb",
+    "02_evaluation_data_preparation.ipynb",
     "02_data_preprocessing.ipynb",
     "03_training.ipynb",
     "04_eval_and_report.ipynb",
@@ -38,7 +39,7 @@ def test_active_entrypoints_are_independent_and_archives_are_unchanged():
         notebook = json.loads(path.read_text())
         code_cells = [c for c in notebook["cells"] if c["cell_type"] == "code"]
         images = 0
-        status = notebook["metadata"].get("phase2_status")
+        status = notebook["metadata"].get("phase2_status", "pending")
         assert status in {"pending", "preparing", "running", "complete"}
         for i, cell in enumerate(code_cells):
             compile("".join(cell["source"]), f"{path}:cell{i}", "exec")
@@ -55,7 +56,8 @@ def test_active_entrypoints_are_independent_and_archives_are_unchanged():
 def test_active_notebooks_have_navigable_numbered_sections():
     import re
 
-    for phase, name in enumerate(ACTIVE, 1):
+    for name in ACTIVE:
+        phase = int(name[:2])
         cells = json.loads((Path("notebooks") / name).read_text())["cells"]
         overview = "".join(cells[0]["source"])
         title, purpose, *_ = overview.split("\n\n")

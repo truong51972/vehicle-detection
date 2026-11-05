@@ -1,4 +1,9 @@
 {
+  "notebooks/01_data_init.ipynb": {
+    "archive": "notebooks/archive/round1/01_data_init.ipynb",
+    "sha256": "2984ee6b870dd1aa47d821e86a125f6a1a5b9fcba66d5e67aece2b2ee0cfed7c",
+    "source_revision": "99d9af2be1b1dcb1a296f7d85867207609bc8162"
+  },
   "notebooks/01_data_preparation.ipynb": {
     "archive": "notebooks/archive/01_data_preparation.ipynb",
     "sha256": "01af079715d574784a797e036e310da671b7e0fc6c11a0d080ca42f47df4a835",

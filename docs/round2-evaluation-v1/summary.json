@@ -1,0 +1,18 @@
+{
+  "artifacts": {
+    "data_audit": "/home/truong51972/projects/vehicle-detection/docs/round2-data-v1/audit.json",
+    "protocol": "/home/truong51972/projects/vehicle-detection/runs/issue5-v1/protocol.json"
+  },
+  "data_audit_id": "86bc3adb08c69b75973c2e97b1258f1d079117359c8645678c36e9eb28a9f577",
+  "manifest_id": "20991a617a258a7887beef2aad63fa0c6f6fbcf7cef3d267569ace98fa699308",
+  "membership_sha256": "698d67f80cf2c32d2e9a51664d340ea70f8d59ef8d791cecf0477195b9d64a2a",
+  "quality_sample_per_set": 4,
+  "sample_diagnostics_sha256": "e131f17ef38394afd8878a5b611f13d6a7ddc8b2462161d48152cd7690df4d0d",
+  "scenario_count": 10,
+  "set_sizes": {
+    "calibration_confirmation": 3464,
+    "calibration_exploration": 3521,
+    "development_validation": 13975
+  },
+  "status": "data_prepared_no_policy_selection_or_model_evaluation"
+}

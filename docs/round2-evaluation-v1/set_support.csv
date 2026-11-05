@@ -1,0 +1,261 @@
+,calibration_exploration,calibration_confirmation,development_validation
+images,3521,3464,13975
+old_instances:5,334,344,1430
+old_instances:0,35774,35742,142541
+old_instances:2,591,608,2276
+old_presence:0,3481,3427,13820
+old_presence:2,468,468,1759
+old_presence:5,215,210,872
+old_size:bicycle:small,73,80,387
+old_size:car:small,15650,15744,62058
+old_size:car:medium,13405,13407,53667
+old_size:bus:medium,244,226,936
+old_size:car:large,6719,6591,26816
+new_instances:bicycle,334,344,1430
+new_size:small,16081,16250,64033
+new_size:bicycle:small,73,80,387
+new_instances:car,35774,35742,142541
+new_size:car:small,15650,15744,62058
+new_size:medium,14589,14607,58225
+new_size:car:medium,13405,13407,53667
+new_instances:bus,591,608,2276
+new_size:bus:medium,244,226,936
+new_size:large,7673,7593,30516
+new_size:car:large,6719,6591,26816
+new_presence:car,3481,3427,13820
+new_presence:bus,468,468,1759
+new_presence:bicycle,215,210,872
+old_negative_images,23,23,120
+new_negative_images,23,23,121
+newly_negative_images,0,0,1
+weather:undefined,417,404,1656
+old_condition:bicycle:weather:undefined,94,76,362
+old_condition:car:weather:undefined,4032,3895,16450
+old_condition:bus:weather:undefined,102,89,397
+new_condition:bicycle:weather:undefined,94,76,362
+new_condition:car:weather:undefined,4032,3895,16450
+new_condition:bus:weather:undefined,102,89,397
+timeofday:daytime,1877,1868,7296
+old_condition:bicycle:timeofday:daytime,254,234,1021
+old_condition:car:timeofday:daytime,20556,20442,80318
+old_condition:bus:timeofday:daytime,415,442,1663
+new_condition:bicycle:timeofday:daytime,254,234,1021
+new_condition:car:timeofday:daytime,20556,20442,80318
+new_condition:bus:timeofday:daytime,415,442,1663
+scene:city street,2227,2153,8682
+old_condition:bicycle:scene:city street,310,322,1269
+old_condition:car:scene:city street,22811,22566,89399
+old_condition:bus:scene:city street,451,459,1736
+new_condition:bicycle:scene:city street,310,322,1269
+new_condition:car:scene:city street,22811,22566,89399
+new_condition:bus:scene:city street,451,459,1736
+weather:overcast,430,464,1779
+old_condition:car:weather:overcast,5057,5541,21323
+new_condition:car:weather:overcast,5057,5541,21323
+scene:highway,846,856,3525
+old_condition:car:scene:highway,7655,7886,31863
+new_condition:car:scene:highway,7655,7886,31863
+weather:clear,1863,1850,7445
+old_condition:car:weather:clear,18442,18688,73901
+new_condition:car:weather:clear,18442,18688,73901
+old_instances:1,1526,1557,5965
+old_presence:1,955,963,3773
+old_size:truck:large,630,629,2400
+new_instances:truck,1526,1557,5965
+new_size:truck:large,630,629,2400
+new_presence:truck,955,963,3773
+old_condition:truck:weather:clear,648,652,2463
+new_condition:truck:weather:clear,648,652,2463
+old_condition:truck:timeofday:daytime,1155,1216,4432
+new_condition:truck:timeofday:daytime,1155,1216,4432
+old_condition:truck:scene:highway,370,331,1535
+new_condition:truck:scene:highway,370,331,1535
+scene:residential,412,395,1597
+old_condition:car:scene:residential,4952,4720,19859
+new_condition:car:scene:residential,4952,4720,19859
+timeofday:night,1387,1350,5635
+old_condition:car:timeofday:night,12470,12622,50602
+new_condition:car:timeofday:night,12470,12622,50602
+weather:snowy,309,268,1057
+old_condition:car:weather:snowy,2777,2526,9954
+new_condition:car:weather:snowy,2777,2526,9954
+old_size:truck:small,242,257,1031
+new_size:truck:small,242,257,1031
+old_condition:bus:weather:overcast,92,117,349
+old_condition:truck:weather:overcast,247,320,1068
+new_condition:bus:weather:overcast,92,117,349
+new_condition:truck:weather:overcast,247,320,1068
+old_condition:bus:scene:highway,106,111,418
+new_condition:bus:scene:highway,106,111,418
+old_condition:truck:scene:city street,1046,1118,3985
+new_condition:truck:scene:city street,1046,1118,3985
+old_size:bus:large,258,269,955
+new_size:bus:large,258,269,955
+old_condition:bus:weather:clear,233,259,953
+new_condition:bus:weather:clear,233,259,953
+timeofday:dawn/dusk,252,237,1025
+old_condition:car:timeofday:dawn/dusk,2729,2639,11490
+new_condition:car:timeofday:dawn/dusk,2729,2639,11490
+old_size:truck:medium,654,671,2534
+new_size:truck:medium,654,671,2534
+old_condition:truck:timeofday:dawn/dusk,110,110,466
+new_condition:truck:timeofday:dawn/dusk,110,110,466
+old_size:bicycle:medium,218,201,814
+new_size:bicycle:medium,218,201,814
+weather:partly cloudy,253,242,992
+old_condition:car:weather:partly cloudy,3090,2786,11412
+old_condition:truck:weather:partly cloudy,167,157,623
+new_condition:car:weather:partly cloudy,3090,2786,11412
+new_condition:truck:weather:partly cloudy,167,157,623
+old_condition:truck:scene:residential,96,95,407
+new_condition:truck:scene:residential,96,95,407
+old_condition:truck:weather:snowy,166,126,483
+new_condition:truck:weather:snowy,166,126,483
+weather:rainy,239,230,1023
+old_condition:car:weather:rainy,2296,2258,9293
+old_condition:truck:weather:rainy,90,86,432
+new_condition:car:weather:rainy,2296,2258,9293
+new_condition:truck:weather:rainy,90,86,432
+old_condition:truck:timeofday:night,260,231,1062
+new_condition:truck:timeofday:night,260,231,1062
+old_condition:bus:timeofday:night,122,104,426
+new_condition:bus:timeofday:night,122,104,426
+old_condition:bicycle:weather:clear,105,160,582
+new_condition:bicycle:weather:clear,105,160,582
+old_condition:bicycle:timeofday:night,52,89,306
+new_condition:bicycle:timeofday:night,52,89,306
+old_condition:bus:scene:residential,30,34,110
+new_condition:bus:scene:residential,30,34,110
+old_condition:truck:weather:undefined,206,214,892
+new_condition:truck:weather:undefined,206,214,892
+old_condition:bicycle:weather:overcast,71,49,218
+new_condition:bicycle:weather:overcast,71,49,218
+old_size:bus:small,89,113,385
+new_size:bus:small,89,113,385
+old_condition:bus:weather:partly cloudy,52,59,194
+old_condition:bicycle:weather:partly cloudy,23,18,75
+new_condition:bus:weather:partly cloudy,52,59,194
+new_condition:bicycle:weather:partly cloudy,23,18,75
+old_condition:bus:timeofday:dawn/dusk,51,62,184
+old_condition:bicycle:timeofday:dawn/dusk,28,21,103
+new_condition:bus:timeofday:dawn/dusk,51,62,184
+new_condition:bicycle:timeofday:dawn/dusk,28,21,103
+old_condition:bicycle:weather:snowy,30,24,98
+new_condition:bicycle:weather:snowy,30,24,98
+old_condition:bus:weather:snowy,64,37,191
+new_condition:bus:weather:snowy,64,37,191
+old_condition:bicycle:weather:rainy,11,14,95
+new_condition:bicycle:weather:rainy,11,14,95
+old_condition:bus:weather:rainy,46,47,190
+new_condition:bus:weather:rainy,46,47,190
+old_condition:bicycle:scene:residential,16,13,111
+new_condition:bicycle:scene:residential,16,13,111
+old_size:bicycle:large,43,63,229
+new_size:bicycle:large,43,63,229
+scene:gas stations,1,1,1
+old_condition:car:scene:gas stations,2,7,10
+old_condition:truck:scene:gas stations,1,0,1
+new_condition:car:scene:gas stations,2,7,10
+new_condition:truck:scene:gas stations,1,0,1
+old_instances:4,118,199,562
+old_presence:4,99,140,435
+old_size:motorcycle:small,27,56,172
+new_instances:motorcycle,118,199,562
+new_size:motorcycle:small,27,56,172
+new_presence:motorcycle,99,140,435
+old_condition:motorcycle:weather:undefined,27,24,106
+new_condition:motorcycle:weather:undefined,27,24,106
+old_condition:motorcycle:timeofday:daytime,89,131,387
+new_condition:motorcycle:timeofday:daytime,89,131,387
+old_condition:motorcycle:scene:city street,99,163,432
+new_condition:motorcycle:scene:city street,99,163,432
+old_condition:motorcycle:weather:overcast,25,31,82
+new_condition:motorcycle:weather:overcast,25,31,82
+old_condition:motorcycle:weather:clear,46,113,291
+new_condition:motorcycle:weather:clear,46,113,291
+old_condition:motorcycle:scene:highway,6,19,58
+new_condition:motorcycle:scene:highway,6,19,58
+timeofday:undefined,5,9,19
+old_condition:car:timeofday:undefined,19,39,131
+new_condition:car:timeofday:undefined,19,39,131
+scene:tunnel,7,14,16
+old_condition:car:scene:tunnel,49,63,83
+new_condition:car:scene:tunnel,49,63,83
+old_size:motorcycle:medium,68,102,274
+new_size:motorcycle:medium,68,102,274
+old_condition:motorcycle:weather:snowy,9,6,19
+new_condition:motorcycle:weather:snowy,9,6,19
+old_condition:motorcycle:timeofday:night,22,51,130
+new_condition:motorcycle:timeofday:night,22,51,130
+old_size:motorcycle:large,23,41,116
+new_size:motorcycle:large,23,41,116
+old_condition:motorcycle:scene:residential,13,17,69
+new_condition:motorcycle:scene:residential,13,17,69
+old_condition:motorcycle:timeofday:dawn/dusk,7,17,45
+new_condition:motorcycle:timeofday:dawn/dusk,7,17,45
+old_instances:3,8,8,21
+old_presence:3,7,6,17
+old_size:train:small,4,3,6
+old_condition:train:weather:clear,6,5,9
+old_condition:train:timeofday:night,2,5,2
+old_condition:train:scene:city street,6,3,13
+scene:parking lot,14,21,75
+old_condition:car:scene:parking lot,207,295,864
+new_condition:car:scene:parking lot,207,295,864
+old_condition:bicycle:scene:highway,8,8,48
+new_condition:bicycle:scene:highway,8,8,48
+old_condition:train:timeofday:daytime,5,3,18
+old_condition:train:scene:residential,1,0,2
+scene:undefined,14,24,79
+old_condition:car:scene:undefined,98,205,463
+new_condition:car:scene:undefined,98,205,463
+old_condition:truck:scene:undefined,3,5,14
+new_condition:truck:scene:undefined,3,5,14
+old_condition:motorcycle:weather:partly cloudy,9,17,38
+new_condition:motorcycle:weather:partly cloudy,9,17,38
+old_size:train:medium,2,1,3
+old_condition:train:timeofday:dawn/dusk,1,0,1
+weather:foggy,10,6,23
+old_condition:truck:weather:foggy,2,2,4
+new_condition:truck:weather:foggy,2,2,4
+old_size:train:large,2,4,12
+old_condition:train:weather:undefined,1,0,2
+old_condition:car:weather:foggy,80,48,208
+new_condition:car:weather:foggy,80,48,208
+old_condition:truck:scene:parking lot,4,7,18
+new_condition:truck:scene:parking lot,4,7,18
+old_condition:truck:scene:tunnel,6,1,5
+new_condition:truck:scene:tunnel,6,1,5
+old_condition:bus:timeofday:undefined,3,0,3
+new_condition:bus:timeofday:undefined,3,0,3
+old_condition:bus:scene:undefined,3,0,5
+new_condition:bus:scene:undefined,3,0,5
+old_condition:truck:timeofday:undefined,1,0,5
+new_condition:truck:timeofday:undefined,1,0,5
+old_condition:bus:weather:foggy,2,0,2
+new_condition:bus:weather:foggy,2,0,2
+old_condition:motorcycle:weather:rainy,2,7,25
+new_condition:motorcycle:weather:rainy,2,7,25
+old_condition:train:weather:partly cloudy,1,1,0
+old_condition:train:scene:highway,1,5,6
+old_condition:bus:scene:parking lot,1,4,5
+new_condition:bus:scene:parking lot,1,4,5
+old_condition:bicycle:scene:tunnel,0,1,0
+new_condition:bicycle:scene:tunnel,0,1,0
+old_condition:train:weather:rainy,0,1,4
+old_condition:bicycle:weather:foggy,0,3,0
+new_condition:bicycle:weather:foggy,0,3,0
+old_condition:motorcycle:weather:foggy,0,1,1
+new_condition:motorcycle:weather:foggy,0,1,1
+old_condition:train:weather:snowy,0,1,1
+old_condition:train:weather:overcast,0,0,5
+old_condition:motorcycle:scene:parking lot,0,0,1
+new_condition:motorcycle:scene:parking lot,0,0,1
+old_condition:bicycle:scene:undefined,0,0,1
+new_condition:bicycle:scene:undefined,0,0,1
+old_condition:bicycle:scene:parking lot,0,0,1
+new_condition:bicycle:scene:parking lot,0,0,1
+old_condition:motorcycle:scene:undefined,0,0,2
+new_condition:motorcycle:scene:undefined,0,0,2
+old_condition:bus:scene:tunnel,0,0,2
+new_condition:bus:scene:tunnel,0,0,2
