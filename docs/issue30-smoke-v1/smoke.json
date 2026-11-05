@@ -1,0 +1,924 @@
+{
+  "evaluations": [
+    {
+      "candidate": "skip",
+      "classes": [
+        {
+          "AP50": 0.641308866211793,
+          "AP50_95": 0.43138455678126775,
+          "class": "car",
+          "images": 4,
+          "instances": 27,
+          "recall": 0.5185185185185185
+        },
+        {
+          "AP50": 0.7450000000000001,
+          "AP50_95": 0.5705000000000001,
+          "class": "truck",
+          "images": 2,
+          "instances": 2,
+          "recall": 0.5
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "bus",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "motorcycle",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "bicycle",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        }
+      ],
+      "decisions": {
+        "[]": 4
+      },
+      "images": 4,
+      "mean_ms": 0.11158874985994768,
+      "native_result_sha256": "2aaba240decdb85a13d218560ea746d22b5fa43c609b84014833f629e2a843c7",
+      "overall": {
+        "mAP50": 0.6931544331058965,
+        "mAP50_95": 0.5009422783906339,
+        "precision": 0.7780868271269702,
+        "recall": 0.5092592592592593
+      },
+      "scenario": "clean"
+    },
+    {
+      "candidate": "frozen_v2",
+      "classes": [
+        {
+          "AP50": 0.641308866211793,
+          "AP50_95": 0.43138455678126775,
+          "class": "car",
+          "images": 4,
+          "instances": 27,
+          "recall": 0.5185185185185185
+        },
+        {
+          "AP50": 0.7450000000000001,
+          "AP50_95": 0.5705000000000001,
+          "class": "truck",
+          "images": 2,
+          "instances": 2,
+          "recall": 0.5
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "bus",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "motorcycle",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "bicycle",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        }
+      ],
+      "decisions": {
+        "[]": 4
+      },
+      "images": 4,
+      "mean_ms": 2.990079999790396,
+      "native_result_sha256": "4b2adc83474336fc6e596ac4dcc423349d7717aac03b3aa4577db9c2e662d0ed",
+      "overall": {
+        "mAP50": 0.6931544331058965,
+        "mAP50_95": 0.5009422783906339,
+        "precision": 0.7780868271269702,
+        "recall": 0.5092592592592593
+      },
+      "scenario": "clean"
+    },
+    {
+      "candidate": "gamma_070",
+      "classes": [
+        {
+          "AP50": 0.6427261527781427,
+          "AP50_95": 0.42909643154673927,
+          "class": "car",
+          "images": 4,
+          "instances": 27,
+          "recall": 0.4688162822448244
+        },
+        {
+          "AP50": 0.695,
+          "AP50_95": 0.5255,
+          "class": "truck",
+          "images": 2,
+          "instances": 2,
+          "recall": 0.5
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "bus",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "motorcycle",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "bicycle",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        }
+      ],
+      "decisions": {
+        "[{\"gamma\": {\"gamma\": 0.7}}]": 4
+      },
+      "images": 4,
+      "mean_ms": 3.4857294999710575,
+      "native_result_sha256": "79d4e134f060cfedbebed9c65bbc89fd1978a53947c892ebfd8001d6025c2ee3",
+      "overall": {
+        "mAP50": 0.6688630763890713,
+        "mAP50_95": 0.47729821577336945,
+        "precision": 0.79209305428468,
+        "recall": 0.4844081411224122
+      },
+      "scenario": "clean"
+    },
+    {
+      "candidate": "clahe_12",
+      "classes": [
+        {
+          "AP50": 0.6535732839795907,
+          "AP50_95": 0.4334673555633263,
+          "class": "car",
+          "images": 4,
+          "instances": 27,
+          "recall": 0.4444444444444444
+        },
+        {
+          "AP50": 0.7450000000000001,
+          "AP50_95": 0.5705000000000001,
+          "class": "truck",
+          "images": 2,
+          "instances": 2,
+          "recall": 0.5
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "bus",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "motorcycle",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "bicycle",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        }
+      ],
+      "decisions": {
+        "[{\"clahe\": {\"clip_limit\": 1.2, \"grid_size\": 8}}]": 4
+      },
+      "images": 4,
+      "mean_ms": 18.5077405001266,
+      "native_result_sha256": "4cf893082b90af4c6e768497308c6e9259083bab297e46a917f535de3954693c",
+      "overall": {
+        "mAP50": 0.6992866419897954,
+        "mAP50_95": 0.5019836777816631,
+        "precision": 0.8615152096875602,
+        "recall": 0.4722222222222222
+      },
+      "scenario": "clean"
+    },
+    {
+      "candidate": "route_dark",
+      "classes": [
+        {
+          "AP50": 0.6810124392138877,
+          "AP50_95": 0.4396062242539659,
+          "class": "car",
+          "images": 4,
+          "instances": 27,
+          "recall": 0.5185185185185185
+        },
+        {
+          "AP50": 0.7450000000000001,
+          "AP50_95": 0.5705000000000001,
+          "class": "truck",
+          "images": 2,
+          "instances": 2,
+          "recall": 0.5
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "bus",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "motorcycle",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "bicycle",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        }
+      ],
+      "decisions": {
+        "[]": 3,
+        "[{\"gamma\": {\"gamma\": 0.7}}]": 1
+      },
+      "images": 4,
+      "mean_ms": 5.140970250067767,
+      "native_result_sha256": "06c13503e8c19a9de77741b0b0cc73675e9494ab4bdaa8a8535575b577b46fb5",
+      "overall": {
+        "mAP50": 0.7130062196069439,
+        "mAP50_95": 0.5050531121269829,
+        "precision": 0.7780868271269702,
+        "recall": 0.5092592592592593
+      },
+      "scenario": "clean"
+    },
+    {
+      "candidate": "skip",
+      "classes": [
+        {
+          "AP50": 0.6341414564086283,
+          "AP50_95": 0.4395080139938057,
+          "class": "car",
+          "images": 4,
+          "instances": 27,
+          "recall": 0.48148148148148145
+        },
+        {
+          "AP50": 0.695,
+          "AP50_95": 0.5307631578947368,
+          "class": "truck",
+          "images": 2,
+          "instances": 2,
+          "recall": 0.5
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "bus",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "motorcycle",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "bicycle",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        }
+      ],
+      "decisions": {
+        "[]": 4
+      },
+      "images": 4,
+      "mean_ms": 0.203264499987199,
+      "native_result_sha256": "1bc1e47ff416529f1042702d5b652509aa581cfc5b3ebd12d478fdde10daba37",
+      "overall": {
+        "mAP50": 0.6645707282043141,
+        "mAP50_95": 0.48513558594427114,
+        "precision": 0.7670146147447088,
+        "recall": 0.4907407407407407
+      },
+      "scenario": "synthetic_underexposure_s2"
+    },
+    {
+      "candidate": "frozen_v2",
+      "classes": [
+        {
+          "AP50": 0.655484967260656,
+          "AP50_95": 0.4453634726778688,
+          "class": "car",
+          "images": 4,
+          "instances": 27,
+          "recall": 0.48730203590812377
+        },
+        {
+          "AP50": 0.695,
+          "AP50_95": 0.5307631578947368,
+          "class": "truck",
+          "images": 2,
+          "instances": 2,
+          "recall": 0.5
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "bus",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "motorcycle",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "bicycle",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        }
+      ],
+      "decisions": {
+        "[]": 3,
+        "[{\"name\": \"gamma\", \"params\": {\"gamma\": 0.85}}]": 1
+      },
+      "images": 4,
+      "mean_ms": 3.9769740001247555,
+      "native_result_sha256": "a7ae3966449c6d4d826696c40d1f8974d897fe8f128cb8f6e3870a6f9fdb94b9",
+      "overall": {
+        "mAP50": 0.6752424836303279,
+        "mAP50_95": 0.48806331528630265,
+        "precision": 0.771007825775344,
+        "recall": 0.49365101795406185
+      },
+      "scenario": "synthetic_underexposure_s2"
+    },
+    {
+      "candidate": "gamma_070",
+      "classes": [
+        {
+          "AP50": 0.6312166031904135,
+          "AP50_95": 0.43124051873050256,
+          "class": "car",
+          "images": 4,
+          "instances": 27,
+          "recall": 0.48148148148148145
+        },
+        {
+          "AP50": 0.695,
+          "AP50_95": 0.5255,
+          "class": "truck",
+          "images": 2,
+          "instances": 2,
+          "recall": 0.5
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "bus",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "motorcycle",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "bicycle",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        }
+      ],
+      "decisions": {
+        "[{\"gamma\": {\"gamma\": 0.7}}]": 4
+      },
+      "images": 4,
+      "mean_ms": 3.8937482495384756,
+      "native_result_sha256": "37b281d06b98be295d9840ac8e2dd9c3accad6d2f3f846fc7c29cf6a65afab75",
+      "overall": {
+        "mAP50": 0.6631083015952067,
+        "mAP50_95": 0.4783702593652512,
+        "precision": 0.7595102800148485,
+        "recall": 0.4907407407407407
+      },
+      "scenario": "synthetic_underexposure_s2"
+    },
+    {
+      "candidate": "clahe_12",
+      "classes": [
+        {
+          "AP50": 0.642575078887319,
+          "AP50_95": 0.4351448325970438,
+          "class": "car",
+          "images": 4,
+          "instances": 27,
+          "recall": 0.491416895387559
+        },
+        {
+          "AP50": 0.6616666666666667,
+          "AP50_95": 0.5288333333333333,
+          "class": "truck",
+          "images": 2,
+          "instances": 2,
+          "recall": 0.5
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "bus",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "motorcycle",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "bicycle",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        }
+      ],
+      "decisions": {
+        "[{\"clahe\": {\"clip_limit\": 1.2, \"grid_size\": 8}}]": 4
+      },
+      "images": 4,
+      "mean_ms": 11.503736000122444,
+      "native_result_sha256": "4e9f99241cbad9869f2504bbd2e489d8db9a96275062312f303ef24f48d29da6",
+      "overall": {
+        "mAP50": 0.6521208727769929,
+        "mAP50_95": 0.4819890829651885,
+        "precision": 0.8652235426473367,
+        "recall": 0.49570844769377953
+      },
+      "scenario": "synthetic_underexposure_s2"
+    },
+    {
+      "candidate": "route_dark",
+      "classes": [
+        {
+          "AP50": 0.6608727790378344,
+          "AP50_95": 0.44917299611527184,
+          "class": "car",
+          "images": 4,
+          "instances": 27,
+          "recall": 0.4867114640580961
+        },
+        {
+          "AP50": 0.695,
+          "AP50_95": 0.5307631578947368,
+          "class": "truck",
+          "images": 2,
+          "instances": 2,
+          "recall": 0.5
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "bus",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "motorcycle",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        },
+        {
+          "AP50": null,
+          "AP50_95": null,
+          "class": "bicycle",
+          "images": 0,
+          "instances": 0,
+          "recall": null
+        }
+      ],
+      "decisions": {
+        "[]": 3,
+        "[{\"gamma\": {\"gamma\": 0.7}}]": 1
+      },
+      "images": 4,
+      "mean_ms": 6.0187680001035915,
+      "native_result_sha256": "2763740ed0cb7a3b6ab96baad341685c468ddd3f13639e62a9ba7a3fe8bf48c0",
+      "overall": {
+        "mAP50": 0.6779363895189172,
+        "mAP50_95": 0.4899680770050042,
+        "precision": 0.7709036072135744,
+        "recall": 0.49335573202904803
+      },
+      "scenario": "synthetic_underexposure_s2"
+    }
+  ],
+  "guards": "Historical write and reserved-image open/decode guards installed; none fired.",
+  "limits": [
+    "Four-image exploration-only integration check; no ranking, confirmation or policy freeze.",
+    "No development or final-holdout image access."
+  ],
+  "manifest_id": "96fe490b8640d149718bd65fa7e0b0afd32ebd1f378a629790c87ebc5b8782ac",
+  "pilot": {
+    "evaluation_manifest_id": "96fe490b8640d149718bd65fa7e0b0afd32ebd1f378a629790c87ebc5b8782ac",
+    "pilot_id": "97ebf4575c1ce73d212f0d5ccff93586223bb478aad093032fbc2dfcfb5d09cb",
+    "protocol_id": "680090b8eef098fbe10c77e632aacbfd3d6854d8489d7518e20f062e032b6e44",
+    "role": "calibration",
+    "rows": [
+      {
+        "attributes": {
+          "scene": "city street",
+          "timeofday": "daytime",
+          "weather": "clear"
+        },
+        "boxes": [
+          [
+            0,
+            831.004192,
+            274.505889,
+            1122.978638,
+            446.695947
+          ],
+          [
+            0,
+            531.543222,
+            308.195249,
+            691.25574,
+            437.961669
+          ],
+          [
+            0,
+            717.458575,
+            321.920543,
+            813.535636,
+            394.290278
+          ],
+          [
+            1,
+            109.802356,
+            379.317229,
+            253.294071,
+            435.466161
+          ],
+          [
+            0,
+            476.642044,
+            354.362148,
+            529.047714,
+            401.776802
+          ]
+        ],
+        "dhash64": "92d29fcd9bcccc94",
+        "geometry_verified": true,
+        "group": "bdd_prefix:15e09ff1",
+        "height": 720,
+        "id": "15e09ff1-23649760",
+        "labels_sha256": "392b8b8b93ce49916d4a04160a3392b23e7e5aab6eb62ad32dae140658eb2e19",
+        "official_split": "train",
+        "sha256": "45ac6aa9be87fe2ec497a8505a11a9ca0883e8408dee5b59ef6db39b28fb5033",
+        "source_group": "bdd_prefix:15e09ff1",
+        "source_path": "bdd100k/bdd100k/images/100k/train/trainA/15e09ff1-23649760.jpg",
+        "width": 1280
+      },
+      {
+        "attributes": {
+          "scene": "city street",
+          "timeofday": "daytime",
+          "weather": "undefined"
+        },
+        "boxes": [
+          [
+            0,
+            0.997946,
+            280.42289,
+            146.698095,
+            432.110716
+          ],
+          [
+            1,
+            288.40646,
+            234.517362,
+            478.016242,
+            393.190813
+          ],
+          [
+            0,
+            237.511202,
+            250.484503,
+            342.295557,
+            361.256534
+          ],
+          [
+            0,
+            769.416541,
+            273.437265,
+            858.233755,
+            354.27091
+          ],
+          [
+            0,
+            445.084018,
+            211.5646,
+            807.338497,
+            509.950522
+          ],
+          [
+            0,
+            989.962657,
+            269.445481,
+            1078.779871,
+            331.318146
+          ],
+          [
+            0,
+            1119.695667,
+            267.449589,
+            1157.617623,
+            358.262695
+          ]
+        ],
+        "dhash64": "b4d58c589cd68d13",
+        "geometry_verified": true,
+        "group": "bdd_prefix:2ba02eed",
+        "height": 720,
+        "id": "2ba02eed-a272ffd7",
+        "labels_sha256": "e1025c2f99b30e4549d84907f13720e21dfa4dba31e714a4d6cdddd0f07a8046",
+        "official_split": "train",
+        "sha256": "0264007b6dee07a87bc1154f1285170a9879cf021c8840c2aad4d72115dcf4bc",
+        "source_group": "bdd_prefix:2ba02eed",
+        "source_path": "bdd100k/bdd100k/images/100k/train/trainA/2ba02eed-a272ffd7.jpg",
+        "width": 1280
+      },
+      {
+        "attributes": {
+          "scene": "city street",
+          "timeofday": "night",
+          "weather": "clear"
+        },
+        "boxes": [
+          [
+            0,
+            145.417363,
+            413.291453,
+            165.316582,
+            427.067836
+          ],
+          [
+            0,
+            217.36069,
+            416.352871,
+            241.852035,
+            436.25209
+          ],
+          [
+            0,
+            241.852036,
+            416.352871,
+            269.404799,
+            437.7828
+          ],
+          [
+            0,
+            261.751254,
+            407.168617,
+            300.018981,
+            439.313508
+          ],
+          [
+            0,
+            287.773308,
+            410.230035,
+            324.510325,
+            439.313509
+          ],
+          [
+            0,
+            373.493017,
+            416.352871,
+            402.57649,
+            454.620598
+          ],
+          [
+            0,
+            195.930763,
+            413.291453,
+            218.891399,
+            439.313508
+          ],
+          [
+            0,
+            163.785872,
+            408.699326,
+            194.400053,
+            433.190671
+          ],
+          [
+            0,
+            117.8646,
+            413.291453,
+            146.948071,
+            433.190672
+          ],
+          [
+            0,
+            319.918199,
+            410.536172,
+            376.554436,
+            454.926736
+          ]
+        ],
+        "dhash64": "06090a2eca1c5850",
+        "geometry_verified": true,
+        "group": "bdd_prefix:5eda76de",
+        "height": 720,
+        "id": "5eda76de-e571f5fe",
+        "labels_sha256": "5495374a2a7b782b865c0d2bd1d37036adb3ed0a166b9b5239341013546006f1",
+        "official_split": "train",
+        "sha256": "cae3fead77e020c2de4cbe9b513670204708cc05b305f6db39bcfbce72c412ff",
+        "source_group": "bdd_prefix:5eda76de",
+        "source_path": "bdd100k/bdd100k/images/100k/train/trainB/5eda76de-e571f5fe.jpg",
+        "width": 1280
+      },
+      {
+        "attributes": {
+          "scene": "city street",
+          "timeofday": "daytime",
+          "weather": "partly cloudy"
+        },
+        "boxes": [
+          [
+            0,
+            725.214493,
+            341.734826,
+            768.187134,
+            378.56852
+          ],
+          [
+            0,
+            698.612379,
+            350.943249,
+            734.422914,
+            373.452727
+          ],
+          [
+            0,
+            745.677655,
+            341.734826,
+            843.900838,
+            378.56852
+          ],
+          [
+            0,
+            891.989273,
+            332.526402,
+            1017.837727,
+            389.823259
+          ],
+          [
+            0,
+            626.991309,
+            348.896933,
+            706.797647,
+            379.012239
+          ],
+          [
+            0,
+            301.627015,
+            334.57272,
+            356.877554,
+            368.336937
+          ],
+          [
+            0,
+            0.0,
+            347.873775,
+            62.412647,
+            387.776943
+          ]
+        ],
+        "dhash64": "66c3452951411849",
+        "geometry_verified": true,
+        "group": "bdd_prefix:651114e2",
+        "height": 720,
+        "id": "651114e2-1fd3184a",
+        "labels_sha256": "bac5bbfde707b4a6f9f2cf643445f7504d341c7ab006efd511e4f1f681243672",
+        "official_split": "train",
+        "sha256": "66f1bf51cba99cc05f54757ce4419ec068875de2147cf1a389c0ab961f37a869",
+        "source_group": "bdd_prefix:651114e2",
+        "source_path": "bdd100k/bdd100k/images/100k/train/trainA/651114e2-1fd3184a.jpg",
+        "width": 1280
+      }
+    ],
+    "sample_role": "calibration_exploration",
+    "seed": 2026,
+    "summary": {
+      "images": 4,
+      "instances:bicycle": 0,
+      "instances:bus": 0,
+      "instances:car": 27,
+      "instances:motorcycle": 0,
+      "instances:train": 0,
+      "instances:truck": 2,
+      "intersection:clear|daytime|city street": 1,
+      "intersection:clear|night|city street": 1,
+      "intersection:partly cloudy|daytime|city street": 1,
+      "intersection:undefined|daytime|city street": 1,
+      "missing_metadata:scene": 0,
+      "missing_metadata:timeofday": 0,
+      "missing_metadata:weather": 1,
+      "negative": 0,
+      "presence:bicycle": 0,
+      "presence:bus": 0,
+      "presence:car": 4,
+      "presence:motorcycle": 0,
+      "presence:train": 0,
+      "presence:truck": 2,
+      "scene:city street": 4,
+      "size_instances:large": 6,
+      "size_instances:medium": 16,
+      "size_instances:small": 7,
+      "size_presence:large": 2,
+      "size_presence:medium": 4,
+      "size_presence:small": 2,
+      "timeofday:daytime": 3,
+      "timeofday:night": 1,
+      "weather:clear": 2,
+      "weather:partly cloudy": 1,
+      "weather:undefined": 1
+    },
+    "target_images": 4,
+    "version": "issue30-calibration-sample-v1"
+  },
+  "status": "real_data_integration_smoke_not_policy_selection"
+}

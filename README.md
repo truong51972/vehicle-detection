@@ -1,6 +1,6 @@
 # BDD100K Raw / Adaptive vehicle-detection study
 
-Round 2 starts with two independent data-preparation notebooks. Configure the
+Round 2 has independent data-preparation and preprocessing-experiment notebooks. Configure the
 saved input paths in section 1, select the project kernel, then choose
 **Restart & Run All**. Missing or stale prerequisites fail with an error; no
 notebook launches another phase.
@@ -19,7 +19,17 @@ notebook launches another phase.
    `docs/round2-evaluation-v2/` manifests, diagnostics and visual examples. Images
    are prepared in memory from original sources; no bulk export is needed.
 
-Both use the existing five-class order: **car, truck, bus, motorcycle, bicycle**.
+3. [03_preprocessing_experiments.ipynb](notebooks/03_preprocessing_experiments.ipynb)
+   screens 20 bounded controls/operators/sequences/routing candidates with native
+   five-class calibration metrics, then locks one candidate for disjoint
+   confirmation. It defaults to saved-result reuse; `ALLOW_INFERENCE=True` runs
+   missing comparisons. Plans and compact evidence use
+   `docs/round2-preprocessing-v2/`; native caches use `runs/round2-preprocessing-v2/`.
+   **Study measured: leading Denoise 5 candidate failed confirmation; v2 retained.** See
+   [issue 30 results](docs/ISSUE30_RESULTS.md) and
+   [experiment contracts and gates](docs/ISSUE30_IMPLEMENTATION.md).
+
+These use the existing five-class order: **car, truck, bus, motorcycle, bicycle**.
 Original six-class annotations/conversions and frozen Gamma-or-Skip v2 results
 remain unchanged. Final-test checks use metadata only: no final image opens,
 hashes, headers, previews, label materialization or evaluation.
@@ -30,9 +40,10 @@ Default prerequisites reflect the preserved local study: `runs/issue5-v1/protoco
 `runs/preprocessing-five-v1/`. Restore those saved inputs or configure their paths;
 Round 2 never regenerates them. See [issue 28 implementation and replay](docs/ISSUE28_IMPLEMENTATION.md).
 
-The remaining Round 2 phases belong to #30 (preprocessing experiments), #33
-(training preparation/fine-tuning) and #35 (development evaluation). No new policy,
-model training or final-test release is part of this data-preparation change.
+Issue #30 has a completed measured attempt and a rejected candidate; a new v3
+policy selection remains unresolved. Later phases
+belong to #33 (training preparation/fine-tuning) and #35 (development evaluation).
+No new policy, model training or final-test release is claimed by this implementation.
 
 The earlier workflow remains available for historical replay:
 

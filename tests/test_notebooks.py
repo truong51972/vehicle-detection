@@ -10,6 +10,7 @@ ACTIVE = (
     "01_data_init.ipynb",
     "02_evaluation_data_preparation.ipynb",
     "02_data_preprocessing.ipynb",
+    "03_preprocessing_experiments.ipynb",
     "03_training.ipynb",
     "04_eval_and_report.ipynb",
 )

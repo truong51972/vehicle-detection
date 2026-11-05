@@ -1,0 +1,11 @@
+scenario,decision,images
+clean,denoise,260
+synthetic_underexposure_s1,denoise,260
+synthetic_underexposure_s2,denoise,260
+synthetic_underexposure_s3,denoise,260
+synthetic_shot_read_s1,denoise,260
+synthetic_shot_read_s2,denoise,260
+synthetic_shot_read_s3,denoise,260
+synthetic_motion_s1,denoise,260
+synthetic_motion_s2,denoise,260
+synthetic_motion_s3,denoise,260

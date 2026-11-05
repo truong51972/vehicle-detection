@@ -1,0 +1,276 @@
+{
+  "audit_id": "03b2f04f4f11cc5adc975f93ec9115e7502864368bc7977dbd33c09e484bf7a0",
+  "candidates": {
+    "bilateral": {
+      "steps": [
+        {
+          "bilateral": {}
+        }
+      ]
+    },
+    "bilateral_then_sharpen_015": {
+      "steps": [
+        {
+          "bilateral": {}
+        },
+        {
+          "sharpen": {
+            "amount": 0.15,
+            "sigma": 1.0
+          }
+        }
+      ]
+    },
+    "clahe_12": {
+      "steps": [
+        {
+          "clahe": {
+            "clip_limit": 1.2,
+            "grid_size": 8
+          }
+        }
+      ]
+    },
+    "clahe_12_then_gamma_070": {
+      "steps": [
+        {
+          "clahe": {
+            "clip_limit": 1.2,
+            "grid_size": 8
+          }
+        },
+        {
+          "gamma": {
+            "gamma": 0.7
+          }
+        }
+      ]
+    },
+    "clahe_20": {
+      "steps": [
+        {
+          "clahe": {
+            "clip_limit": 2.0,
+            "grid_size": 8
+          }
+        }
+      ]
+    },
+    "denoise_2": {
+      "steps": [
+        {
+          "denoise": {
+            "strength": 2.0
+          }
+        }
+      ]
+    },
+    "denoise_2_then_gamma_070": {
+      "steps": [
+        {
+          "denoise": {
+            "strength": 2.0
+          }
+        },
+        {
+          "gamma": {
+            "gamma": 0.7
+          }
+        }
+      ]
+    },
+    "denoise_5": {
+      "steps": [
+        {
+          "denoise": {
+            "strength": 5.0
+          }
+        }
+      ]
+    },
+    "frozen_v2": {
+      "v2": true
+    },
+    "gamma_070": {
+      "steps": [
+        {
+          "gamma": {
+            "gamma": 0.7
+          }
+        }
+      ]
+    },
+    "gamma_070_then_clahe_12": {
+      "steps": [
+        {
+          "gamma": {
+            "gamma": 0.7
+          }
+        },
+        {
+          "clahe": {
+            "clip_limit": 1.2,
+            "grid_size": 8
+          }
+        }
+      ]
+    },
+    "gamma_070_then_denoise_2": {
+      "steps": [
+        {
+          "gamma": {
+            "gamma": 0.7
+          }
+        },
+        {
+          "denoise": {
+            "strength": 2.0
+          }
+        }
+      ]
+    },
+    "gamma_085": {
+      "steps": [
+        {
+          "gamma": {
+            "gamma": 0.85
+          }
+        }
+      ]
+    },
+    "percentile": {
+      "steps": [
+        {
+          "percentile": {}
+        }
+      ]
+    },
+    "route_dark": {
+      "rules": [
+        {
+          "below": 0.25,
+          "metric": "brightness",
+          "steps": [
+            {
+              "gamma": {
+                "gamma": 0.7
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "route_noise_dark": {
+      "rules": [
+        {
+          "above": 0.025,
+          "metric": "noise_highpass",
+          "steps": [
+            {
+              "bilateral": {}
+            }
+          ]
+        },
+        {
+          "below": 0.25,
+          "metric": "brightness",
+          "steps": [
+            {
+              "gamma": {
+                "gamma": 0.7
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "sharpen_015": {
+      "steps": [
+        {
+          "sharpen": {
+            "amount": 0.15,
+            "sigma": 1.0
+          }
+        }
+      ]
+    },
+    "sharpen_015_then_bilateral": {
+      "steps": [
+        {
+          "sharpen": {
+            "amount": 0.15,
+            "sigma": 1.0
+          }
+        },
+        {
+          "bilateral": {}
+        }
+      ]
+    },
+    "sharpen_040": {
+      "steps": [
+        {
+          "sharpen": {
+            "amount": 0.4,
+            "sigma": 1.0
+          }
+        }
+      ]
+    },
+    "skip": {
+      "steps": []
+    }
+  },
+  "checkpoint_sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+  "confirmation": {
+    "comparators": [
+      "skip",
+      "frozen_v2"
+    ],
+    "fallback_search": false,
+    "max_class_regression": 0.02,
+    "max_clean_regression": 0.005,
+    "max_synthetic_regression": 0.01,
+    "minimum_class_groups": 5,
+    "minimum_gain": 0
+  },
+  "implementation": {
+    "baseline.py": "1caf6bf879a02988e6550afb237709381967dbcef72293fc9b7e09f4d6bd8720",
+    "evaluation_stats.py": "227f0272b00e91790e2e0eece429e1eeb7ee10cc415b5d5fb3f101f2cb4fcd59",
+    "preprocess.py": "354f19a51ba613f7bd0109fe5fcb7f86b98423059081500d96640ad2e29bb27b",
+    "preprocessing_experiments.py": "ad9c67d5fc2cf9d77ffaf8b9e15091dbf9acd4567c811d885eb0c4d318a46d17",
+    "stress.py": "8175f20c82debe9221e29f6bc667bdc73946909ad9d4c93e469dfabcc671438b",
+    "stress_eval.py": "b2d9b90eb79f52ec6f16425e769c82c3c9e80fa34259b81e7b105ae48cff7d1b"
+  },
+  "manifest_id": "96fe490b8640d149718bd65fa7e0b0afd32ebd1f378a629790c87ebc5b8782ac",
+  "numeric_versions": {
+    "numpy": "2.4.6",
+    "opencv": "4.14.0"
+  },
+  "pilots": {
+    "confirmation": "7e0682086ae369c887af88342ab4a8abf5d6db97112b698661b0d7c170181a49",
+    "exploration": "c4f7e17008a47c4449d356c221f823a125144a7d7e2b13d4d1465c493c5f4d18"
+  },
+  "plan_id": "5d688c840ba2571eef5d7e436b1253110528f7af89c3916b8f6ffeec6117bf36",
+  "selection": "five-class AP; family-balanced mean; Skip wins ties",
+  "settings": {
+    "agnostic_nms": false,
+    "augment": false,
+    "batch": 32,
+    "conf": 0.001,
+    "deterministic": true,
+    "device": "0",
+    "imgsz": 640,
+    "iou": 0.7,
+    "max_det": 300,
+    "nms": false,
+    "plots": true,
+    "quantize": 32,
+    "rect": true,
+    "seed": 2026,
+    "verbose": false,
+    "workers": 0
+  },
+  "v2_policy_id": "1ac3fb9bb94b132f70d3e168b5ef15a54b616444e535b9a3bb265682a6fce0ef",
+  "version": "issue30-plan-v1"
+}

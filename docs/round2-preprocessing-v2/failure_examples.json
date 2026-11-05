@@ -1,0 +1,23 @@
+[
+  {
+    "delta": -3,
+    "id": "9efd3c16-b81b79c1",
+    "raw_TP50": 8,
+    "scenario": "clean",
+    "treated_TP50": 5
+  },
+  {
+    "delta": -3,
+    "id": "8a4df1d9-58cc5476",
+    "raw_TP50": 8,
+    "scenario": "synthetic_motion_s1",
+    "treated_TP50": 5
+  },
+  {
+    "delta": -3,
+    "id": "ad930b5f-4298e268",
+    "raw_TP50": 9,
+    "scenario": "synthetic_underexposure_s1",
+    "treated_TP50": 6
+  }
+]

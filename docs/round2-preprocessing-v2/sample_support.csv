@@ -1,0 +1,16 @@
+sample,class,images,groups,instances
+exploration,car,254,154,2665
+exploration,truck,79,64,118
+exploration,bus,20,19,29
+exploration,motorcycle,9,9,14
+exploration,bicycle,14,12,25
+confirmation,car,254,153,2566
+confirmation,truck,88,54,128
+confirmation,bus,29,28,38
+confirmation,motorcycle,9,9,10
+confirmation,bicycle,16,14,23
+development,car,251,144,2653
+development,truck,68,54,100
+development,bus,20,16,31
+development,motorcycle,8,8,13
+development,bicycle,18,17,23

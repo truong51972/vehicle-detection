@@ -1,0 +1,102 @@
+[
+  {
+    "candidate": "denoise_5",
+    "mean_ms": 157.6576256316514,
+    "score": 0.18882529434237108
+  },
+  {
+    "candidate": "denoise_2",
+    "mean_ms": 157.41559622384216,
+    "score": 0.18415442878990793
+  },
+  {
+    "candidate": "sharpen_015_then_bilateral",
+    "mean_ms": 5.524072292185167,
+    "score": 0.18298367791844417
+  },
+  {
+    "candidate": "bilateral",
+    "mean_ms": 2.074711254280004,
+    "score": 0.18262106621723828
+  },
+  {
+    "candidate": "frozen_v2",
+    "mean_ms": 3.0799933718970607,
+    "score": 0.18223722200449152
+  },
+  {
+    "candidate": "skip",
+    "mean_ms": 0.1829207652338738,
+    "score": 0.18208926222381142
+  },
+  {
+    "candidate": "sharpen_015",
+    "mean_ms": 3.7488085124863346,
+    "score": 0.18207308677717451
+  },
+  {
+    "candidate": "route_noise_dark",
+    "mean_ms": 5.790855052745059,
+    "score": 0.18196268490992093
+  },
+  {
+    "candidate": "bilateral_then_sharpen_015",
+    "mean_ms": 5.571787984384713,
+    "score": 0.1816868019458487
+  },
+  {
+    "candidate": "route_dark",
+    "mean_ms": 5.602512254303349,
+    "score": 0.18131507550441503
+  },
+  {
+    "candidate": "percentile",
+    "mean_ms": 6.345134051186108,
+    "score": 0.1805063576605731
+  },
+  {
+    "candidate": "sharpen_040",
+    "mean_ms": 3.8187150504029432,
+    "score": 0.17941133647128601
+  },
+  {
+    "candidate": "gamma_070_then_denoise_2",
+    "mean_ms": 159.37230735896364,
+    "score": 0.17930337603473814
+  },
+  {
+    "candidate": "clahe_12",
+    "mean_ms": 5.135426443744251,
+    "score": 0.1787123693196324
+  },
+  {
+    "candidate": "denoise_2_then_gamma_070",
+    "mean_ms": 158.32043921601766,
+    "score": 0.17786472929011307
+  },
+  {
+    "candidate": "gamma_085",
+    "mean_ms": 3.067929540603842,
+    "score": 0.17719931017846938
+  },
+  {
+    "candidate": "clahe_20",
+    "mean_ms": 5.11283966329259,
+    "score": 0.17464347628477422
+  },
+  {
+    "candidate": "gamma_070_then_clahe_12",
+    "mean_ms": 7.500593620719798,
+    "score": 0.17445585996988347
+  },
+  {
+    "candidate": "gamma_070",
+    "mean_ms": 3.0430677343677104,
+    "score": 0.17292796708190267
+  },
+  {
+    "candidate": "clahe_12_then_gamma_070",
+    "mean_ms": 7.571737937881551,
+    "score": 0.17076173846661183
+  }
+]

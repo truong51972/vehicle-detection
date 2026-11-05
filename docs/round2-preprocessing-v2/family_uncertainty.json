@@ -1,0 +1,50 @@
+[
+  {
+    "candidate": "denoise_5",
+    "ci_high": 0.0009189480977183384,
+    "ci_low": -0.014673575511379669,
+    "control": "frozen_v2",
+    "estimand": "paired source-group bootstrap; fixed five classes; family-balanced mean; shared draws across scenarios",
+    "limit": "exploratory conditional percentile interval; no multiplicity correction; not used for reselection",
+    "recovery": -0.005516239838955855,
+    "resamples": 100,
+    "sample": "confirmation",
+    "valid_draws": 100
+  },
+  {
+    "candidate": "denoise_5",
+    "ci_high": 0.0015444617003258331,
+    "ci_low": -0.013110591494736881,
+    "control": "skip",
+    "estimand": "paired source-group bootstrap; fixed five classes; family-balanced mean; shared draws across scenarios",
+    "limit": "exploratory conditional percentile interval; no multiplicity correction; not used for reselection",
+    "recovery": -0.004622863802881572,
+    "resamples": 100,
+    "sample": "confirmation",
+    "valid_draws": 100
+  },
+  {
+    "candidate": "denoise_5",
+    "ci_high": 0.004865248154869988,
+    "ci_low": -0.005121747286390234,
+    "control": "frozen_v2",
+    "estimand": "paired source-group bootstrap; fixed five classes; family-balanced mean; shared draws across scenarios",
+    "limit": "exploratory conditional percentile interval; no multiplicity correction; not used for reselection",
+    "recovery": -0.00019947884728423182,
+    "resamples": 100,
+    "sample": "development",
+    "valid_draws": 100
+  },
+  {
+    "candidate": "denoise_5",
+    "ci_high": 0.004865799306777093,
+    "ci_low": -0.005226359014219539,
+    "control": "skip",
+    "estimand": "paired source-group bootstrap; fixed five classes; family-balanced mean; shared draws across scenarios",
+    "limit": "exploratory conditional percentile interval; no multiplicity correction; not used for reselection",
+    "recovery": -0.0001442107725400238,
+    "resamples": 100,
+    "sample": "development",
+    "valid_draws": 100
+  }
+]
