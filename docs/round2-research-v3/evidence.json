@@ -1,0 +1,29 @@
+{
+  "artifacts": {
+    "docs/round2-research-v3/access.json": "7fed55c1b816bcb1e4c2eab2b542fc3799d98a07f488786a8c8ed36f98b783a8",
+    "docs/round2-research-v3/cost.json": "376ecc4fc05f1e31820ca1952ca2005d2794a2dcbfb579b6280680eb0dc7bfde",
+    "docs/round2-research-v3/failures.json": "9d6713dfb9c40b52f31eedf05bab004c5fc977481866d8c017e77e95a0a73d7a",
+    "docs/round2-research-v3/failures.png": "682c96e535998fa6917f51743f9b93cf66f321899b15cf90bf9584c1a7da3377",
+    "docs/round2-research-v3/hypotheses.md": "d4c33e5a05b4dec1f7db5934839244b2adcfb7172dc31c5d79332693fd5787c8",
+    "docs/round2-research-v3/initial_diagnostics.json": "e558b2d351f71356f256067254e7022e93bc64a77151312a62cd754ed79b06c5",
+    "docs/round2-research-v3/initial_failures.png": "697c1a9f70e98b992bc577ecb29b1eb7b4da8cf02d32f0de2e3036b3e0774550",
+    "docs/round2-research-v3/measurements.json": "82c9285b189412947ec16ee1d90368870f1bdc449e6f03463ad8a8e8cbb2723a",
+    "docs/round2-research-v3/membership.csv.gz": "831a3d15bf3b7e0deb25271c9c6833df2db375be10616681b39ee3ff24e7081a",
+    "docs/round2-research-v3/pareto.json": "9ba434627d8067832426a5799d9eeea9578ee19b134ae3679471a4b0e561f2b9",
+    "docs/round2-research-v3/pilot_decision.json": "3e89682dbbe8e90538d19a9d922b09832301368ae8f0cb6cfe4c2a8aa0097af4",
+    "docs/round2-research-v3/plan.json": "5f57329cbd97a723b1c08dfbba0f79964fdc4120f161df77a66ba660d766f464",
+    "docs/round2-research-v3/results.png": "ddf74192697be1a6a046a1a82f03cebcf0a6f65f965b6415aebf1c2f6f2e6c15",
+    "docs/round2-research-v3/routing.json": "4acfa5ddca7a3084aefc839c7dad08da77e0f9b23b7e2e739aae90e2f9d38a88",
+    "docs/round2-research-v3/runtime.json": "4c53eef7ef97633b9b5044d830bbaf363f3010deeb091677795c2d6d6947e173",
+    "docs/round2-research-v3/slices.json": "93b0b88d9741114eae4918e7350992de7e929ded52a5864d417447a79f057172",
+    "docs/round2-research-v3/summary.json": "91b67aa24c4923dfa76f40f0308a9cac5c6ac7cb43a639f5bb77542b15bb1173",
+    "docs/round2-research-v3/support.json": "0ef5f49727046ad55d3d33a49820ed8e194389e8dcfc0ec3cf892f63226dac14",
+    "docs/round2-research-v3/uncertainty.json": "67b3613493e3a23ba181571544634401b881ad196d380089f530112c90c5187e",
+    "docs/round2-research-v3/uncertainty_draws.json.gz": "08c0cd823738899d14d0132856732d526698aea6760647526a210f315778af48",
+    "runs/round2-research-v3/sample.json": "dd90c5cf2fbd56fd09cd31fec97ca9ceced1fd21ca2e8793e39432956e85deb4",
+    "src/vehicle_detection/research_round3_report.py": "5c11ca480610c89ba1d415788ea9bbfc46d9d93a91154df4a76bc4e16ae07162"
+  },
+  "plan_id": "f584535c69364e8be613eb998cbca8387b49e38538f2f4dd1c9fc8ce36ac99dd",
+  "status": "exploration_only_retain_frozen_v2",
+  "v3_released": false
+}

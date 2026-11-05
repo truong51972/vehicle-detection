@@ -1,0 +1,92 @@
+{
+  "decision": {
+    "candidates": [
+      {
+        "advance": false,
+        "candidate": "pr38_locked",
+        "reasons": [
+          "Gain below 0.2 AP percentage points vs skip",
+          "Gain below 0.2 AP percentage points vs frozen_v2"
+        ],
+        "score": 0.13590055321506556
+      },
+      {
+        "advance": false,
+        "candidate": "bilateral",
+        "reasons": [
+          "Gain below 0.2 AP percentage points vs skip",
+          "Gain below 0.2 AP percentage points vs frozen_v2"
+        ],
+        "score": 0.13413449381984943
+      },
+      {
+        "advance": false,
+        "candidate": "noise_range",
+        "reasons": [
+          "Gain below 0.2 AP percentage points vs skip",
+          "Gain below 0.2 AP percentage points vs frozen_v2"
+        ],
+        "score": 0.13548755085037612
+      }
+    ],
+    "scores": {
+      "bilateral": 0.13413449381984943,
+      "frozen_v2": 0.1360626498411266,
+      "noise_range": 0.13548755085037612,
+      "pr38_locked": 0.13590055321506556,
+      "skip": 0.13540889225879227
+    }
+  },
+  "evaluations": 25,
+  "image_passes": 12800,
+  "plan_id": "f584535c69364e8be613eb998cbca8387b49e38538f2f4dd1c9fc8ce36ac99dd",
+  "scenarios": [
+    {
+      "family": "clean",
+      "id": "clean",
+      "params": {},
+      "severity": 0,
+      "synthetic": false
+    },
+    {
+      "family": "underexposure",
+      "id": "synthetic_underexposure_s3",
+      "params": {
+        "factor": 0.25
+      },
+      "severity": 3,
+      "synthetic": true
+    },
+    {
+      "family": "shot_read",
+      "id": "synthetic_shot_read_s1",
+      "params": {
+        "photons": 800,
+        "read_sigma": 0.003
+      },
+      "severity": 1,
+      "synthetic": true
+    },
+    {
+      "family": "shot_read",
+      "id": "synthetic_shot_read_s3",
+      "params": {
+        "photons": 50,
+        "read_sigma": 0.02
+      },
+      "severity": 3,
+      "synthetic": true
+    },
+    {
+      "family": "motion",
+      "id": "synthetic_motion_s3",
+      "params": {
+        "size": 21
+      },
+      "severity": 3,
+      "synthetic": true
+    }
+  ],
+  "status": "exploration_only_retain_frozen_v2",
+  "v3_released": false
+}
