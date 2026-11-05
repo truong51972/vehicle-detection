@@ -1,6 +1,5 @@
 {
   "artifacts": {
-    "/home/truong51972/projects/vehicle-detection/src/vehicle_detection/research_round3_report.py": "6cb53b0768d03baac309faf74569a637ca9c2c0684a50a93a0d1ea0befb17f97",
     "docs/round2-research-v3/access.json": "7fed55c1b816bcb1e4c2eab2b542fc3799d98a07f488786a8c8ed36f98b783a8",
     "docs/round2-research-v3/cost.json": "376ecc4fc05f1e31820ca1952ca2005d2794a2dcbfb579b6280680eb0dc7bfde",
     "docs/round2-research-v3/failures.json": "9d6713dfb9c40b52f31eedf05bab004c5fc977481866d8c017e77e95a0a73d7a",
@@ -21,7 +20,8 @@
     "docs/round2-research-v3/support.json": "0ef5f49727046ad55d3d33a49820ed8e194389e8dcfc0ec3cf892f63226dac14",
     "docs/round2-research-v3/uncertainty.json": "67b3613493e3a23ba181571544634401b881ad196d380089f530112c90c5187e",
     "docs/round2-research-v3/uncertainty_draws.json.gz": "08c0cd823738899d14d0132856732d526698aea6760647526a210f315778af48",
-    "runs/round2-research-v3/sample.json": "dd90c5cf2fbd56fd09cd31fec97ca9ceced1fd21ca2e8793e39432956e85deb4"
+    "runs/round2-research-v3/sample.json": "dd90c5cf2fbd56fd09cd31fec97ca9ceced1fd21ca2e8793e39432956e85deb4",
+    "src/vehicle_detection/research_round3_report.py": "5c11ca480610c89ba1d415788ea9bbfc46d9d93a91154df4a76bc4e16ae07162"
   },
   "plan_id": "f584535c69364e8be613eb998cbca8387b49e38538f2f4dd1c9fc8ce36ac99dd",
   "status": "exploration_only_retain_frozen_v2",
