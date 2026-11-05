@@ -1,3 +1,5 @@
+> Historical workflow record. Current entrypoints and replay paths: [issue 41 migration](HISTORICAL_REPLAY.md).
+
 # Issue 28 — Round 2 data preparation
 
 Issue [#28](https://github.com/truong51972/vehicle-detection/issues/28) covers
@@ -7,8 +9,8 @@ references. It makes no new taxonomy, allocation or policy decision.
 
 ## Entry points and saved inputs
 
-Run `notebooks/01_data_init.ipynb`, then
-`notebooks/02_evaluation_data_preparation.ipynb` using the project study kernel.
+Run [notebooks/01_data_init.ipynb](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/notebooks/01_data_init.ipynb), then
+[notebooks/02_evaluation_data_preparation.ipynb](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/notebooks/02_evaluation_data_preparation.ipynb) using the project study kernel.
 Each supports **Restart & Run All** from the repository or `notebooks/` directory.
 Notebook 02 consumes notebook 01's saved audit; it never reruns the audit or an
 upstream phase. Restore these existing prerequisites or configure their paths:
@@ -27,7 +29,7 @@ Raw/v2 pairs. It reuses the shared deep verifier with receipt writing disabled.
 It never repairs inputs or regenerates labels, splits, policies or images.
 
 The former split-building notebook 01 is archived byte-for-byte under
-`notebooks/archive/round1/`, with its source revision and checksum in the archive
+[notebooks/archive/round1/](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/notebooks/archive/round1/), with its source revision and checksum in the archive
 manifest. Earlier preprocessing/training/evaluation notebooks retain their paths.
 
 ## Outputs and the issue 30 handoff

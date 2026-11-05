@@ -1,153 +1,85 @@
-"""Development boundaries and cache failures use fixtures, never claimed GPU results."""
+import json
+from types import SimpleNamespace
 
 import pytest
-from test_adaptive import frozen as frozen
-from test_finetuning import pair_inputs as pair_inputs
-from test_study import bdd as bdd
+import yaml
+from test_experiment_data import experiment_project as experiment_project
+from test_finetuning import trained_project as trained_project
 
-from vehicle_detection import evaluation
-from vehicle_detection.common import digest, file_hash, read_json, write_json
-from vehicle_detection.data import CLASSES
-from vehicle_detection.datasets import export_development_pair
-from vehicle_detection.evaluation import evaluate_development
-from vehicle_detection.five_class import FIVE_CLASSES, derive_labels
-from vehicle_detection.offline import export_variant, verify_alignment
+pytest.importorskip("ultralytics")
 
-# Keep six-class fixtures while deriving five-class inputs explicitly below.
-pytestmark = pytest.mark.parametrize("pair_inputs", [CLASSES], indirect=True)
+from vehicle_detection import evaluation  # noqa: E402
+from vehicle_detection.five_class import FIVE_CLASSES  # noqa: E402
 
 
-def test_explicit_checkpoint_has_no_native_or_legacy_receipt_dependency(pair_inputs):
-    protocol, _, policy, _, _, raw, checkpoint, output = pair_inputs
-    assert not (output / "raw/complete.json").exists()
-    assert not (output / "raw/args.yaml").exists()
+def test_evaluation_pairs_policy_and_detector_and_reuses_metrics(trained_project, monkeypatch):
+    root, _ = trained_project
+    calls = []
+
+    class Model:
+        def __init__(self, path):
+            self.names = dict(enumerate(FIVE_CLASSES))
+            self.model = SimpleNamespace(yaml={"yaml_file": "yolo26n.yaml"})
+            self.ckpt = {"train_args": {"data": str(root / "runs/v1/train.yaml")}}
+
+        def val(self, **kwargs):
+            calls.append(kwargs)
+            return SimpleNamespace(
+                mean_results=lambda: [0.4, 0.3, 0.2, 0.1],
+                to_json=lambda **kw: json.dumps([]),
+                speed={"inference": 1.0},
+            )
+
+    monkeypatch.setattr(evaluation, "YOLO", Model)
     with pytest.raises(FileNotFoundError, match="ALLOW_INFERENCE"):
-        evaluate_development(protocol, policy, raw, checkpoint, output / "evaluation")
+        evaluation.evaluate_experiment(root, "v1")
+    result = evaluation.evaluate_experiment(root, "v1", allow_inference=True)
+    assert result["overall"]["mAP50_95"] == 0.1
+    assert calls[0]["data"] == str(root / "runs/v1/data/data.yaml")
+    assert calls[0]["split"] == "val"
+    assert result["final_test_accessed"] is False
+    assert evaluation.evaluate_experiment(root, "v1") == result
+    assert len(calls) == 1
+    with pytest.raises(ValueError, match="settings changed"):
+        evaluation.evaluate_experiment(root, "v1", settings={"batch": 1})
+    checkpoint = root / "runs/v1/train/weights/best.pt"
+    checkpoint.write_bytes(b"a different detector")
+    with pytest.raises(ValueError, match="inputs/settings changed"):
+        evaluation.evaluate_experiment(root, "v1")
 
 
-def test_development_pair_and_cache_reuse_never_repair_missing_inputs(pair_inputs, monkeypatch):
-    protocol, _, policy, _, _, raw, checkpoint, output = pair_inputs
-    inputs = export_development_pair(
-        protocol, policy, raw, raw.parent / "conversion", output / "dev"
-    )
-    assert set(inputs) == {"raw", "adaptive"}
-    monkeypatch.setattr(evaluation, "PRETRAINED_SHA256", file_hash(checkpoint))
-    destination = output / "evaluation"
-    args = protocol, policy, raw, checkpoint, destination
-    with pytest.raises(FileNotFoundError, match="ALLOW_INFERENCE"):
-        evaluate_development(*args, pretrained=True)
-
-    def no_model(*args, **kwargs):
-        raise RuntimeError("No model in this fixture")
-
-    monkeypatch.setattr(evaluation, "YOLO", no_model)
-    with pytest.raises(RuntimeError, match="No model"):
-        evaluate_development(*args, pretrained=True, allow_inference=True)
-    identity = read_json(destination / "identity.json")
-    result = {"artifacts": {}, "fixture": True}
-    write_json(
-        destination / "native_result.json",
-        {
-            "identity": identity,
-            "result": result,
-            "checksum": digest(result),
-        },
-    )
-    assert evaluate_development(*args, pretrained=True) == result
-    # Original six-class result files can still be replayed under their pinned identity.
-    legacy = {**identity, "version": "development-native-v1"}
-    legacy.pop("class_names")
-    write_json(
-        destination / "native_result.json",
-        {
-            "identity": legacy,
-            "result": result,
-            "checksum": digest(result),
-        },
-    )
-    assert evaluate_development(*args, pretrained=True) == result
-    with pytest.raises(ValueError, match="Historical evaluation cache"):
-        evaluate_development(*args, pretrained=True, settings={"batch": 1})
-    checkpoint.unlink()
-    with pytest.raises(FileNotFoundError, match="checkpoint"):
-        evaluate_development(*args, pretrained=True)
-
-
-def test_final_role_and_changed_manifest_rejected_before_pixels(pair_inputs, monkeypatch):
-    import pandas as pd
-
-    from vehicle_detection import datasets
-
-    protocol, _, policy, _, _, raw, checkpoint, output = pair_inputs
-
-    def no_pixels(*args, **kwargs):
-        pytest.fail("Wrong roles must fail before pixel verification")
-
-    monkeypatch.setattr(datasets, "verify_alignment", no_pixels)
-    meta_path = raw / "metadata.csv"
-    meta = pd.read_csv(meta_path)
-    meta["id"] = protocol["splits"]["final_test"][0]["id"]
-    meta.to_csv(meta_path, index=False)
-    with pytest.raises(ValueError, match="frozen role IDs"):
-        evaluate_development(protocol, policy, raw, checkpoint, output)
-    protocol["seed"] = -1
-    with pytest.raises(ValueError, match="checksum"):
-        evaluate_development(protocol, policy, raw, checkpoint, output)
-
-
-def test_five_class_taxonomy_inferred_and_bound_in_cache(pair_inputs, monkeypatch):
-    from types import SimpleNamespace
-
-    import pandas as pd
-
-    protocol, _, policy, _, _, raw, checkpoint, output = pair_inputs
-    conversion = raw.parent / "conversion"
-    write_json(
-        conversion / "conversion.json",
-        {
-            "classes": ["car", "truck", "bus", "train", "motorcycle", "bicycle"],
-            "box_convention": "continuous",
-        },
-    )
-    derived = raw.parent / "five-labels"
-    derive_labels(conversion, derived, {"tune": protocol["splits"]["development_validation"]})
-    records = [
-        {"id": r["id"], "path": r["source"], "sha256": r["source_sha256"]}
-        for r in pd.read_csv(raw / "metadata.csv").to_dict("records")
-    ]
-    five = raw.parent / "five-dev"
-    export_variant({"tune": records}, derived, five, "raw_reencoded", policy["recipes"])
-    verify_alignment([five])
-    monkeypatch.setattr(evaluation, "PRETRAINED_SHA256", file_hash(checkpoint))
-
-    def no_model(*args, **kwargs):
-        raise RuntimeError("Fixture stops before inference")
-
-    monkeypatch.setattr(evaluation, "YOLO", no_model)
-    args = protocol, policy, five, checkpoint, output
-    with pytest.raises(RuntimeError, match="Fixture stops"):
-        evaluate_development(*args, pretrained=True, allow_inference=True)
-    identity = read_json(output / "identity.json")
-    assert identity["class_names"] == FIVE_CLASSES
-    assert identity["mapping"] == "COCO-80 to five vehicles"
-    result = {"artifacts": {}}
-    write_json(
-        output / "native_result.json",
-        {
-            "identity": identity,
-            "result": result,
-            "checksum": digest(result),
-        },
-    )
-    assert evaluate_development(*args, pretrained=True) == result
+def test_wrong_experiment_and_taxonomy_fail_before_inference(trained_project, monkeypatch):
+    root, _ = trained_project
+    path = root / "runs/v1/train/args.yaml"
+    args = yaml.safe_load(path.read_text())
+    args["data"] = str(root / "runs/v0/train.yaml")
+    path.write_text(yaml.safe_dump(args))
+    with pytest.raises(ValueError, match="another experiment"):
+        evaluation.evaluate_experiment(root, "v1", allow_inference=True)
+    args["data"] = str(root / "runs/v1/train.yaml")
+    path.write_text(yaml.safe_dump(args))
+    monkeypatch.setattr(evaluation, "YOLO", lambda path: SimpleNamespace(names={0: "car"}))
     with pytest.raises(ValueError, match="taxonomy"):
-        evaluate_development(*args, pretrained=True, class_names=["wrong"])
-    with pytest.raises(ValueError, match="identity/checksum"):
-        evaluate_development(*args, pretrained=True, settings={"batch": 1})
+        evaluation.evaluate_experiment(root, "v1", allow_inference=True)
     monkeypatch.setattr(
-        evaluation, "YOLO", lambda *a: SimpleNamespace(names=dict.fromkeys(range(80)))
+        evaluation,
+        "YOLO",
+        lambda path: SimpleNamespace(
+            names=dict(enumerate(FIVE_CLASSES)),
+            model=SimpleNamespace(yaml={"yaml_file": "yolo26n.yaml"}),
+            ckpt={"train_args": {"data": str(root / "runs/v0/train.yaml")}},
+        ),
     )
-    with pytest.raises(ValueError, match="Checkpoint taxonomy"):
-        evaluate_development(
-            protocol, policy, five, checkpoint, output / "wrong-head", allow_inference=True
-        )
+    with pytest.raises(ValueError, match="Checkpoint belongs"):
+        evaluation.evaluate_experiment(root, "v1", allow_inference=True)
+
+
+def test_historical_measurements_keep_original_attribution():
+    from pathlib import Path
+
+    raw = evaluation.historical_result(Path.cwd(), "raw")
+    adaptive = evaluation.historical_result(Path.cwd(), "adaptive")
+    assert raw["evaluation"] == "raw-raw"
+    assert adaptive["evaluation"] == "adaptive-adaptive"
+    assert raw["result"]["overall"]["mAP50_95"] == pytest.approx(0.1907560653)
+    assert adaptive["result"]["overall"]["mAP50_95"] == pytest.approx(0.1936308567)

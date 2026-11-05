@@ -1,199 +1,93 @@
-# BDD100K Raw / Adaptive vehicle-detection study
+# BDD100K / YOLO26n versioned experiments
 
-Round 2 has independent data preparation, preprocessing research and training notebooks. Configure the
-saved input paths in section 1, select the project kernel, then choose
-**Restart & Run All**. Missing or stale prerequisites fail with an error; no
-notebook launches another phase.
+One experiment pairs an offline preprocessing policy with the detector trained on
+its output. Start with [00_data_init.ipynb](notebooks/00_data_init.ipynb), then open
+an experiment README:
 
-1. [01_data_init.ipynb](notebooks/01_data_init.ipynb) audits the existing **five-class**
-   #14 artifacts and original BDD sources. It reuses frozen roles/groups, checks
-   original/derived labels and geometry, deep-verifies the Raw/v2 S10 and
-   development pairs **without writing their receipts**, and saves compact support,
-   membership and sampled visual-quality evidence under `docs/round2-data-v2/`.
-   It does not split, convert labels or export images.
-2. [02_evaluation_data_preparation.ipynb](notebooks/02_evaluation_data_preparation.ipynb)
-   reads the saved audit and partitions the existing calibration role into
-   group-disjoint exploration/confirmation halves. It retains all development IDs
-   and freezes clean plus explicitly synthetic low-light, noise and motion-blur
-   recipes at severities 1–3, with fixed seeds and JPEG95 encoding. It saves
-   `docs/round2-evaluation-v2/` manifests, diagnostics and visual examples. Images
-   are prepared in memory from original sources; no bulk export is needed.
+- [v0 — Raw baseline](notebooks/experiments/v0/README.md): Skip + JPEG95; completed
+  historical S10 training and development evaluation.
+- [v1 — Gamma-or-Skip](notebooks/experiments/v1/README.md): the historical algorithm
+  called **Adaptive v2**; completed historical S10 training and development evaluation.
+- [v2 — Later preprocessing exploration](notebooks/experiments/v2/README.md):
+  measured exploration with failed gates; no replacement policy locked, no paired
+  detector trained or evaluated.
 
-3. [03_preprocessing_experiments.ipynb](notebooks/03_preprocessing_experiments.ipynb)
-   screens 20 bounded controls/operators/sequences/routing candidates with native
-   five-class calibration metrics, then locks one candidate for disjoint
-   confirmation. It defaults to saved-result reuse; `ALLOW_INFERENCE=True` runs
-   missing comparisons. Plans and compact evidence use
-   `docs/round2-preprocessing-v2/`; native caches use `runs/round2-preprocessing-v2/`.
-   **Study measured: leading Denoise 5 candidate failed confirmation; v2 retained.** See
-   [issue 30 results](docs/ISSUE30_RESULTS.md) and
-   [experiment contracts and gates](docs/ISSUE30_IMPLEMENTATION.md).
-   Section 6 adds an opt-in quality/threshold search, three measured operator
-   refinements, diverse routing and local threshold refinement. New evidence uses
-   `round2-quality-v2` roots; `round2-quality-v1` remains preserved.
-   Set `RUN_QUALITY_SEARCH=True`; inference and direct runtime each have separate opt-ins.
-   See [review follow-ups and replay](docs/ISSUE30_QUALITY_REVIEW.md) and the
-   [first exploration record](docs/ISSUE30_QUALITY_SEARCH.md).
-   [Autonomous research round 3](docs/ISSUE30_RESEARCH_ROUND3.md) adds a preregistered
-   expansion to 512 exploration images, fixed competing hypotheses, early stopping
-   and source-group uncertainty; existing notebook/evidence bytes stay preserved.
+Folder IDs are stable sequential experiment identities, independent of algorithm
+names, maturity and performance. A changed policy/configuration that changes the
+scientific comparison needs the next experiment ID. Each experiment README is its
+human-readable source of truth; there is no separate experiment registry.
 
-4. [04_train_data_preparation.ipynb](notebooks/04_train_data_preparation.ipynb)
-   verifies the existing five-class Raw/frozen-v2 S10 pair and shared Raw development
-   input, including source-pixel JPEG95 replay and actual per-image routes. Missing
-   exports can be prepared in a new root from saved six-class labels. It writes
-   `docs/round2-training-v1/preparation.json` and `routes.csv.gz`; no detector runs.
-5. [05_model_training.ipynb](notebooks/05_model_training.ipynb) reads the saved P4
-   receipt and checks paired native YOLO26n training provenance. Defaults verify
-   and reuse the completed #21 Raw/v2 checkpoints, with no new training. Fresh
-   paired training requires a new root and `ALLOW_TRAINING=True`; native resume
-   remains explicit. Checkpoint receipts, native histories and learning curves
-   under `docs/round2-training-v1/` form the #35 handoff. See the
-   [#33 execution contract](docs/ISSUE33_IMPLEMENTATION.md) and
-   [verified-reuse results](docs/ISSUE33_RESULTS.md).
+Each implemented lifecycle has independent **Restart & Run All** notebooks:
+`01_experiments` where useful → `02_train_prepare` → `03_train` → `04_eval`.
+They consume explicitly saved prerequisites and never execute upstream notebooks.
+Configuration is in section 1. Launch from the repository root or any notebook's
+directory. Raw has no dummy exploration phase; v2 has no fabricated downstream phases.
 
-These use the existing five-class order: **car, truck, bus, motorcycle, bicycle**.
-Original six-class annotations/conversions and frozen Gamma-or-Skip v2 results
-remain unchanged. Final-test checks use metadata only: no final image opens,
-hashes, headers, previews, label materialization or evaluation.
+## Run or inspect
 
-Default prerequisites reflect the preserved local study: `runs/issue5-v1/protocol.json`,
-`runs/issue6-v2/subsets.json`, `docs/issue6-v2/policy.json`,
-`runs/issue6-v2/conversion/S10`, `runs/issue5-v1/conversion` and
-`runs/preprocessing-five-v1/`. Restore those saved inputs or configure their paths;
-Round 2 never regenerates them. See [issue 28 implementation and replay](docs/ISSUE28_IMPLEMENTATION.md).
-
-[Issue #30](https://github.com/truong51972/vehicle-detection/issues/30) is complete:
-PRs #37–#39 found **no demonstrated useful preprocessing improvement** and released
-no v3 policy. Retain **Raw and frozen v2 (Gamma-or-Skip)** for
-[#33](https://github.com/truong51972/vehicle-detection/issues/33) training preparation
-and paired fine-tuning, followed by #35 development evaluation. The
-[research handoff](https://github.com/truong51972/vehicle-detection/issues/30#issuecomment-6664412401)
-preserves the unused confirmation plan and sealed final holdout; further preprocessing
-research requires a separately scoped hypothesis and experiment.
-The training phase verifies reuse of earlier native runs; no final-test release is claimed.
-
-The earlier workflow remains available for historical replay:
-
-- [Original split-building notebook 01](notebooks/archive/round1/01_data_init.ipynb)
-  is preserved byte-for-byte with its source revision and SHA256 in the archive
-  manifest. It creates six-class `runs/data-v1/` artifacts and is not a Round 2 step.
-- [02_data_preprocessing.ipynb](notebooks/02_data_preprocessing.ipynb) defaults to
-  `FIVE_CLASS_ONLY=True`, deriving the earlier five-class S10/development pairs
-  under `runs/preprocessing-five-v1/` from saved six-class conversions. Its
-  six-class preparation path is explicitly opt-in.
-- [03_training.ipynb](notebooks/03_training.ipynb) defaults to the existing
-  five-class S10 exports from the earlier preprocessing notebook and writes native
-  YOLO26n checkpoints, histories and paired settings under `runs/training-five-s10-v1/`.
-  Both branches share initialization/budgets and Raw development validation.
-  `RESUME` explicitly opts in to native `last.pt` continuation.
-- [04_eval_and_report.ipynb](notebooks/04_eval_and_report.ipynb) defaults to the
-  completed five-class S10 checkpoints/development exports and writes
-  `runs/development-five-v1/`; historical six-class weights remain supported.
-  It reports pretrained/Raw-trained/Adaptive-trained × Raw/Adaptive metrics,
-  per-class AP, latency, plots and representative errors. Saved-result reuse is
-  the default; inference requires `ALLOW_INFERENCE=True`. Set
-  `BOOTSTRAP_RESAMPLES=100` for exploratory source-group uncertainty; the default
-  is zero. Object-size image-presence slices overlap and retain all GT/predictions;
-  they are not area-restricted AP. Gamma/Skip route deltas are descriptive comparisons
-  of cached matches. Checkpoint selection and final-test release remain separate;
-  changed inputs require a new output root. This notebook never imports the trainer.
-
-These are earlier workflow entrypoints, not the new Round 2 phases. See the
-[evaluation plan](docs/development-five-v1/PLAN.md),
-[handoff checklist](docs/EPIC14_FIVE_CLASS_HANDOFF.md) and
-[five-class development report](docs/development-five-v1/RESULTS.md) for the completed
-six-cell matrix, support, paired group uncertainty, costs and holdout scope.
-
-## Prerequisites
-
-Python 3.11+, `uv`, OpenCV system libraries (`libgl1`, `libglib2.0-0` on Ubuntu),
-and compatible PyTorch/CUDA for the recorded GPU protocol:
+Install Python 3.11+, `uv`, OpenCV system libraries (`libgl1`, `libglib2.0-0` on
+Ubuntu), and the study dependencies. Use the project `.venv` kernel:
 
 ```sh
 uv sync --locked --extra study
 uv run --extra study jupyter lab notebooks/
 ```
 
-Use the `.venv` kernel. Repository-root and `notebooks/` launch directories both
-work. Every notebook starts with a purpose, artifact contract and linked numbered
-outline. The historical six-class taxonomy, including railway `train`, stays unchanged;
-Round 2 reuses its already derived five-class mapping. Extract
-BDD detection images/annotations under `data/bdd100k/`; nested Kaggle
-layouts are supported. Keep data/runs on the WSL-native filesystem.
+Defaults inspect historical evidence without new training/inference. Preparation
+inspection requires the original verified local exports. To execute new work:
 
-```text
-data/bdd100k/.../images/100k/train/**/*.jpg
-data/bdd100k/.../images/100k/val/**/*.jpg
-data/bdd100k/.../bdd100k_labels_images_train.json
-data/bdd100k/.../bdd100k_labels_images_val.json
-```
+1. In notebook 00, optionally set `AUDIT_SOURCES=True` to audit original sources.
+2. In each experiment's 02, set `ALLOW_PREPARATION=True`. This exports the same
+   frozen 4,890 S10 and 13,975 development IDs/GT from originals using that policy
+   and JPEG95. Prepare v0 before training v1 so shared Raw selection data exists.
+3. In 03, set `READ_HISTORICAL=False`, `ALLOW_TRAINING=True`. Native Ultralytics
+   owns optimization/checkpoints/history. Both detectors initialize independently
+   from pinned COCO-80 YOLO26n and select checkpoints on shared v0 Raw development.
+   Native continuation additionally requires `RESUME=True`.
+4. In 04, set `READ_HISTORICAL=False`. Saved metrics are reused; new inference
+   additionally requires `ALLOW_INFERENCE=True`. This evaluates each detector on
+   its matching offline policy over the identical original development IDs/GT.
 
-The local pretrained checkpoint must match SHA256
+New outputs live under `runs/v0/` and `runs/v1/`, leaving original measurements
+under their original paths. Prepared images are owned files; no dataloader filters
+or custom training engine are used. An existing export/run with changed inputs
+fails. Preparation publishes atomically; inspect a leftover `data.tmp` before
+removing it and retrying. There is no partial-export resume engine.
+
+## Shared data and small configs
+
+[configs/data.yaml](configs/data.yaml) binds the single frozen
+[split/group table](configs/splits.csv.gz), original dataset/GT version and seed.
+It is projected from the preserved protocol and S10 membership, without resplitting.
+All experiments use **car, truck, bus, motorcycle, bicycle**; railway `train` is
+excluded by the existing six-to-five mapping, while negative images remain.
+The final holdout is sealed: no image reads, headers, hashes, previews, label
+materialization or inference. Final annotations are metadata only.
+
+[configs/v0.yaml](configs/v0.yaml) and [configs/v1.yaml](configs/v1.yaml) hold only
+policy parameters, JPEG quality, seed, initialization and training settings.
+Native `data.yaml`/`train.yaml`, `args.yaml`, `results.csv`, checkpoints and one
+`eval/metrics.json` replace the active multi-stage JSON receipt chain. Input/file
+bindings still reject changed splits, policies, prepared bytes and foreign detectors.
+
+Extract original BDD images/annotations under `data/bdd100k/`, or update the shared
+`data_root`. The saved table has source-relative paths matching the preserved
+nested local layout. A different extraction layout needs explicit path relocation
+and a re-audit; do not change memberships or silently edit measured identities.
+The local `weights/yolo26n.pt` must have SHA256
 `9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef`.
-Notebooks fail if it is absent; they never silently download a model or the dataset.
-Large images, model weights and run caches remain gitignored.
+Nothing downloads datasets/checkpoints automatically. Keep data/runs on the native filesystem.
 
-Notebook 03 defaults to the preserved local protocol at `runs/issue5-v1/protocol.json`,
-subsets at `runs/issue6-v2/subsets.json`, frozen `docs/issue6-v2/policy.json`, and
-five-class S10/development exports under `runs/preprocessing-five-v1/`.
-It runs both branches sequentially for 20 epochs with identical settings and writes
-native histories plus `summary.json`. Use a fresh `TRAIN_ROOT` for a new study;
-never initialize from a historical six-class fine-tuned checkpoint.
-The completed [five-class S10 report](docs/ISSUE21_RESULTS.md) includes saved
-convergence plots, native histories, checkpoint hashes and the Raw interruption/
-resume disclosure. Notebook 03 reuses completed runs and writes `convergence.png`;
-its native CSV timing totals sum visible resume sessions, excluding partial work.
+## Historical evidence and checks
 
-## Artifact contracts and existing experiments
-
-A protocol binds four disjoint roles, groups/duplicate safeguards, source hashes,
-boxes and classes. A policy binds calibration-only IDs and the frozen operator code.
-An export binds IDs/labels/geometry, recipes and JPEG95, with a deep-verification
-receipt. New training binds verified exports, initial checkpoint, native freeze and
-shared settings in a short study manifest; native `args.yaml` is checked against
-the declared settings on reuse. Ultralytics owns optimization, weights, history
-and resume. Native resume is epoch-boundary continuation, not bitwise
-reproducibility or an atomic last-checkpoint guarantee. Evaluation binds the
-explicit checkpoint, verified development export, native settings and metric plots.
-Raw and Adaptive always retain the same IDs and GT. COCO-80 pretrained predictions
-map to the explicit five/six vehicle classes; fine-tuned heads use native IDs/AP.
-Five-class mapping drops railway predictions and maps motorcycle/bicycle to 3/4.
-Five-vs-six macro-mAP cannot establish an algorithmic gain because the denominator changes.
-
-Defaults use new output roots so recorded results are preserved. To inspect the
-completed S10 experiments without rerunning earlier phases, configure notebook 04:
-
-- `PROTOCOL_PATH`: `runs/issue5-v1/protocol.json`
-- `POLICY_PATH`: `runs/issue6-v2/policy.json`
-- `TRAIN_ROOT`: `runs/issue7-s10-v2`
-- Raw input: `runs/issue5-v1/datasets/raw`
-- Adaptive input: `runs/development-v1/inputs/adaptive` for the completed six-class
-  matrix, or a separately prepared export from the same original sources, labels
-  and frozen policy. Phase 02 exposes `RAW_DEVELOPMENT` / `DEV_CONVERSION`.
-- `OUTPUT`: `runs/development-v1` for the completed native evaluation caches.
-- `PLAN`: `docs/development-v1/PLAN.md` for the historical six-class analysis.
-
-Original training receipts remain available as historical evidence, but the new
-evaluator does not require or parse them.
-New runs must use distinct roots; do not resume the old six-class S10 checkpoints
-with this simplified training implementation. Native `best.pt` can be evaluated
-without a custom `complete.json` receipt.
-No full-data training/holdout runs are part of CI. Fresh-kernel smoke fixtures have
-synthetic images/checkpoints and never count as scientific evidence.
-
-## Evidence and checks
-
-[Archive and replay instructions](notebooks/archive/README.md) identify every
-historical notebook by its original path, source revision and preserved SHA256.
-[Historical design](docs/HISTORY.md), [S10 results](docs/ISSUE7_RESULTS.md) and the
-[module audit](docs/REFACTOR.md) and [cleanup decisions](docs/EPIC14_CLEANUP.md) preserve study context and remaining limitations.
-The [development matrix record](docs/DEVELOPMENT_RESULTS.md) preserves the six
-completed evaluations and identifies unfinished #7 analysis after benchmarking stopped.
-[Issue #13](https://github.com/truong51972/vehicle-detection/issues/13) restructures
-the workflow; [#7](https://github.com/truong51972/vehicle-detection/issues/7)
-retains the development analysis/selection deliverables. Neither implies a final-test
-release or new scientific results from a refactor.
+[Historical replay and migration audit](docs/HISTORICAL_REPLAY.md) records the
+baseline commit/tag, original notebook hashes and Git links. Archives are removed
+from the active tree. Measured JSON/CSV/plots and local checkpoints stay preserved;
+legacy research helpers remain for those evidence paths. The later
+[#33 verified-reuse handoff](docs/ISSUE33_RESULTS.md) and its checkpoint identities
+also remain unchanged; its original P4/P5 sources use the recorded upstream replay commit. Existing single-seed S10
+results are exploratory; no new training, validated improvement, S20/full-data
+expansion or final release is claimed by this refactor.
 
 ```sh
 uv run --extra study pytest -q
@@ -201,3 +95,6 @@ uv run --extra study ruff check .
 uv run --extra study ruff format --check .
 uv build
 ```
+
+Tests use tiny synthetic data, including fresh kernels and native CPU training;
+they never count as scientific evidence or run the real study on a GPU.

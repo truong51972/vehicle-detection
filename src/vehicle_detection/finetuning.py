@@ -1,4 +1,4 @@
-"""Native paired YOLO26n S10 training. Data integrity belongs to the export phase."""
+"""Native S10 training on saved offline exports; no paired receipt chain."""
 
 from pathlib import Path
 
@@ -6,13 +6,10 @@ import pandas as pd
 import yaml
 from ultralytics import YOLO
 
-from .adaptive import validate_policy
 from .baseline import PRETRAINED_SHA256, VAL_SETTINGS, verify_coco_names
-from .common import digest, file_hash, freeze_json, read_json
-from .data import CLASSES
-from .datasets import verify_role
-from .offline import verify_alignment
-from .subsets import validate_subsets
+from .common import file_hash
+from .experiment_data import load_experiment, verify_data
+from .five_class import FIVE_CLASSES
 
 # Keep the historical S10 budget and disabled augmentations; both branches share it.
 TRAIN_SETTINGS = {
@@ -73,168 +70,82 @@ def backbone_boundary(model):
     return boundary
 
 
-def prepare_pair(protocol, subsets, policy, decision, pair, development, checkpoint, output):
-    """One-time lightweight preflight; deep export verification occurs in notebook 02."""
-    validate_subsets(subsets, protocol)
-    validate_policy(policy, protocol)
-    if (
-        decision["decision_id"] != digest({k: v for k, v in decision.items() if k != "decision_id"})
-        or decision["status"] != "v3_not_deployed"
-        or decision["retained_policy_id"] != policy["policy_id"]
-    ):
-        raise ValueError("Expected the frozen decision retaining the issue #6 policy")
-    pair, development, checkpoint, output = (
-        Path(p).resolve() for p in (pair, development, checkpoint, output)
-    )
-    binding = read_json(pair / "pair.json")
-    if (
-        binding["protocol_id"] != protocol["manifest_id"]
-        or binding["subsets_id"] != subsets["manifest_id"]
-        or binding["policy_id"] != policy["policy_id"]
-        or binding["subset"] != "S10"
-        or binding["records_sha256"] != subsets["subsets"]["S10"]["records_sha256"]
-    ):
-        raise ValueError("Expected frozen S10 exports; expansion requires a new study")
-    ids = set(subsets["subsets"]["S10"]["ids"])
-    rows = [r for r in protocol["splits"]["training_pool"] if r["id"] in ids]
-    training = {
-        branch: verify_role(
-            pair / branch,
-            rows,
-            "train",
-            variant,
-            policy["recipes"] if branch == "adaptive" else None,
-            deep=False,
-        )
-        for branch, variant in (("raw", "raw_reencoded"), ("adaptive", "adaptive"))
+def train_experiment(root, experiment, *, allow_training=False, resume=False):
+    """Select on shared Raw development, using native args/history/checkpoints for reuse."""
+    root = Path(root).resolve()
+    config = load_experiment(root, experiment)
+    prepared = verify_data(root, experiment)
+    raw = verify_data(root, "v0")
+    directory = root / f"runs/{experiment}"
+    data = directory / "train.yaml"
+    native = {
+        **prepared,
+        "val": str(Path(raw["path"]) / "images/val"),
+        "selection_files_sha256": raw["files_sha256"],
     }
-    # This one cross-variant check compares IDs, label digests, dimensions and splits.
-    verify_alignment([pair / "raw", pair / "adaptive"], deep=False)
-    development_export = verify_role(
-        development,
-        protocol["splits"]["development_validation"],
-        "tune",
-        "raw_reencoded",
-        deep=False,
-    )
-    classes = training["raw"]["export"]["conversion"].get("classes", CLASSES)
-    if any(
-        dataset["export"]["conversion"].get("classes", CLASSES) != classes
-        for dataset in (training["adaptive"], development_export)
-    ):
-        raise ValueError("Training and development exports must use the same taxonomy")
-    if file_hash(checkpoint) != PRETRAINED_SHA256:
-        raise ValueError("Use the unchanged pinned pretrained YOLO26n checkpoint")
-    model = YOLO(str(checkpoint))
-    verify_coco_names(model.names)
-    experiment = {
-        "version": "paired-native-v1",
-        "protocol_id": protocol["manifest_id"],
-        "subsets_id": subsets["manifest_id"],
-        "policy_id": policy["policy_id"],
-        "policy_decision_id": decision["decision_id"],
-        "training": training,
-        "development": development_export,
-        "checkpoint": str(checkpoint),
-        "checkpoint_sha256": PRETRAINED_SHA256,
-        "freeze": backbone_boundary(model.model),
-        "settings": TRAIN_SETTINGS,
-        "final_test_accessed": False,
-    }
-    if not (output / "pair.json").exists() and output.exists() and any(output.iterdir()):
-        raise ValueError("Unknown training directory; choose an empty experiment root")
-    freeze_json(output / "pair.json", experiment)
-    for branch, dataset in training.items():
-        config = {
-            "path": str(output),
-            "train": str(Path(dataset["path"]) / "images/train"),
-            "val": str(development / "images/tune"),
-            "names": dict(enumerate(classes)),
-        }
-        path = output / f"{branch}.yaml"
-        if path.exists() and yaml.safe_load(path.read_text()) != config:
-            raise ValueError("Training YAML changed; use a new experiment root")
-        if not path.exists():
-            path.write_text(yaml.safe_dump(config))
-    return experiment
-
-
-def train_branch(experiment, branch, output, *, resume=False):
-    """Run/reuse one branch using native YOLO.train and native last.pt resume."""
-    output = Path(output).resolve()
-    if branch not in ("raw", "adaptive") or read_json(output / "pair.json") != experiment:
-        raise ValueError("Unknown branch or changed paired experiment")
-    data = output / f"{branch}.yaml"
-    classes = experiment["training"][branch]["export"]["conversion"].get("classes", CLASSES)
-    expected = {
-        "path": str(output),
-        "train": str(Path(experiment["training"][branch]["path"]) / "images/train"),
-        "val": str(Path(experiment["development"]["path"]) / "images/tune"),
-        "names": dict(enumerate(classes)),
-    }
-    if yaml.safe_load(data.read_text()) != expected:
-        raise ValueError("Training YAML changed")
-    # One cheap manifest/inventory check, never rehash/decode every training image.
-    root = Path(experiment["training"][branch]["path"])
-    verify_alignment([root], deep=False)
-    if (
-        read_json(root / "verified.json")["files_identity"]
-        != experiment["training"][branch]["files_identity"]
-    ):
-        raise ValueError("Frozen training export identity changed")
-    run = output / branch
+    if data.is_symlink():
+        raise ValueError("Unexpected training YAML symlink")
+    if data.exists() and yaml.safe_load(data.read_text()) != native:
+        raise ValueError("Training data changed; use a new experiment ID")
+    if not data.exists():
+        data.write_text(yaml.safe_dump(native))
+    settings = {**TRAIN_SETTINGS, **config["training"], "seed": config["seed"]}
+    run = directory / "train"
+    if run.resolve() != run:
+        raise ValueError("Unexpected training directory symlink")
     args_path = run / "args.yaml"
-    if args_path.is_file():
-        # Ultralytics owns the run; its saved args must still match the declared study.
+    best, last, history = run / "weights/best.pt", run / "weights/last.pt", run / "results.csv"
+    if any(p.resolve() != p for p in (args_path, best, last, history)):
+        raise ValueError("Unexpected native artifact symlink")
+    if args_path.exists():
         args = yaml.safe_load(args_path.read_text())
         if (
             args.get("data") != str(data)
-            or args.get("freeze") != experiment["freeze"]
-            or any(args.get(k) != value for k, value in experiment["settings"].items())
+            or args.get("freeze") != 11
+            or any(args.get(k) != v for k, v in settings.items())
         ):
-            raise ValueError("Native run settings changed; select a new output root")
+            raise ValueError("Native training settings differ from the experiment")
+        if best.is_file() and history.is_file():
+            table = pd.read_csv(history)
+            if table.epoch.tolist() == list(range(1, settings["epochs"] + 1)):
+                if resume:
+                    raise ValueError("Training is already complete")
+                return table
     elif run.exists() and any(run.iterdir()):
-        raise ValueError("Unknown native run directory; select a new output root")
-    best, last, history = (run / "weights/best.pt", run / "weights/last.pt", run / "results.csv")
+        raise ValueError("Unknown native training directory")
+    if not allow_training:
+        raise FileNotFoundError("No completed run; explicitly set ALLOW_TRAINING=True")
     if resume:
         if not args_path.is_file() or not last.is_file():
-            raise FileNotFoundError("Native resume requires this branch's last.pt and args.yaml")
-        YOLO(str(last)).train(resume=True)
-    elif not (best.is_file() and last.is_file() and history.is_file()):
-        if args_path.is_file():
-            raise ValueError("Interrupted native run; explicitly resume=True or use a new root")
-        if file_hash(experiment["checkpoint"]) != experiment["checkpoint_sha256"]:
-            raise ValueError("Starting pretrained checkpoint changed")
-        YOLO(experiment["checkpoint"]).train(
+            raise FileNotFoundError("Native resume requires this experiment's args.yaml/last.pt")
+        model = YOLO(str(last))
+        if model.ckpt["train_args"]["data"] != str(data) or model.names != dict(
+            enumerate(FIVE_CLASSES)
+        ):
+            raise ValueError("Resume checkpoint belongs to another experiment/taxonomy")
+        model.train(resume=True)
+    else:
+        if args_path.exists():
+            raise ValueError("Interrupted training; explicitly RESUME=True")
+        checkpoint = root / config["checkpoint"]
+        if (
+            config["checkpoint_sha256"] != PRETRAINED_SHA256
+            or file_hash(checkpoint) != PRETRAINED_SHA256
+        ):
+            raise ValueError("Use the unchanged pinned pretrained YOLO26n checkpoint")
+        model = YOLO(str(checkpoint))
+        verify_coco_names(model.names)
+        model.train(
             data=str(data),
-            freeze=experiment["freeze"],
-            project=str(output),
-            name=branch,
+            freeze=backbone_boundary(model.model),
+            project=str(directory),
+            name="train",
             exist_ok=True,
-            **experiment["settings"],
+            **settings,
         )
-    for path in (best, last, history):
-        if not path.is_file():
-            raise FileNotFoundError(f"Native training did not publish {path}")
+    if not best.is_file() or not history.is_file():
+        raise FileNotFoundError("Native training did not publish best.pt/results.csv")
     table = pd.read_csv(history)
-    if table["epoch"].tolist() != list(range(1, experiment["settings"]["epochs"] + 1)):
-        raise ValueError("Native training has not completed the declared epoch budget")
-    metric = "metrics/mAP50-95(B)"
-    elapsed = table["time"]
-    increments = elapsed.diff()
-    # shortcut: clock resets infer sessions, use retained logs if a restart has no visible reset.
-    seconds = increments.where(increments >= 0, elapsed).sum()
-    result = {
-        "budget": {
-            "epochs": len(table),
-            "images_per_epoch": len(experiment["training"][branch]["ids"]),
-        },
-        # Native best.pt is replaced on equal fitness, so the last tied maximum wins.
-        "best_epoch": int(table.loc[table[metric] == table[metric].max(), "epoch"].iloc[-1]),
-        "final_epoch": int(table["epoch"].iloc[-1]),
-        "training_validation_seconds": float(seconds),
-        "timing_reset_epochs": table.loc[increments < 0, "epoch"].astype(int).tolist(),
-        "best_checkpoint": str(best),
-        "last_checkpoint": str(last),
-    }
-    return result
+    if table.epoch.tolist() != list(range(1, settings["epochs"] + 1)):
+        raise ValueError("Native training has not completed the epoch budget")
+    return table

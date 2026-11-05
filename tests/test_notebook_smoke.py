@@ -1,234 +1,101 @@
-"""Fresh kernels run all four real notebooks on tiny fixtures, never research evidence."""
+"""Fresh-kernel lifecycle execution on synthetic CPU fixtures; never research evidence."""
 
 import shutil
-from pathlib import Path
 
 import pytest
-from test_study import bdd as bdd
+import yaml
+from test_experiment_data import experiment_project as experiment_project
 
-from vehicle_detection.common import read_json, write_json
 
-
-def test_four_fresh_kernels_and_cached_evaluation_without_upstream_work(bdd, tmp_path):
+def test_versioned_notebooks_run_independently_in_fresh_kernels(experiment_project):
     nbformat = pytest.importorskip("nbformat")
     nbclient = pytest.importorskip("nbclient")
-    torch = pytest.importorskip("torch")
     pytest.importorskip("ultralytics")
-    pytest.importorskip("bdd100k")
-    from ultralytics.nn.tasks import DetectionModel, yaml_model_load
+    root = experiment_project
+    shutil.copytree("notebooks", root / "notebooks")
+    shutil.copytree("docs", root / "docs")
+    guard = """from unittest.mock import patch
+from ultralytics import YOLO
+for target in ["vehicle_detection.protocol.build_protocol", "vehicle_detection.data.convert_labels",
+               "vehicle_detection.adaptive.calibrate_policy"]:
+    patch(target, side_effect=AssertionError("Upstream work started")).start()
+patch.object(YOLO, "train", side_effect=AssertionError("Training started")).start()
+patch.object(YOLO, "val", side_effect=AssertionError("Inference started")).start()
+"""
 
-    from vehicle_detection.adaptive import calibrate_policy
-    from vehicle_detection.baseline import COCO_TO_VEHICLE
-    from vehicle_detection.common import digest, file_hash
-    from vehicle_detection.data import CLASSES
-
-    repository = Path.cwd()
-    project = tmp_path / "project"
-    project.mkdir()
-    (project / "pyproject.toml").touch()
-    shutil.copytree(repository / "notebooks", project / "notebooks")
-    shutil.copytree(bdd, project / "data/bdd100k")
-    write_json(project / "notebooks/test_exposure.json", {})
-
-    # Every execution starts a new kernel. Paths are the notebook's own declared defaults.
-    def run(name, setup="", overrides="", cwd=None):
-        notebook = nbformat.read(project / "notebooks" / name, as_version=4)
-        if setup:
-            notebook.cells.insert(1, nbformat.v4.new_code_cell(setup))
-        if overrides:
-            index = next(i for i, c in enumerate(notebook.cells) if "require_paths(" in c.source)
-            cell = notebook.cells[index]
-            position = cell.source.index("require_paths(")
-            cell.source = cell.source[:position] + overrides + "\n" + cell.source[position:]
+    def run(path, overrides="", setup=guard, cwd=None):
+        notebook = nbformat.read(root / "notebooks" / path, as_version=4)
+        cell = next(c for c in notebook.cells if c.cell_type == "code")
+        cell.source += "\n" + overrides
+        notebook.cells.insert(1, nbformat.v4.new_code_cell(setup))
         nbclient.NotebookClient(
             notebook,
             timeout=180,
             kernel_name="python3",
-            resources={"metadata": {"path": str(cwd or project)}},
+            resources={"metadata": {"path": str(cwd or root)}},
         ).execute()
         assert all(c.execution_count is not None for c in notebook.cells if c.cell_type == "code")
 
-    run("archive/round1/01_data_init.ipynb")
-    protocol = read_json(project / "runs/data-v1/protocol.json")
-    policy = calibrate_policy(protocol, project / "data/bdd100k", sample_size=2, per_operator=1)
-    write_json(project / "docs/issue6-v2/policy.json", policy)
-    decision = {"status": "v3_not_deployed", "retained_policy_id": policy["policy_id"]}
-    decision["decision_id"] = digest(decision)
-    write_json(project / "docs/issue11-v2/v3_decision.json", decision)
-    shutil.copy(repository / "docs/issue11-v2/experimental_matrix.csv", project / "docs/issue11-v2")
-    shutil.copy(repository / "docs/issue11-v2/supported_recovery.png", project / "docs/issue11-v2")
-    decision["reason"] = "Fixture policy, never research evidence"
-    decision["decision_id"] = digest({k: v for k, v in decision.items() if k != "decision_id"})
-    write_json(project / "docs/issue11-v2/v3_decision.json", decision)
-    run(
-        "02_data_preprocessing.ipynb",
-        overrides="FIVE_CLASS_ONLY = False",
-        cwd=project / "notebooks",
-    )
-    historical_roots = [
-        project / "runs/data-v1",
-        project / "runs/preprocessing-v1",
-        project / "docs/preprocessing-v1",
-    ]
+    run("00_data_init.ipynb", "AUDIT_SOURCES = True")
+    run("experiments/v1/01_experiments.ipynb")
+    run("experiments/v2/01_experiments.ipynb")
+    for version in ("v0", "v1"):
+        directory = root / f"notebooks/experiments/{version}"
+        run(
+            f"experiments/{version}/02_train_prepare.ipynb",
+            "ALLOW_PREPARATION = True",
+            cwd=directory,
+        )
+        run(f"experiments/{version}/03_train.ipynb", cwd=directory)
+        run(f"experiments/{version}/04_eval.ipynb", cwd=directory)
+        assert not (root / f"runs/{version}/train").exists()
+        assert not (root / f"runs/{version}/eval").exists()
 
-    def historical_snapshot():
-        return {
-            str(path): (file_hash(path), path.stat().st_mtime_ns)
-            for root in historical_roots
-            for path in root.rglob("*")
-            if path.is_file()
-        }
+    # Exercise the actual native CPU API with a tiny synthetic COCO head/checkpoint.
+    torch = pytest.importorskip("torch")
+    from ultralytics.nn.tasks import DetectionModel, yaml_model_load
 
-    before = historical_snapshot()
-    analysis = project / "docs/issue11-v2"
-    saved_analysis = project / "docs/issue11-v2-saved"
-    analysis.rename(saved_analysis)
-    run(
-        "02_data_preprocessing.ipynb",
-        setup="""from unittest.mock import patch
-import cv2
-for target in ["vehicle_detection.data.convert_labels",
-               "vehicle_detection.subsets.build_subsets",
-               "vehicle_detection.subsets.freeze_subsets",
-               "vehicle_detection.adaptive.calibrate_policy"]:
-    patch(target, side_effect=AssertionError("Historical phase triggered")).start()
-original_imread = cv2.imread
-def guarded_imread(path, *args, **kwargs):
-    assert "/val/" not in str(path), "Reserved pixels accessed"
-    return original_imread(path, *args, **kwargs)
-patch.object(cv2, "imread", side_effect=guarded_imread).start()
-""",
-    )
-    saved_analysis.rename(analysis)
-    assert historical_snapshot() == before
-    five = read_json(project / "runs/preprocessing-five-v1/summary.json")
-    assert five["role_support_annotation_only"]["final_test"]["images"] == len(
-        protocol["splits"]["final_test"]
-    )
+    from vehicle_detection.baseline import COCO_TO_VEHICLE
+    from vehicle_detection.common import file_hash
+    from vehicle_detection.data import CLASSES
 
-    config = yaml_model_load("yolo26n.yaml")
-    config["end2end"] = True
-    model = DetectionModel(config, nc=80, verbose=False)
+    model = DetectionModel(yaml_model_load("yolo26n.yaml"), nc=80, verbose=False)
     model.names = dict.fromkeys(range(80), "other")
     model.names.update({c: CLASSES[b] for c, b in COCO_TO_VEHICLE.items()})
-    checkpoint = project / "weights/yolo26n.pt"
+    checkpoint = root / "weights/yolo26n.pt"
     checkpoint.parent.mkdir()
     torch.save({"model": model, "train_args": {"task": "detect"}}, checkpoint)
-    setup = f"""import vehicle_detection.baseline as baseline
-baseline.PRETRAINED_SHA256 = {file_hash(checkpoint)!r}
-"""
-    train_setup = (
-        setup
-        + """import vehicle_detection.finetuning as training
-training.TRAIN_SETTINGS.update(epochs=1, batch=2, nbs=2, imgsz=64, workers=0, device="cpu")
-"""
-    )
-    run(
-        "03_training.ipynb",
-        setup=train_setup
-        + """from unittest.mock import patch
-for target in ["vehicle_detection.data.scan_bdd", "vehicle_detection.protocol.build_protocol",
-               "vehicle_detection.adaptive.calibrate_policy",
-               "vehicle_detection.offline.export_variant"]:
-    patch(target, side_effect=AssertionError("Upstream phase triggered")).start()
+    for version in ("v0", "v1"):
+        config_path = root / f"configs/{version}.yaml"
+        config = yaml.safe_load(config_path.read_text())
+        config["checkpoint_sha256"] = file_hash(checkpoint)
+        config["training"].update(epochs=1, batch=2, nbs=2, imgsz=64, workers=0, device="cpu")
+        config_path.write_text(yaml.safe_dump(config))
+        # Config changed only in this isolated fixture; reprepare before training.
+        shutil.rmtree(root / f"runs/{version}/data")
+        run(f"experiments/{version}/02_train_prepare.ipynb", "ALLOW_PREPARATION = True")
+    for version in ("v0", "v1"):
+        run(
+            f"experiments/{version}/03_train.ipynb",
+            "READ_HISTORICAL = False\nALLOW_TRAINING = True",
+            setup=f"""import vehicle_detection.finetuning as training
+training.PRETRAINED_SHA256 = {file_hash(checkpoint)!r}
 """,
-        overrides='PROTOCOL_PATH = ROOT / "runs/data-v1/protocol.json"\n'
-        'SUBSETS_PATH = ROOT / "runs/preprocessing-v1/subsets.json"',
-    )
-    for branch in ("raw", "adaptive"):
-        from ultralytics import YOLO
-
-        checkpoint = project / "runs/training-five-s10-v1" / branch / "weights/best.pt"
-        assert len(YOLO(str(checkpoint)).names) == 5
-    # Round 2 phases reuse the same verified inputs/checkpoints in independent kernels.
-    run(
-        "04_train_data_preparation.ipynb",
-        setup="""from unittest.mock import patch
-for target in ["vehicle_detection.training_preparation.scan_bdd",
-               "vehicle_detection.training_preparation.export_pair",
-               "vehicle_detection.training_preparation.export_variant"]:
-    patch(target, side_effect=AssertionError("Unexpected upstream work")).start()
-""",
-        overrides='PROTOCOL_PATH = ROOT / "runs/data-v1/protocol.json"\n'
-        'SUBSETS_PATH = ROOT / "runs/preprocessing-v1/subsets.json"\n'
-        'TRAIN_CONVERSION = ROOT / "runs/preprocessing-v1/conversion/S10"\n'
-        'DEV_CONVERSION = ROOT / "runs/data-v1/conversion"',
-        cwd=project / "notebooks",
-    )
-    run(
-        "05_model_training.ipynb",
-        setup=train_setup
-        + """from unittest.mock import patch
+        )
+        eval_override = """READ_HISTORICAL = False
+ALLOW_INFERENCE = True
+original_evaluate = evaluate_experiment
+def evaluate_experiment(*args, **kwargs):
+    settings = {"device": "cpu", "imgsz": 64, "batch": 2, "workers": 0}
+    return original_evaluate(*args, settings=settings, **kwargs)
+"""
+        run(
+            f"experiments/{version}/04_eval.ipynb",
+            eval_override,
+            setup="""from unittest.mock import patch
 from ultralytics import YOLO
-patch.object(YOLO, "train", side_effect=AssertionError("Training triggered on reuse")).start()
-patch("vehicle_detection.training_preparation.prepare_training_data",
-      side_effect=AssertionError("P4 triggered from P5")).start()
+patch.object(YOLO, "train", side_effect=AssertionError("Training started in evaluation")).start()
 """,
-        overrides='PROTOCOL_PATH = ROOT / "runs/data-v1/protocol.json"\n'
-        'SUBSETS_PATH = ROOT / "runs/preprocessing-v1/subsets.json"\n'
-        "HISTORICAL_PATH = None",
-    )
-    handoff = read_json(project / "docs/round2-training-v1/training.json")
-    assert handoff["branches"]["raw"]["budget"] == handoff["branches"]["adaptive"]["budget"]
-    assert handoff["branches"]["raw"]["final_epoch"] == 1
-    assert not handoff["final_test_accessed"] and not handoff["v3_released"]
-    # Keep six-class evaluation replay covered alongside five-class training.
-    run(
-        "03_training.ipynb",
-        setup=train_setup,
-        overrides='PROTOCOL_PATH = ROOT / "runs/data-v1/protocol.json"\n'
-        'PREPARED = ROOT / "runs/preprocessing-v1"\n'
-        'SUBSETS_PATH = PREPARED / "subsets.json"\n'
-        'RAW_DEVELOPMENT = ROOT / "runs/data-v1/datasets/raw"\n'
-        'TRAIN_ROOT = ROOT / "runs/training-native-s10-v1"',
-    )
-    (project / "docs/development-v1").mkdir()
-    shutil.copy(repository / "docs/development-v1/PLAN.md", project / "docs/development-v1")
-    eval_paths = (
-        'PROTOCOL_PATH = ROOT / "runs/data-v1/protocol.json"\n'
-        'POLICY_PATH = ROOT / "runs/preprocessing-v1/policy.json"\n'
-        'TRAIN_ROOT = ROOT / "runs/training-native-s10-v1"\n'
-        'INPUTS = {"raw": ROOT / "runs/data-v1/datasets/raw", '
-        '"adaptive": ROOT / "runs/preprocessing-v1/development/adaptive"}\n'
-        'OUTPUT = ROOT / "runs/development-native-v1"\n'
-        'PLAN = ROOT / "docs/development-v1/PLAN.md"\n'
-    )
-    run(
-        "04_eval_and_report.ipynb",
-        setup=setup,
-        overrides=eval_paths + "ALLOW_INFERENCE = True\nBOOTSTRAP_RESAMPLES = 2\n"
-        "import vehicle_detection.evaluation as evaluation\n"
-        "original = evaluation.evaluate_development\n"
-        "def evaluate_development(*args, **kwargs):\n"
-        '    return original(*args, settings={"device":"cpu", "batch":2, '
-        '"imgsz":64, "workers":0}, **kwargs)',
-    )
-    # Reuse the exact same saved settings in a fresh kernel. Any upstream work is fatal.
-    guard = (
-        setup
-        + """from unittest.mock import patch
-from ultralytics import YOLO
-from ultralytics.models.yolo.detect import DetectionTrainer
-for target in ["vehicle_detection.data.scan_bdd", "vehicle_detection.protocol.build_protocol",
-               "vehicle_detection.adaptive.calibrate_policy",
-               "vehicle_detection.offline.export_variant",
-               "vehicle_detection.finetuning.prepare_pair",
-               "vehicle_detection.finetuning.train_branch"]:
-    patch(target, side_effect=AssertionError("Upstream phase triggered")).start()
-patch.object(YOLO, "train", side_effect=AssertionError("Training triggered")).start()
-patch.object(DetectionTrainer, "__init__", side_effect=AssertionError("Trainer created")).start()
-patch("vehicle_detection.evaluation.YOLO",
-      side_effect=AssertionError("Inference triggered")).start()
-"""
-    )
-    run(
-        "04_eval_and_report.ipynb",
-        setup=guard,
-        overrides=eval_paths
-        + "BOOTSTRAP_RESAMPLES = 2\nimport vehicle_detection.evaluation as evaluation\n"
-        "original = evaluation.evaluate_development\n"
-        "def evaluate_development(*args, **kwargs):\n"
-        '    return original(*args, settings={"device":"cpu", "batch":2, '
-        '"imgsz":64, "workers":0}, **kwargs)',
-        cwd=project / "notebooks",
-    )
+        )
+        run(f"experiments/{version}/04_eval.ipynb", eval_override, setup=guard)
+        assert (root / f"runs/{version}/eval/metrics.json").is_file()

@@ -1,3 +1,5 @@
+> Historical workflow record. Current entrypoints and replay paths: [issue 41 migration](HISTORICAL_REPLAY.md).
+
 # Phase 1 baseline and Phase 2 research
 
 [Issue #1](https://github.com/truong51972/vehicle-detection/issues/1) spans both
@@ -47,7 +49,7 @@ are:
 
 The active workflow is four independent notebooks directly under `notebooks/`:
 data initialization, preprocessing research, training, then evaluation/reporting.
-See [the usage guide](../README.md) and [preserved evidence](../notebooks/archive/README.md).
+See [the usage guide](../README.md) and [preserved evidence](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/notebooks/archive/README.md).
 Both historical S10 branches are complete; development analysis and model/scale
 selection remain separate scientific deliverables. No downstream phase runs an
 upstream phase to repair missing artifacts.
