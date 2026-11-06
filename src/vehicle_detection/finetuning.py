@@ -1,4 +1,4 @@
-"""Native S10 training on saved offline exports; no paired receipt chain."""
+"""Native training on saved offline exports; no paired receipt chain."""
 
 from pathlib import Path
 

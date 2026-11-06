@@ -15,6 +15,7 @@ from vehicle_detection.data import scan_bdd
 from vehicle_detection.experiment_data import (
     audit_sources,
     load_experiment,
+    populations,
     prepare_data,
     shared_splits,
     source_rows,
@@ -42,7 +43,7 @@ def experiment_project(bdd, tmp_path):
     roles = [
         "training_pool",
         "training_pool",
-        "calibration",
+        "training_pool",
         "calibration",
         "development_validation",
         "development_validation",
@@ -58,7 +59,8 @@ def experiment_project(bdd, tmp_path):
                 "group": group_key(r),
                 "source_group": group_key(r),
                 "role": role,
-                "s10": int(role == "training_pool"),
+                "s10": int(r["id"] in {"train_0", "train_1"}),
+                "s20": int(role == "training_pool"),
                 "source_path": str(Path(r["path"]).relative_to(bdd)),
                 "width": 80,
                 "height": 64,
@@ -79,11 +81,30 @@ def test_shared_table_matches_preserved_memberships_and_policy():
     shared, rows = shared_splits(Path.cwd())
     assert len(rows) == 79593
     assert sum(r["s10"] for r in rows) == 4890
+    assert shared["training_subset"] == "S20"
+    assert sum(r["s20"] for r in rows) == 9781
     assert sum(r["role"] == "development_validation" for r in rows) == 13975
     old = pd.read_csv("docs/issue5/split_membership.csv.gz")
     table = pd.DataFrame(rows).set_index("id")
     for key in ("group", "source_group", "role"):
         assert table[key].to_dict() == old.set_index("id")[key].to_dict()
+    membership = Path("docs/issue6-v2/subset_membership.csv.gz")
+    historical = pd.read_csv(membership).set_index("id")
+    summary = json.loads(Path("docs/issue6-v2/summary.json").read_text())
+    assert file_hash(membership) == summary["membership_sha256"]
+    assert shared["source_protocol_id"] == summary["protocol_id"]
+    assert shared["source_subsets_id"] == summary["subsets_id"]
+    pool = table[table.role == "training_pool"]
+    assert not historical.index.duplicated().any()
+    assert set(historical.index) == set(pool.index)
+    assert historical.group.to_dict() == pool.group.to_dict()
+    for subset in ("S10", "S20"):
+        flag = subset.lower()
+        assert historical[subset].astype(int).to_dict() == pool[flag].to_dict()
+        for key in ("group", "source_group", "sha256"):
+            assert pool.groupby(key)[flag].nunique().max() == 1
+    assert set(table.index[table.s10 == 1]) < set(table.index[table.s20 == 1])
+    assert table.loc[table.s20 == 1, "group"].nunique() == 5915
     policy = json.loads(Path("docs/issue6-v2/policy.json").read_text())
     assert load_experiment(Path.cwd(), "v1")["recipes"] == policy["recipes"]
     assert shared["source_protocol_id"] == policy["protocol_id"]
@@ -110,6 +131,12 @@ def test_offline_parity_determinism_reuse_and_sealed_holdout(experiment_project,
     for version in ("v0", "v1"):
         native = prepare_data(project, version)
         assert "test" not in native
+        assert native["training_subset"] == "S20" and native["seed"] == 2026
+        assert {p.stem for p in Path(native["path"]).glob("images/train/*.jpg")} == {
+            r["id"] for r in rows if r["s20"]
+        }
+        assert len(populations(rows, "S10")["train"]) == 2
+        assert len(populations(rows, "S20")["train"]) == 3
         assert prepare_data(project, version) == native
         assert verify_data(project, version) == native
     raw, adaptive = (project / f"runs/{v}/data" for v in ("v0", "v1"))
@@ -160,15 +187,15 @@ def test_preparation_rejects_changed_data_policy_inventory_and_unknown_temp(expe
         prepare_data(root, "v0")
 
 
-@pytest.mark.parametrize("change", ["group", "id", "s10", "source_path", "sha256"])
+@pytest.mark.parametrize("change", ["group", "id", "s10", "s20", "source_path", "sha256"])
 def test_invalid_shared_contract_fails_before_any_pixels(experiment_project, change):
     root = experiment_project
     path = root / "configs/splits.csv.gz"
     table = pd.read_csv(path, keep_default_na=False)
     if change in ("group", "id"):
         table.loc[0, change] = table.loc[len(table) - 1, change]
-    elif change == "s10":
-        table.loc[table.role == "final_test", "s10"] = 1
+    elif change in ("s10", "s20"):
+        table.loc[table.role == "final_test", change] = 1
     elif change == "source_path":
         table.loc[0, change] = "../escape.jpg"
     else:
@@ -198,6 +225,38 @@ def test_source_tamper_and_symlink_fail_without_publishing_export(experiment_pro
     source.unlink()
     source.symlink_to(reserved)
     with pytest.raises(ValueError, match="path/symlink"):
+        prepare_data(root, "v0")
+
+
+@pytest.mark.parametrize("key", ["group", "source_group", "sha256"])
+def test_subsets_reject_divided_groups_and_lost_s10_ids(experiment_project, key):
+    root = experiment_project
+    path = root / "configs/splits.csv.gz"
+    table = pd.read_csv(path, keep_default_na=False)
+    table.loc[table.id == "train_2", key] = table.loc[table.id == "train_0", key].item()
+    table.to_csv(path, index=False)
+    shared_path = root / "configs/data.yaml"
+    shared = yaml.safe_load(shared_path.read_text())
+    shared["splits_sha256"] = file_hash(path)
+    shared_path.write_text(yaml.safe_dump(shared))
+    with pytest.raises(ValueError, match="divides a source/duplicate group"):
+        shared_splits(root)
+    table.loc[table.id == "train_0", "s20"] = 0
+    table.to_csv(path, index=False)
+    shared["splits_sha256"] = file_hash(path)
+    shared_path.write_text(yaml.safe_dump(shared))
+    with pytest.raises(ValueError, match="Invalid split row"):
+        shared_splits(root)
+
+
+def test_s20_export_cannot_be_reused_as_s10(experiment_project):
+    root = experiment_project
+    prepare_data(root, "v0")
+    path = root / "configs/data.yaml"
+    shared = yaml.safe_load(path.read_text())
+    shared["training_subset"] = "S10"
+    path.write_text(yaml.safe_dump(shared))
+    with pytest.raises(ValueError, match="inputs/policy changed"):
         prepare_data(root, "v0")
 
 

@@ -75,6 +75,7 @@ def test_native_training_is_isolated_raw_selection_and_reuse_is_read_only(traine
     assert len(calls) == 2 and calls[0][0] == calls[1][0]
     for exp in ("v0", "v1"):
         config = yaml.safe_load((root / f"runs/{exp}/train.yaml").read_text())
+        assert config["training_subset"] == "S20"
         assert config["val"] == str(root / "runs/v0/data/images/val")
         raw = yaml.safe_load((root / "runs/v0/data/data.yaml").read_text())
         assert config["selection_files_sha256"] == raw["files_sha256"]

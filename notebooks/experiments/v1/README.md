@@ -7,22 +7,27 @@ ID. Quality uses the preserved maximum-512-pixel-side estimator. Brightness belo
 one filter is applied before JPEG95. Exact parameters live in the
 [experiment config](../../../configs/v1.yaml).
 
-Status: **locked and evaluated historical S10 experiment**. The new versioned paths
-have not been trained or evaluated. The existing detector is paired with this exact
+Status: **S20 training and development evaluation completed**, alongside the historical
+S10 experiment. [Issue #43](../../../docs/ISSUE43_EXECUTION.md) records the paired S20
+comparison: Gamma-or-Skip→Gamma-or-Skip mAP50:95 **20.6879%**, selected epoch **10**.
+The existing detector is paired with this exact
 policy, not a later denoising/routing candidate.
 
 - [01_experiments](01_experiments.ipynb): read original calibration/policy evidence.
 - [02_train_prepare](02_train_prepare.ipynb): inspect preserved Adaptive exports,
-  or prepare `runs/v1/data/` from originals using this policy for train and evaluation.
+  or prepare S20 at `runs/v1/data/` from originals using this policy for train and evaluation.
 - [03_train](03_train.ipynb): inspect original native history, or explicitly train
   under `runs/v1/train/`. Requires saved v0 Raw development for common selection.
 - [04_eval](04_eval.ipynb): read the original Adaptive→Adaptive measurement, or
   evaluate the v1 detector with matching policy; new metrics use `runs/v1/eval/metrics.json`.
 
-[Shared data](../../00_data_init.ipynb): identical 4,890 S10/13,975 development
+[Shared data](../../00_data_init.ipynb): identical 9,781 S20/13,975 development
 IDs/GT as v0, seed 2026, five classes, independently initialized from the same pinned
 COCO YOLO26n checkpoint. The shared training budget/settings and Raw development
 checkpoint selection match v0. The final holdout remains sealed.
+All historical S10 IDs are preserved in S20; the frozen policy is unchanged.
+Standalone evaluation uses `EVAL_SETTINGS={"workers": 0}` in both arms after a
+documented multiprocess-loader stall; training remains at 8 workers.
 
 Original outputs: `runs/preprocessing-five-v1/{datasets/S10,development}/adaptive/`,
 `runs/training-five-s10-v1/adaptive/`, `runs/development-five-v1/adaptive-adaptive/`.

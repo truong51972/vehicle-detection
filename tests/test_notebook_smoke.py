@@ -84,10 +84,7 @@ training.PRETRAINED_SHA256 = {file_hash(checkpoint)!r}
         )
         eval_override = """READ_HISTORICAL = False
 ALLOW_INFERENCE = True
-original_evaluate = evaluate_experiment
-def evaluate_experiment(*args, **kwargs):
-    settings = {"device": "cpu", "imgsz": 64, "batch": 2, "workers": 0}
-    return original_evaluate(*args, settings=settings, **kwargs)
+EVAL_SETTINGS = {"device": "cpu", "imgsz": 64, "batch": 2, "workers": 0}
 """
         run(
             f"experiments/{version}/04_eval.ipynb",

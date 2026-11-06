@@ -51,6 +51,7 @@ def evaluate_experiment(root, experiment, *, allow_inference=False, settings=Non
         raise ValueError("Use native FP32 NMS-free validation without augmentation")
     identity = {
         "experiment": experiment,
+        "training_subset": prepared["training_subset"],
         "data_sha256": file_hash(directory / "data/data.yaml"),
         "checkpoint_sha256": file_hash(checkpoint),
         "settings": config,
