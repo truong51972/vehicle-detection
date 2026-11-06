@@ -3,10 +3,11 @@
 **Resolution is an actionable exploratory signal, but it does not solve the
 two-wheeler failure or select a preprocessing policy.** The native 640/960
 diagnostic passed its prospectively fixed gates on already-consumed images.
-The next method hypothesis to investigate is task-aligned photometric training,
-with an unchanged-input control, rather than another global enhancement grid.
-This recommendation needs its own short paired training design; it is not an
-authorization or result for full S20 training. Issue #47 remains open.
+The next prioritized experiment is **resolution-aware fine-tuning: matched
+640/960 training arms, each evaluated at both inference resolutions**. Task-aligned
+photometric training remains a secondary candidate. This recommendation needs a
+separately declared short paired study. It is not a preprocessing policy and
+does not authorize or report full S20 training. Issue #47 remains open.
 
 PR #48 was merged as an immutable negative Gamma/Sharpen pilot. Its outcome,
 thresholds and support gates remain unchanged. This separate follow-up diagnoses
@@ -63,13 +64,15 @@ is invented to close that gap.
 
 The [independent notebook](../notebooks/research/issue47/01_method_discovery.ipynb)
 contains the short ranked hypothesis table, controls, cost and falsification
-criteria. The [plan](ISSUE47_DISCOVERY_PLAN.md) cites the primary papers and
-official implementations, distinguishing external evidence from our inference.
+criteria from before this diagnostic. The current next-experiment priority is
+resolution-aware fine-tuning, as described below. The [plan](ISSUE47_DISCOVERY_PLAN.md)
+cites primary papers and official implementations, distinguishing external evidence
+from our inference.
 
 1. **Native resolution sensitivity — executed first.** Change only 640 to 960
    on identical JPEG95/GT/model. This is a cheap way to test sensitivity to
    input detail without SAHI slicing/crop merging or another dependency.
-2. **Task-aligned photometric training — next method hypothesis.** Test learned
+2. **Task-aligned photometric training — secondary candidate.** Test learned
    exposure robustness with the same inference inputs, rather than assume a
    visually improved input helps a frozen detector. Existing native HSV is a
    possible controlled first intervention, not a calibrated noise model or a
@@ -154,21 +157,29 @@ per arm. Batch p95 is not image p95. Sequential order/setup effects remain;
 There is no added offline filter or new matched CPU preprocessing benchmark.
 
 The diagnostic passes its declared aggregate/two-wheeler/uncertainty/regression/
-cost checks. That supports **further resolution-aware investigation**, not a
-released policy, an explanation of every miss, or a new S20 metric row. The
-remaining two-wheeler FN burden and mostly bright population make a controlled
-task-aligned training diagnostic a more useful next method question than another
-brightness threshold grid. That is an evidence-informed hypothesis, not a claim
-of efficacy; no training was performed or independently confirmed here.
+cost checks. The strongest measured signal therefore prioritizes **resolution-aware
+fine-tuning** over the secondary photometric-training hypothesis. It does not
+establish a released policy, explain every miss, or create a v3 S20 result.
+No training was performed or independently confirmed here.
 
-A future short training study should independently initialize both native arms,
-use only fixed training-pool memberships, change one declared photometric factor,
-evaluate matching inference inputs on consumed exploration, and separately audit
-rare-class support, clean regressions and cost. It must declare its own sample,
-epoch/compute budget and stop criteria before execution. Candidate selection on
-new group-disjoint exploration still requires a new committed plan, and a frozen
-candidate needs appropriate independent confirmation before full S20 training.
-No gate is revised retroactively and the reserved confirmation plan stays unread.
+The separate follow-up should declare a short source-group-safe training subset
+and fixed epoch/compute budget before execution. Independently initialize matched
+native YOLO26n arms at 640 and 960, keeping train IDs/GT, seed, epochs, freeze and
+augmentation settings identical. Evaluate both arms at both 640 and 960 on the
+same consumed exploration IDs: a 2×2 matrix separating training-resolution from
+inference-resolution effects. Training at 960 must show **incremental benefit
+over the 640-trained arm evaluated at 960**, rather than merely recover the
+already-observed inference-resizing gain. Set rare-class uncertainty, supported
+cohort/clean-regression and compute stop criteria prospectively; report VRAM,
+training time and inference latency. Any necessary batch-size difference must
+be disclosed as a confounder. Do not change augmentation in this resolution test
+or add a hyperparameter grid; photometric training remains a later candidate.
+
+This PR adds no inference/training and leaves its measured results and original
+plan unchanged. Candidate selection on new group-disjoint exploration still
+requires a new committed plan, and a frozen candidate needs appropriate independent
+confirmation before full S20 training. No gate is revised retroactively and the
+reserved confirmation plan stays unread.
 
 ## Reuse and provenance
 
