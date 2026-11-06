@@ -1,0 +1,10 @@
+{
+  "executed_notebook_sha256": "c683e1bb74fb834de765bf854b2ea160304b5958e528aa7d61f1791d018a7777",
+  "first_attempt_preserved": true,
+  "fresh_kernel_acquisition_completed": true,
+  "fresh_kernel_log_sha256": "84094b7c69bef3ec74075c2dea5e914968b3cdaa0d5510bc90a216ed3719c798",
+  "historical_evidence_config_notebook_hashes_unchanged": 330,
+  "historical_local_files_unchanged": 160890,
+  "method": "Historical local file size/mtime inventories plus exact config/docs/notebook hashes; no original/development/final pixel reads",
+  "old_pixel_bytes_read_for_preservation_check": false
+}

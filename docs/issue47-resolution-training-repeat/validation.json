@@ -1,0 +1,15 @@
+{
+  "fresh_kernel_read_only_replay": "passed with model/source/acquisition paths blocked",
+  "git_diff_check": "passed",
+  "historical_tracked_v0_v1_v2_and_prior_issue47_evidence": "unchanged",
+  "independent_scientific_confirmation": false,
+  "native_validator_callback_regression": "passed on tiny synthetic CPU fixture",
+  "pytest": {
+    "command": ".venv/bin/pytest -q",
+    "passed": 184,
+    "seconds": 90.55
+  },
+  "remote_ci": "not claimed; local validation only",
+  "ruff_check": "passed",
+  "ruff_format_check": "118 files already formatted"
+}

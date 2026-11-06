@@ -29,6 +29,14 @@ Issue #47 continues separately in the
 saved-error/GT diagnosis, a cited mechanism review and one controlled resolution
 diagnostic on already-consumed exploration. This preserves the negative pilot;
 it does not select a new preprocessing policy or authorize S20 training.
+The follow-up [resolution-training notebook](notebooks/research/issue47/02_resolution_training.ipynb)
+tests two matched five-epoch training sizes, each evaluated at 640 and 960, under
+a separate [prospective budget and gates](docs/ISSUE47_TRAINING_PLAN.md) and
+[explicitly requested repeat](docs/ISSUE47_TRAINING_REPEAT_PLAN.md). Its
+consumed-calibration evidence remains separate from the completed S20 arms.
+The [training diagnostic result](docs/ISSUE47_TRAINING_RESULTS.md) retains a
+positive incremental AP estimate but fails uncertainty and dark-bus regression
+gates; no adaptive policy or S20 promotion follows.
 
 Folder IDs are stable sequential experiment identities, independent of algorithm
 names, maturity and performance. A changed policy/configuration that changes the
