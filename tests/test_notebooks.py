@@ -18,6 +18,7 @@ ACTIVE = {
     "experiments/v2/02_train_prepare.ipynb",
     "experiments/v2/03_train.ipynb",
     "experiments/v2/04_eval.ipynb",
+    "experiments/v3/01_experiments.ipynb",
     "experiments/compare.ipynb",
 }
 

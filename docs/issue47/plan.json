@@ -1,0 +1,60 @@
+{
+  "checkpoint_sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+  "commit": "a88c996557c3e4c9ee0d51b6d8a9f599d578617d",
+  "hardware": {
+    "cuda": "13.2",
+    "gpu": "NVIDIA GeForce RTX 5060 Ti"
+  },
+  "ids_sha256": "d925d907e4ea2da0ff1301a418d7a5a194ff0f4c114f73aba2adb0b0e8c45084",
+  "inputs": {
+    "configs/data.yaml": "0e81943cecef8c54845ebf189046078d3daabd27107cbf050c047abf3fb9abe1",
+    "configs/splits.csv.gz": "b7a6aba1d1f72e1b1e3eceda8e8427d41f44408067fad63ee68479137714cb96",
+    "docs/ISSUE47_PLAN.md": "75b18d89cf4ecea2e8f33b5e74e0ab6d228f2a15fcf9b8863d550b9f99243076",
+    "docs/issue45/membership.csv": "47ff16388270e949ac11e260eee7f27a14a8dd9c42a1421ad20eef11e7ca1b7f",
+    "docs/round2-evaluation-v2/evaluation_sets.json": "e9756304bc41a093bf033cdc8f98d7059a79639c53aaa69572bcb259687b9e96",
+    "docs/round2-research-v3/membership.csv.gz": "831a3d15bf3b7e0deb25271c9c6833df2db375be10616681b39ee3ff24e7081a",
+    "notebooks/experiments/v3/01_experiments.ipynb": "7cada3274bfd870a34dcae22630d715addc13de1c42a070eb4f1d8d899a0a164",
+    "src/vehicle_detection/baseline.py": "1caf6bf879a02988e6550afb237709381967dbcef72293fc9b7e09f4d6bd8720",
+    "src/vehicle_detection/evaluation_stats.py": "227f0272b00e91790e2e0eece429e1eeb7ee10cc415b5d5fb3f101f2cb4fcd59",
+    "src/vehicle_detection/experiment_data.py": "7fae6427e0a6ea166d0959a089344e09c4d890c55d9bcb96faad690f83b2ae2b",
+    "src/vehicle_detection/preprocess.py": "8bdc2391fc9c4c6c330e47221b6eb7f678c6206c1e53d9e3dd8e040a82e9fb8a",
+    "src/vehicle_detection/stress_eval.py": "5072219da9653205913f696d741f5520362e02b81c80db892b8a18b7d778a07d",
+    "src/vehicle_detection/v2_pilot.py": "3dc88d188da8bc4386617a9c0f1cb561637a4faa474dbeb5ad4b1b6cf2b080ee",
+    "src/vehicle_detection/v3_pilot.py": "af23dffdcb7fb8980b3b44f60c30dd815762d784f472352bbec056dcf81fbfed"
+  },
+  "maximum_image_passes": 4352,
+  "role": "calibration_exploration",
+  "rows_sha256": "1f6ec4d948289a4969fd17a723ac8fd040b56df0ec3ccdab228ad77befd7b7d1",
+  "settings": {
+    "agnostic_nms": false,
+    "augment": false,
+    "batch": 32,
+    "conf": 0.001,
+    "deterministic": true,
+    "device": "0",
+    "half": false,
+    "imgsz": 640,
+    "iou": 0.7,
+    "max_det": 300,
+    "nms": false,
+    "plots": true,
+    "quantize": 32,
+    "rect": true,
+    "seed": 2026,
+    "verbose": false,
+    "workers": 0
+  },
+  "support": {
+    "bicycle": 54,
+    "bus": 126,
+    "car": 644,
+    "motorcycle": 25,
+    "truck": 237
+  },
+  "versions": {
+    "numpy": "2.4.6",
+    "opencv-python": "4.14.0.94",
+    "torch": "2.15.0",
+    "ultralytics": "8.4.198"
+  }
+}

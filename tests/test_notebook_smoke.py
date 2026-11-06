@@ -111,6 +111,7 @@ def test_comparison_runs_read_only_without_local_runs_or_study_dependencies(tmp_
     (root / "pyproject.toml").touch()
     shutil.copyfile("notebooks/experiments/compare.ipynb", directory / "compare.ipynb")
     shutil.copytree("docs/issue45-s20", root / "docs/issue45-s20")
+    shutil.copytree("docs/issue47", root / "docs/issue47")
     before = {str(p.relative_to(root)): file_hash(p) for p in root.rglob("*") if p.is_file()}
     notebook = nbformat.read(directory / "compare.ipynb", as_version=4)
     notebook.cells.insert(
@@ -150,3 +151,44 @@ patch("io.open", guarded(io.open)).start()
         str(p.relative_to(root)): file_hash(p) for p in root.rglob("*") if p.is_file()
     }
     assert all(not (root / name).exists() for name in ("runs", "weights", "data"))
+
+
+def test_v3_default_runs_in_fresh_kernel_with_only_committed_evidence(tmp_path):
+    nbformat = pytest.importorskip("nbformat")
+    nbclient = pytest.importorskip("nbclient")
+    from vehicle_detection.common import file_hash
+
+    root = tmp_path / "project"
+    directory = root / "notebooks/experiments/v3"
+    directory.mkdir(parents=True)
+    (root / "pyproject.toml").touch()
+    shutil.copytree("docs/issue47", root / "docs/issue47")
+    shutil.copyfile("docs/ISSUE47_PLAN.md", root / "docs/ISSUE47_PLAN.md")
+    path = directory / "01_experiments.ipynb"
+    shutil.copyfile("notebooks/experiments/v3/01_experiments.ipynb", path)
+    before = {str(p.relative_to(root)): file_hash(p) for p in root.rglob("*") if p.is_file()}
+    notebook = nbformat.read(path, as_version=4)
+    notebook.cells.insert(
+        1,
+        nbformat.v4.new_code_cell("""import sys
+from unittest.mock import patch
+
+for module in ("torch", "ultralytics", "vehicle_detection.evaluation_stats",
+               "vehicle_detection.finetuning", "vehicle_detection.stress_eval"):
+    sys.modules[module] = None
+patch("vehicle_detection.v3_pilot.shared_splits", side_effect=AssertionError("Read splits")).start()
+patch("vehicle_detection.v3_pilot.source_rows", side_effect=AssertionError("Read sources")).start()
+patch("vehicle_detection.v3_pilot.apply", side_effect=AssertionError("Replayed pixels")).start()
+"""),
+    )
+    nbclient.NotebookClient(
+        notebook,
+        timeout=120,
+        kernel_name="python3",
+        resources={"metadata": {"path": str(directory)}},
+    ).execute()
+    assert all(c.execution_count is not None for c in notebook.cells if c.cell_type == "code")
+    assert before == {
+        str(p.relative_to(root)): file_hash(p) for p in root.rglob("*") if p.is_file()
+    }
+    assert all(not (root / name).exists() for name in ("runs", "weights", "data", "configs"))

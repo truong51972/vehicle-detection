@@ -12,13 +12,17 @@ an experiment README:
   a failed [local-shadow pilot](docs/ISSUE45_RESULTS.md), followed by a separately
   committed [exploratory S20 train/eval comparison](docs/ISSUE45_S20_EXECUTION.md).
   No confirmed/released replacement policy is claimed.
+- [v3 — Adaptive exposure/detail exploration](notebooks/experiments/v3/README.md):
+  a completed preregistered natural-image routing pilot with matched components;
+  failed advancement gates, so no policy freeze or S20 training.
 
 Open [experiments/compare.ipynb](notebooks/experiments/compare.ipynb) for all
 cross-version presentation/analysis. It reads committed S20 metrics, timing,
 subgroups and plots in a fresh kernel without local runs, weights or datasets.
 Historical S10 and pretrained pilot evidence stays separately attributed.
 Each version's `04_eval` only evaluates/inspects its own policy–detector pair.
-Adaptive-routing v3 is a future separate issue/PR; it is not implemented here.
+V3's pretrained calibration evidence and decision remain separate from trained
+S20 results; an untrained policy never receives a development metric row.
 
 Folder IDs are stable sequential experiment identities, independent of algorithm
 names, maturity and performance. A changed policy/configuration that changes the
@@ -29,7 +33,8 @@ Each implemented lifecycle has independent **Restart & Run All** notebooks:
 `01_experiments` where useful → `02_train_prepare` → `03_train` → `04_eval`.
 They consume explicitly saved prerequisites and never execute upstream notebooks.
 Configuration is in section 1. Launch from the repository root or any notebook's
-directory. Raw has no dummy exploration phase; v2 has no fabricated downstream phases.
+directory. Raw has no dummy exploration phase; downstream v3 phases require a
+defensible confirmed policy.
 
 ## Run or inspect
 
