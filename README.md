@@ -9,9 +9,9 @@ an experiment README:
 - [v1 — Gamma-or-Skip](notebooks/experiments/v1/README.md): the historical algorithm
   called **Adaptive v2**; completed S20 and historical S10 training and development evaluation.
 - [v2 — Later preprocessing exploration](notebooks/experiments/v2/README.md):
-  measured exploration with failed gates, including the new
-  [local-shadow pilot](docs/ISSUE45_RESULTS.md); no replacement policy locked,
-  no paired detector trained or evaluated.
+  a failed [local-shadow pilot](docs/ISSUE45_RESULTS.md), followed by a separately
+  committed [exploratory S20 train/eval comparison](docs/ISSUE45_S20_EXECUTION.md).
+  No confirmed/released replacement policy is claimed.
 
 Folder IDs are stable sequential experiment identities, independent of algorithm
 names, maturity and performance. A changed policy/configuration that changes the
@@ -42,7 +42,7 @@ inspection requires the original verified local exports. To execute new work:
    frozen 9,781 S20 and 13,975 development IDs/GT from originals using that policy
    and JPEG95. Prepare v0 before training v1 so shared Raw selection data exists.
 3. In 03, set `READ_HISTORICAL=False`, `ALLOW_TRAINING=True`. Native Ultralytics
-   owns optimization/checkpoints/history. Both detectors initialize independently
+   owns optimization/checkpoints/history. All detectors initialize independently
    from pinned COCO-80 YOLO26n and select checkpoints on shared v0 Raw development.
    Native continuation additionally requires `RESUME=True`.
 4. In 04, set `READ_HISTORICAL=False`. Saved metrics are reused; new inference
@@ -53,10 +53,12 @@ inspection requires the original verified local exports. To execute new work:
    Both inference and cache reuse require matching native training settings and
    a history containing the complete configured epoch budget.
 
-New **S20** outputs live under `runs/v0/` and `runs/v1/`; the subset name, seed and
-split checksum are saved in native data/training YAML. Historical inspection still
-uses S10. See [issue #43 execution](docs/ISSUE43_EXECUTION.md) for provenance,
-commands and completion status. Prepared images are owned files; no dataloader filters
+New **S20** outputs live under `runs/v0/`, `runs/v1/` and `runs/v2/`; the subset
+name, seed and split checksum are saved in native data/training YAML. v0/v1
+historical inspection still uses S10; v2 inspects its own S20 results. See
+[issue #43 execution](docs/ISSUE43_EXECUTION.md) and the
+[v2 S20 extension](docs/ISSUE45_S20_EXECUTION.md) for provenance, commands and
+completion status. Prepared images are owned files; no dataloader filters
 or custom training engine are used. An existing export/run with changed inputs
 fails. Preparation publishes atomically; inspect a leftover `data.tmp` before
 removing it and retrying. There is no partial-export resume engine.
@@ -75,7 +77,8 @@ excluded by the existing six-to-five mapping, while negative images remain.
 The final holdout is sealed: no image reads, headers, hashes, previews, label
 materialization or inference. Final annotations are metadata only.
 
-[configs/v0.yaml](configs/v0.yaml) and [configs/v1.yaml](configs/v1.yaml) hold only
+[configs/v0.yaml](configs/v0.yaml), [configs/v1.yaml](configs/v1.yaml) and
+[configs/v2.yaml](configs/v2.yaml) hold only
 policy parameters, JPEG quality, seed, initialization and training settings.
 Native `data.yaml`/`train.yaml`, `args.yaml`, `results.csv`, checkpoints and one
 `eval/metrics.json` replace the active multi-stage JSON receipt chain. Input/file

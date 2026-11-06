@@ -1,5 +1,10 @@
 # Issue #45 — stop after the local-shadow pilot
 
+This is the historical pilot decision at commit `5945f1f`. Following review,
+the separately [committed fine-tuning plan](ISSUE45_FINETUNING_PLAN.md) led to a
+completed [exploratory S20 comparison](ISSUE45_S20_EXECUTION.md). That extension
+does not change any pilot measurement, failed gate or original provenance limit.
+
 **Decision: no defensible v2 candidate from this pilot; leave v2 untrained.**
 All three real pretrained evaluations completed on 2026-11-06. Local-shadow
 correction failed the predeclared improvement, dark-regression, uncertainty and

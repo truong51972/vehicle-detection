@@ -4,17 +4,32 @@ Purpose: investigate whether bounded filters, sequences or quality-based routing
 improve over Skip and frozen Gamma-or-Skip. This stable folder identifies the later
 exploratory study. It is separate from the old algorithm name “Adaptive v2”.
 
-Status: **exploratory; replacement policy not locked for paired training**.
+Status: **exploratory S20 train/eval completed; no confirmed replacement policy**.
 The [issue #45 local-shadow pilot](../../../docs/ISSUE45_RESULTS.md) completed
 three paired native evaluations on 256 additional exploration images. It failed
-gain, dark-regression, uncertainty and mean-cost gates; **v2 remains untrained**.
+gain, dark-regression, uncertainty and mean-cost gates. That historical result is
+unchanged. A separate, [committed post-pilot plan](../../../docs/ISSUE45_FINETUNING_PLAN.md)
+then froze the same local-shadow recipe as an experimental v2 training arm.
 The [premeasurement declaration](../../../docs/ISSUE45_PILOT.md) fixes its recipe,
 sample budget and stop rules. `01_experiments` defaults to verified evidence;
 `ALLOW_PILOT=True` opts into a new attempt and refuses an existing local output.
-No v2 detector has been trained or evaluated. There are no placeholder downstream
-notebooks or fabricated runs. [01_experiments](01_experiments.ipynb) independently
-reads actual saved decisions; exact historical search execution is available via
+The [completed S20 comparison](../../../docs/ISSUE45_S20_EXECUTION.md) records
+policy-matched development mAP50:95 **20.4930%**, below v0/v1, with higher CPU
+preprocessing cost. It is development, single seed, not a released improvement.
+[01_experiments](01_experiments.ipynb) independently reads saved pilot and S20
+decisions; exact historical search execution is available via
 [Git replay](../../../docs/HISTORICAL_REPLAY.md).
+
+- [02_train_prepare](02_train_prepare.ipynb): explicitly prepare frozen S20 and
+  development inputs from originals, preserving all five-class GT/negatives.
+- [03_train](03_train.ipynb): one native 20-epoch independent initialization,
+  selecting on the same v0 Raw development export; no training without opt-in.
+- [04_eval](04_eval.ipynb): matching-policy development evaluation; separate
+  `ALLOW_COMPARISON=True` permits the prespecified control diagnostic replays.
+
+`configs/v2.yaml` exposes no tuning knobs. Native data/models remain local under
+`runs/v2/`; execution/diagnostics under `runs/issue45-s20/`; compact evidence under
+`docs/issue45-s20/`. Existing v0/v1 runs and final-test pixels remain untouched.
 
 The preserved screening used 20 bounded controls/operators/sequences/routes,
 five-class calibration exploration/confirmation, seed 2026 and the pinned pretrained
@@ -34,6 +49,6 @@ experiment registry. See [screening results](../../../docs/ISSUE30_RESULTS.md),
 
 Issue #45's new pilot evidence lives separately under `docs/issue45/` and local
 `runs/issue45/pilot/`; it does not overwrite or relabel the historical research.
-No `configs/v2.yaml` or downstream lifecycle phases are added after a failed gate.
-A future distinct policy needs a new preregistered pilot; no threshold retuning or
-confirmation is justified by these measurements.
+The later training extension tests a separately declared hypothesis; it does not
+retroactively pass those gates. A future distinct policy needs a new preregistered
+study; no threshold retuning, confirmation or release is justified here.
