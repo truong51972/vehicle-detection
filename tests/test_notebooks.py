@@ -20,6 +20,7 @@ ACTIVE = {
     "experiments/v2/04_eval.ipynb",
     "experiments/v3/01_experiments.ipynb",
     "experiments/compare.ipynb",
+    "research/issue47/01_method_discovery.ipynb",
 }
 
 

@@ -1,6 +1,7 @@
 """Fresh-kernel lifecycle execution on synthetic CPU fixtures; never research evidence."""
 
 import shutil
+from pathlib import Path
 
 import pytest
 import yaml
@@ -153,19 +154,32 @@ patch("io.open", guarded(io.open)).start()
     assert all(not (root / name).exists() for name in ("runs", "weights", "data"))
 
 
-def test_v3_default_runs_in_fresh_kernel_with_only_committed_evidence(tmp_path):
+@pytest.mark.parametrize(
+    "notebook_path, report_name, plan_name",
+    [
+        ("experiments/v3/01_experiments.ipynb", "issue47", "ISSUE47_PLAN.md"),
+        (
+            "research/issue47/01_method_discovery.ipynb",
+            "issue47-discovery",
+            "ISSUE47_DISCOVERY_PLAN.md",
+        ),
+    ],
+)
+def test_research_defaults_run_with_only_committed_evidence(
+    tmp_path, notebook_path, report_name, plan_name
+):
     nbformat = pytest.importorskip("nbformat")
     nbclient = pytest.importorskip("nbclient")
     from vehicle_detection.common import file_hash
 
     root = tmp_path / "project"
-    directory = root / "notebooks/experiments/v3"
+    directory = root / "notebooks" / Path(notebook_path).parent
     directory.mkdir(parents=True)
     (root / "pyproject.toml").touch()
-    shutil.copytree("docs/issue47", root / "docs/issue47")
-    shutil.copyfile("docs/ISSUE47_PLAN.md", root / "docs/ISSUE47_PLAN.md")
-    path = directory / "01_experiments.ipynb"
-    shutil.copyfile("notebooks/experiments/v3/01_experiments.ipynb", path)
+    shutil.copytree(f"docs/{report_name}", root / f"docs/{report_name}")
+    shutil.copyfile(f"docs/{plan_name}", root / f"docs/{plan_name}")
+    path = directory / Path(notebook_path).name
+    shutil.copyfile(f"notebooks/{notebook_path}", path)
     before = {str(p.relative_to(root)): file_hash(p) for p in root.rglob("*") if p.is_file()}
     notebook = nbformat.read(path, as_version=4)
     notebook.cells.insert(
@@ -179,6 +193,10 @@ for module in ("torch", "ultralytics", "vehicle_detection.evaluation_stats",
 patch("vehicle_detection.v3_pilot.shared_splits", side_effect=AssertionError("Read splits")).start()
 patch("vehicle_detection.v3_pilot.source_rows", side_effect=AssertionError("Read sources")).start()
 patch("vehicle_detection.v3_pilot.apply", side_effect=AssertionError("Replayed pixels")).start()
+patch("vehicle_detection.method_discovery.source_rows",
+      side_effect=AssertionError("Read original metadata")).start()
+patch("vehicle_detection.method_discovery.build_diagnosis",
+      side_effect=AssertionError("Replayed diagnosis")).start()
 """),
     )
     nbclient.NotebookClient(
