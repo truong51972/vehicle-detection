@@ -7,12 +7,18 @@ from pathlib import Path
 import pandas as pd
 import yaml
 from ultralytics import YOLO
+from ultralytics.models.yolo.detect import DetectionValidator
 
 from .baseline import VAL_SETTINGS
 from .common import file_hash, read_json, write_json
+from .evaluation_stats import MatchingStats
 from .experiment_data import load_experiment, verify_data
 from .five_class import FIVE_CLASSES
 from .training_settings import TRAIN_SETTINGS, validate_training_args
+
+
+class ExperimentValidator(MatchingStats, DetectionValidator):
+    """Retain native matches for subgroup/error analysis of new evaluations."""
 
 
 def evaluate_experiment(root, experiment, *, allow_inference=False, settings=None):
@@ -78,6 +84,7 @@ def evaluate_experiment(root, experiment, *, allow_inference=False, settings=Non
     if model.ckpt["train_args"]["data"] != args["data"]:
         raise ValueError("Checkpoint belongs to another experiment")
     metrics = model.val(
+        validator=ExperimentValidator,
         data=str(directory / "data/data.yaml"),
         split="val",
         project=str(directory),

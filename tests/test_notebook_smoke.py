@@ -39,7 +39,7 @@ patch.object(YOLO, "val", side_effect=AssertionError("Inference started")).start
     run("00_data_init.ipynb", "AUDIT_SOURCES = True")
     run("experiments/v1/01_experiments.ipynb")
     run("experiments/v2/01_experiments.ipynb")
-    for version in ("v0", "v1"):
+    for version in ("v0", "v1", "v2"):
         directory = root / f"notebooks/experiments/{version}"
         run(
             f"experiments/{version}/02_train_prepare.ipynb",
@@ -65,7 +65,7 @@ patch.object(YOLO, "val", side_effect=AssertionError("Inference started")).start
     checkpoint = root / "weights/yolo26n.pt"
     checkpoint.parent.mkdir()
     torch.save({"model": model, "train_args": {"task": "detect"}}, checkpoint)
-    for version in ("v0", "v1"):
+    for version in ("v0", "v1", "v2"):
         config_path = root / f"configs/{version}.yaml"
         config = yaml.safe_load(config_path.read_text())
         config["checkpoint_sha256"] = file_hash(checkpoint)
@@ -74,7 +74,7 @@ patch.object(YOLO, "val", side_effect=AssertionError("Inference started")).start
         # Config changed only in this isolated fixture; reprepare before training.
         shutil.rmtree(root / f"runs/{version}/data")
         run(f"experiments/{version}/02_train_prepare.ipynb", "ALLOW_PREPARATION = True")
-    for version in ("v0", "v1"):
+    for version in ("v0", "v1", "v2"):
         run(
             f"experiments/{version}/03_train.ipynb",
             "READ_HISTORICAL = False\nALLOW_TRAINING = True",

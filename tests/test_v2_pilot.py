@@ -10,7 +10,14 @@ import pytest
 from vehicle_detection.common import digest, file_hash, read_json, write_json
 from vehicle_detection.experiment_data import shared_splits
 from vehicle_detection.five_class import FIVE_CLASSES
-from vehicle_detection.v2_pilot import ARMS, assess, local_shadow, run, select_sample
+from vehicle_detection.v2_pilot import (
+    ARMS,
+    assess,
+    local_shadow,
+    require_dark_support,
+    run,
+    select_sample,
+)
 
 
 def test_local_shadow_is_bounded_deterministic_and_preserves_bright_pixels():
@@ -88,7 +95,11 @@ def test_advancement_requires_gain_support_regression_cost_and_uncertainty():
         assert any(reason in r for r in result["reasons"])
 
 
-def test_default_only_reads_hash_verified_evidence_and_opt_in_never_overwrites(tmp_path):
+def test_default_only_reads_hash_verified_evidence_and_opt_in_never_overwrites(
+    tmp_path, monkeypatch
+):
+    import builtins
+
     report = tmp_path / "docs/issue45"
     write_json(report / "summary.json", {"decision": {"advance": False}})
     write_json(report / "evidence.json", {"summary.json": file_hash(report / "summary.json")})
@@ -97,8 +108,28 @@ def test_default_only_reads_hash_verified_evidence_and_opt_in_never_overwrites(t
     with pytest.raises(ValueError, match="evidence changed"):
         run(tmp_path)
     (tmp_path / "runs/issue45/pilot").mkdir(parents=True)
+    original_import = builtins.__import__
+
+    def lightweight_import(name, *args, **kwargs):
+        if name.split(".")[0] in {"torch", "ultralytics"}:
+            raise ModuleNotFoundError(name)
+        return original_import(name, *args, **kwargs)
+
+    monkeypatch.setattr(builtins, "__import__", lightweight_import)
     with pytest.raises(FileExistsError, match="output exists"):
         run(tmp_path, allow_inference=True)
+
+
+def test_future_pilot_rejects_untestable_dark_gate_before_inference():
+    rows = [
+        {"id": str(i), "source_group": str(i), "boxes": [[c, 0, 0, 10, 10] for c in range(5)]}
+        for i in range(5)
+    ]
+    features = {r["id"]: {"brightness": 0.1} for r in rows}
+    assert set(require_dark_support(rows, features).values()) == {5}
+    rows[0]["boxes"].pop()
+    with pytest.raises(ValueError, match="Insufficient dark class support before inference"):
+        require_dark_support(rows, features)
 
 
 def test_sample_rejects_a_rehashed_cross_role_partition():

@@ -1,0 +1,15 @@
+id: v2
+variant: local_shadow
+recipes:
+  # Fixed operator constants and post-pilot hypothesis: docs/ISSUE45_FINETUNING_PLAN.md.
+  local_shadow: {}
+jpeg_quality: 95
+seed: 2026
+checkpoint: weights/yolo26n.pt
+checkpoint_sha256: 9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef
+training:
+  epochs: 20
+  imgsz: 640
+  batch: 16
+  workers: 8
+  device: '0'

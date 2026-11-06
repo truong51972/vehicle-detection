@@ -15,6 +15,9 @@ ACTIVE = {
     "experiments/v1/03_train.ipynb",
     "experiments/v1/04_eval.ipynb",
     "experiments/v2/01_experiments.ipynb",
+    "experiments/v2/02_train_prepare.ipynb",
+    "experiments/v2/03_train.ipynb",
+    "experiments/v2/04_eval.ipynb",
 }
 
 
@@ -52,7 +55,6 @@ def test_active_notebooks_have_numbered_context_and_explicit_prerequisites():
         code = ["".join(c["source"]) for c in cells if c["cell_type"] == "code"]
         assert "require_paths(" in code[0]
     assert not Path("notebooks/experiments/v0/01_experiments.ipynb").exists()
-    assert not Path("notebooks/experiments/v2/03_train.ipynb").exists()
 
 
 def test_documentation_local_links_resolve():

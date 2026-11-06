@@ -14,20 +14,21 @@ from .common import digest, file_hash, freeze_json, read_image, read_json
 from .datasets import verify_label
 from .experiment_data import load_experiment, shared_splits, source_rows
 from .five_class import FIVE_CLASSES
-from .preprocess import apply_recipe, quality, validate_image
+from .preprocess import apply_recipe, local_shadow, quality
 
 ARMS = ("raw", "gamma_or_skip", "local_shadow")
 
 
-def local_shadow(image):
-    """Bounded smooth illumination gain applied to original detail, from pixels only."""
-    validate_image(image)
-    scale = min(1, 512 / max(image.shape[:2]))
-    small = cv2.resize(image, None, fx=scale, fy=scale, interpolation=cv2.INTER_AREA)
-    illumination = cv2.GaussianBlur(cv2.cvtColor(small, cv2.COLOR_BGR2GRAY), (0, 0), 16)
-    gain = np.clip(np.sqrt(0.25 / np.maximum(illumination.astype(np.float32) / 255, 0.0625)), 1, 2)
-    gain = cv2.resize(gain, image.shape[1::-1], interpolation=cv2.INTER_LINEAR)
-    return np.clip(image.astype(np.float32) * gain[:, :, None], 0, 255).astype(np.uint8)
+def require_dark_support(rows, features):
+    """Stop future pilots before inference when the declared dark gate is untestable."""
+    dark = [r for r in rows if features[r["id"]]["brightness"] < 0.12]
+    groups = {
+        name: len({r["source_group"] for r in dark if any(b[0] == c for b in r["boxes"])})
+        for c, name in enumerate(FIVE_CLASSES)
+    }
+    if min(groups.values()) < 5:
+        raise ValueError(f"Insufficient dark class support before inference: {groups}")
+    return groups
 
 
 def select_sample(rows, manifest, consumed):
@@ -139,6 +140,10 @@ def run(root, *, allow_inference=False):
                 raise ValueError("Pilot evidence changed")
         return read_json(report / "summary.json")
 
+    output = root / "runs/issue45/pilot"
+    if output.exists() or output.is_symlink():
+        raise FileExistsError("Pilot output exists; inspect it rather than overwriting evidence")
+
     import torch
     from ultralytics import YOLO
 
@@ -149,9 +154,6 @@ def run(root, *, allow_inference=False):
     from .stress_eval import SETTINGS, CalibrationValidator
 
     start = time.perf_counter()
-    output = root / "runs/issue45/pilot"
-    if output.exists() or output.is_symlink():
-        raise FileExistsError("Pilot output exists; inspect it rather than overwriting evidence")
     shared, rows = shared_splits(root)
     manifest = read_json(root / "docs/round2-evaluation-v2/evaluation_sets.json")
     if manifest["protocol_id"] != shared["source_protocol_id"]:
@@ -271,6 +273,7 @@ def run(root, *, allow_inference=False):
         cv2.setNumThreads(prior_threads)
     freeze_json(output / "exports.json", exported)
     freeze_json(report / "features.json", features)
+    require_dark_support(selected, features)
     runtime = {
         name: {"mean_ms": float(np.mean(v)), "p95_ms": float(np.quantile(v, 0.95)), "calls": len(v)}
         for name, v in timings.items()
