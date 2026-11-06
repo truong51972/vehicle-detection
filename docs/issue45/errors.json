@@ -1,0 +1,3610 @@
+{
+  "counts": {
+    "00c29c52-f9524f1e": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "01a4933a-252e566a": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 1
+      }
+    },
+    "03bda335-c7b9119c": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 3
+      }
+    },
+    "04bfcebe-f0908883": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 3
+      }
+    },
+    "07c832a3-06d6506a": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 4
+      }
+    },
+    "07c832a3-a286f952": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 4
+      }
+    },
+    "07c832a3-c87a3f8b": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 3
+      }
+    },
+    "07c832a3-dc8720a4": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 1
+      }
+    },
+    "0906a78e-6d55c7fd": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 9
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 9
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 9
+      }
+    },
+    "0913cf42-fec3e0c0": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 6
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 6
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 6
+      }
+    },
+    "0943441a-24164e6e": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 2
+      }
+    },
+    "09d90930-ace30bf2": {
+      "gamma_or_skip": {
+        "FP50": 3,
+        "TP50": 6
+      },
+      "local_shadow": {
+        "FP50": 3,
+        "TP50": 6
+      },
+      "raw": {
+        "FP50": 3,
+        "TP50": 6
+      }
+    },
+    "0b36fdad-f5c619e4": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 1
+      }
+    },
+    "0b744ab1-9b1ba46f": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "0b744ab1-d09717fb": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 2
+      }
+    },
+    "0b744ab1-f8e01c96": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 1
+      }
+    },
+    "0e4e23dd-3a4d3d72": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 2
+      }
+    },
+    "0f442be6-11385773": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "0f442be6-4c85438c": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 2
+      }
+    },
+    "0f442be6-6b6551bb": {
+      "gamma_or_skip": {
+        "FP50": 4,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 4,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 4,
+        "TP50": 5
+      }
+    },
+    "0f442be6-83bdd3cb": {
+      "gamma_or_skip": {
+        "FP50": 3,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 3,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 3,
+        "TP50": 4
+      }
+    },
+    "0f442be6-8a323c27": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "0f442be6-cff829d2": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "0f442be6-db4257a7": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "0f442be6-fd779249": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 4
+      }
+    },
+    "0f8553a2-99c35cca": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 6
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 6
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 6
+      }
+    },
+    "110c9575-4c5be030": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 1
+      }
+    },
+    "110c9575-a023613b": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 9
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 9
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 9
+      }
+    },
+    "110c9575-c7bb0c93": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 1
+      }
+    },
+    "110c9575-d76f1d58": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 2
+      }
+    },
+    "110c9575-f59c7fac": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 4
+      }
+    },
+    "11886292-7b112025": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 5
+      }
+    },
+    "147f3d5b-f5c261ec": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 1
+      }
+    },
+    "17147b4f-2cd06986": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "181589c6-8d66eb54": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 4
+      }
+    },
+    "19cec3a6-a2a9e531": {
+      "gamma_or_skip": {
+        "FP50": 3,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 4,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 3,
+        "TP50": 5
+      }
+    },
+    "19cec3a6-ab85f949": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 2
+      }
+    },
+    "1abd6590-820d7f31": {
+      "gamma_or_skip": {
+        "FP50": 4,
+        "TP50": 9
+      },
+      "local_shadow": {
+        "FP50": 4,
+        "TP50": 9
+      },
+      "raw": {
+        "FP50": 4,
+        "TP50": 9
+      }
+    },
+    "1abd6590-92295331": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "1abd6590-d571a210": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 2
+      }
+    },
+    "1c71863d-894a6b30": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 4
+      }
+    },
+    "1c71863d-a34af0f4": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 6
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 6
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 6
+      }
+    },
+    "1c71863d-d02c9321": {
+      "gamma_or_skip": {
+        "FP50": 3,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 3,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 3,
+        "TP50": 4
+      }
+    },
+    "1cf0663b-c96dc322": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 3
+      }
+    },
+    "1d055f0d-a6223073": {
+      "gamma_or_skip": {
+        "FP50": 5,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 3,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 4,
+        "TP50": 2
+      }
+    },
+    "1da2d8a7-a57699cf": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 2
+      }
+    },
+    "2001abbf-ca4d8e6e": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "21f553b9-c7f697c2": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 5
+      }
+    },
+    "2228c293-3a585561": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 7
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 7
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 7
+      }
+    },
+    "2262b6f5-b4b17184": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 2
+      }
+    },
+    "238265b2-fbaae21c": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 8
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 8
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 8
+      }
+    },
+    "24c42a84-43d1006a": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "24c42a84-5635b020": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "24c42a84-a264a3d8": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 3
+      }
+    },
+    "24c42a84-a40757d5": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 4
+      }
+    },
+    "24c42a84-a66bdeb0": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "24c42a84-de688d99": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 3,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 3
+      }
+    },
+    "24c42a84-eb967881": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "2586c43f-1c64f70b": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 2
+      }
+    },
+    "2586c43f-cbd4aa22": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 8
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 8
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 8
+      }
+    },
+    "2586c43f-da71d26b": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 4
+      }
+    },
+    "25ba4da8-04946761": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 5
+      }
+    },
+    "25ba4da8-c9aa841d": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 3,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 3
+      }
+    },
+    "273c8449-9933c8ea": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 2
+      }
+    },
+    "273c8449-d39c799a": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 6
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 6
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 6
+      }
+    },
+    "273dd231-065e155b": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 4
+      }
+    },
+    "273dd231-2de39183": {
+      "gamma_or_skip": {
+        "FP50": 3,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 3,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 3,
+        "TP50": 4
+      }
+    },
+    "273dd231-addb7c6c": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 2
+      }
+    },
+    "2b2ae655-0a484a17": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 9
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 9
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 9
+      }
+    },
+    "2b2ae655-fcb3903c": {
+      "gamma_or_skip": {
+        "FP50": 3,
+        "TP50": 8
+      },
+      "local_shadow": {
+        "FP50": 3,
+        "TP50": 8
+      },
+      "raw": {
+        "FP50": 3,
+        "TP50": 8
+      }
+    },
+    "2bddb06c-3ce049d3": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 2
+      }
+    },
+    "2d77b000-0af4ef5c": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 6
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 6
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 6
+      }
+    },
+    "2d783b3a-a6304dbd": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 5
+      }
+    },
+    "2d783b3a-f05965f5": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 5
+      }
+    },
+    "2e3e8698-12a2b9f5": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 1
+      }
+    },
+    "2e3e8698-72305bda": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 1
+      }
+    },
+    "2e3e8698-e0e4408c": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 0
+      }
+    },
+    "2e3e8698-e9411b0d": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "2e3e8698-ea48c2f5": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 1
+      }
+    },
+    "2ea72fd4-ce58a7cc": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 2
+      }
+    },
+    "31817fbb-0db6510f": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 0
+      }
+    },
+    "31817fbb-4ee1142d": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 2
+      }
+    },
+    "31817fbb-e7a8d925": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 1
+      }
+    },
+    "32b65ae2-77ba7ed5": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 4
+      }
+    },
+    "346673af-f70e85b6": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 9
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 9
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 9
+      }
+    },
+    "349e1327-5c005b40": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 4
+      }
+    },
+    "36a97b4c-6f065187": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 3
+      }
+    },
+    "36a97b4c-ab26eb7b": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 3,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 5
+      }
+    },
+    "36a97b4c-ca109ea7": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 4
+      }
+    },
+    "378465c1-894b1418": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 1
+      }
+    },
+    "3b048843-2b28098d": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 2
+      }
+    },
+    "3c48a528-e32e8999": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 4
+      }
+    },
+    "3eff1cd8-4719e118": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 2
+      }
+    },
+    "3fb5dd12-b31259c6": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 2
+      }
+    },
+    "3fb5dd12-b63b23c9": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 7
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 7
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 7
+      }
+    },
+    "43aced49-7eb95ceb": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 1
+      }
+    },
+    "445a1e0b-83038a11": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 6
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 6
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 6
+      }
+    },
+    "445a1e0b-a1261242": {
+      "gamma_or_skip": {
+        "FP50": 3,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 3,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 3,
+        "TP50": 1
+      }
+    },
+    "457c527a-7d0eee24": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 3
+      }
+    },
+    "4757d9b4-2557f9ce": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 4
+      }
+    },
+    "4757d9b4-52b3c3c4": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 6
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 6
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 6
+      }
+    },
+    "4757d9b4-c034937f": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 1
+      }
+    },
+    "4757d9b4-d53fc78c": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 1
+      }
+    },
+    "49c6923b-5b494322": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 7
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 7
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 7
+      }
+    },
+    "4a73ef4e-f1727635": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 8
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 8
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 8
+      }
+    },
+    "4afc8e1a-b313d8a7": {
+      "gamma_or_skip": {
+        "FP50": 4,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 4,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 4,
+        "TP50": 4
+      }
+    },
+    "4afc8e1a-e7d669c3": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 8
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 8
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 8
+      }
+    },
+    "4d9bc77b-9db5b90c": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 3
+      }
+    },
+    "50233983-59bbf3f6": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 5
+      }
+    },
+    "51484d7c-d0f0b5aa": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 3
+      }
+    },
+    "53f06672-e942bc38": {
+      "gamma_or_skip": {
+        "FP50": 3,
+        "TP50": 7
+      },
+      "local_shadow": {
+        "FP50": 3,
+        "TP50": 8
+      },
+      "raw": {
+        "FP50": 3,
+        "TP50": 7
+      }
+    },
+    "54cbcb1c-49d4c35b": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 5
+      }
+    },
+    "55d9daae-407480d0": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 2
+      }
+    },
+    "55d9daae-d4bf6649": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 6
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 4
+      }
+    },
+    "579a18f6-b8ee8436": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 2
+      }
+    },
+    "5841b246-409be8c1": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 2
+      }
+    },
+    "5841b246-cf4f4dd4": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "59d3ef56-06bb8c46": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 2
+      }
+    },
+    "59d3ef56-964041f6": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 1
+      }
+    },
+    "59d3ef56-cf26641e": {
+      "gamma_or_skip": {
+        "FP50": 3,
+        "TP50": 8
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 8
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 7
+      }
+    },
+    "5bcd9048-4e07de72": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 2
+      }
+    },
+    "5bcd9048-7bae315c": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 5
+      }
+    },
+    "5f317543-d3b9bdd3": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 6
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 6
+      }
+    },
+    "5ff476c0-637fa6be": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 2
+      }
+    },
+    "60e3224d-0ea59f5b": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 6
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 6
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 6
+      }
+    },
+    "60e3224d-2ede2128": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 7
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 7
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 7
+      }
+    },
+    "60e3224d-9b7e62c3": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 7
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 7
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 7
+      }
+    },
+    "60e3224d-dba92b4c": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 7
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 7
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 7
+      }
+    },
+    "617c12a1-6dd17ba7": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 9
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 9
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 9
+      }
+    },
+    "632bef00-15c0c9ab": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 4
+      }
+    },
+    "663c372c-14ec708b": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 5
+      }
+    },
+    "663c372c-de2089dd": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 2
+      }
+    },
+    "68587d03-c6f02121": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 2
+      }
+    },
+    "69090a46-f923c04a": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 7
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 7
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 7
+      }
+    },
+    "696287b1-77ce5f98": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 1
+      }
+    },
+    "69b56742-5c505893": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 2
+      }
+    },
+    "6b6269cb-2f8b65c2": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 5
+      }
+    },
+    "6c5a84bb-0b558ef8": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 3
+      }
+    },
+    "726770e5-2976cfba": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 11
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 11
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 11
+      }
+    },
+    "726770e5-33f45b27": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 1
+      }
+    },
+    "73084cf8-1f870867": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 3
+      }
+    },
+    "74864afc-2311bc20": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 7
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 7
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 7
+      }
+    },
+    "74864afc-c379f51f": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 6
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 6
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 6
+      }
+    },
+    "74e4c6c9-365138c8": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 5
+      }
+    },
+    "74e4c6c9-584cd4cf": {
+      "gamma_or_skip": {
+        "FP50": 4,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 4,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 4,
+        "TP50": 5
+      }
+    },
+    "7561392e-48597e1a": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 5
+      }
+    },
+    "764d9df8-797fe001": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 2
+      }
+    },
+    "78d26609-024b0231": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 3
+      }
+    },
+    "78d26609-5fd8dff0": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 3
+      }
+    },
+    "78d26609-7710886d": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 3
+      }
+    },
+    "78d26609-8aa9895d": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 3
+      }
+    },
+    "78d26609-e0258941": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 1
+      }
+    },
+    "78d26609-f421ba85": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "78ef68cb-f61b9567": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 1
+      }
+    },
+    "79b8198f-7231f8e8": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "79b8198f-d661af00": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 0
+      }
+    },
+    "7b379d27-ffef31ef": {
+      "gamma_or_skip": {
+        "FP50": 6,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 5,
+        "TP50": 6
+      },
+      "raw": {
+        "FP50": 6,
+        "TP50": 5
+      }
+    },
+    "7c164c71-0b668676": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 5
+      }
+    },
+    "7c164c71-25911c07": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 4
+      }
+    },
+    "7c164c71-40c1b788": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 2
+      }
+    },
+    "7c164c71-48628583": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "7c164c71-a2f88139": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 2
+      }
+    },
+    "7c2747e6-2a97b7a9": {
+      "gamma_or_skip": {
+        "FP50": 4,
+        "TP50": 8
+      },
+      "local_shadow": {
+        "FP50": 4,
+        "TP50": 8
+      },
+      "raw": {
+        "FP50": 4,
+        "TP50": 8
+      }
+    },
+    "7c2747e6-38bc486e": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 9
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 9
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 9
+      }
+    },
+    "7c2747e6-462e68b7": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 9
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 10
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 9
+      }
+    },
+    "7c2747e6-92ad263f": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 8
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 8
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 8
+      }
+    },
+    "7c2747e6-bb49d3b2": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 3
+      }
+    },
+    "7d27a9c2-3affdada": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 5
+      }
+    },
+    "80226c1d-22a0f485": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 5
+      }
+    },
+    "803f28f2-c8faeee8": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 5
+      }
+    },
+    "82e35f62-a01dc25b": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 1
+      }
+    },
+    "83334ad9-9100f22a": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "855390c9-1c085e9b": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 9
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 9
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 9
+      }
+    },
+    "855390c9-1db02da2": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 3
+      }
+    },
+    "855390c9-2d897ef6": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 8
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 8
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 8
+      }
+    },
+    "855390c9-aa403fba": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 9
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 9
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 9
+      }
+    },
+    "85eefe14-3b715024": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "874e5af9-c1de9f9d": {
+      "gamma_or_skip": {
+        "FP50": 3,
+        "TP50": 11
+      },
+      "local_shadow": {
+        "FP50": 3,
+        "TP50": 11
+      },
+      "raw": {
+        "FP50": 3,
+        "TP50": 11
+      }
+    },
+    "874e5af9-fa8b0b88": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 5
+      }
+    },
+    "8759dd07-4da00cb1": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 8
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 8
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 8
+      }
+    },
+    "8759dd07-d2c8a3ec": {
+      "gamma_or_skip": {
+        "FP50": 5,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 4,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 5,
+        "TP50": 5
+      }
+    },
+    "89d5f661-67d35b5f": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 11
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 11
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 11
+      }
+    },
+    "8aee5862-4e2a3723": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 5
+      }
+    },
+    "8aee5862-8b6452a1": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 4
+      }
+    },
+    "8aee5862-bea1a8a1": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 8
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 7
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 7
+      }
+    },
+    "8b8b5d32-654ea46b": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 5
+      }
+    },
+    "8d5e3ddb-ec4542e1": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 5
+      }
+    },
+    "8e4a88d3-f82585e2": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 4
+      }
+    },
+    "8e84ae1c-3f65bdbc": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 1
+      }
+    },
+    "904bbc40-42cdf169": {
+      "gamma_or_skip": {
+        "FP50": 4,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 4,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 4,
+        "TP50": 5
+      }
+    },
+    "9081cc9d-1615daea": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 1
+      }
+    },
+    "9081cc9d-8f710e84": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 3
+      }
+    },
+    "9081cc9d-f0d56e0b": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 3
+      }
+    },
+    "92edb403-c9740fa8": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 7
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 7
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 7
+      }
+    },
+    "934918cf-84d66fa8": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 0
+      }
+    },
+    "9349d497-71177609": {
+      "gamma_or_skip": {
+        "FP50": 3,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 3,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 3,
+        "TP50": 4
+      }
+    },
+    "9349d497-95fd868b": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 2
+      }
+    },
+    "9856c056-6dcfc70d": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 3
+      }
+    },
+    "9856c056-b98385c3": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 4,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 2
+      }
+    },
+    "9922e632-c2bc7c37": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 6
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 6
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 6
+      }
+    },
+    "9a8eabbe-2f4c8593": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 9
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 9
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 9
+      }
+    },
+    "9a922f4c-5eb167e4": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 2
+      }
+    },
+    "9a922f4c-8a9111f4": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 8
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 8
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 8
+      }
+    },
+    "9a93110b-6f4c1062": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 4
+      }
+    },
+    "9aba8323-6f62a91a": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 5
+      }
+    },
+    "9c6194a9-e4f0486b": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 6
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 6
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 6
+      }
+    },
+    "a0f7de25-a5b1ff4e": {
+      "gamma_or_skip": {
+        "FP50": 3,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 4
+      }
+    },
+    "a2125192-dd394020": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "a2125192-df657be2": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 4
+      }
+    },
+    "a2125192-e2716931": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 2
+      }
+    },
+    "a2125192-eee9f45f": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 3
+      }
+    },
+    "a291a71b-261e9a2f": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 3
+      }
+    },
+    "a635b203-a3ac67af": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 3
+      }
+    },
+    "a635b203-ddc23637": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 1
+      }
+    },
+    "a84eaeec-490f36bc": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 1
+      }
+    },
+    "a84eaeec-d8896df8": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 3
+      }
+    },
+    "a86192e1-429fe3bd": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 3
+      }
+    },
+    "a86192e1-4e4484ed": {
+      "gamma_or_skip": {
+        "FP50": 3,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 4,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 4,
+        "TP50": 3
+      }
+    },
+    "a86192e1-6160a8a3": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "a86192e1-890466d3": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 5
+      }
+    },
+    "a86192e1-fd9312d1": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 3
+      }
+    },
+    "a870a22f-24b3b7e3": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "aa4a3c6c-2eee0908": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 3
+      }
+    },
+    "aa4a3c6c-53a592a3": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 7
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 7
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 7
+      }
+    },
+    "aa4a3c6c-54cbf3a1": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 1
+      }
+    },
+    "abfa6816-8fd04b81": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 2
+      }
+    },
+    "abfa6816-d22baa8d": {
+      "gamma_or_skip": {
+        "FP50": 4,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 3,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 4,
+        "TP50": 2
+      }
+    },
+    "ac919158-58b1c39d": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 11
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 11
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 11
+      }
+    },
+    "ad22a2a2-4218f8db": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 2
+      }
+    },
+    "ad22a2a2-4bb8793e": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 3
+      }
+    },
+    "ad22a2a2-5acaee34": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 5
+      }
+    },
+    "ad22a2a2-5bcfc79b": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 1
+      }
+    },
+    "ad22a2a2-6ccabeaf": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 1
+      }
+    },
+    "ad22a2a2-76532df2": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 3
+      }
+    },
+    "ad22a2a2-7ff574dd": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 2
+      }
+    },
+    "ad22a2a2-9b6c8180": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 5
+      }
+    },
+    "ad22a2a2-a60c79f2": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 1
+      }
+    },
+    "ad22a2a2-b10de28b": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 1
+      }
+    },
+    "ad22a2a2-b9915c58": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 4
+      }
+    },
+    "ad22a2a2-c5a4b7d1": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 1
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 1
+      }
+    },
+    "ad22a2a2-db9892f5": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 4
+      }
+    },
+    "ad22a2a2-ec87bc0e": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 5
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 5
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 5
+      }
+    },
+    "ad22a2a2-efdfa29d": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 1
+      }
+    },
+    "ad22a2a2-fd0c2a52": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 4
+      }
+    },
+    "ad3208d5-4c12992d": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 0
+      }
+    },
+    "ad49da5f-2b5d9c4f": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 4
+      }
+    },
+    "ae653a7e-684f7a19": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 7
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 7
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 7
+      }
+    },
+    "ae653a7e-93f406b6": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 6
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 6
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 6
+      }
+    },
+    "ae653a7e-cff6118b": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "ae653a7e-e55e3083": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 3
+      }
+    },
+    "ae653a7e-ec18ef73": {
+      "gamma_or_skip": {
+        "FP50": 2,
+        "TP50": 8
+      },
+      "local_shadow": {
+        "FP50": 2,
+        "TP50": 8
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 8
+      }
+    },
+    "ae653a7e-f2f30b5d": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 4
+      }
+    },
+    "b03c15d6-72badcc4": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 0,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 3
+      }
+    },
+    "b03c15d6-882278dc": {
+      "gamma_or_skip": {
+        "FP50": 0,
+        "TP50": 4
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 4
+      }
+    },
+    "b0fa25cd-abf2ad39": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 6
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 6
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 6
+      }
+    },
+    "fe144fec-22a9e4a4": {
+      "gamma_or_skip": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "local_shadow": {
+        "FP50": 1,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 2
+      }
+    }
+  },
+  "examples": {
+    "all": [
+      "7d27a9c2-3affdada",
+      "a86192e1-890466d3"
+    ],
+    "blurred": [
+      "a0f7de25-a5b1ff4e",
+      "fe144fec-22a9e4a4"
+    ],
+    "bright": [
+      "7d27a9c2-3affdada",
+      "ad22a2a2-4218f8db"
+    ],
+    "dark": [
+      "a86192e1-890466d3",
+      "07c832a3-dc8720a4"
+    ],
+    "small_two_wheeler": [
+      "0f442be6-cff829d2",
+      "110c9575-f59c7fac"
+    ]
+  }
+}

@@ -9,8 +9,9 @@ an experiment README:
 - [v1 — Gamma-or-Skip](notebooks/experiments/v1/README.md): the historical algorithm
   called **Adaptive v2**; completed S20 and historical S10 training and development evaluation.
 - [v2 — Later preprocessing exploration](notebooks/experiments/v2/README.md):
-  measured exploration with failed gates; no replacement policy locked, no paired
-  detector trained or evaluated.
+  measured exploration with failed gates, including the new
+  [local-shadow pilot](docs/ISSUE45_RESULTS.md); no replacement policy locked,
+  no paired detector trained or evaluated.
 
 Folder IDs are stable sequential experiment identities, independent of algorithm
 names, maturity and performance. A changed policy/configuration that changes the

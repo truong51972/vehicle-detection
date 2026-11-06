@@ -1,0 +1,37 @@
+{
+  "candidate_decision_recomputed": true,
+  "code_hashes_match_execution": true,
+  "confirmation_accessed": false,
+  "development_pixels_accessed": false,
+  "evidence_only_replay_with_training_and_inference_blocked": true,
+  "exports_rehashed": 768,
+  "final_test_pixels_accessed": false,
+  "fresh_kernel_opt_in": "runs/issue45/01_experiments_executed.ipynb: completed real three-arm pilot",
+  "fresh_kernel_readonly": "runs/issue45/01_experiments_readonly_smoke.ipynb: completed from notebook directory with YOLO.val/train blocked",
+  "limitations": [
+    "Pretrained exploration only; not a new S20 or independent test result",
+    "Weak dark/blur/small-two-wheeler support; one model/seed/host",
+    "Pixel access guard covers source export/timing; source reader handles all annotations as metadata",
+    "Premeasurement declaration file was hash-bound before execution, not separately committed"
+  ],
+  "new_s20_preparation_started": false,
+  "paired_id_and_label_byte_checks": "Three equal 256-ID native loader/statistics populations; every label byte equal across arms, boxes verified against originals",
+  "premeasurement_inputs_unchanged": true,
+  "protected_v0_v1_artifacts": {
+    "count": 14,
+    "digest": "8f2845c4a89dcf02eb940c97c639fe21fe7665c5be8928a85c2cd283774acd78",
+    "hashes_unchanged": true
+  },
+  "pytest": {
+    "command": ".venv/bin/pytest -q",
+    "passed": 161,
+    "seconds": 63.51
+  },
+  "ruff_check": ".venv/bin/ruff check .: passed",
+  "ruff_format": ".venv/bin/ruff format --check .: passed (92 files)",
+  "source_access": "Exactly the 256 selected calibration-exploration source paths; existing exploration_access guard active during exports/timing",
+  "statistics_rehashed": 3,
+  "suite_notebook_smoke": "Independent fresh kernels and synthetic native CPU train/eval included in 161 tests; not scientific evidence",
+  "v2_training_started": false,
+  "whitespace": "git diff --check: passed"
+}

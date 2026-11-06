@@ -5,6 +5,12 @@ improve over Skip and frozen Gamma-or-Skip. This stable folder identifies the la
 exploratory study. It is separate from the old algorithm name “Adaptive v2”.
 
 Status: **exploratory; replacement policy not locked for paired training**.
+The [issue #45 local-shadow pilot](../../../docs/ISSUE45_RESULTS.md) completed
+three paired native evaluations on 256 additional exploration images. It failed
+gain, dark-regression, uncertainty and mean-cost gates; **v2 remains untrained**.
+The [premeasurement declaration](../../../docs/ISSUE45_PILOT.md) fixes its recipe,
+sample budget and stop rules. `01_experiments` defaults to verified evidence;
+`ALLOW_PILOT=True` opts into a new attempt and refuses an existing local output.
 No v2 detector has been trained or evaluated. There are no placeholder downstream
 notebooks or fabricated runs. [01_experiments](01_experiments.ipynb) independently
 reads actual saved decisions; exact historical search execution is available via
@@ -26,5 +32,8 @@ experiment registry. See [screening results](../../../docs/ISSUE30_RESULTS.md),
 [quality review](../../../docs/ISSUE30_QUALITY_REVIEW.md) and
 [replication](../../../docs/ISSUE30_RESEARCH_ROUND3.md).
 
-Any new policy/configuration that changes the scientific comparison needs the next
-experiment ID. This refactor performs no new search, policy lock, training or inference.
+Issue #45's new pilot evidence lives separately under `docs/issue45/` and local
+`runs/issue45/pilot/`; it does not overwrite or relabel the historical research.
+No `configs/v2.yaml` or downstream lifecycle phases are added after a failed gate.
+A future distinct policy needs a new preregistered pilot; no threshold retuning or
+confirmation is justified by these measurements.
