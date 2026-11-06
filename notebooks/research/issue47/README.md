@@ -30,3 +30,12 @@ GT-size distributions and image-cohort AP cannot identify which individual boxes
 were missed. Sparse classes remain inconclusive, absent AP is never zero-filled,
 and image-cohort AP is not AP-small. Sequential GPU validation batch p95 is not
 per-image latency or a matched CPU preprocessing benchmark.
+
+Issue [#51](https://github.com/truong51972/vehicle-detection/issues/51) continues
+with [03_full_resolution_training.ipynb](03_full_resolution_training.ipynb) and
+the [finalized full-S20 protocol](../../../docs/ISSUE47_FULL_TRAINING_PLAN.md).
+The fixed-640 native selection safeguards are tested on synthetic CPU data.
+Default execution only verifies saved evidence or reports not acquired. Real
+preparation, 20-epoch training and the four-cell matrix need separate explicit
+opt-ins after the verified implementation is committed. Historical experiments
+remain unchanged; this implementation does not start acquisition.
