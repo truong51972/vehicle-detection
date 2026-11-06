@@ -163,6 +163,11 @@ patch("io.open", guarded(io.open)).start()
             "issue47-discovery",
             "ISSUE47_DISCOVERY_PLAN.md",
         ),
+        (
+            "research/issue47/02_resolution_training.ipynb",
+            "issue47-resolution-training",
+            "ISSUE47_TRAINING_PLAN.md",
+        ),
     ],
 )
 def test_research_defaults_run_with_only_committed_evidence(
