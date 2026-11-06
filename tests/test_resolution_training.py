@@ -1,6 +1,7 @@
 """Prospective training-resolution gates and immutable evidence inspection."""
 
 from copy import deepcopy
+from types import SimpleNamespace
 
 import numpy as np
 import pytest
@@ -9,6 +10,7 @@ from vehicle_detection.common import file_hash, write_json
 from vehicle_detection.five_class import FIVE_CLASSES
 from vehicle_detection.resolution_training import (
     assess,
+    check_mode,
     check_populations,
     examples,
     run,
@@ -85,7 +87,7 @@ def test_primary_contrast_holds_inference_size_fixed_and_keeps_every_failed_gate
 
 
 def test_default_replay_checks_hashes_and_opt_in_never_overwrites(tmp_path):
-    report = tmp_path / "docs/issue47-resolution-training"
+    report = tmp_path / "docs/issue47-resolution-training-repeat"
     write_json(report / "result.json", {"decision": {"policy_selected": False}})
     write_json(report / "evidence.json", {"result.json": file_hash(report / "result.json")})
     assert not run(tmp_path)["decision"]["policy_selected"]
@@ -113,3 +115,58 @@ def test_examples_are_deterministic_native_class_counts_not_box_attribution():
             "after": {"TP50": 1, "FP50": 0},
         }
     ]
+
+
+def test_mode_guard_uses_the_actual_native_validator_callback(tmp_path):
+    pytest.importorskip("ultralytics")
+    import cv2
+    import yaml
+    from ultralytics import YOLO
+    from ultralytics.nn.tasks import DetectionModel, yaml_model_load
+
+    from vehicle_detection.evaluation import ExperimentValidator
+
+    for kind in ("images", "labels"):
+        (tmp_path / kind / "val").mkdir(parents=True)
+    for i in range(2):
+        assert cv2.imwrite(str(tmp_path / f"images/val/{i}.jpg"), np.zeros((64, 64, 3), np.uint8))
+        (tmp_path / f"labels/val/{i}.txt").write_text(f"{i} 0.5 0.5 0.5 0.5\n")
+    data = tmp_path / "data.yaml"
+    data.write_text(
+        yaml.safe_dump(
+            {
+                "path": str(tmp_path),
+                "train": "images/val",
+                "val": "images/val",
+                "names": dict(enumerate(FIVE_CLASSES)),
+            }
+        )
+    )
+    model = YOLO("yolo26n.yaml")
+    model.model = DetectionModel(yaml_model_load("yolo26n.yaml"), nc=5, verbose=False)
+    model.model.names = dict(enumerate(FIVE_CLASSES))
+    checked = []
+
+    def verify_callback(validator):
+        check_mode(validator)
+        checked.append(True)
+
+    model.add_callback("on_val_end", verify_callback)
+    model.val(
+        validator=ExperimentValidator,
+        data=str(data),
+        device="cpu",
+        imgsz=64,
+        batch=2,
+        workers=0,
+        plots=False,
+        nms=False,
+        half=False,
+        project=str(tmp_path),
+        name="eval",
+        verbose=False,
+    )
+    assert checked == [True]
+    assert (tmp_path / "eval/paired_stats.npz").is_file()
+    with pytest.raises(ValueError, match="NMS-free"):
+        check_mode(SimpleNamespace(end2end=True, args=SimpleNamespace(nms=True)))

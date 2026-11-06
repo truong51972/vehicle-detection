@@ -17,7 +17,7 @@ from .five_class import FIVE_CLASSES
 from .method_discovery import cohorts, outcome
 from .v3_pilot import run as read_pilot
 
-STUDY = "issue47-resolution-training"
+STUDY = "issue47-resolution-training-repeat"
 
 
 def select_training(rows, minimum=2048, maximum=2176):
@@ -26,7 +26,9 @@ def select_training(rows, minimum=2048, maximum=2176):
         if row["role"] == "training_pool" and row["s20"]:
             groups.setdefault(row["group"], []).append(row)
     selected = []
-    for group in sorted(groups, key=lambda g: (digest([2026, STUDY, g]), g)):
+    for group in sorted(
+        groups, key=lambda g: (digest([2026, "issue47-resolution-training", g]), g)
+    ):
         selected.extend(groups[group])
         if len(selected) >= minimum:
             break
@@ -117,6 +119,11 @@ def examples(before, after):
     return records
 
 
+def check_mode(validator):
+    if not validator.end2end or validator.args.nms is not False:
+        raise ValueError("NMS-free evaluation contract changed")
+
+
 def run(root, *, allow_training=False):
     root = Path(root).resolve()
     report, output = root / f"docs/{STUDY}", root / f"runs/{STUDY}/study"
@@ -131,6 +138,7 @@ def run(root, *, allow_training=False):
         raise ValueError("Unexpected diagnostic output symlink")
     protected = [
         "docs/ISSUE47_TRAINING_PLAN.md",
+        "docs/ISSUE47_TRAINING_REPEAT_PLAN.md",
         "notebooks/research/issue47/02_resolution_training.ipynb",
         "src/vehicle_detection/resolution_training.py",
         "src/vehicle_detection/experiment_data.py",
@@ -289,6 +297,7 @@ def run(root, *, allow_training=False):
             "checkpoint_sha256": file_hash(checkpoints[size]),
             "epochs": 5,
         }
+        freeze_json(report / f"train{size}_measurement.json", training[str(size)])
         history.to_csv(report / f"train{size}_results.csv", index=False)
         copyfile(directory / "args.yaml", report / f"train{size}_args.yaml")
         del model
@@ -318,6 +327,7 @@ def run(root, *, allow_training=False):
                 raise ValueError("Trained detector taxonomy changed")
             batch_times.clear()
             model.add_callback("on_val_start", check_loader)
+            model.add_callback("on_val_end", check_mode)
             model.add_callback("on_val_batch_start", start_batch)
             model.add_callback("on_val_batch_end", end_batch)
             tick = time.perf_counter()
@@ -330,8 +340,14 @@ def run(root, *, allow_training=False):
                 exist_ok=False,
                 **{**native_settings, "imgsz": size},
             )
-            if not model.validator.end2end or model.validator.args.nms is not False:
-                raise ValueError("NMS-free evaluation contract changed")
+            measurement = {
+                "native_ms_per_image": native.speed,
+                "wall_seconds": time.perf_counter() - tick,
+                "batch_mean_ms": float(np.mean(batch_times)),
+                "batch_p95_ms": float(np.quantile(batch_times, 0.95)),
+                "batches": len(batch_times),
+            }
+            freeze_json(report / f"eval{train_size}_{size}_measurement.json", measurement)
             path = output / f"eval{train_size}_{size}/paired_stats.npz"
             stats = load_stats(path)
             if set(stats) != ids:
@@ -346,13 +362,7 @@ def run(root, *, allow_training=False):
                 rtol=0,
             ):
                 raise ValueError("Native AP disagrees with saved matches")
-            timings[key] = {
-                "native_ms_per_image": native.speed,
-                "wall_seconds": time.perf_counter() - tick,
-                "batch_mean_ms": float(np.mean(batch_times)),
-                "batch_p95_ms": float(np.quantile(batch_times, 0.95)),
-                "batches": len(batch_times),
-            }
+            timings[key] = measurement
             statistics[key] = {"path": str(path.relative_to(root)), "sha256": file_hash(path)}
             del model
     bootstrap_rows = [{**r, "group": r["source_group"]} for r in evaluation]

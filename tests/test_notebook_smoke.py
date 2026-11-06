@@ -165,8 +165,8 @@ patch("io.open", guarded(io.open)).start()
         ),
         (
             "research/issue47/02_resolution_training.ipynb",
-            "issue47-resolution-training",
-            "ISSUE47_TRAINING_PLAN.md",
+            "issue47-resolution-training-repeat",
+            "ISSUE47_TRAINING_REPEAT_PLAN.md",
         ),
     ],
 )
