@@ -1,3 +1,5 @@
+> Historical workflow record. Current entrypoints and replay paths: [issue 41 migration](HISTORICAL_REPLAY.md).
+
 # Issue #5: data protocol and pretrained YOLO26n baseline
 
 This implements the first child of [parent #4](https://github.com/truong51972/vehicle-detection/issues/4).
@@ -104,7 +106,7 @@ Version-controlled evidence is compact:
   deep-verified Raw export identity.
 - [Optional historical comparison](issue5/historical_comparison.json): the old
   train/tune transitions are a separate report and never enter canonical identity.
-- [Executed notebook 01](../notebooks/archive/phase2/01_data_protocol.ipynb): audits,
+- [Executed notebook 01](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/notebooks/archive/phase2/01_data_protocol.ipynb): audits,
   charts, native conversion, 0.01-pixel box roundtrips and export verification.
 
 Only development Raw was materialized. Raw has **no enhancement**, with JPEG
@@ -171,7 +173,7 @@ or baseline rerun. The audit documents joint support limits for later paired wor
 ## Pretrained development validation
 
 Execution evidence is recorded in [the baseline summary](issue5/pretrained_baseline.json)
-and [executed notebook 03](../notebooks/archive/phase2/03_finetuning_benchmark.ipynb).
+and [executed notebook 03](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/notebooks/archive/phase2/03_finetuning_benchmark.ipynb).
 
 Executed on **2026-11-03** with CUDA device 0, retaining **13,975 images**.
 The pinned, untouched YOLO26n release checkpoint SHA256 is

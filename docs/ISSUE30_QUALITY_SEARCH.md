@@ -1,3 +1,5 @@
+> Historical workflow record. Current entrypoints and replay paths: [issue 41 migration](HISTORICAL_REPLAY.md).
+
 # Issue 30 — quality-derived exploration increment
 
 This records the preserved **v1** increment at source revision `3df03aa`. The
@@ -12,8 +14,8 @@ unchanged. **No new v3 is released and issue #30 is not complete.**
 
 The old evidence manifest also binds the active notebook's original bytes. Those
 bytes are preserved at
-`notebooks/archive/round2-screening/03_preprocessing_experiments.ipynb`, with the
-original hash/revision in `notebooks/archive/manifest.json`. When checking the old
+[notebooks/archive/round2-screening/03_preprocessing_experiments.ipynb](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/notebooks/archive/round2-screening/03_preprocessing_experiments.ipynb), with the
+original hash/revision in [notebooks/archive/manifest.json](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/notebooks/archive/manifest.json). When checking the old
 evidence manifest, resolve its notebook entry to this archive; every other entry
 remains at its recorded path. The old manifest itself is unchanged.
 

@@ -1,3 +1,5 @@
+> Historical workflow record. Current entrypoints and replay paths: [issue 41 migration](HISTORICAL_REPLAY.md).
+
 # Historical design and execution evidence
 
 This narrative describes the original study. Use the four canonical notebooks in
@@ -19,7 +21,7 @@ co-grouped within official train. These safeguards **do not prove absence of all
 near duplicates**. The protocol records the limitations and source-group counts.
 
 Final test comes from official val after excluding every previously exposed ID in
-[the exposure ledger](../notebooks/test_exposure.json), related groups and any groups
+[the exposure ledger](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/notebooks/test_exposure.json), related groups and any groups
 shared with official train. Missing files and invalid boxes are disclosed.
 Official-val annotations/metadata and file existence are audited; **its images
 are not opened, decoded, hashed, exported, previewed or evaluated**. Its box-size
@@ -103,7 +105,7 @@ version/root. A sampled storage estimate gates export; retain additional headroo
 because this is not a worst-case bound. No source images are overwritten.
 
 The original v1 reports/datasets remain under `docs/issue6/` and
-`runs/issue6-v1/`. Its [executed notebook](../notebooks/archive/phase2/evidence/02_adaptive_preprocessing_v1.ipynb)
+`runs/issue6-v1/`. Its [executed notebook](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/notebooks/archive/phase2/evidence/02_adaptive_preprocessing_v1.ipynb)
 retains every embedded chart and example image byte-for-byte. Replay v1 with source
 revision `7380eed`; the current implementation explicitly rejects v1 policies.
 Do not relabel old timing or quality evidence as v2. The noise estimator remains
@@ -138,7 +140,7 @@ or evidence of real-world camera robustness.
 
 The current notebook requires the original saved pilot/statistics/figures, not a GPU,
 raw BDD pixels or fresh model predictions. The original complete
-[v1 notebook](../notebooks/archive/phase2/evidence/02b_synthetic_robustness_v1.ipynb) is preserved
+[v1 notebook](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/notebooks/archive/phase2/evidence/02b_synthetic_robustness_v1.ipynb) is preserved
 byte-for-byte; replay its image/model experiment with revision `98d7a1f` and its
 original prerequisites. Do not rewrite old inference metadata to match new code.
 
@@ -156,8 +158,8 @@ The local repair inventory is `runs/wsl-migration.json`. On another move, prefer
 recreating `.venv` with `uv sync`; audit links before opening an old notebook.
 Never automatically move source data or rewrite checkpoint/provenance identities.
 
-The original [preparation](../notebooks/archive/01_data_preparation.ipynb) and
-[training](../notebooks/archive/02_training_benchmark.ipynb) notebooks are **historical YOLO11**.
+The original [preparation](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/notebooks/archive/01_data_preparation.ipynb) and
+[training](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/notebooks/archive/02_training_benchmark.ipynb) notebooks are **historical YOLO11**.
 Their original manifests, YAML and checkpoint arguments retain old absolute
 paths; they are not the new execution entrypoints. Do not resume their optimizer
 state as YOLO26. [The old execution snapshot](PHASE2_RESULTS.md) records the

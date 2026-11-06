@@ -1,3 +1,5 @@
+> Historical workflow record. Current entrypoints and replay paths: [issue 41 migration](HISTORICAL_REPLAY.md).
+
 # Issue #21: completed five-class native S10 training
 
 Both Raw and frozen **Gamma-or-Skip v2** completed **20 epochs** on 2026-11-04.
@@ -83,7 +85,7 @@ Compact committed evidence:
   identities, best/final native metrics, timing segments and checkpoint hashes.
 - [raw_results.csv](issue21/raw_results.csv) and
   [adaptive_results.csv](issue21/adaptive_results.csv): unmodified native histories.
-- [03_training.ipynb](../notebooks/03_training.ipynb): fresh-kernel saved-run
+- [03_training.ipynb](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/notebooks/03_training.ipynb): fresh-kernel saved-run
   execution, convergence figure and checkpoint summary. Training and upstream
   preparation were blocked during the reporting execution; no guard fired.
 

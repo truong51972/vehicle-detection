@@ -1,9 +1,11 @@
+> Historical workflow record. Current entrypoints and replay paths: [issue 41 migration](HISTORICAL_REPLAY.md).
+
 # Four independent notebook refactor
 
 Based on merged PR #12 (`2df2241`). The prior interface had two historical YOLO11
 notebooks plus four phase2 entrypoints and two evidence snapshots. The active
 interface is now exactly four phase-named notebooks; all eight originals retain
-identical bytes under `notebooks/archive/`. No historical result or policy changed.
+identical bytes under [notebooks/archive/](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/notebooks/archive/). No historical result or policy changed.
 
 ## Call-site audit and final inventory
 
@@ -116,17 +118,17 @@ these requirements only for active notebooks; archived bytes remain unchanged.
 
 Before: 13 Python modules. The structural extraction adds three shared operations
 modules (16 total); two focused development helpers bring the current count to 18.
-[development_report.py](../src/vehicle_detection/development_report.py) aggregates saved native matches with explicit point-only or
-bootstrap analysis; [loader_benchmark.py](../src/vehicle_detection/loader_benchmark.py) measures native CPU loading without a
-model/trainer. Callers: notebook 04; tests: [test_development_report](../tests/test_development_report.py),
-[test_loader_benchmark](../tests/test_loader_benchmark.py), and fresh-kernel smoke. These are phase-local operations,
+[development_report.py](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/src/vehicle_detection/development_report.py) aggregates saved native matches with explicit point-only or
+bootstrap analysis; [loader_benchmark.py](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/src/vehicle_detection/loader_benchmark.py) measures native CPU loading without a
+model/trainer. Callers: notebook 04; tests: [test_development_report](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/tests/test_development_report.py),
+[test_loader_benchmark](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/tests/test_loader_benchmark.py), and fresh-kernel smoke. These are phase-local operations,
 not an orchestration framework. Extracted dataset-validation code now has its own
 hash in fresh training/resume identities.
 
-Active callers: [data initialization](../notebooks/01_data_init.ipynb),
-[data preprocessing](../notebooks/02_data_preprocessing.ipynb),
-[training](../notebooks/03_training.ipynb), and
-[evaluation/reporting](../notebooks/04_eval_and_report.ipynb).
+Active callers: [data initialization](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/notebooks/01_data_init.ipynb),
+[data preprocessing](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/notebooks/02_data_preprocessing.ipynb),
+[training](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/notebooks/03_training.ipynb), and
+[evaluation/reporting](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/notebooks/04_eval_and_report.ipynb).
 [Fresh-kernel smoke](../tests/test_notebook_smoke.py) verifies optional missing
 loader evidence does not trigger measurement or prevent cached-result reporting.
 Full resampling and new loader measurements stay explicit; no reporting cell

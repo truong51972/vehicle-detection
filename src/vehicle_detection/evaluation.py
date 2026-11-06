@@ -1,147 +1,92 @@
-"""Development-only YOLO.val and verified cache replay. No training orchestration."""
+"""Evaluate a detector on its own offline policy's shared development population."""
 
 import json
 from importlib.metadata import version
 from pathlib import Path
 
+import pandas as pd
+import yaml
 from ultralytics import YOLO
-from ultralytics.models.yolo.detect import DetectionValidator
 
-from .adaptive import validate_policy
-from .baseline import PRETRAINED_SHA256, VAL_SETTINGS, VehicleValidator, verify_coco_names
-from .common import (
-    digest,
-    file_hash,
-    freeze_json,
-    read_json,
-    require_paths,
-    reuse_evaluation,
-    write_json,
-)
-from .data import CLASSES
-from .datasets import verify_role
-from .evaluation_stats import MatchingStats
-from .protocol import validate_protocol
+from .baseline import VAL_SETTINGS
+from .common import file_hash, read_json, write_json
+from .experiment_data import load_experiment, verify_data
+from .five_class import FIVE_CLASSES
+from .training_settings import TRAIN_SETTINGS, validate_training_args
 
 
-class PretrainedValidator(MatchingStats, VehicleValidator):
-    """COCO→BDD class remapping plus native matching and native metrics."""
-
-
-class TrainedValidator(MatchingStats, DetectionValidator):
-    """Native validation with optional saved per-image matches for grouped analysis."""
-
-
-def evaluate_development(
-    protocol,
-    policy,
-    dataset,
-    checkpoint,
-    output,
-    *,
-    pretrained=False,
-    allow_inference=False,
-    settings=None,
-    class_names=None,
-):
-    """Validate development only; native best.pt is sufficient without training receipts."""
-    validate_protocol(protocol)
-    validate_policy(policy, protocol)
-    dataset, checkpoint, output = (Path(p).resolve() for p in (dataset, checkpoint, output))
-    variant = read_json(dataset / "export.json")["variant"]
-    if variant not in ("raw_reencoded", "adaptive"):
-        raise ValueError("Expected Raw/Adaptive development export, not final-test data")
-    rows = protocol["splits"]["development_validation"]
-    bound = verify_role(
-        dataset,
-        rows,
-        "tune",
-        variant,
-        policy["recipes"] if variant == "adaptive" else None,
-        deep=False,
-    )
-    exported_names = bound["export"]["conversion"].get("classes", CLASSES)
-    names = list(exported_names if class_names is None else class_names)
-    if names != exported_names:
-        raise ValueError("Evaluation taxonomy differs from development labels")
+def evaluate_experiment(root, experiment, *, allow_inference=False, settings=None):
+    root = Path(root).resolve()
+    prepared = verify_data(root, experiment)
+    directory = root / f"runs/{experiment}"
+    checkpoint = directory / "train/weights/best.pt"
+    history = directory / "train/results.csv"
+    if any(
+        p.resolve() != p
+        for p in (checkpoint, history, directory / "train/args.yaml", directory / "train.yaml")
+    ):
+        raise ValueError("Unexpected detector/YAML symlink")
+    args = yaml.safe_load((directory / "train/args.yaml").read_text())
+    if args["data"] != str(directory / "train.yaml"):
+        raise ValueError("Detector belongs to another experiment")
+    experiment_config = load_experiment(root, experiment)
+    expected_settings = {
+        **TRAIN_SETTINGS,
+        **experiment_config["training"],
+        "seed": experiment_config["seed"],
+    }
+    validate_training_args(args, directory / "train.yaml", expected_settings)
+    if pd.read_csv(history).epoch.tolist() != list(range(1, expected_settings["epochs"] + 1)):
+        raise ValueError("Native training has not completed the epoch budget")
+    training = yaml.safe_load((directory / "train.yaml").read_text())
+    raw = verify_data(root, "v0")
+    if training != {
+        **prepared,
+        "val": str(Path(raw["path"]) / "images/val"),
+        "selection_files_sha256": raw["files_sha256"],
+    }:
+        raise ValueError("Detector's prepared inputs/policy differ from evaluation")
     config = {**VAL_SETTINGS, "half": False, **(settings or {})}
-    if config["nms"] is not False or config["augment"] or config["half"] or not config["plots"]:
-        raise ValueError("Use fixed FP32 NMS-free native validation and plots")
-    require_paths(checkpoint=checkpoint)
-    weights_hash = file_hash(checkpoint)
-    if pretrained and weights_hash != PRETRAINED_SHA256:
-        raise ValueError("Expected the unchanged pinned pretrained YOLO26n checkpoint")
-
+    if config["nms"] is not False or config["augment"] or config["half"]:
+        raise ValueError("Use native FP32 NMS-free validation without augmentation")
     identity = {
-        "version": "development-native-v3",
-        "protocol_id": protocol["manifest_id"],
-        "policy_id": policy["policy_id"],
-        "role": "development_validation",
-        "dataset": bound,
-        "checkpoint_sha256": weights_hash,
-        "mapping": ("COCO-80 to six vehicles" if names == CLASSES else "COCO-80 to five vehicles")
-        if pretrained
-        else f"native {len(names)} vehicles",
-        "class_names": names,
+        "experiment": experiment,
+        "data_sha256": file_hash(directory / "data/data.yaml"),
+        "checkpoint_sha256": file_hash(checkpoint),
         "settings": config,
         "ultralytics": version("ultralytics"),
     }
-    saved = output / "native_result.json"
-    if saved.is_file():
-        prior = read_json(saved)["identity"]
-        if prior.get("version") in {"development-native-v1", "development-native-v2"}:
-            # Read-only old six-class measurements; never rewrite their source hashes.
-            comparable = (
-                "protocol_id",
-                "policy_id",
-                "role",
-                "dataset",
-                "checkpoint_sha256",
-                "mapping",
-                "settings",
-            )
-            if names != CLASSES or any(prior.get(k) != identity[k] for k in comparable):
-                raise ValueError("Historical evaluation cache inputs/roles changed")
-            return reuse_evaluation(saved, prior)
-    cached = reuse_evaluation(saved, identity)
-    if cached is not None:
-        return cached
+    output = directory / "eval"
+    saved = output / "metrics.json"
+    if output.resolve() != output or saved.is_symlink():
+        raise ValueError("Unexpected evaluation/checkpoint symlink")
+    if saved.exists():
+        result = read_json(saved)
+        if result["inputs"] != identity:
+            raise ValueError("Evaluation inputs/settings changed; use a new experiment ID")
+        return result
     if not allow_inference:
-        raise FileNotFoundError(f"No verified result at {saved}; set ALLOW_INFERENCE=True")
-
-    freeze_json(output / "identity.json", identity)
-    # Check actual exported file hashes before creating the model / doing new inference.
-    verify_role(
-        dataset,
-        rows,
-        "tune",
-        variant,
-        policy["recipes"] if variant == "adaptive" else None,
-        deep=True,
-    )
+        raise FileNotFoundError("No saved metrics; explicitly set ALLOW_INFERENCE=True")
+    if output.exists() and any(output.iterdir()):
+        raise ValueError("Incomplete/unknown evaluation directory; inspect it before retrying")
     model = YOLO(str(checkpoint))
-    if pretrained:
-        verify_coco_names(model.names)
-    elif model.names != dict(enumerate(names)):
-        raise ValueError("Checkpoint taxonomy differs from development labels")
+    if model.names != dict(enumerate(FIVE_CLASSES)):
+        raise ValueError("Detector taxonomy differs from shared five-class labels")
     if model.model.yaml.get("yaml_file") != "yolo26n.yaml":
-        raise ValueError("Expected YOLO26n checkpoint")
-
+        raise ValueError("Expected YOLO26n detector")
+    if model.ckpt["train_args"]["data"] != args["data"]:
+        raise ValueError("Checkpoint belongs to another experiment")
     metrics = model.val(
-        validator=PretrainedValidator if pretrained else TrainedValidator,
-        data=str(dataset / "data.yaml"),
+        data=str(directory / "data/data.yaml"),
         split="val",
-        project=str(output.parent),
-        name=output.name,
+        project=str(directory),
+        name="eval",
         exist_ok=True,
         **config,
     )
-    plot = output / "confusion_matrix_normalized.png"
-    stats = output / "paired_stats.npz"
-    if not plot.is_file() or not stats.is_file():
-        raise ValueError("Native plots/per-image matching statistics missing")
     precision, recall, map50, map5095 = map(float, metrics.mean_results())
     result = {
+        "inputs": identity,
         "overall": {
             "precision": precision,
             "recall": recall,
@@ -152,9 +97,28 @@ def evaluate_development(
         "speed_ms": metrics.speed,
         "role": "development_validation",
         "final_test_accessed": False,
-        "artifacts": {
-            p.name: file_hash(p) for p in [*output.glob("*.png"), *output.glob("*.jpg"), stats]
-        },
     }
-    write_json(saved, {"identity": identity, "result": result, "checksum": digest(result)})
+    write_json(saved, result)
+    return result
+
+
+def historical_result(root, branch):
+    """Read committed historical measurements without relabeling them as new runs."""
+    if branch not in {"raw", "adaptive"}:
+        raise ValueError("Expected a historical Raw/Adaptive branch")
+    root = Path(root)
+    training = read_json(root / "docs/issue21/s10_results.json")
+    matrix = read_json(root / "docs/development-five-v1/matrix.json")
+    result = next(r for r in matrix["evaluations"] if r["evaluation"] == f"{branch}-{branch}")
+    identity = result["identity"]
+    if (
+        training["final_test_accessed"]
+        or matrix["final_test_accessed"]
+        or identity["class_names"] != FIVE_CLASSES
+        or identity["checkpoint_sha256"]
+        != training["branches"][branch]["checkpoints"]["best"]["sha256"]
+        or identity["protocol_id"] != training["protocol_id"]
+        or identity["policy_id"] != training["policy_id"]
+    ):
+        raise ValueError("Historical measurement provenance differs")
     return result

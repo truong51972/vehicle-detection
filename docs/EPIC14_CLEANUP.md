@@ -1,3 +1,5 @@
+> Historical workflow record. Current entrypoints and replay paths: [issue 41 migration](HISTORICAL_REPLAY.md).
+
 # Epic #14 cleanup decisions — issues #15, #17, #18, #19
 
 This PR only simplifies the **existing six-class implementation**. It does not
@@ -19,7 +21,7 @@ six-class runs. The separate derived five-class labels and training belong to
 | `datasets.py` / `offline.py` | **SIMPLIFY preflight** | Deep decode/hash/box checks run at export or explicit inference boundaries. Cached report and training preflight recheck frozen roles, IDs, source/label metadata and immutable manifests without rehashing every JPEG. Unexpected symlinks still fail. |
 | `protocol.py`, `subsets.py`, `adaptive.py`, `preprocess.py`, `data.py` | **KEEP** | Group leakage controls, frozen S10 membership, official BDD/Scalabel/Ultralytics format adaptation and pixel-only CV policy are domain-specific. Rewriting them risks changing frozen data identities for a cosmetic LOC reduction. |
 | `stress.py`, `stress_eval.py`, `robustness_spec.py` | **KEEP isolated** | No canonical notebook imports the old stress flow; research tests and eventual #8 specification retain it. Removing it would sacrifice evidence and future gated work without simplifying runtime. |
-| `notebooks/archive/` | **KEEP untouched** | Original historical notebook bytes and hashes are preserved; an old implementation is replayable from its recorded source revision. |
+| [notebooks/archive/](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/notebooks/archive/) | **KEEP untouched** | Original historical notebook bytes and hashes are preserved; an old implementation is replayable from its recorded source revision. |
 
 ## Execution and integrity boundaries
 

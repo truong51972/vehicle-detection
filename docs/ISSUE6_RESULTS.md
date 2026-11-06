@@ -1,8 +1,10 @@
+> Historical workflow record. Current entrypoints and replay paths: [issue 41 migration](HISTORICAL_REPLAY.md).
+
 # Issue #6: nested Raw / Adaptive pilots
 
 This implements [issue #6](https://github.com/truong51972/vehicle-detection/issues/6)
 on the merged issue #5 protocol. The original v1 execution is preserved in
-[the evidence notebook](../notebooks/archive/phase2/evidence/02_adaptive_preprocessing_v1.ipynb).
+[the evidence notebook](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/notebooks/archive/phase2/evidence/02_adaptive_preprocessing_v1.ipynb).
 The [review follow-up](ISSUE6_REVIEW.md) documents v2; figures and measurements in
 this report continue to describe v1 at revision `7380eed`.
 No detector inference, optimizer steps or development/final-test image inspection

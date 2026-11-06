@@ -1,3 +1,5 @@
+> Historical workflow record. Current entrypoints and replay paths: [issue 41 migration](../HISTORICAL_REPLAY.md).
+
 # Five-class S10 development evaluation — issue #22
 
 All six development cells evaluated the same **13,975 images, 8,258 source groups
@@ -184,7 +186,7 @@ Hardware/software are recorded in [environment.json](environment.json).
 
 ## Reproduction and subsequent holdout scope
 
-Notebook [04](../../notebooks/04_eval_and_report.ipynb) defaults to these five-class
+Notebook [04](https://github.com/truong51972/vehicle-detection/blob/51687b273e7e87b5315d84f5b67202d4cc746992/notebooks/04_eval_and_report.ipynb) defaults to these five-class
 paths, saved-result reuse and zero bootstrap draws. Setting
 `BOOTSTRAP_RESAMPLES=100` reuses the saved uncertainty analysis. New inference
 still requires `ALLOW_INFERENCE=True`; no training/upstream phase is invoked.
