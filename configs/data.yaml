@@ -1,5 +1,5 @@
 splits: configs/splits.csv.gz
-splits_sha256: f43211052577a0fe561711ffd7a436a46cd9e016f233d7a98edf3282832cf958
+splits_sha256: b7a6aba1d1f72e1b1e3eceda8e8427d41f44408067fad63ee68479137714cb96
 classes:
 - car
 - truck
@@ -11,3 +11,4 @@ seed: 2026
 source_revision: 51687b2
 source_protocol_id: 680090b8eef098fbe10c77e632aacbfd3d6854d8489d7518e20f062e032b6e44
 source_subsets_id: 8a9ba46aa120f0e1d113d4bd907bc8ef5e82ab9bb3bd533d863812deb3f30b4f
+training_subset: S20

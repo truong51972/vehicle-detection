@@ -41,6 +41,7 @@ def test_evaluation_pairs_policy_and_detector_and_reuses_metrics(evaluation_mode
     with pytest.raises(FileNotFoundError, match="ALLOW_INFERENCE"):
         evaluation.evaluate_experiment(root, "v1")
     result = evaluation.evaluate_experiment(root, "v1", allow_inference=True)
+    assert result["inputs"]["training_subset"] == "S20"
     assert result["overall"]["mAP50_95"] == 0.1
     assert calls[0]["data"] == str(root / "runs/v1/data/data.yaml")
     assert calls[0]["split"] == "val"

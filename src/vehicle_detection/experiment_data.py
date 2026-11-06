@@ -25,10 +25,11 @@ def shared_splits(root):
         file_hash(path) != shared["splits_sha256"]
         or shared["classes"] != FIVE_CLASSES
         or shared["seed"] != 2026
+        or shared["training_subset"] not in {"S10", "S20"}
     ):
         raise ValueError("Shared split table or taxonomy changed")
     rows = pd.read_csv(path, keep_default_na=False).to_dict("records")
-    owners = {}
+    owners, selections = {}, {}
     roles = {"training_pool", "calibration", "development_validation", "final_test"}
     if {r["role"] for r in rows} != roles:
         raise ValueError("Expected all four frozen roles")
@@ -39,7 +40,9 @@ def shared_splits(root):
             or source.is_absolute()
             or ".." in source.parts
             or row["s10"] not in (0, 1)
-            or (row["s10"] and row["role"] != "training_pool")
+            or row["s20"] not in (0, 1)
+            or row["s10"] > row["s20"]
+            or (row["s20"] and row["role"] != "training_pool")
             or (row["role"] == "final_test" and row["sha256"])
             or (row["role"] != "final_test" and not row["sha256"])
             or row["width"] < 2
@@ -53,8 +56,13 @@ def shared_splits(root):
             if token in owners and (key == "id" or owners[token] != row["role"]):
                 raise ValueError(f"Duplicate ID or cross-role leakage: {row['id']}")
             owners[token] = row["role"]
-    if not any(r["s10"] for r in rows):
-        raise ValueError("Missing frozen S10 population")
+            if key != "id":
+                flags = (row["s10"], row["s20"])
+                if token in selections and selections[token] != flags:
+                    raise ValueError(f"Subset divides a source/duplicate group: {row['id']}")
+                selections[token] = flags
+    if not 0 < sum(r["s10"] for r in rows) < sum(r["s20"] for r in rows):
+        raise ValueError("Expected nonempty, strictly nested frozen S10/S20 populations")
     return shared, rows
 
 
@@ -118,9 +126,10 @@ def audit_sources(root):
     return pd.Series([r["role"] for r in rows]).value_counts()
 
 
-def populations(rows):
+def populations(rows, subset):
+    flag = {"S10": "s10", "S20": "s20"}[subset]
     return {
-        "train": [r for r in rows if r["s10"]],
+        "train": [r for r in rows if r[flag]],
         "val": [r for r in rows if r["role"] == "development_validation"],
     }
 
@@ -133,6 +142,8 @@ def _data_config(root, experiment, shared):
         "val": "images/val",
         "names": dict(enumerate(FIVE_CLASSES)),
         "experiment": experiment,
+        "training_subset": shared["training_subset"],
+        "seed": shared["seed"],
         "config_sha256": digest(config),
         "splits_sha256": shared["splits_sha256"],
         "opencv": cv2.__version__,
@@ -152,7 +163,7 @@ def verify_data(root, experiment):
     if {k: v for k, v in saved.items() if k not in {"files_sha256", "operator_sha256"}} != expected:
         raise ValueError("Prepared experiment inputs/policy changed; use a new experiment ID")
     files = []
-    for split, selected in populations(rows).items():
+    for split, selected in populations(rows, shared["training_subset"]).items():
         for kind, suffix in (("images", ".jpg"), ("labels", ".txt")):
             folder = directory / kind / split
             if folder.resolve() != folder:
@@ -191,7 +202,7 @@ def prepare_data(root, experiment):
     temporary.mkdir(parents=True, exist_ok=False)
     files = []
     try:
-        for split, selected in populations(rows).items():
+        for split, selected in populations(rows, shared["training_subset"]).items():
             for kind in ("images", "labels"):
                 (temporary / kind / split).mkdir(parents=True)
             for row in selected:
