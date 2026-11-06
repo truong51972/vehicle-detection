@@ -135,7 +135,6 @@ def _data_config(root, experiment, shared):
         "experiment": experiment,
         "config_sha256": digest(config),
         "splits_sha256": shared["splits_sha256"],
-        "operator_sha256": file_hash(Path(__file__).with_name("preprocess.py")),
         "opencv": cv2.__version__,
     }
 
@@ -149,7 +148,8 @@ def verify_data(root, experiment):
     if directory.resolve() != directory or (directory / "data.yaml").is_symlink():
         raise ValueError("Unexpected prepared directory symlink")
     saved = yaml.safe_load((directory / "data.yaml").read_text())
-    if {k: v for k, v in saved.items() if k != "files_sha256"} != expected:
+    # The operator hash records export provenance; reuse checks the frozen output bytes.
+    if {k: v for k, v in saved.items() if k not in {"files_sha256", "operator_sha256"}} != expected:
         raise ValueError("Prepared experiment inputs/policy changed; use a new experiment ID")
     files = []
     for split, selected in populations(rows).items():
@@ -182,6 +182,7 @@ def prepare_data(root, experiment):
         raise ValueError("Unexpected export directory symlink")
     if destination.exists():
         return verify_data(root, experiment)
+    native["operator_sha256"] = file_hash(Path(__file__).with_name("preprocess.py"))
     shared, rows = source_rows(root)
     data = (root / shared["data_root"]).resolve()
     if destination.is_relative_to(data) or data.is_relative_to(destination):

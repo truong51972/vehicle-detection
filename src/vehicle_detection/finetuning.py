@@ -6,58 +6,11 @@ import pandas as pd
 import yaml
 from ultralytics import YOLO
 
-from .baseline import PRETRAINED_SHA256, VAL_SETTINGS, verify_coco_names
+from .baseline import PRETRAINED_SHA256, verify_coco_names
 from .common import file_hash
 from .experiment_data import load_experiment, verify_data
 from .five_class import FIVE_CLASSES
-
-# Keep the historical S10 budget and disabled augmentations; both branches share it.
-TRAIN_SETTINGS = {
-    **VAL_SETTINGS,
-    "epochs": 20,
-    "patience": 0,
-    "batch": 16,
-    "amp": False,
-    "optimizer": "AdamW",
-    "lr0": 0.001,
-    "lrf": 0.01,
-    "cos_lr": True,
-    "warmup_epochs": 3.0,
-    "warmup_bias_lr": 0.0,
-    "weight_decay": 0.0005,
-    "nbs": 64,
-    "cls_remap": True,
-    "rect": False,
-    "cache": False,
-    "fraction": 1.0,
-    "compile": False,
-    "channels_last": False,
-    "save": True,
-    "val": True,
-    "augmentations": [],
-    **dict.fromkeys(
-        (
-            "hsv_h",
-            "hsv_s",
-            "hsv_v",
-            "degrees",
-            "translate",
-            "scale",
-            "shear",
-            "perspective",
-            "flipud",
-            "fliplr",
-            "bgr",
-            "mosaic",
-            "mixup",
-            "cutmix",
-            "copy_paste",
-            "multi_scale",
-            "close_mosaic",
-        ),
-        0,
-    ),
-}
+from .training_settings import TRAIN_SETTINGS, validate_training_args
 
 
 def backbone_boundary(model):
@@ -99,12 +52,7 @@ def train_experiment(root, experiment, *, allow_training=False, resume=False):
         raise ValueError("Unexpected native artifact symlink")
     if args_path.exists():
         args = yaml.safe_load(args_path.read_text())
-        if (
-            args.get("data") != str(data)
-            or args.get("freeze") != 11
-            or any(args.get(k) != v for k, v in settings.items())
-        ):
-            raise ValueError("Native training settings differ from the experiment")
+        validate_training_args(args, data, settings)
         if best.is_file() and history.is_file():
             table = pd.read_csv(history)
             if table.epoch.tolist() == list(range(1, settings["epochs"] + 1)):

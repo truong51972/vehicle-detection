@@ -1,6 +1,7 @@
 import json
 from types import SimpleNamespace
 
+import pandas as pd
 import pytest
 import yaml
 from test_experiment_data import experiment_project as experiment_project
@@ -12,7 +13,8 @@ from vehicle_detection import evaluation  # noqa: E402
 from vehicle_detection.five_class import FIVE_CLASSES  # noqa: E402
 
 
-def test_evaluation_pairs_policy_and_detector_and_reuses_metrics(trained_project, monkeypatch):
+@pytest.fixture
+def evaluation_model(trained_project, monkeypatch):
     root, _ = trained_project
     calls = []
 
@@ -31,6 +33,11 @@ def test_evaluation_pairs_policy_and_detector_and_reuses_metrics(trained_project
             )
 
     monkeypatch.setattr(evaluation, "YOLO", Model)
+    return root, calls
+
+
+def test_evaluation_pairs_policy_and_detector_and_reuses_metrics(evaluation_model):
+    root, calls = evaluation_model
     with pytest.raises(FileNotFoundError, match="ALLOW_INFERENCE"):
         evaluation.evaluate_experiment(root, "v1")
     result = evaluation.evaluate_experiment(root, "v1", allow_inference=True)
@@ -46,6 +53,40 @@ def test_evaluation_pairs_policy_and_detector_and_reuses_metrics(trained_project
     checkpoint.write_bytes(b"a different detector")
     with pytest.raises(ValueError, match="inputs/settings changed"):
         evaluation.evaluate_experiment(root, "v1")
+
+
+@pytest.mark.parametrize("cached", [False, True])
+@pytest.mark.parametrize(
+    "failure", ["interrupted", "missing_epoch", "settings", "freeze", "missing_history"]
+)
+def test_evaluation_requires_completed_matching_training(evaluation_model, cached, failure):
+    root, calls = evaluation_model
+    saved = root / "runs/v1/eval/metrics.json"
+    if cached:
+        evaluation.evaluate_experiment(root, "v1", allow_inference=True)
+    previous = saved.read_bytes() if cached else None
+    native_calls = len(calls)
+    run = root / "runs/v1/train"
+    history = run / "results.csv"
+    error, message = ValueError, "epoch budget"
+    if failure in {"interrupted", "missing_epoch"}:
+        pd.read_csv(history).iloc[[0 if failure == "interrupted" else 1]].to_csv(
+            history, index=False
+        )
+    elif failure == "missing_history":
+        history.unlink()
+        error, message = FileNotFoundError, "results.csv"
+    else:
+        path = run / "args.yaml"
+        args = yaml.safe_load(path.read_text())
+        key = "optimizer" if failure == "settings" else "freeze"
+        args[key] = "SGD" if failure == "settings" else 0
+        path.write_text(yaml.safe_dump(args))
+        message = "settings differ"
+    with pytest.raises(error, match=message):
+        evaluation.evaluate_experiment(root, "v1", allow_inference=True)
+    assert len(calls) == native_calls
+    assert (saved.read_bytes() if saved.exists() else None) == previous
 
 
 def test_wrong_experiment_and_taxonomy_fail_before_inference(trained_project, monkeypatch):

@@ -4,13 +4,15 @@ import json
 from importlib.metadata import version
 from pathlib import Path
 
+import pandas as pd
 import yaml
 from ultralytics import YOLO
 
 from .baseline import VAL_SETTINGS
 from .common import file_hash, read_json, write_json
-from .experiment_data import verify_data
+from .experiment_data import load_experiment, verify_data
 from .five_class import FIVE_CLASSES
+from .training_settings import TRAIN_SETTINGS, validate_training_args
 
 
 def evaluate_experiment(root, experiment, *, allow_inference=False, settings=None):
@@ -18,14 +20,24 @@ def evaluate_experiment(root, experiment, *, allow_inference=False, settings=Non
     prepared = verify_data(root, experiment)
     directory = root / f"runs/{experiment}"
     checkpoint = directory / "train/weights/best.pt"
+    history = directory / "train/results.csv"
     if any(
         p.resolve() != p
-        for p in (checkpoint, directory / "train/args.yaml", directory / "train.yaml")
+        for p in (checkpoint, history, directory / "train/args.yaml", directory / "train.yaml")
     ):
         raise ValueError("Unexpected detector/YAML symlink")
     args = yaml.safe_load((directory / "train/args.yaml").read_text())
     if args["data"] != str(directory / "train.yaml"):
         raise ValueError("Detector belongs to another experiment")
+    experiment_config = load_experiment(root, experiment)
+    expected_settings = {
+        **TRAIN_SETTINGS,
+        **experiment_config["training"],
+        "seed": experiment_config["seed"],
+    }
+    validate_training_args(args, directory / "train.yaml", expected_settings)
+    if pd.read_csv(history).epoch.tolist() != list(range(1, expected_settings["epochs"] + 1)):
+        raise ValueError("Native training has not completed the epoch budget")
     training = yaml.safe_load((directory / "train.yaml").read_text())
     raw = verify_data(root, "v0")
     if training != {

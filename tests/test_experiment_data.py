@@ -210,3 +210,24 @@ def test_prepared_directory_symlinks_fail_before_reading_bytes(experiment_projec
     labels.symlink_to(saved, target_is_directory=True)
     with pytest.raises(ValueError, match="directory symlink"):
         verify_data(root, "v0")
+
+
+@pytest.mark.parametrize("experiment", ["v0", "v1"])
+def test_source_only_edit_preserves_frozen_export_reuse(
+    experiment_project, monkeypatch, tmp_path, experiment
+):
+    from vehicle_detection import experiment_data as data
+
+    operator = tmp_path / "preprocess.py"
+    operator.write_bytes(Path(data.__file__).with_name("preprocess.py").read_bytes())
+    monkeypatch.setattr(data, "__file__", str(tmp_path / "experiment_data.py"))
+    root = experiment_project
+    prepared = prepare_data(root, experiment)
+    saved = root / f"runs/{experiment}/data/data.yaml"
+    original_yaml = saved.read_bytes()
+    operator.write_text(operator.read_text() + "\n# Unrelated future operator documentation.\n")
+    assert file_hash(operator) != prepared["operator_sha256"]
+    monkeypatch.setattr(data, "source_rows", lambda *args: pytest.fail("Source work on reuse"))
+    assert verify_data(root, experiment) == prepared
+    assert prepare_data(root, experiment) == prepared
+    assert saved.read_bytes() == original_yaml

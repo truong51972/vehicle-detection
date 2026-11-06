@@ -47,6 +47,8 @@ inspection requires the original verified local exports. To execute new work:
 4. In 04, set `READ_HISTORICAL=False`. Saved metrics are reused; new inference
    additionally requires `ALLOW_INFERENCE=True`. This evaluates each detector on
    its matching offline policy over the identical original development IDs/GT.
+   Both inference and cache reuse require matching native training settings and
+   a history containing the complete configured epoch budget.
 
 New outputs live under `runs/v0/` and `runs/v1/`, leaving original measurements
 under their original paths. Prepared images are owned files; no dataloader filters
@@ -69,6 +71,8 @@ policy parameters, JPEG quality, seed, initialization and training settings.
 Native `data.yaml`/`train.yaml`, `args.yaml`, `results.csv`, checkpoints and one
 `eval/metrics.json` replace the active multi-stage JSON receipt chain. Input/file
 bindings still reject changed splits, policies, prepared bytes and foreign detectors.
+The recorded operator-source hash is export provenance; later source-only edits
+do not invalidate unchanged prepared data.
 
 Extract original BDD images/annotations under `data/bdd100k/`, or update the shared
 `data_root`. The saved table has source-relative paths matching the preserved
