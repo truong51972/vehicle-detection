@@ -1,0 +1,696 @@
+{
+  "best_fitness": 0.20864,
+  "checkpoint_hashes": {
+    "best": "6d074aa6f7287b0c2711e8c2651028f5d6e3d8c27da27a5a707408efefb3a3b7",
+    "last": "a7d68b3397629951999d6f8ae865f8dffc564c8e38880c9539a7ea2d465cf810"
+  },
+  "selected_epoch": 9,
+  "selection_imgsz": 640,
+  "selection_pad": 0.0,
+  "selection_passes": [
+    {
+      "epoch": 1,
+      "images": 13975,
+      "imgsz": 640,
+      "metrics": {
+        "fitness": 0.18985764413888337,
+        "metrics/mAP50(B)": 0.3153208632277143,
+        "metrics/mAP50-95(B)": 0.18985764413888337,
+        "metrics/precision(B)": 0.47722964416310665,
+        "metrics/recall(B)": 0.3057699328996192
+      },
+      "pad": 0.0,
+      "tensor_shapes": [
+        [
+          384,
+          640
+        ]
+      ],
+      "terminal": false
+    },
+    {
+      "epoch": 2,
+      "images": 13975,
+      "imgsz": 640,
+      "metrics": {
+        "fitness": 0.18308560668071827,
+        "metrics/mAP50(B)": 0.314594020276441,
+        "metrics/mAP50-95(B)": 0.18308560668071827,
+        "metrics/precision(B)": 0.4775996832105678,
+        "metrics/recall(B)": 0.30771478261773905
+      },
+      "pad": 0.0,
+      "tensor_shapes": [
+        [
+          384,
+          640
+        ]
+      ],
+      "terminal": false
+    },
+    {
+      "epoch": 3,
+      "images": 13975,
+      "imgsz": 640,
+      "metrics": {
+        "fitness": 0.19887186289769518,
+        "metrics/mAP50(B)": 0.33425777858308664,
+        "metrics/mAP50-95(B)": 0.19887186289769518,
+        "metrics/precision(B)": 0.5081796598926122,
+        "metrics/recall(B)": 0.3139321168532381
+      },
+      "pad": 0.0,
+      "tensor_shapes": [
+        [
+          384,
+          640
+        ]
+      ],
+      "terminal": false
+    },
+    {
+      "epoch": 4,
+      "images": 13975,
+      "imgsz": 640,
+      "metrics": {
+        "fitness": 0.19189586455083807,
+        "metrics/mAP50(B)": 0.3271092742935021,
+        "metrics/mAP50-95(B)": 0.19189586455083807,
+        "metrics/precision(B)": 0.49623041632901915,
+        "metrics/recall(B)": 0.31090803592308813
+      },
+      "pad": 0.0,
+      "tensor_shapes": [
+        [
+          384,
+          640
+        ]
+      ],
+      "terminal": false
+    },
+    {
+      "epoch": 5,
+      "images": 13975,
+      "imgsz": 640,
+      "metrics": {
+        "fitness": 0.20154241678210336,
+        "metrics/mAP50(B)": 0.33910828434018725,
+        "metrics/mAP50-95(B)": 0.20154241678210336,
+        "metrics/precision(B)": 0.48866925657092725,
+        "metrics/recall(B)": 0.3321796461457683
+      },
+      "pad": 0.0,
+      "tensor_shapes": [
+        [
+          384,
+          640
+        ]
+      ],
+      "terminal": false
+    },
+    {
+      "epoch": 6,
+      "images": 13975,
+      "imgsz": 640,
+      "metrics": {
+        "fitness": 0.20573676950093456,
+        "metrics/mAP50(B)": 0.34659129447010295,
+        "metrics/mAP50-95(B)": 0.20573676950093456,
+        "metrics/precision(B)": 0.48738981363957723,
+        "metrics/recall(B)": 0.3356808510356532
+      },
+      "pad": 0.0,
+      "tensor_shapes": [
+        [
+          384,
+          640
+        ]
+      ],
+      "terminal": false
+    },
+    {
+      "epoch": 7,
+      "images": 13975,
+      "imgsz": 640,
+      "metrics": {
+        "fitness": 0.20647116616381356,
+        "metrics/mAP50(B)": 0.34658814085131395,
+        "metrics/mAP50-95(B)": 0.20647116616381356,
+        "metrics/precision(B)": 0.5267837376793447,
+        "metrics/recall(B)": 0.32636015884917435
+      },
+      "pad": 0.0,
+      "tensor_shapes": [
+        [
+          384,
+          640
+        ]
+      ],
+      "terminal": false
+    },
+    {
+      "epoch": 8,
+      "images": 13975,
+      "imgsz": 640,
+      "metrics": {
+        "fitness": 0.203927868676623,
+        "metrics/mAP50(B)": 0.34553275014350227,
+        "metrics/mAP50-95(B)": 0.203927868676623,
+        "metrics/precision(B)": 0.5021604115004521,
+        "metrics/recall(B)": 0.3279707259287727
+      },
+      "pad": 0.0,
+      "tensor_shapes": [
+        [
+          384,
+          640
+        ]
+      ],
+      "terminal": false
+    },
+    {
+      "epoch": 9,
+      "images": 13975,
+      "imgsz": 640,
+      "metrics": {
+        "fitness": 0.20863676306676357,
+        "metrics/mAP50(B)": 0.3524365346406745,
+        "metrics/mAP50-95(B)": 0.20863676306676357,
+        "metrics/precision(B)": 0.5279236199428805,
+        "metrics/recall(B)": 0.3319190882903372
+      },
+      "pad": 0.0,
+      "tensor_shapes": [
+        [
+          384,
+          640
+        ]
+      ],
+      "terminal": false
+    },
+    {
+      "epoch": 10,
+      "images": 13975,
+      "imgsz": 640,
+      "metrics": {
+        "fitness": 0.20729111992243957,
+        "metrics/mAP50(B)": 0.3502460149879797,
+        "metrics/mAP50-95(B)": 0.20729111992243957,
+        "metrics/precision(B)": 0.5189252658081995,
+        "metrics/recall(B)": 0.33677174933097154
+      },
+      "pad": 0.0,
+      "tensor_shapes": [
+        [
+          384,
+          640
+        ]
+      ],
+      "terminal": false
+    },
+    {
+      "epoch": 11,
+      "images": 13975,
+      "imgsz": 640,
+      "metrics": {
+        "fitness": 0.2052786995598118,
+        "metrics/mAP50(B)": 0.3493471309669746,
+        "metrics/mAP50-95(B)": 0.2052786995598118,
+        "metrics/precision(B)": 0.5017407241319426,
+        "metrics/recall(B)": 0.33713295905577095
+      },
+      "pad": 0.0,
+      "tensor_shapes": [
+        [
+          384,
+          640
+        ]
+      ],
+      "terminal": false
+    },
+    {
+      "epoch": 12,
+      "images": 13975,
+      "imgsz": 640,
+      "metrics": {
+        "fitness": 0.20514998272018034,
+        "metrics/mAP50(B)": 0.3507779085638257,
+        "metrics/mAP50-95(B)": 0.20514998272018034,
+        "metrics/precision(B)": 0.5243437674220932,
+        "metrics/recall(B)": 0.33294629301085543
+      },
+      "pad": 0.0,
+      "tensor_shapes": [
+        [
+          384,
+          640
+        ]
+      ],
+      "terminal": false
+    },
+    {
+      "epoch": 13,
+      "images": 13975,
+      "imgsz": 640,
+      "metrics": {
+        "fitness": 0.2028700430063353,
+        "metrics/mAP50(B)": 0.346766894573726,
+        "metrics/mAP50-95(B)": 0.2028700430063353,
+        "metrics/precision(B)": 0.5060769228331545,
+        "metrics/recall(B)": 0.33172683235304057
+      },
+      "pad": 0.0,
+      "tensor_shapes": [
+        [
+          384,
+          640
+        ]
+      ],
+      "terminal": false
+    },
+    {
+      "epoch": 14,
+      "images": 13975,
+      "imgsz": 640,
+      "metrics": {
+        "fitness": 0.20388437184978753,
+        "metrics/mAP50(B)": 0.34713018366091786,
+        "metrics/mAP50-95(B)": 0.20388437184978753,
+        "metrics/precision(B)": 0.4995843188842562,
+        "metrics/recall(B)": 0.33689651713277813
+      },
+      "pad": 0.0,
+      "tensor_shapes": [
+        [
+          384,
+          640
+        ]
+      ],
+      "terminal": false
+    },
+    {
+      "epoch": 15,
+      "images": 13975,
+      "imgsz": 640,
+      "metrics": {
+        "fitness": 0.20327874559347817,
+        "metrics/mAP50(B)": 0.34639574322038075,
+        "metrics/mAP50-95(B)": 0.20327874559347817,
+        "metrics/precision(B)": 0.5032664777526555,
+        "metrics/recall(B)": 0.33417922196468386
+      },
+      "pad": 0.0,
+      "tensor_shapes": [
+        [
+          384,
+          640
+        ]
+      ],
+      "terminal": false
+    },
+    {
+      "epoch": 16,
+      "images": 13975,
+      "imgsz": 640,
+      "metrics": {
+        "fitness": 0.20175578920299345,
+        "metrics/mAP50(B)": 0.3436197203353501,
+        "metrics/mAP50-95(B)": 0.20175578920299345,
+        "metrics/precision(B)": 0.4999882220458972,
+        "metrics/recall(B)": 0.32958247057355405
+      },
+      "pad": 0.0,
+      "tensor_shapes": [
+        [
+          384,
+          640
+        ]
+      ],
+      "terminal": false
+    },
+    {
+      "epoch": 17,
+      "images": 13975,
+      "imgsz": 640,
+      "metrics": {
+        "fitness": 0.2009147939203253,
+        "metrics/mAP50(B)": 0.3419537974476426,
+        "metrics/mAP50-95(B)": 0.2009147939203253,
+        "metrics/precision(B)": 0.5095564299497216,
+        "metrics/recall(B)": 0.3260869409594453
+      },
+      "pad": 0.0,
+      "tensor_shapes": [
+        [
+          384,
+          640
+        ]
+      ],
+      "terminal": false
+    },
+    {
+      "epoch": 18,
+      "images": 13975,
+      "imgsz": 640,
+      "metrics": {
+        "fitness": 0.20023918784065375,
+        "metrics/mAP50(B)": 0.34183637066387973,
+        "metrics/mAP50-95(B)": 0.20023918784065375,
+        "metrics/precision(B)": 0.4993747423845587,
+        "metrics/recall(B)": 0.3292815812286639
+      },
+      "pad": 0.0,
+      "tensor_shapes": [
+        [
+          384,
+          640
+        ]
+      ],
+      "terminal": false
+    },
+    {
+      "epoch": 19,
+      "images": 13975,
+      "imgsz": 640,
+      "metrics": {
+        "fitness": 0.20057264536778643,
+        "metrics/mAP50(B)": 0.342109761564587,
+        "metrics/mAP50-95(B)": 0.20057264536778643,
+        "metrics/precision(B)": 0.5063298329508991,
+        "metrics/recall(B)": 0.32897996408506314
+      },
+      "pad": 0.0,
+      "tensor_shapes": [
+        [
+          384,
+          640
+        ]
+      ],
+      "terminal": false
+    },
+    {
+      "epoch": 20,
+      "images": 13975,
+      "imgsz": 640,
+      "metrics": {
+        "fitness": 0.2004234827829138,
+        "metrics/mAP50(B)": 0.341573966943396,
+        "metrics/mAP50-95(B)": 0.2004234827829138,
+        "metrics/precision(B)": 0.5021324254029524,
+        "metrics/recall(B)": 0.32909350438133356
+      },
+      "pad": 0.0,
+      "tensor_shapes": [
+        [
+          384,
+          640
+        ]
+      ],
+      "terminal": false
+    },
+    {
+      "epoch": 20,
+      "images": 13975,
+      "imgsz": 640,
+      "metrics": {
+        "fitness": 0.20863038523357666,
+        "metrics/mAP50(B)": 0.3524104441905152,
+        "metrics/mAP50-95(B)": 0.20863038523357666,
+        "metrics/precision(B)": 0.5291607528766881,
+        "metrics/recall(B)": 0.33201632367930917
+      },
+      "pad": 0.0,
+      "tensor_shapes": [
+        [
+          384,
+          640
+        ]
+      ],
+      "terminal": true
+    }
+  ],
+  "train_metrics": {
+    "fitness": 0.20864,
+    "metrics/mAP50(B)": 0.35244,
+    "metrics/mAP50-95(B)": 0.20864,
+    "metrics/precision(B)": 0.52792,
+    "metrics/recall(B)": 0.33192,
+    "val/box_loss": 1.85807,
+    "val/cls_loss": 1.206,
+    "val/l1_loss": 0.00577
+  },
+  "train_shapes": [
+    [
+      640,
+      640
+    ]
+  ],
+  "trainable_parameters": [
+    "model.13.cv1.conv.weight",
+    "model.13.cv1.bn.weight",
+    "model.13.cv1.bn.bias",
+    "model.13.cv2.conv.weight",
+    "model.13.cv2.bn.weight",
+    "model.13.cv2.bn.bias",
+    "model.13.m.0.cv1.conv.weight",
+    "model.13.m.0.cv1.bn.weight",
+    "model.13.m.0.cv1.bn.bias",
+    "model.13.m.0.cv2.conv.weight",
+    "model.13.m.0.cv2.bn.weight",
+    "model.13.m.0.cv2.bn.bias",
+    "model.13.m.0.cv3.conv.weight",
+    "model.13.m.0.cv3.bn.weight",
+    "model.13.m.0.cv3.bn.bias",
+    "model.13.m.0.m.0.cv1.conv.weight",
+    "model.13.m.0.m.0.cv1.bn.weight",
+    "model.13.m.0.m.0.cv1.bn.bias",
+    "model.13.m.0.m.0.cv2.conv.weight",
+    "model.13.m.0.m.0.cv2.bn.weight",
+    "model.13.m.0.m.0.cv2.bn.bias",
+    "model.13.m.0.m.1.cv1.conv.weight",
+    "model.13.m.0.m.1.cv1.bn.weight",
+    "model.13.m.0.m.1.cv1.bn.bias",
+    "model.13.m.0.m.1.cv2.conv.weight",
+    "model.13.m.0.m.1.cv2.bn.weight",
+    "model.13.m.0.m.1.cv2.bn.bias",
+    "model.16.cv1.conv.weight",
+    "model.16.cv1.bn.weight",
+    "model.16.cv1.bn.bias",
+    "model.16.cv2.conv.weight",
+    "model.16.cv2.bn.weight",
+    "model.16.cv2.bn.bias",
+    "model.16.m.0.cv1.conv.weight",
+    "model.16.m.0.cv1.bn.weight",
+    "model.16.m.0.cv1.bn.bias",
+    "model.16.m.0.cv2.conv.weight",
+    "model.16.m.0.cv2.bn.weight",
+    "model.16.m.0.cv2.bn.bias",
+    "model.16.m.0.cv3.conv.weight",
+    "model.16.m.0.cv3.bn.weight",
+    "model.16.m.0.cv3.bn.bias",
+    "model.16.m.0.m.0.cv1.conv.weight",
+    "model.16.m.0.m.0.cv1.bn.weight",
+    "model.16.m.0.m.0.cv1.bn.bias",
+    "model.16.m.0.m.0.cv2.conv.weight",
+    "model.16.m.0.m.0.cv2.bn.weight",
+    "model.16.m.0.m.0.cv2.bn.bias",
+    "model.16.m.0.m.1.cv1.conv.weight",
+    "model.16.m.0.m.1.cv1.bn.weight",
+    "model.16.m.0.m.1.cv1.bn.bias",
+    "model.16.m.0.m.1.cv2.conv.weight",
+    "model.16.m.0.m.1.cv2.bn.weight",
+    "model.16.m.0.m.1.cv2.bn.bias",
+    "model.17.conv.weight",
+    "model.17.bn.weight",
+    "model.17.bn.bias",
+    "model.19.cv1.conv.weight",
+    "model.19.cv1.bn.weight",
+    "model.19.cv1.bn.bias",
+    "model.19.cv2.conv.weight",
+    "model.19.cv2.bn.weight",
+    "model.19.cv2.bn.bias",
+    "model.19.m.0.cv1.conv.weight",
+    "model.19.m.0.cv1.bn.weight",
+    "model.19.m.0.cv1.bn.bias",
+    "model.19.m.0.cv2.conv.weight",
+    "model.19.m.0.cv2.bn.weight",
+    "model.19.m.0.cv2.bn.bias",
+    "model.19.m.0.cv3.conv.weight",
+    "model.19.m.0.cv3.bn.weight",
+    "model.19.m.0.cv3.bn.bias",
+    "model.19.m.0.m.0.cv1.conv.weight",
+    "model.19.m.0.m.0.cv1.bn.weight",
+    "model.19.m.0.m.0.cv1.bn.bias",
+    "model.19.m.0.m.0.cv2.conv.weight",
+    "model.19.m.0.m.0.cv2.bn.weight",
+    "model.19.m.0.m.0.cv2.bn.bias",
+    "model.19.m.0.m.1.cv1.conv.weight",
+    "model.19.m.0.m.1.cv1.bn.weight",
+    "model.19.m.0.m.1.cv1.bn.bias",
+    "model.19.m.0.m.1.cv2.conv.weight",
+    "model.19.m.0.m.1.cv2.bn.weight",
+    "model.19.m.0.m.1.cv2.bn.bias",
+    "model.20.conv.weight",
+    "model.20.bn.weight",
+    "model.20.bn.bias",
+    "model.22.cv1.conv.weight",
+    "model.22.cv1.bn.weight",
+    "model.22.cv1.bn.bias",
+    "model.22.cv2.conv.weight",
+    "model.22.cv2.bn.weight",
+    "model.22.cv2.bn.bias",
+    "model.22.m.0.0.cv1.conv.weight",
+    "model.22.m.0.0.cv1.bn.weight",
+    "model.22.m.0.0.cv1.bn.bias",
+    "model.22.m.0.0.cv2.conv.weight",
+    "model.22.m.0.0.cv2.bn.weight",
+    "model.22.m.0.0.cv2.bn.bias",
+    "model.22.m.0.1.attn.qkv.conv.weight",
+    "model.22.m.0.1.attn.qkv.bn.weight",
+    "model.22.m.0.1.attn.qkv.bn.bias",
+    "model.22.m.0.1.attn.proj.conv.weight",
+    "model.22.m.0.1.attn.proj.bn.weight",
+    "model.22.m.0.1.attn.proj.bn.bias",
+    "model.22.m.0.1.attn.pe.conv.weight",
+    "model.22.m.0.1.attn.pe.bn.weight",
+    "model.22.m.0.1.attn.pe.bn.bias",
+    "model.22.m.0.1.ffn.0.conv.weight",
+    "model.22.m.0.1.ffn.0.bn.weight",
+    "model.22.m.0.1.ffn.0.bn.bias",
+    "model.22.m.0.1.ffn.1.conv.weight",
+    "model.22.m.0.1.ffn.1.bn.weight",
+    "model.22.m.0.1.ffn.1.bn.bias",
+    "model.23.cv2.0.0.conv.weight",
+    "model.23.cv2.0.0.bn.weight",
+    "model.23.cv2.0.0.bn.bias",
+    "model.23.cv2.0.1.conv.weight",
+    "model.23.cv2.0.1.bn.weight",
+    "model.23.cv2.0.1.bn.bias",
+    "model.23.cv2.0.2.weight",
+    "model.23.cv2.0.2.bias",
+    "model.23.cv2.1.0.conv.weight",
+    "model.23.cv2.1.0.bn.weight",
+    "model.23.cv2.1.0.bn.bias",
+    "model.23.cv2.1.1.conv.weight",
+    "model.23.cv2.1.1.bn.weight",
+    "model.23.cv2.1.1.bn.bias",
+    "model.23.cv2.1.2.weight",
+    "model.23.cv2.1.2.bias",
+    "model.23.cv2.2.0.conv.weight",
+    "model.23.cv2.2.0.bn.weight",
+    "model.23.cv2.2.0.bn.bias",
+    "model.23.cv2.2.1.conv.weight",
+    "model.23.cv2.2.1.bn.weight",
+    "model.23.cv2.2.1.bn.bias",
+    "model.23.cv2.2.2.weight",
+    "model.23.cv2.2.2.bias",
+    "model.23.cv3.0.0.0.conv.weight",
+    "model.23.cv3.0.0.0.bn.weight",
+    "model.23.cv3.0.0.0.bn.bias",
+    "model.23.cv3.0.0.1.conv.weight",
+    "model.23.cv3.0.0.1.bn.weight",
+    "model.23.cv3.0.0.1.bn.bias",
+    "model.23.cv3.0.1.0.conv.weight",
+    "model.23.cv3.0.1.0.bn.weight",
+    "model.23.cv3.0.1.0.bn.bias",
+    "model.23.cv3.0.1.1.conv.weight",
+    "model.23.cv3.0.1.1.bn.weight",
+    "model.23.cv3.0.1.1.bn.bias",
+    "model.23.cv3.0.2.weight",
+    "model.23.cv3.0.2.bias",
+    "model.23.cv3.1.0.0.conv.weight",
+    "model.23.cv3.1.0.0.bn.weight",
+    "model.23.cv3.1.0.0.bn.bias",
+    "model.23.cv3.1.0.1.conv.weight",
+    "model.23.cv3.1.0.1.bn.weight",
+    "model.23.cv3.1.0.1.bn.bias",
+    "model.23.cv3.1.1.0.conv.weight",
+    "model.23.cv3.1.1.0.bn.weight",
+    "model.23.cv3.1.1.0.bn.bias",
+    "model.23.cv3.1.1.1.conv.weight",
+    "model.23.cv3.1.1.1.bn.weight",
+    "model.23.cv3.1.1.1.bn.bias",
+    "model.23.cv3.1.2.weight",
+    "model.23.cv3.1.2.bias",
+    "model.23.cv3.2.0.0.conv.weight",
+    "model.23.cv3.2.0.0.bn.weight",
+    "model.23.cv3.2.0.0.bn.bias",
+    "model.23.cv3.2.0.1.conv.weight",
+    "model.23.cv3.2.0.1.bn.weight",
+    "model.23.cv3.2.0.1.bn.bias",
+    "model.23.cv3.2.1.0.conv.weight",
+    "model.23.cv3.2.1.0.bn.weight",
+    "model.23.cv3.2.1.0.bn.bias",
+    "model.23.cv3.2.1.1.conv.weight",
+    "model.23.cv3.2.1.1.bn.weight",
+    "model.23.cv3.2.1.1.bn.bias",
+    "model.23.cv3.2.2.weight",
+    "model.23.cv3.2.2.bias",
+    "model.23.one2one_cv2.0.0.conv.weight",
+    "model.23.one2one_cv2.0.0.bn.weight",
+    "model.23.one2one_cv2.0.0.bn.bias",
+    "model.23.one2one_cv2.0.1.conv.weight",
+    "model.23.one2one_cv2.0.1.bn.weight",
+    "model.23.one2one_cv2.0.1.bn.bias",
+    "model.23.one2one_cv2.0.2.weight",
+    "model.23.one2one_cv2.0.2.bias",
+    "model.23.one2one_cv2.1.0.conv.weight",
+    "model.23.one2one_cv2.1.0.bn.weight",
+    "model.23.one2one_cv2.1.0.bn.bias",
+    "model.23.one2one_cv2.1.1.conv.weight",
+    "model.23.one2one_cv2.1.1.bn.weight",
+    "model.23.one2one_cv2.1.1.bn.bias",
+    "model.23.one2one_cv2.1.2.weight",
+    "model.23.one2one_cv2.1.2.bias",
+    "model.23.one2one_cv2.2.0.conv.weight",
+    "model.23.one2one_cv2.2.0.bn.weight",
+    "model.23.one2one_cv2.2.0.bn.bias",
+    "model.23.one2one_cv2.2.1.conv.weight",
+    "model.23.one2one_cv2.2.1.bn.weight",
+    "model.23.one2one_cv2.2.1.bn.bias",
+    "model.23.one2one_cv2.2.2.weight",
+    "model.23.one2one_cv2.2.2.bias",
+    "model.23.one2one_cv3.0.0.0.conv.weight",
+    "model.23.one2one_cv3.0.0.0.bn.weight",
+    "model.23.one2one_cv3.0.0.0.bn.bias",
+    "model.23.one2one_cv3.0.0.1.conv.weight",
+    "model.23.one2one_cv3.0.0.1.bn.weight",
+    "model.23.one2one_cv3.0.0.1.bn.bias",
+    "model.23.one2one_cv3.0.1.0.conv.weight",
+    "model.23.one2one_cv3.0.1.0.bn.weight",
+    "model.23.one2one_cv3.0.1.0.bn.bias",
+    "model.23.one2one_cv3.0.1.1.conv.weight",
+    "model.23.one2one_cv3.0.1.1.bn.weight",
+    "model.23.one2one_cv3.0.1.1.bn.bias",
+    "model.23.one2one_cv3.0.2.weight",
+    "model.23.one2one_cv3.0.2.bias",
+    "model.23.one2one_cv3.1.0.0.conv.weight",
+    "model.23.one2one_cv3.1.0.0.bn.weight",
+    "model.23.one2one_cv3.1.0.0.bn.bias",
+    "model.23.one2one_cv3.1.0.1.conv.weight",
+    "model.23.one2one_cv3.1.0.1.bn.weight",
+    "model.23.one2one_cv3.1.0.1.bn.bias",
+    "model.23.one2one_cv3.1.1.0.conv.weight",
+    "model.23.one2one_cv3.1.1.0.bn.weight",
+    "model.23.one2one_cv3.1.1.0.bn.bias",
+    "model.23.one2one_cv3.1.1.1.conv.weight",
+    "model.23.one2one_cv3.1.1.1.bn.weight",
+    "model.23.one2one_cv3.1.1.1.bn.bias",
+    "model.23.one2one_cv3.1.2.weight",
+    "model.23.one2one_cv3.1.2.bias",
+    "model.23.one2one_cv3.2.0.0.conv.weight",
+    "model.23.one2one_cv3.2.0.0.bn.weight",
+    "model.23.one2one_cv3.2.0.0.bn.bias",
+    "model.23.one2one_cv3.2.0.1.conv.weight",
+    "model.23.one2one_cv3.2.0.1.bn.weight",
+    "model.23.one2one_cv3.2.0.1.bn.bias",
+    "model.23.one2one_cv3.2.1.0.conv.weight",
+    "model.23.one2one_cv3.2.1.0.bn.weight",
+    "model.23.one2one_cv3.2.1.0.bn.bias",
+    "model.23.one2one_cv3.2.1.1.conv.weight",
+    "model.23.one2one_cv3.2.1.1.bn.weight",
+    "model.23.one2one_cv3.2.1.1.bn.bias",
+    "model.23.one2one_cv3.2.2.weight",
+    "model.23.one2one_cv3.2.2.bias"
+  ]
+}
