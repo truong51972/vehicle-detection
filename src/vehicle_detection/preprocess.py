@@ -52,9 +52,21 @@ def sharpen(image, amount, sigma):
     return cv2.addWeighted(image, 1 + amount, smooth, -amount, 0)
 
 
+def local_shadow(image):
+    """Bounded smooth illumination gain applied to original detail, from pixels only."""
+    validate_image(image)
+    scale = min(1, 512 / max(image.shape[:2]))
+    small = cv2.resize(image, None, fx=scale, fy=scale, interpolation=cv2.INTER_AREA)
+    illumination = cv2.GaussianBlur(cv2.cvtColor(small, cv2.COLOR_BGR2GRAY), (0, 0), 16)
+    gain = np.clip(np.sqrt(0.25 / np.maximum(illumination.astype(np.float32) / 255, 0.0625)), 1, 2)
+    gain = cv2.resize(gain, image.shape[1::-1], interpolation=cv2.INTER_LINEAR)
+    return np.clip(image.astype(np.float32) * gain[:, :, None], 0, 255).astype(np.uint8)
+
+
 def validate_recipes(recipes):
     bounds = {
         "raw": {},
+        "local_shadow": {},
         "gamma": {"gamma": (0.1, 3)},
         "clahe": {"clip_limit": (0.1, 8), "grid_size": (2, 32)},
         "denoise": {"strength": (0.1, 30)},
@@ -119,6 +131,8 @@ def apply_recipe(image, variant, recipes):
         output = denoise(image, **settings)
     elif variant == "sharpen":
         output = sharpen(image, **settings)
+    elif variant == "local_shadow":
+        output = local_shadow(image)
     else:
         raise ValueError(f"Unknown recipe: {variant}")
     return output, [{"name": variant, "params": settings}], scores

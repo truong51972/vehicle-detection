@@ -1,0 +1,56 @@
+{
+  "all_native_training_settings_match": true,
+  "confirmation_accessed": false,
+  "control_replays": {
+    "count": 2,
+    "image_passes": 27950,
+    "original_aggregate_metrics_reproduced_atol": 1e-06,
+    "original_outputs_preserved": true
+  },
+  "final_test_pixels_accessed": false,
+  "fresh_kernel_study_smoke": "All active notebooks independently executed on synthetic fixtures; native CPU train/eval covers v0/v1/v2; not scientific evidence",
+  "frozen_plan_config_operator_hashes_verified": true,
+  "future_pilot_dark_support_guard_before_inference": true,
+  "guarded_report_API_replay": "Verified compact evidence with YOLO.train/val blocked",
+  "interpretation": "Exploratory single-seed development comparison; primary v2 mAP50:95 below both controls; no promoted/released policy or independent test claim",
+  "lightweight_tests": {
+    "command": "UV_PROJECT_ENVIRONMENT=/tmp/vehicle-detection-issue45-ci uv sync --locked --python 3.11; /tmp/vehicle-detection-issue45-ci/bin/pytest -q",
+    "passed": 132,
+    "seconds": 7.69,
+    "skipped": 15,
+    "torch_installed": false
+  },
+  "native_statistics_hashes_verified": 3,
+  "pilot_declaration_provenance_limit_preserved": true,
+  "protected_artifacts_and_caches": {
+    "count": 28,
+    "fingerprint": "297a231d88319e9ecbcf2655f383700228047bed34e49808a8b44eecf94bf8a7",
+    "includes": "All original pilot compact artifacts; v0/v1 native YAML/history/weights/metrics and train/val caches",
+    "sha256_and_mtime_unchanged": true
+  },
+  "public_pretraining_commit": "f1661c4649bff24497a7a88b33afd3dc8a807a65",
+  "real_fresh_kernel_execution": {
+    "comparison": "runs/issue45-s20/04_comparison_executed.ipynb",
+    "evaluation": "runs/issue45-s20/04_eval_executed.ipynb",
+    "preparation": "runs/issue45-s20/02_train_prepare_executed.ipynb",
+    "training": "runs/issue45-s20/03_train_executed.ipynb"
+  },
+  "ruff_check": ".venv/bin/ruff check .: passed",
+  "ruff_format": ".venv/bin/ruff format --check .: 100 files formatted",
+  "source_reads": {
+    "count": 14231,
+    "identities_sha256": "ff5a6d99862ada7f9394465a9348609b8f358e543a06216a6d9c8498e0864ec3",
+    "population": "13975 development + previously consumed 256 calibration-exploration images only"
+  },
+  "study_tests": {
+    "command": ".venv/bin/pytest -q",
+    "passed": 165,
+    "seconds": 82.12
+  },
+  "three_arm_ids_and_label_bytes_equal": true,
+  "training_epochs": 20,
+  "training_interrupted": false,
+  "training_resumed": false,
+  "v2_main_evaluation_image_passes": 13975,
+  "whitespace": "git diff --check: passed"
+}

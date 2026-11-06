@@ -72,7 +72,7 @@ def experiment_project(bdd, tmp_path):
     shared = yaml.safe_load(Path("configs/data.yaml").read_text())
     shared.update(data_root=str(bdd), splits_sha256=file_hash(project / "configs/splits.csv.gz"))
     (project / "configs/data.yaml").write_text(yaml.safe_dump(shared))
-    for version in ("v0", "v1"):
+    for version in ("v0", "v1", "v2"):
         shutil.copyfile(f"configs/{version}.yaml", project / f"configs/{version}.yaml")
     return project
 
@@ -128,7 +128,7 @@ def test_offline_parity_determinism_reuse_and_sealed_holdout(experiment_project,
     monkeypatch.setattr(data, "file_hash", hashed)
     assert audit_sources(project).sum() == 9
     _, rows = source_rows(project)
-    for version in ("v0", "v1"):
+    for version in ("v0", "v1", "v2"):
         native = prepare_data(project, version)
         assert "test" not in native
         assert native["training_subset"] == "S20" and native["seed"] == 2026
@@ -142,6 +142,9 @@ def test_offline_parity_determinism_reuse_and_sealed_holdout(experiment_project,
     raw, adaptive = (project / f"runs/{v}/data" for v in ("v0", "v1"))
     for label in (raw / "labels").rglob("*.txt"):
         assert label.read_bytes() == (adaptive / label.relative_to(raw)).read_bytes()
+        assert (
+            label.read_bytes() == (project / "runs/v2/data" / label.relative_to(raw)).read_bytes()
+        )
         assert len(label.read_text().splitlines()) == (0 if label.stem == "train_1" else 5)
     assert (raw / "labels/train/train_0.txt").read_text().splitlines()[0] == (
         "0 0.19375 0.328125 0.3625 0.59375"
@@ -156,7 +159,7 @@ def test_offline_parity_determinism_reuse_and_sealed_holdout(experiment_project,
         output, _, _ = apply_recipe(image, config["variant"], config["recipes"])
         ok, encoded = cv2.imencode(".jpg", output, [cv2.IMWRITE_JPEG_QUALITY, 95])
         assert ok and encoded.tobytes() == (adaptive / "images/val" / f"{r['id']}.jpg").read_bytes()
-    before = native["files_sha256"]
+    before = verify_data(project, "v1")["files_sha256"]
     shutil.rmtree(adaptive)
     assert prepare_data(project, "v1")["files_sha256"] == before
     assert not list((project / "runs").rglob("images/test"))

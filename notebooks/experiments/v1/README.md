@@ -21,6 +21,10 @@ policy, not a later denoising/routing candidate.
 - [04_eval](04_eval.ipynb): read the original Adaptive→Adaptive measurement, or
   evaluate the v1 detector with matching policy; new metrics use `runs/v1/eval/metrics.json`.
 
+Use [compare.ipynb](../compare.ipynb) as the only cross-version comparison UI.
+It reads committed evidence without local runs/weights/datasets; this version's
+evaluation notebook stays local to frozen Gamma-or-Skip and its own detector.
+
 [Shared data](../../00_data_init.ipynb): identical 9,781 S20/13,975 development
 IDs/GT as v0, seed 2026, five classes, independently initialized from the same pinned
 COCO YOLO26n checkpoint. The shared training budget/settings and Raw development

@@ -15,6 +15,10 @@ ACTIVE = {
     "experiments/v1/03_train.ipynb",
     "experiments/v1/04_eval.ipynb",
     "experiments/v2/01_experiments.ipynb",
+    "experiments/v2/02_train_prepare.ipynb",
+    "experiments/v2/03_train.ipynb",
+    "experiments/v2/04_eval.ipynb",
+    "experiments/compare.ipynb",
 }
 
 
@@ -34,6 +38,9 @@ def test_active_entrypoints_are_independent_and_have_no_fabricated_execution():
             assert not any(token in source for token in ("%run", "runpy", "papermill", "archive/"))
             if name.endswith("04_eval.ipynb"):
                 assert "finetuning" not in source
+                assert "s20_report" not in source
+                assert "ALLOW_COMPARISON" not in source
+                assert "compare_s20" not in source
                 assert not any(
                     isinstance(n, ast.Attribute) and n.attr == "train" for n in ast.walk(tree)
                 )
@@ -52,7 +59,6 @@ def test_active_notebooks_have_numbered_context_and_explicit_prerequisites():
         code = ["".join(c["source"]) for c in cells if c["cell_type"] == "code"]
         assert "require_paths(" in code[0]
     assert not Path("notebooks/experiments/v0/01_experiments.ipynb").exists()
-    assert not Path("notebooks/experiments/v2/03_train.ipynb").exists()
 
 
 def test_documentation_local_links_resolve():

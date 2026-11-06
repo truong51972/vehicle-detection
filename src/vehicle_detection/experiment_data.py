@@ -70,7 +70,7 @@ def load_experiment(root, experiment):
     if not re.fullmatch(r"v\d+", experiment):
         raise ValueError("Expected a stable experiment ID such as v0")
     config = yaml.safe_load((Path(root) / f"configs/{experiment}.yaml").read_text())
-    if config["id"] != experiment or config["variant"] not in {"raw", "adaptive"}:
+    if config["id"] != experiment or config["variant"] not in {"raw", "adaptive", "local_shadow"}:
         raise ValueError("Wrong experiment identity or policy")
     validate_recipes(config["recipes"])
     if config["variant"] not in config["recipes"]:

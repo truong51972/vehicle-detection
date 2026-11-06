@@ -1,0 +1,1340 @@
+{
+  "confirmation_accessed": false,
+  "development_ids_sha256": "bf2957e6f237c3c2373f9913117933e6de0ae3c7d3bcf5aa700362efa0e71ff3",
+  "diagnostic_artifacts": {
+    "v0": {
+      "sha256": "735efd9e0c8f2d228bf97ff12cf79662145ffaa4a559b5b283d76222f995af1e",
+      "statistics": "runs/issue45-s20/diagnostics/v0/paired_stats.npz"
+    },
+    "v1": {
+      "sha256": "5731fc569460f5c22e290130ce7278de6361be143ed404cd05c78d96fa6f3bed",
+      "statistics": "runs/issue45-s20/diagnostics/v1/paired_stats.npz"
+    },
+    "v2": {
+      "sha256": "d5a54ff8a6acce4542dcd49e858c49faccd12f0b733798b7a9c9147449e1df39",
+      "statistics": "runs/v2/eval/paired_stats.npz"
+    }
+  },
+  "diagnostic_seconds": {
+    "v0": 87.88945472499836,
+    "v1": 82.28600330900008
+  },
+  "errors": {
+    "all": {
+      "v0": {
+        "FP50": 24797,
+        "TP50": 75491
+      },
+      "v1": {
+        "FP50": 21486,
+        "TP50": 74166
+      },
+      "v2": {
+        "FP50": 22027,
+        "TP50": 75085
+      }
+    },
+    "blurred": {
+      "v0": {
+        "FP50": 81,
+        "TP50": 197
+      },
+      "v1": {
+        "FP50": 90,
+        "TP50": 208
+      },
+      "v2": {
+        "FP50": 69,
+        "TP50": 211
+      }
+    },
+    "bright": {
+      "v0": {
+        "FP50": 20089,
+        "TP50": 61997
+      },
+      "v1": {
+        "FP50": 17023,
+        "TP50": 60833
+      },
+      "v2": {
+        "FP50": 17640,
+        "TP50": 61589
+      }
+    },
+    "dark": {
+      "v0": {
+        "FP50": 4708,
+        "TP50": 13494
+      },
+      "v1": {
+        "FP50": 4463,
+        "TP50": 13333
+      },
+      "v2": {
+        "FP50": 4387,
+        "TP50": 13496
+      }
+    },
+    "small_two_wheeler": {
+      "v0": {
+        "FP50": 858,
+        "TP50": 2481
+      },
+      "v1": {
+        "FP50": 712,
+        "TP50": 2439
+      },
+      "v2": {
+        "FP50": 768,
+        "TP50": 2473
+      }
+    }
+  },
+  "examples": {
+    "all": [
+      {
+        "counts": {
+          "v0": {
+            "FP50": 2,
+            "TP50": 17
+          },
+          "v1": {
+            "FP50": 2,
+            "TP50": 12
+          },
+          "v2": {
+            "FP50": 3,
+            "TP50": 10
+          }
+        },
+        "id": "3cb51130-bb7958df"
+      },
+      {
+        "counts": {
+          "v0": {
+            "FP50": 3,
+            "TP50": 19
+          },
+          "v1": {
+            "FP50": 7,
+            "TP50": 14
+          },
+          "v2": {
+            "FP50": 8,
+            "TP50": 14
+          }
+        },
+        "id": "afc0b404-3803e66f"
+      }
+    ],
+    "blurred": [
+      {
+        "counts": {
+          "v0": {
+            "FP50": 0,
+            "TP50": 2
+          },
+          "v1": {
+            "FP50": 1,
+            "TP50": 2
+          },
+          "v2": {
+            "FP50": 0,
+            "TP50": 0
+          }
+        },
+        "id": "1bf03fd3-28431749"
+      },
+      {
+        "counts": {
+          "v0": {
+            "FP50": 3,
+            "TP50": 8
+          },
+          "v1": {
+            "FP50": 1,
+            "TP50": 4
+          },
+          "v2": {
+            "FP50": 0,
+            "TP50": 6
+          }
+        },
+        "id": "4d19ba21-bf71d5ca"
+      }
+    ],
+    "bright": [
+      {
+        "counts": {
+          "v0": {
+            "FP50": 2,
+            "TP50": 17
+          },
+          "v1": {
+            "FP50": 2,
+            "TP50": 12
+          },
+          "v2": {
+            "FP50": 3,
+            "TP50": 10
+          }
+        },
+        "id": "3cb51130-bb7958df"
+      },
+      {
+        "counts": {
+          "v0": {
+            "FP50": 3,
+            "TP50": 19
+          },
+          "v1": {
+            "FP50": 7,
+            "TP50": 14
+          },
+          "v2": {
+            "FP50": 8,
+            "TP50": 14
+          }
+        },
+        "id": "afc0b404-3803e66f"
+      }
+    ],
+    "dark": [
+      {
+        "counts": {
+          "v0": {
+            "FP50": 4,
+            "TP50": 8
+          },
+          "v1": {
+            "FP50": 3,
+            "TP50": 4
+          },
+          "v2": {
+            "FP50": 5,
+            "TP50": 4
+          }
+        },
+        "id": "ac8f2119-e432bcf7"
+      },
+      {
+        "counts": {
+          "v0": {
+            "FP50": 2,
+            "TP50": 11
+          },
+          "v1": {
+            "FP50": 1,
+            "TP50": 10
+          },
+          "v2": {
+            "FP50": 0,
+            "TP50": 7
+          }
+        },
+        "id": "a5c880cf-b4210db6"
+      }
+    ],
+    "small_two_wheeler": [
+      {
+        "counts": {
+          "v0": {
+            "FP50": 1,
+            "TP50": 6
+          },
+          "v1": {
+            "FP50": 3,
+            "TP50": 5
+          },
+          "v2": {
+            "FP50": 0,
+            "TP50": 3
+          }
+        },
+        "id": "4562a561-b493a547"
+      },
+      {
+        "counts": {
+          "v0": {
+            "FP50": 5,
+            "TP50": 6
+          },
+          "v1": {
+            "FP50": 5,
+            "TP50": 4
+          },
+          "v2": {
+            "FP50": 2,
+            "TP50": 3
+          }
+        },
+        "id": "65fa2e9e-5db6df0b"
+      }
+    ]
+  },
+  "execution": {
+    "config_sha256": "d115520cf429e55a9f88164f8db5323243feb051c48c0868a1d388e6ac88b257",
+    "operator_sha256": "8bdc2391fc9c4c6c330e47221b6eb7f678c6206c1e53d9e3dd8e040a82e9fb8a",
+    "plan_sha256": "e5ba777f2dd88888bf8afdec8a5f5c178ace4a9f2df0d3fbd0fdd8dd90547fc5",
+    "pretraining_commit": "f1661c4649bff24497a7a88b33afd3dc8a807a65",
+    "started_utc": "2026-11-06T09:15:58Z"
+  },
+  "final_test_accessed": false,
+  "parity": {
+    "S20_images": 9781,
+    "development_images": 13975,
+    "id_sets_equal": true,
+    "paired_label_bytes": true,
+    "training_ids_sha256": "ca35e8665e4b7961379b75bf96c697210f29f0fd17c6a3a172c9de6903bea1bc"
+  },
+  "records": {
+    "v0": {
+      "best_sha256": "d9903b52ff7c52462761262eb39362c8cf9e1859973c499a9dc508477cc12fdd",
+      "config_sha256": "a701c1bdf84d4f82575fd3ee4aa8b9a9ce7ed16822b121e67d08b4dfd422cd63",
+      "data_sha256": "11161e58ea4f3d64cd74b028d8eb0c02ac4515ed095cd4cb10b087830f28cb1f",
+      "last_sha256": "281368ac30ee506c1ec6c12647d43cd4a792cfcde82e951b4359201b38b452d5",
+      "native": {
+        "classes": [
+          {
+            "Box-F1": 0.60634347,
+            "Box-P": 0.62840001,
+            "Box-R": 0.58578278,
+            "Class": "car",
+            "Images": 13820,
+            "Instances": 142541,
+            "mAP50": 0.62332107,
+            "mAP50-95": 0.35544318,
+            "mAP75": 0.34753917
+          },
+          {
+            "Box-F1": 0.41612164,
+            "Box-P": 0.45307126,
+            "Box-R": 0.38474434,
+            "Class": "truck",
+            "Images": 3773,
+            "Instances": 5965,
+            "mAP50": 0.37268572,
+            "mAP50-95": 0.2502616,
+            "mAP75": 0.27873862
+          },
+          {
+            "Box-F1": 0.40605864,
+            "Box-P": 0.54062197,
+            "Box-R": 0.32513181,
+            "Class": "bus",
+            "Images": 1759,
+            "Instances": 2276,
+            "mAP50": 0.34855781,
+            "mAP50-95": 0.24899839,
+            "mAP75": 0.28177763
+          },
+          {
+            "Box-F1": 0.255118,
+            "Box-P": 0.41960411,
+            "Box-R": 0.18327402,
+            "Class": "motorcycle",
+            "Images": 435,
+            "Instances": 562,
+            "mAP50": 0.17523661,
+            "mAP50-95": 0.07745031,
+            "mAP75": 0.05878612
+          },
+          {
+            "Box-F1": 0.29281417,
+            "Box-P": 0.5865713,
+            "Box-R": 0.1951049,
+            "Class": "bicycle",
+            "Images": 872,
+            "Instances": 1430,
+            "mAP50": 0.23807842,
+            "mAP50-95": 0.09846546,
+            "mAP75": 0.06574039
+          }
+        ],
+        "final_test_accessed": false,
+        "inputs": {
+          "checkpoint_sha256": "d9903b52ff7c52462761262eb39362c8cf9e1859973c499a9dc508477cc12fdd",
+          "data_sha256": "11161e58ea4f3d64cd74b028d8eb0c02ac4515ed095cd4cb10b087830f28cb1f",
+          "experiment": "v0",
+          "settings": {
+            "agnostic_nms": false,
+            "augment": false,
+            "batch": 32,
+            "conf": 0.001,
+            "deterministic": true,
+            "device": "0",
+            "half": false,
+            "imgsz": 640,
+            "iou": 0.7,
+            "max_det": 300,
+            "nms": false,
+            "plots": true,
+            "quantize": 32,
+            "rect": true,
+            "seed": 2026,
+            "verbose": false,
+            "workers": 0
+          },
+          "training_subset": "S20",
+          "ultralytics": "8.4.198"
+        },
+        "overall": {
+          "mAP50": 0.3515759238472517,
+          "mAP50_95": 0.20612378875208745,
+          "precision": 0.5256537293830716,
+          "recall": 0.33480756895577846
+        },
+        "role": "development_validation",
+        "speed_ms": {
+          "inference": 1.071339738964216,
+          "loss": 0.00014798110986148443,
+          "postprocess": 0.1050186236153131,
+          "preprocess": 0.17518835077304867
+        }
+      },
+      "runtime": {
+        "calls": 768,
+        "mean_ms": 2.428364161412825,
+        "p95_ms": 2.939857848832616
+      },
+      "selected_epoch": 9,
+      "statistics_sha256": "735efd9e0c8f2d228bf97ff12cf79662145ffaa4a559b5b283d76222f995af1e",
+      "subgroups": {
+        "all": {
+          "classes": {
+            "bicycle": {
+              "AP50": 0.2380784150075108,
+              "AP50_95": 0.09846546176115892,
+              "instances": 1430,
+              "precision": 0.5865712962111945,
+              "recall": 0.1951048951048951,
+              "source_groups": 794
+            },
+            "bus": {
+              "AP50": 0.3485578112053468,
+              "AP50_95": 0.24899839328809703,
+              "instances": 2276,
+              "precision": 0.5406219706412256,
+              "recall": 0.3251318101933216,
+              "source_groups": 1549
+            },
+            "car": {
+              "AP50": 0.6233210694542659,
+              "AP50_95": 0.3554431831346824,
+              "instances": 142541,
+              "precision": 0.6284000127676628,
+              "recall": 0.5857827761333919,
+              "source_groups": 8199
+            },
+            "motorcycle": {
+              "AP50": 0.17523660504781224,
+              "AP50_95": 0.07745030931324884,
+              "instances": 562,
+              "precision": 0.4196041118252834,
+              "recall": 0.18327402135231316,
+              "source_groups": 408
+            },
+            "truck": {
+              "AP50": 0.3726857185213229,
+              "AP50_95": 0.2502615962632504,
+              "instances": 5965,
+              "precision": 0.4530712554699918,
+              "recall": 0.38474434199497065,
+              "source_groups": 3043
+            }
+          },
+          "images": 13975,
+          "mAP50": 0.3515759238472517,
+          "mAP50_95": 0.20612378875208753
+        },
+        "blurred": {
+          "classes": {
+            "bus": {
+              "AP50": 0.0,
+              "AP50_95": 0.0,
+              "instances": 1,
+              "precision": 1.0,
+              "recall": 0.0,
+              "source_groups": 1
+            },
+            "car": {
+              "AP50": 0.5318000935257243,
+              "AP50_95": 0.2662149078831257,
+              "instances": 495,
+              "precision": 0.6297694355045931,
+              "recall": 0.47078744247903104,
+              "source_groups": 102
+            },
+            "motorcycle": {
+              "AP50": 0.0,
+              "AP50_95": 0.0,
+              "instances": 1,
+              "precision": 1.0,
+              "recall": 0.0,
+              "source_groups": 1
+            },
+            "truck": {
+              "AP50": 0.3719480994152047,
+              "AP50_95": 0.26040457301341585,
+              "instances": 9,
+              "precision": 0.38339768330041796,
+              "recall": 0.4444444444444444,
+              "source_groups": 7
+            }
+          },
+          "images": 122,
+          "mAP50": 0.22593704823523225,
+          "mAP50_95": 0.13165487022413538
+        },
+        "bright": {
+          "classes": {
+            "bicycle": {
+              "AP50": 0.2424004115036436,
+              "AP50_95": 0.10084411269854701,
+              "instances": 1332,
+              "precision": 0.6043595710395815,
+              "recall": 0.19495764913297828,
+              "source_groups": 734
+            },
+            "bus": {
+              "AP50": 0.3572226531518454,
+              "AP50_95": 0.25493016264634394,
+              "instances": 2113,
+              "precision": 0.5464983858052733,
+              "recall": 0.3298627543776621,
+              "source_groups": 1429
+            },
+            "car": {
+              "AP50": 0.6326372780362608,
+              "AP50_95": 0.37055285959965295,
+              "instances": 112762,
+              "precision": 0.6476495636633821,
+              "recall": 0.5911832000141892,
+              "source_groups": 6686
+            },
+            "motorcycle": {
+              "AP50": 0.18578320445472718,
+              "AP50_95": 0.08250249895936478,
+              "instances": 499,
+              "precision": 0.42798346853527003,
+              "recall": 0.18837675350701402,
+              "source_groups": 357
+            },
+            "truck": {
+              "AP50": 0.3774948169567228,
+              "AP50_95": 0.25344165832385596,
+              "instances": 5460,
+              "precision": 0.46023567373861135,
+              "recall": 0.38278388278388276,
+              "source_groups": 2727
+            }
+          },
+          "images": 10668,
+          "mAP50": 0.35910767282064,
+          "mAP50_95": 0.21245425844555293
+        },
+        "dark": {
+          "classes": {
+            "bicycle": {
+              "AP50": 0.2022110038447269,
+              "AP50_95": 0.07736417074051873,
+              "instances": 98,
+              "precision": 0.5147145406951389,
+              "recall": 0.1836734693877551,
+              "source_groups": 67
+            },
+            "bus": {
+              "AP50": 0.24198512297283375,
+              "AP50_95": 0.17826798451769216,
+              "instances": 163,
+              "precision": 0.52783991102548,
+              "recall": 0.25153374233128833,
+              "source_groups": 129
+            },
+            "car": {
+              "AP50": 0.5838347964861181,
+              "AP50_95": 0.29514682020962685,
+              "instances": 29779,
+              "precision": 0.5496160094416663,
+              "recall": 0.5733234829913697,
+              "source_groups": 2253
+            },
+            "motorcycle": {
+              "AP50": 0.10975205634631288,
+              "AP50_95": 0.0486885119953764,
+              "instances": 63,
+              "precision": 0.40589887139406033,
+              "recall": 0.1111111111111111,
+              "source_groups": 54
+            },
+            "truck": {
+              "AP50": 0.3248593451607813,
+              "AP50_95": 0.21858469599007177,
+              "instances": 505,
+              "precision": 0.40387790434279014,
+              "recall": 0.36435643564356435,
+              "source_groups": 367
+            }
+          },
+          "images": 3307,
+          "mAP50": 0.29252846496215457,
+          "mAP50_95": 0.16361043669065717
+        },
+        "small_two_wheeler": {
+          "classes": {
+            "bicycle": {
+              "AP50": 0.10856430654631015,
+              "AP50_95": 0.03542056702671018,
+              "instances": 551,
+              "precision": 0.5395745820309696,
+              "recall": 0.05317869391157748,
+              "source_groups": 274
+            },
+            "bus": {
+              "AP50": 0.35345248228748316,
+              "AP50_95": 0.26190319329495604,
+              "instances": 117,
+              "precision": 0.5751844425493635,
+              "recall": 0.29914529914529914,
+              "source_groups": 88
+            },
+            "car": {
+              "AP50": 0.6161684250432757,
+              "AP50_95": 0.35772066408043157,
+              "instances": 4599,
+              "precision": 0.6593793096205804,
+              "recall": 0.5644705370732768,
+              "source_groups": 397
+            },
+            "motorcycle": {
+              "AP50": 0.09825970232472636,
+              "AP50_95": 0.0339372738845949,
+              "instances": 219,
+              "precision": 0.4847433692127293,
+              "recall": 0.0776255707762557,
+              "source_groups": 155
+            },
+            "truck": {
+              "AP50": 0.3708057952061812,
+              "AP50_95": 0.23849487572724856,
+              "instances": 232,
+              "precision": 0.42436465260216094,
+              "recall": 0.41379310344827586,
+              "source_groups": 133
+            }
+          },
+          "images": 412,
+          "mAP50": 0.30945014228159534,
+          "mAP50_95": 0.18549531480278825
+        }
+      },
+      "train_data_sha256": "36ff7aa35cd0071a8375268f72dd65bc50709927441e906e033d97073c3abe0b",
+      "training_csv_seconds": 2051.38
+    },
+    "v1": {
+      "best_sha256": "20a8b074ac00f6a26bd98329c6cfd11a028d0e472780963438bf79381baf82aa",
+      "config_sha256": "e83b29eb131b8193a5d29a5e7051a5ac7d6b10e0abf0253279cb4438edd890b4",
+      "data_sha256": "f80d5fa87d561e211d48102c239022725eeb54c3c3352cf6d2578b6373c3406d",
+      "last_sha256": "a59102145253fba15ed4c59258e14b93125409ed2d0af8de79c98c2831f8af7a",
+      "native": {
+        "classes": [
+          {
+            "Box-F1": 0.61488412,
+            "Box-P": 0.6676661,
+            "Box-R": 0.56983605,
+            "Class": "car",
+            "Images": 13820,
+            "Instances": 142541,
+            "mAP50": 0.62401115,
+            "mAP50-95": 0.35438469,
+            "mAP75": 0.34895035
+          },
+          {
+            "Box-F1": 0.41835177,
+            "Box-P": 0.46423757,
+            "Box-R": 0.38072087,
+            "Class": "truck",
+            "Images": 3773,
+            "Instances": 5965,
+            "mAP50": 0.36973709,
+            "mAP50-95": 0.24821638,
+            "mAP75": 0.27529541
+          },
+          {
+            "Box-F1": 0.40761939,
+            "Box-P": 0.52306697,
+            "Box-R": 0.33391916,
+            "Class": "bus",
+            "Images": 1759,
+            "Instances": 2276,
+            "mAP50": 0.3452108,
+            "mAP50-95": 0.24819521,
+            "mAP75": 0.28122388
+          },
+          {
+            "Box-F1": 0.2522431,
+            "Box-P": 0.43311435,
+            "Box-R": 0.17793594,
+            "Class": "motorcycle",
+            "Images": 435,
+            "Instances": 562,
+            "mAP50": 0.17876059,
+            "mAP50-95": 0.08143823,
+            "mAP75": 0.05863915
+          },
+          {
+            "Box-F1": 0.30082596,
+            "Box-P": 0.50628818,
+            "Box-R": 0.21398601,
+            "Class": "bicycle",
+            "Images": 872,
+            "Instances": 1430,
+            "mAP50": 0.24470081,
+            "mAP50-95": 0.10215932,
+            "mAP75": 0.07306791
+          }
+        ],
+        "final_test_accessed": false,
+        "inputs": {
+          "checkpoint_sha256": "20a8b074ac00f6a26bd98329c6cfd11a028d0e472780963438bf79381baf82aa",
+          "data_sha256": "f80d5fa87d561e211d48102c239022725eeb54c3c3352cf6d2578b6373c3406d",
+          "experiment": "v1",
+          "settings": {
+            "agnostic_nms": false,
+            "augment": false,
+            "batch": 32,
+            "conf": 0.001,
+            "deterministic": true,
+            "device": "0",
+            "half": false,
+            "imgsz": 640,
+            "iou": 0.7,
+            "max_det": 300,
+            "nms": false,
+            "plots": true,
+            "quantize": 32,
+            "rect": true,
+            "seed": 2026,
+            "verbose": false,
+            "workers": 0
+          },
+          "training_subset": "S20",
+          "ultralytics": "8.4.198"
+        },
+        "overall": {
+          "mAP50": 0.35248408825801303,
+          "mAP50_95": 0.2068787673103934,
+          "precision": 0.518874633087793,
+          "recall": 0.33527960647711075
+        },
+        "role": "development_validation",
+        "speed_ms": {
+          "inference": 1.08958458676045,
+          "loss": 0.00013745960761578038,
+          "postprocess": 0.10572189266488542,
+          "preprocess": 0.17734256036110407
+        }
+      },
+      "runtime": {
+        "calls": 768,
+        "mean_ms": 2.7941655715721936,
+        "p95_ms": 4.604678250143479
+      },
+      "selected_epoch": 10,
+      "statistics_sha256": "5731fc569460f5c22e290130ce7278de6361be143ed404cd05c78d96fa6f3bed",
+      "subgroups": {
+        "all": {
+          "classes": {
+            "bicycle": {
+              "AP50": 0.24470080972155048,
+              "AP50_95": 0.10215932417651882,
+              "instances": 1430,
+              "precision": 0.5062881774376051,
+              "recall": 0.213986013986014,
+              "source_groups": 794
+            },
+            "bus": {
+              "AP50": 0.34521079885438316,
+              "AP50_95": 0.2481952063639893,
+              "instances": 2276,
+              "precision": 0.5230669730730102,
+              "recall": 0.3339191564147627,
+              "source_groups": 1549
+            },
+            "car": {
+              "AP50": 0.6240111548744561,
+              "AP50_95": 0.3543846942889845,
+              "instances": 142541,
+              "precision": 0.667666098298916,
+              "recall": 0.5698360471723926,
+              "source_groups": 8199
+            },
+            "motorcycle": {
+              "AP50": 0.17876058997557115,
+              "AP50_95": 0.08143822818821334,
+              "instances": 562,
+              "precision": 0.4331143489409549,
+              "recall": 0.17793594306049823,
+              "source_groups": 408
+            },
+            "truck": {
+              "AP50": 0.3697370878641044,
+              "AP50_95": 0.2482163835342611,
+              "instances": 5965,
+              "precision": 0.4642375676884789,
+              "recall": 0.380720871751886,
+              "source_groups": 3043
+            }
+          },
+          "images": 13975,
+          "mAP50": 0.35248408825801303,
+          "mAP50_95": 0.2068787673103934
+        },
+        "blurred": {
+          "classes": {
+            "bus": {
+              "AP50": 0.0,
+              "AP50_95": 0.0,
+              "instances": 1,
+              "precision": 0.0,
+              "recall": 0.0,
+              "source_groups": 1
+            },
+            "car": {
+              "AP50": 0.5304705191534106,
+              "AP50_95": 0.26674766991037263,
+              "instances": 495,
+              "precision": 0.6509629979457816,
+              "recall": 0.4484848484848485,
+              "source_groups": 102
+            },
+            "motorcycle": {
+              "AP50": 0.04738095238095238,
+              "AP50_95": 0.011353548966756513,
+              "instances": 1,
+              "precision": 1.0,
+              "recall": 0.0,
+              "source_groups": 1
+            },
+            "truck": {
+              "AP50": 0.3125559434300036,
+              "AP50_95": 0.20473044781579866,
+              "instances": 9,
+              "precision": 0.48160629864078686,
+              "recall": 0.41583202010789067,
+              "source_groups": 7
+            }
+          },
+          "images": 122,
+          "mAP50": 0.22260185374109165,
+          "mAP50_95": 0.12070791667323195
+        },
+        "bright": {
+          "classes": {
+            "bicycle": {
+              "AP50": 0.24470761096214091,
+              "AP50_95": 0.10312189756813264,
+              "instances": 1332,
+              "precision": 0.5072771283550983,
+              "recall": 0.21546546546546547,
+              "source_groups": 734
+            },
+            "bus": {
+              "AP50": 0.3535612105803829,
+              "AP50_95": 0.25333249218196036,
+              "instances": 2113,
+              "precision": 0.529557349076072,
+              "recall": 0.3398012304779934,
+              "source_groups": 1429
+            },
+            "car": {
+              "AP50": 0.6345239083924128,
+              "AP50_95": 0.3695402099247621,
+              "instances": 112762,
+              "precision": 0.6756835379354954,
+              "recall": 0.5815256912789769,
+              "source_groups": 6686
+            },
+            "motorcycle": {
+              "AP50": 0.19591967146187667,
+              "AP50_95": 0.0902726770466753,
+              "instances": 499,
+              "precision": 0.43766260916230687,
+              "recall": 0.1903807615230461,
+              "source_groups": 357
+            },
+            "truck": {
+              "AP50": 0.3748576444077576,
+              "AP50_95": 0.2518146310564569,
+              "instances": 5460,
+              "precision": 0.46881535562116167,
+              "recall": 0.3840659340659341,
+              "source_groups": 2727
+            }
+          },
+          "images": 10668,
+          "mAP50": 0.3607140091609142,
+          "mAP50_95": 0.2136163815555975
+        },
+        "dark": {
+          "classes": {
+            "bicycle": {
+              "AP50": 0.2552907713572028,
+              "AP50_95": 0.09983253420561836,
+              "instances": 98,
+              "precision": 0.574816803273073,
+              "recall": 0.19387755102040816,
+              "source_groups": 67
+            },
+            "bus": {
+              "AP50": 0.25889177527303653,
+              "AP50_95": 0.1963803265449413,
+              "instances": 163,
+              "precision": 0.473241891918407,
+              "recall": 0.24539877300613497,
+              "source_groups": 129
+            },
+            "car": {
+              "AP50": 0.5817339770357055,
+              "AP50_95": 0.29440489117841334,
+              "instances": 29779,
+              "precision": 0.7164099991112872,
+              "recall": 0.468952277656005,
+              "source_groups": 2253
+            },
+            "motorcycle": {
+              "AP50": 0.06898548772749098,
+              "AP50_95": 0.028760416703358983,
+              "instances": 63,
+              "precision": 0.43425809722093955,
+              "recall": 0.07936507936507936,
+              "source_groups": 54
+            },
+            "truck": {
+              "AP50": 0.316350037383847,
+              "AP50_95": 0.2129948805463721,
+              "instances": 505,
+              "precision": 0.45274730378353045,
+              "recall": 0.3207920792079208,
+              "source_groups": 367
+            }
+          },
+          "images": 3307,
+          "mAP50": 0.2962504097554566,
+          "mAP50_95": 0.1664746098357408
+        },
+        "small_two_wheeler": {
+          "classes": {
+            "bicycle": {
+              "AP50": 0.10272956452744665,
+              "AP50_95": 0.03305935733039448,
+              "instances": 551,
+              "precision": 0.429667443036458,
+              "recall": 0.06533575317604355,
+              "source_groups": 274
+            },
+            "bus": {
+              "AP50": 0.3365423153259326,
+              "AP50_95": 0.24867766875613548,
+              "instances": 117,
+              "precision": 0.49859421565874246,
+              "recall": 0.3333333333333333,
+              "source_groups": 88
+            },
+            "car": {
+              "AP50": 0.6193497478676009,
+              "AP50_95": 0.3561115141416203,
+              "instances": 4599,
+              "precision": 0.6552141338241412,
+              "recall": 0.5827353772559252,
+              "source_groups": 397
+            },
+            "motorcycle": {
+              "AP50": 0.10202948052531133,
+              "AP50_95": 0.03928750695698331,
+              "instances": 219,
+              "precision": 0.5571022816807544,
+              "recall": 0.09191216872110866,
+              "source_groups": 155
+            },
+            "truck": {
+              "AP50": 0.3712264711730452,
+              "AP50_95": 0.2407689032616181,
+              "instances": 232,
+              "precision": 0.42361449247711325,
+              "recall": 0.43083353678944925,
+              "source_groups": 133
+            }
+          },
+          "images": 412,
+          "mAP50": 0.3063755158838673,
+          "mAP50_95": 0.18358099008935033
+        }
+      },
+      "train_data_sha256": "b7817538a9d41ac5757fb5d778a59c33e86f8a05a08318e77d8930719e8ec651",
+      "training_csv_seconds": 2102.97
+    },
+    "v2": {
+      "best_sha256": "563f748e054b120ff5257f72d975a7b31cf1d6291f810eef8c804388afee2e9e",
+      "config_sha256": "d115520cf429e55a9f88164f8db5323243feb051c48c0868a1d388e6ac88b257",
+      "data_sha256": "d183ca9aab378b1bb2c45dd06a179bb700104d4b3d240e95c20aa5225d22732b",
+      "last_sha256": "60c0a78394517c6739fa8eaf4165da85af2ea7e5844ce7aeabca9c4d3a94fbd4",
+      "native": {
+        "classes": [
+          {
+            "Box-F1": 0.61156051,
+            "Box-P": 0.64520861,
+            "Box-R": 0.581248,
+            "Class": "car",
+            "Images": 13820,
+            "Instances": 142541,
+            "mAP50": 0.62539325,
+            "mAP50-95": 0.3565855,
+            "mAP75": 0.34916376
+          },
+          {
+            "Box-F1": 0.42039071,
+            "Box-P": 0.4981658,
+            "Box-R": 0.36362112,
+            "Class": "truck",
+            "Images": 3773,
+            "Instances": 5965,
+            "mAP50": 0.37091142,
+            "mAP50-95": 0.24574771,
+            "mAP75": 0.27140776
+          },
+          {
+            "Box-F1": 0.39620416,
+            "Box-P": 0.50386833,
+            "Box-R": 0.32644991,
+            "Class": "bus",
+            "Images": 1759,
+            "Instances": 2276,
+            "mAP50": 0.34025794,
+            "mAP50-95": 0.24615826,
+            "mAP75": 0.27757075
+          },
+          {
+            "Box-F1": 0.24959113,
+            "Box-P": 0.42802034,
+            "Box-R": 0.17615658,
+            "Class": "motorcycle",
+            "Images": 435,
+            "Instances": 562,
+            "mAP50": 0.17822951,
+            "mAP50-95": 0.07462836,
+            "mAP75": 0.05225594
+          },
+          {
+            "Box-F1": 0.30212889,
+            "Box-P": 0.53965824,
+            "Box-R": 0.20979021,
+            "Class": "bicycle",
+            "Images": 872,
+            "Instances": 1430,
+            "mAP50": 0.2508889,
+            "mAP50-95": 0.1015306,
+            "mAP75": 0.06671822
+          }
+        ],
+        "final_test_accessed": false,
+        "inputs": {
+          "checkpoint_sha256": "563f748e054b120ff5257f72d975a7b31cf1d6291f810eef8c804388afee2e9e",
+          "data_sha256": "d183ca9aab378b1bb2c45dd06a179bb700104d4b3d240e95c20aa5225d22732b",
+          "experiment": "v2",
+          "settings": {
+            "agnostic_nms": false,
+            "augment": false,
+            "batch": 32,
+            "conf": 0.001,
+            "deterministic": true,
+            "device": "0",
+            "half": false,
+            "imgsz": 640,
+            "iou": 0.7,
+            "max_det": 300,
+            "nms": false,
+            "plots": true,
+            "quantize": 32,
+            "rect": true,
+            "seed": 2026,
+            "verbose": false,
+            "workers": 0
+          },
+          "training_subset": "S20",
+          "ultralytics": "8.4.198"
+        },
+        "overall": {
+          "mAP50": 0.35313620118980704,
+          "mAP50_95": 0.20493008972326138,
+          "precision": 0.5229842653340332,
+          "recall": 0.33145316549743853
+        },
+        "role": "development_validation",
+        "speed_ms": {
+          "inference": 1.0756814951723843,
+          "loss": 0.0001355759564254846,
+          "postprocess": 0.10987722868960324,
+          "preprocess": 0.17129598003221727
+        }
+      },
+      "runtime": {
+        "calls": 768,
+        "mean_ms": 13.626847325520922,
+        "p95_ms": 16.381536849439726
+      },
+      "selected_epoch": 9,
+      "statistics_sha256": "d5a54ff8a6acce4542dcd49e858c49faccd12f0b733798b7a9c9147449e1df39",
+      "subgroups": {
+        "all": {
+          "classes": {
+            "bicycle": {
+              "AP50": 0.2508888961431738,
+              "AP50_95": 0.10153060235426256,
+              "instances": 1430,
+              "precision": 0.5396582423848272,
+              "recall": 0.2097902097902098,
+              "source_groups": 794
+            },
+            "bus": {
+              "AP50": 0.34025793982793545,
+              "AP50_95": 0.24615826423922438,
+              "instances": 2276,
+              "precision": 0.5038683333893121,
+              "recall": 0.3264499121265378,
+              "source_groups": 1549
+            },
+            "car": {
+              "AP50": 0.6253932458426347,
+              "AP50_95": 0.3565855035520205,
+              "instances": 142541,
+              "precision": 0.645208613498735,
+              "recall": 0.5812479987217757,
+              "source_groups": 8199
+            },
+            "motorcycle": {
+              "AP50": 0.17822950907919066,
+              "AP50_95": 0.07462836484880815,
+              "instances": 562,
+              "precision": 0.428020336106285,
+              "recall": 0.17615658362989323,
+              "source_groups": 408
+            },
+            "truck": {
+              "AP50": 0.3709114150561008,
+              "AP50_95": 0.24574771362199116,
+              "instances": 5965,
+              "precision": 0.4981658012910066,
+              "recall": 0.3636211232187762,
+              "source_groups": 3043
+            }
+          },
+          "images": 13975,
+          "mAP50": 0.35313620118980704,
+          "mAP50_95": 0.20493008972326138
+        },
+        "blurred": {
+          "classes": {
+            "bus": {
+              "AP50": 0.0,
+              "AP50_95": 0.0,
+              "instances": 1,
+              "precision": 0.0,
+              "recall": 0.0,
+              "source_groups": 1
+            },
+            "car": {
+              "AP50": 0.5356100596025348,
+              "AP50_95": 0.2641138855625148,
+              "instances": 495,
+              "precision": 0.5582131504737488,
+              "recall": 0.503030303030303,
+              "source_groups": 102
+            },
+            "motorcycle": {
+              "AP50": 0.04975,
+              "AP50_95": 0.00995,
+              "instances": 1,
+              "precision": 1.0,
+              "recall": 0.0,
+              "source_groups": 1
+            },
+            "truck": {
+              "AP50": 0.31197465465465457,
+              "AP50_95": 0.19917714999209737,
+              "instances": 9,
+              "precision": 0.4420196328925251,
+              "recall": 0.4444444444444444,
+              "source_groups": 7
+            }
+          },
+          "images": 122,
+          "mAP50": 0.22433367856429734,
+          "mAP50_95": 0.11831025888865304
+        },
+        "bright": {
+          "classes": {
+            "bicycle": {
+              "AP50": 0.2551413460117761,
+              "AP50_95": 0.1035378800088322,
+              "instances": 1332,
+              "precision": 0.5372074220196746,
+              "recall": 0.21438145176024168,
+              "source_groups": 734
+            },
+            "bus": {
+              "AP50": 0.34605571939635815,
+              "AP50_95": 0.25013789569575856,
+              "instances": 2113,
+              "precision": 0.5014002224106882,
+              "recall": 0.3317557974443919,
+              "source_groups": 1429
+            },
+            "car": {
+              "AP50": 0.6357805394688001,
+              "AP50_95": 0.3723882896159851,
+              "instances": 112762,
+              "precision": 0.6516419076927642,
+              "recall": 0.5926587853686989,
+              "source_groups": 6686
+            },
+            "motorcycle": {
+              "AP50": 0.19141282780507152,
+              "AP50_95": 0.08233160895753298,
+              "instances": 499,
+              "precision": 0.42974131615518907,
+              "recall": 0.18837675350701402,
+              "source_groups": 357
+            },
+            "truck": {
+              "AP50": 0.37410796144735303,
+              "AP50_95": 0.24696921729172452,
+              "instances": 5460,
+              "precision": 0.4966524048987927,
+              "recall": 0.36575091575091573,
+              "source_groups": 2727
+            }
+          },
+          "images": 10668,
+          "mAP50": 0.3604996788258718,
+          "mAP50_95": 0.2110729783139667
+        },
+        "dark": {
+          "classes": {
+            "bicycle": {
+              "AP50": 0.20903869431292588,
+              "AP50_95": 0.08226067696004863,
+              "instances": 98,
+              "precision": 0.5999100425349773,
+              "recall": 0.15306122448979592,
+              "source_groups": 67
+            },
+            "bus": {
+              "AP50": 0.271828568612185,
+              "AP50_95": 0.1991181599090682,
+              "instances": 163,
+              "precision": 0.5244373696134385,
+              "recall": 0.24539877300613497,
+              "source_groups": 129
+            },
+            "car": {
+              "AP50": 0.5845116112294522,
+              "AP50_95": 0.2947361559798533,
+              "instances": 29779,
+              "precision": 0.6694582333415595,
+              "recall": 0.5063971254911179,
+              "source_groups": 2253
+            },
+            "motorcycle": {
+              "AP50": 0.08200845104457666,
+              "AP50_95": 0.02500681045459821,
+              "instances": 63,
+              "precision": 0.4313399411254579,
+              "recall": 0.07936507936507936,
+              "source_groups": 54
+            },
+            "truck": {
+              "AP50": 0.3427147467365928,
+              "AP50_95": 0.2348714752234729,
+              "instances": 505,
+              "precision": 0.5135434190924955,
+              "recall": 0.3306930693069307,
+              "source_groups": 367
+            }
+          },
+          "images": 3307,
+          "mAP50": 0.2980204143871465,
+          "mAP50_95": 0.16719865570540823
+        },
+        "small_two_wheeler": {
+          "classes": {
+            "bicycle": {
+              "AP50": 0.12406462919193027,
+              "AP50_95": 0.038745754428305974,
+              "instances": 551,
+              "precision": 0.5685756920311417,
+              "recall": 0.05989110707803993,
+              "source_groups": 274
+            },
+            "bus": {
+              "AP50": 0.31851720861504473,
+              "AP50_95": 0.23480820800870483,
+              "instances": 117,
+              "precision": 0.53014789615353,
+              "recall": 0.2905982905982906,
+              "source_groups": 88
+            },
+            "car": {
+              "AP50": 0.6183551860715132,
+              "AP50_95": 0.35936867534252115,
+              "instances": 4599,
+              "precision": 0.662751364798287,
+              "recall": 0.5642530984996739,
+              "source_groups": 397
+            },
+            "motorcycle": {
+              "AP50": 0.11914399061641778,
+              "AP50_95": 0.03702478119253845,
+              "instances": 219,
+              "precision": 0.5105848139269662,
+              "recall": 0.08576838461459131,
+              "source_groups": 155
+            },
+            "truck": {
+              "AP50": 0.354143733739345,
+              "AP50_95": 0.2282690616749755,
+              "instances": 232,
+              "precision": 0.44613841880185073,
+              "recall": 0.3706896551724138,
+              "source_groups": 133
+            }
+          },
+          "images": 412,
+          "mAP50": 0.3068449496468502,
+          "mAP50_95": 0.17964329612940919
+        }
+      },
+      "train_data_sha256": "60a947f7a5922e804f42a283a2a10021cb2e7d6b599e70c26286510d6c02df4c",
+      "training_csv_seconds": 2046.66
+    }
+  },
+  "report_sha256": "591562a2e1844521d1e61f61fe05a10ebb2900dc6c3ca093f60098aa02176728",
+  "role": "development_validation",
+  "seed": 2026,
+  "source_reads": 14231,
+  "source_reads_sha256": "ff5a6d99862ada7f9394465a9348609b8f358e543a06216a6d9c8498e0864ec3",
+  "training_subset": "S20",
+  "v0_v1_notebook_seconds": {
+    "v0_03_train": 2141.959180228001,
+    "v0_04_eval": 99.49100315299802,
+    "v1_03_train": 2177.3616802000015,
+    "v1_04_eval": 115.56598816299811
+  },
+  "v2_notebook_seconds": {
+    "02_train_prepare": 482.8996326839988,
+    "03_train": 2115.316472319002,
+    "04_eval": 113.54635219500051
+  },
+  "wall_seconds": 306.79486065400124
+}

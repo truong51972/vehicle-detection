@@ -1,0 +1,118 @@
+{
+  "all_native_training_settings_match": true,
+  "execution": {
+    "config_sha256": "d115520cf429e55a9f88164f8db5323243feb051c48c0868a1d388e6ac88b257",
+    "operator_sha256": "8bdc2391fc9c4c6c330e47221b6eb7f678c6206c1e53d9e3dd8e040a82e9fb8a",
+    "plan_sha256": "e5ba777f2dd88888bf8afdec8a5f5c178ace4a9f2df0d3fbd0fdd8dd90547fc5",
+    "pretraining_commit": "f1661c4649bff24497a7a88b33afd3dc8a807a65",
+    "started_utc": "2026-11-06T09:15:58Z"
+  },
+  "parity": {
+    "S20_images": 9781,
+    "development_images": 13975,
+    "id_sets_equal": true,
+    "paired_label_bytes": true,
+    "training_ids_sha256": "ca35e8665e4b7961379b75bf96c697210f29f0fd17c6a3a172c9de6903bea1bc"
+  },
+  "populations": {
+    "train": {
+      "class_instances": {
+        "bicycle": 1080,
+        "bus": 1572,
+        "car": 100236,
+        "motorcycle": 432,
+        "truck": 4106
+      },
+      "groups": 5915,
+      "ids_sha256": "ca35e8665e4b7961379b75bf96c697210f29f0fd17c6a3a172c9de6903bea1bc",
+      "images": 9781,
+      "label_bytes_sha256": "c9a1068181d58654d45ff1e51cd3859cd32b487cc8cf19a7dddbea0e58981db7",
+      "negative_images": 73
+    },
+    "val": {
+      "class_instances": {
+        "bicycle": 1430,
+        "bus": 2276,
+        "car": 142541,
+        "motorcycle": 562,
+        "truck": 5965
+      },
+      "groups": 8258,
+      "ids_sha256": "bf2957e6f237c3c2373f9913117933e6de0ae3c7d3bcf5aa700362efa0e71ff3",
+      "images": 13975,
+      "label_bytes_sha256": "cbecb87305ba283193ccdf69549a57dded5c41fbe85977deefc29b0a30db98a8",
+      "negative_images": 121
+    }
+  },
+  "prepared": {
+    "v0": {
+      "data_sha256": "11161e58ea4f3d64cd74b028d8eb0c02ac4515ed095cd4cb10b087830f28cb1f",
+      "native": {
+        "config_sha256": "2919178dc1a99c63b3ee26b09c23063d0a011bdda7f5d299d67aa4d306cfaada",
+        "experiment": "v0",
+        "files_sha256": "4e1a5ce060ef4775910f9bb7227b7fced7cb7b4b2afe3f928479b39cb49e43a6",
+        "names": {
+          "0": "car",
+          "1": "truck",
+          "2": "bus",
+          "3": "motorcycle",
+          "4": "bicycle"
+        },
+        "opencv": "4.14.0",
+        "operator_sha256": "354f19a51ba613f7bd0109fe5fcb7f86b98423059081500d96640ad2e29bb27b",
+        "path": "/home/truong51972/projects/vehicle-detection/runs/v0/data",
+        "seed": 2026,
+        "splits_sha256": "b7a6aba1d1f72e1b1e3eceda8e8427d41f44408067fad63ee68479137714cb96",
+        "train": "images/train",
+        "training_subset": "S20",
+        "val": "images/val"
+      }
+    },
+    "v1": {
+      "data_sha256": "f80d5fa87d561e211d48102c239022725eeb54c3c3352cf6d2578b6373c3406d",
+      "native": {
+        "config_sha256": "31c47050e5e3a04f2a97847a425acc27d837b05e27d3409c4bba018a617fc919",
+        "experiment": "v1",
+        "files_sha256": "28fb7ec3e5c76af98920adfbf8ee3911dfc448e142c5d96e28c73e65f48cbcb0",
+        "names": {
+          "0": "car",
+          "1": "truck",
+          "2": "bus",
+          "3": "motorcycle",
+          "4": "bicycle"
+        },
+        "opencv": "4.14.0",
+        "operator_sha256": "354f19a51ba613f7bd0109fe5fcb7f86b98423059081500d96640ad2e29bb27b",
+        "path": "/home/truong51972/projects/vehicle-detection/runs/v1/data",
+        "seed": 2026,
+        "splits_sha256": "b7a6aba1d1f72e1b1e3eceda8e8427d41f44408067fad63ee68479137714cb96",
+        "train": "images/train",
+        "training_subset": "S20",
+        "val": "images/val"
+      }
+    },
+    "v2": {
+      "data_sha256": "d183ca9aab378b1bb2c45dd06a179bb700104d4b3d240e95c20aa5225d22732b",
+      "native": {
+        "config_sha256": "d23ca7e20cce896ce95479c157cc507681167248f4eff6d4e1be583a2c8002ca",
+        "experiment": "v2",
+        "files_sha256": "58fbff8f4906e10c29f79224cd623d1b427682c992b6bd8cdff1674731c88699",
+        "names": {
+          "0": "car",
+          "1": "truck",
+          "2": "bus",
+          "3": "motorcycle",
+          "4": "bicycle"
+        },
+        "opencv": "4.14.0",
+        "operator_sha256": "8bdc2391fc9c4c6c330e47221b6eb7f678c6206c1e53d9e3dd8e040a82e9fb8a",
+        "path": "/home/truong51972/projects/vehicle-detection/runs/v2/data",
+        "seed": 2026,
+        "splits_sha256": "b7a6aba1d1f72e1b1e3eceda8e8427d41f44408067fad63ee68479137714cb96",
+        "train": "images/train",
+        "training_subset": "S20",
+        "val": "images/val"
+      }
+    }
+  }
+}

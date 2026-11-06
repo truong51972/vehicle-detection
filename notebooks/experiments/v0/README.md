@@ -16,6 +16,10 @@ S20 comparison: Raw→Raw mAP50:95 **20.6124%**, selected epoch **9**. Historica
 - [04_eval](04_eval.ipynb): inspect the original measured pair, or evaluate the v0
   detector on v0 Raw development; new metrics use `runs/v0/eval/metrics.json`.
 
+Use [compare.ipynb](../compare.ipynb) as the only cross-version comparison UI.
+It reads committed evidence without local runs/weights/datasets; this version's
+evaluation notebook stays local to Raw and its own detector.
+
 The shared [data contract](../../00_data_init.ipynb) and
 [config](../../../configs/v0.yaml) select 9,781 S20 and 13,975 development IDs,
 seed 2026, five classes and the pinned COCO YOLO26n initialization. Both detectors
