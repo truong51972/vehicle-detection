@@ -8,10 +8,17 @@ an experiment README:
   S20 and historical S10 training and development evaluation.
 - [v1 — Gamma-or-Skip](notebooks/experiments/v1/README.md): the historical algorithm
   called **Adaptive v2**; completed S20 and historical S10 training and development evaluation.
-- [v2 — Later preprocessing exploration](notebooks/experiments/v2/README.md):
+- [v2 — Local-shadow (exploratory)](notebooks/experiments/v2/README.md):
   a failed [local-shadow pilot](docs/ISSUE45_RESULTS.md), followed by a separately
   committed [exploratory S20 train/eval comparison](docs/ISSUE45_S20_EXECUTION.md).
   No confirmed/released replacement policy is claimed.
+
+Open [experiments/compare.ipynb](notebooks/experiments/compare.ipynb) for all
+cross-version presentation/analysis. It reads committed S20 metrics, timing,
+subgroups and plots in a fresh kernel without local runs, weights or datasets.
+Historical S10 and pretrained pilot evidence stays separately attributed.
+Each version's `04_eval` only evaluates/inspects its own policy–detector pair.
+Adaptive-routing v3 is a future separate issue/PR; it is not implemented here.
 
 Folder IDs are stable sequential experiment identities, independent of algorithm
 names, maturity and performance. A changed policy/configuration that changes the
@@ -40,18 +47,21 @@ inspection requires the original verified local exports. To execute new work:
 1. In notebook 00, optionally set `AUDIT_SOURCES=True` to audit original sources.
 2. In each experiment's 02, set `ALLOW_PREPARATION=True`. This exports the same
    frozen 9,781 S20 and 13,975 development IDs/GT from originals using that policy
-   and JPEG95. Prepare v0 before training v1 so shared Raw selection data exists.
-3. In 03, set `READ_HISTORICAL=False`, `ALLOW_TRAINING=True`. Native Ultralytics
+   and JPEG95. Prepare v0 before training v1/v2 so shared Raw selection data exists.
+3. In 03, set `ALLOW_TRAINING=True` (and `READ_HISTORICAL=False` for v0/v1). Native Ultralytics
    owns optimization/checkpoints/history. All detectors initialize independently
    from pinned COCO-80 YOLO26n and select checkpoints on shared v0 Raw development.
    Native continuation additionally requires `RESUME=True`.
-4. In 04, set `READ_HISTORICAL=False`. Saved metrics are reused; new inference
+4. In 04, set `READ_HISTORICAL=False` for v0/v1. Saved metrics are reused; new inference
    additionally requires `ALLOW_INFERENCE=True`. This evaluates each detector on
    its matching offline policy over the identical original development IDs/GT.
-   Both notebooks use `EVAL_SETTINGS={"workers": 0}` after an observed standalone
+   All three notebooks use `EVAL_SETTINGS={"workers": 0}` after an observed standalone
    multiprocess-loader stall; GPU and metric settings are unchanged.
    Both inference and cache reuse require matching native training settings and
    a history containing the complete configured epoch budget.
+
+Comparison is a separate read-only step in `experiments/compare.ipynb`; it has no
+training/inference opt-ins and never runs the historical diagnostic acquisition.
 
 New **S20** outputs live under `runs/v0/`, `runs/v1/` and `runs/v2/`; the subset
 name, seed and split checksum are saved in native data/training YAML. v0/v1

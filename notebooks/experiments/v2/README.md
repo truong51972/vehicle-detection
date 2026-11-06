@@ -1,8 +1,9 @@
-# v2 — Later preprocessing exploration
+# v2 — Local-shadow (exploratory)
 
-Purpose: investigate whether bounded filters, sequences or quality-based routing
-improve over Skip and frozen Gamma-or-Skip. This stable folder identifies the later
-exploratory study. It is separate from the old algorithm name “Adaptive v2”.
+Purpose: measure the fixed local-shadow policy and its matching detector. The
+earlier filter/routing exploration remains historical provenance, separate from
+the old algorithm name “Adaptive v2” (today's v1). Adaptive-routing v3 belongs
+in a future separate issue/PR; it does not replace this negative v2 experiment.
 
 Status: **exploratory S20 train/eval completed; no confirmed replacement policy**.
 The [issue #45 local-shadow pilot](../../../docs/ISSUE45_RESULTS.md) completed
@@ -24,8 +25,14 @@ decisions; exact historical search execution is available via
   development inputs from originals, preserving all five-class GT/negatives.
 - [03_train](03_train.ipynb): one native 20-epoch independent initialization,
   selecting on the same v0 Raw development export; no training without opt-in.
-- [04_eval](04_eval.ipynb): matching-policy development evaluation; separate
-  `ALLOW_COMPARISON=True` permits the prespecified control diagnostic replays.
+- [04_eval](04_eval.ipynb): evaluate/inspect only the local-shadow policy–detector
+  pair. Cross-version actions and acquisition opt-ins are not part of this notebook.
+
+Use [compare.ipynb](../compare.ipynb) as the only cross-version comparison UI.
+It verifies/reads committed metrics, support, timing and plots in a fresh kernel
+without local runs/weights/datasets. It never trains, exports sources, runs
+inference or invokes diagnostic replays. The existing S20 execution report is
+historical provenance at `c118ab2`; its acquisition commands are not the current UI.
 
 `configs/v2.yaml` exposes no tuning knobs. Native data/models remain local under
 `runs/v2/`; execution/diagnostics under `runs/issue45-s20/`; compact evidence under

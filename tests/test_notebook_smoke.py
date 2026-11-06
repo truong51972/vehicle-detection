@@ -15,7 +15,9 @@ def test_versioned_notebooks_run_independently_in_fresh_kernels(experiment_proje
     shutil.copytree("notebooks", root / "notebooks")
     shutil.copytree("docs", root / "docs")
     guard = """from unittest.mock import patch
+import sys
 from ultralytics import YOLO
+sys.modules["vehicle_detection.s20_report"] = None
 for target in ["vehicle_detection.protocol.build_protocol", "vehicle_detection.data.convert_labels",
                "vehicle_detection.adaptive.calibrate_policy"]:
     patch(target, side_effect=AssertionError("Upstream work started")).start()
@@ -96,3 +98,55 @@ patch.object(YOLO, "train", side_effect=AssertionError("Training started in eval
         )
         run(f"experiments/{version}/04_eval.ipynb", eval_override, setup=guard)
         assert (root / f"runs/{version}/eval/metrics.json").is_file()
+
+
+def test_comparison_runs_read_only_without_local_runs_or_study_dependencies(tmp_path):
+    nbformat = pytest.importorskip("nbformat")
+    nbclient = pytest.importorskip("nbclient")
+    from vehicle_detection.common import file_hash
+
+    root = tmp_path / "project"
+    directory = root / "notebooks/experiments"
+    directory.mkdir(parents=True)
+    (root / "pyproject.toml").touch()
+    shutil.copyfile("notebooks/experiments/compare.ipynb", directory / "compare.ipynb")
+    shutil.copytree("docs/issue45-s20", root / "docs/issue45-s20")
+    before = {str(p.relative_to(root)): file_hash(p) for p in root.rglob("*") if p.is_file()}
+    notebook = nbformat.read(directory / "compare.ipynb", as_version=4)
+    notebook.cells.insert(
+        1,
+        nbformat.v4.new_code_cell("""import builtins
+import io
+import sys
+from pathlib import Path
+from unittest.mock import patch
+
+for module in ("torch", "ultralytics", "vehicle_detection.s20_report",
+               "vehicle_detection.evaluation", "vehicle_detection.finetuning"):
+    sys.modules[module] = None
+_root = next(p for p in [Path.cwd(), *Path.cwd().parents]
+             if (p / "pyproject.toml").is_file())
+def guarded(original):
+    def wrapped(path, mode="r", *args, **kwargs):
+        if isinstance(path, (str, Path)):
+            path = Path(path).absolute()
+            if path.is_relative_to(_root):
+                if any(c in mode for c in "wax+") or not path.is_relative_to(_root / "docs"):
+                    raise AssertionError("Comparison accessed local execution state or wrote files")
+        return original(path, mode, *args, **kwargs)
+    return wrapped
+patch("builtins.open", guarded(builtins.open)).start()
+patch("io.open", guarded(io.open)).start()
+"""),
+    )
+    nbclient.NotebookClient(
+        notebook,
+        timeout=120,
+        kernel_name="python3",
+        resources={"metadata": {"path": str(directory)}},
+    ).execute()
+    assert all(c.execution_count is not None for c in notebook.cells if c.cell_type == "code")
+    assert before == {
+        str(p.relative_to(root)): file_hash(p) for p in root.rglob("*") if p.is_file()
+    }
+    assert all(not (root / name).exists() for name in ("runs", "weights", "data"))
