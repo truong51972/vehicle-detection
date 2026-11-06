@@ -1,0 +1,155 @@
+{
+  "examples": {
+    "bicycle": {
+      "adverse": {
+        "GT": 2,
+        "counts": {
+          "640": {
+            "FP50": 0,
+            "TP50": 2
+          },
+          "960": {
+            "FP50": 0,
+            "TP50": 1
+          }
+        },
+        "id": "0a4773b8-ff24b5af"
+      },
+      "favorable": {
+        "GT": 1,
+        "counts": {
+          "640": {
+            "FP50": 0,
+            "TP50": 0
+          },
+          "960": {
+            "FP50": 0,
+            "TP50": 1
+          }
+        },
+        "id": "1d092676-229605e3"
+      }
+    },
+    "bus": {
+      "adverse": {
+        "GT": 2,
+        "counts": {
+          "640": {
+            "FP50": 0,
+            "TP50": 2
+          },
+          "960": {
+            "FP50": 0,
+            "TP50": 1
+          }
+        },
+        "id": "00d79c0a-23bea078"
+      },
+      "favorable": {
+        "GT": 2,
+        "counts": {
+          "640": {
+            "FP50": 0,
+            "TP50": 0
+          },
+          "960": {
+            "FP50": 0,
+            "TP50": 2
+          }
+        },
+        "id": "42a9f0cf-ac88282a"
+      }
+    },
+    "car": {
+      "adverse": {
+        "GT": 25,
+        "counts": {
+          "640": {
+            "FP50": 0,
+            "TP50": 6
+          },
+          "960": {
+            "FP50": 2,
+            "TP50": 3
+          }
+        },
+        "id": "264b9ed7-741f6ed4"
+      },
+      "favorable": {
+        "GT": 17,
+        "counts": {
+          "640": {
+            "FP50": 6,
+            "TP50": 4
+          },
+          "960": {
+            "FP50": 0,
+            "TP50": 12
+          }
+        },
+        "id": "548a8059-bef4812f"
+      }
+    },
+    "motorcycle": {
+      "adverse": {
+        "GT": 1,
+        "counts": {
+          "640": {
+            "FP50": 0,
+            "TP50": 1
+          },
+          "960": {
+            "FP50": 1,
+            "TP50": 0
+          }
+        },
+        "id": "5cc1f61a-8cf3056a"
+      },
+      "favorable": {
+        "GT": 1,
+        "counts": {
+          "640": {
+            "FP50": 0,
+            "TP50": 0
+          },
+          "960": {
+            "FP50": 0,
+            "TP50": 1
+          }
+        },
+        "id": "989bd529-779a95b6"
+      }
+    },
+    "truck": {
+      "adverse": {
+        "GT": 3,
+        "counts": {
+          "640": {
+            "FP50": 0,
+            "TP50": 2
+          },
+          "960": {
+            "FP50": 1,
+            "TP50": 1
+          }
+        },
+        "id": "048e0c14-37c19b65"
+      },
+      "favorable": {
+        "GT": 3,
+        "counts": {
+          "640": {
+            "FP50": 1,
+            "TP50": 1
+          },
+          "960": {
+            "FP50": 1,
+            "TP50": 3
+          }
+        },
+        "id": "91e99bdb-714377cf"
+      }
+    }
+  },
+  "selection": "Per class, minimum/maximum TP change, then FP change, ID tie break; illustrative counts, not image AP or GT-box attribution"
+}

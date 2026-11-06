@@ -24,6 +24,12 @@ Each version's `04_eval` only evaluates/inspects its own policy–detector pair.
 V3's pretrained calibration evidence and decision remain separate from trained
 S20 results; an untrained policy never receives a development metric row.
 
+Issue #47 continues separately in the
+[method-discovery notebook](notebooks/research/issue47/01_method_discovery.ipynb):
+saved-error/GT diagnosis, a cited mechanism review and one controlled resolution
+diagnostic on already-consumed exploration. This preserves the negative pilot;
+it does not select a new preprocessing policy or authorize S20 training.
+
 Folder IDs are stable sequential experiment identities, independent of algorithm
 names, maturity and performance. A changed policy/configuration that changes the
 scientific comparison needs the next experiment ID. Each experiment README is its
