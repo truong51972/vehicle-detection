@@ -1,0 +1,8 @@
+{
+  "plots": {
+    "errors.png": "c7bee7dafc953a0a6ccaacbbe4cd0cafe3fe9de5039aa977fc86c57555e2bc04",
+    "pilot.png": "82aa79fa3c1b0c403989bf876add19c74988ae31229d63ba77b7a3a812cb39c8"
+  },
+  "script_sha256": "0df528cd23b88e67bffb65b204b3ee377521b66191eaf003c96a9cee515a1464",
+  "source": "Saved summary/errors and verified local Skip JPEG95 exports; no inference or original source reads"
+}
