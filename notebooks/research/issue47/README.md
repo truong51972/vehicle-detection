@@ -34,8 +34,13 @@ per-image latency or a matched CPU preprocessing benchmark.
 Issue [#51](https://github.com/truong51972/vehicle-detection/issues/51) continues
 with [03_full_resolution_training.ipynb](03_full_resolution_training.ipynb) and
 the [finalized full-S20 protocol](../../../docs/ISSUE47_FULL_TRAINING_PLAN.md).
-The fixed-640 native selection safeguards are tested on synthetic CPU data.
-Default execution only verifies saved evidence or reports not acquired. Real
-preparation, 20-epoch training and the four-cell matrix need separate explicit
-opt-ins after the verified implementation is committed. Historical experiments
-remain unchanged; this implementation does not start acquisition.
+Both complete 20-epoch arms and all four matrix cells are reported in the
+[full-S20 results](../../../docs/ISSUE51_RESULTS.md). All 42 actual CUDA selection
+passes verified fixed-640 tensors; native selected epochs are 9 and 10. The
+positive AP estimate remains inconclusive because dark-bus coverage conflicts.
+Default Restart & Run All reads hash-verified committed evidence without datasets,
+weights or study dependencies. Acquisition requires explicit guarded opt-ins and
+cannot overwrite completed attempts. The notebook and its original pre-acquisition
+note remain frozen at the acquisition revision. The interrupted CPU postprocessing
+and subsequent saved-match continuation are documented in the results. Historical
+experiments remain unchanged; no policy is promoted and Issue #47 stays open.

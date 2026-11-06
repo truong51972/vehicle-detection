@@ -10,6 +10,7 @@ from vehicle_detection.full_resolution_training import STUDY
 def test_cpu_cohort_keeps_1000_source_group_draws_and_reuses_only_verified_receipts(
     tmp_path, monkeypatch
 ):
+    monkeypatch.setenv("CUDA_VISIBLE_DEVICES", "")
     pytest.importorskip("ultralytics")
     from vehicle_detection import evaluation_stats, method_discovery
 

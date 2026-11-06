@@ -343,7 +343,8 @@ def test_summary_uses_1000_paired_original_source_group_draws_and_fixed_contrast
     assert MATRIX == ((640, 640), (960, 960), (640, 960), (960, 640))
 
 
-def test_new_notebook_default_in_fresh_kernel_never_reads_data_or_models(tmp_path):
+@pytest.mark.parametrize("completed", [False, True])
+def test_new_notebook_default_in_fresh_kernel_never_reads_data_or_models(tmp_path, completed):
     import shutil
 
     nbformat = pytest.importorskip("nbformat")
@@ -355,6 +356,8 @@ def test_new_notebook_default_in_fresh_kernel_never_reads_data_or_models(tmp_pat
         destination = root / name
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(name, destination)
+    if completed:
+        shutil.copytree(f"docs/{STUDY}", root / f"docs/{STUDY}")
     (root / "pyproject.toml").touch()
     before = {str(p.relative_to(root)): file_hash(p) for p in root.rglob("*") if p.is_file()}
     notebook = nbformat.read(root / NOTEBOOK, as_version=4)
