@@ -196,8 +196,10 @@ only adaptive route considered:
 | Evidence | Detector / population / objective | Observed finding and decision |
 | --- | --- | --- |
 | [Issue #30, round 2](ISSUE30_RESULTS.md) | Pretrained, controlled clean/corruption scenarios, independent exploration/confirmation | Denoise-5 looked +0.6736 AP points over Skip in exploration but was **-0.4623** in confirmation; reject. Ordered Gamma/CLAHE and Sharpen/Bilateral pairs did not establish robust superiority. |
+| [PR #38 quality-route review](ISSUE30_QUALITY_REVIEW.md) | Pretrained, 256 exploration images, ten-scenario family-balanced objective | The refined route reached 18.5643% on its optimization sample and passed direct CPU cost gates, but clean TP/FP worsened against both controls. Status remained **pending fresh confirmation**, not a confirmed release. The next row tests its transfer on new groups. |
 | [Issue #30, round 3](ISSUE30_RESEARCH_ROUND3.md) | Pretrained, new 256-image slice / five-scenario sentinel | Previous route's +0.59575-point old-slice advantage over v2 became **-0.01621** on new groups under matched sentinels; fixed noise-range bilateral also failed. |
 | [Issue #45, local shadow](ISSUE45_RESULTS.md) | Pretrained, 256 natural calibration images | +0.1145 points over Raw, but below +0.2; dark-car regression and CPU mean-cost gates failed. |
+| [Issue #45 S20 extension](ISSUE45_S20_EXECUTION.md) | Independently trained S20/640 arms, matched 13,975-image development | Local shadow lost **0.1194 AP points versus Raw** and **0.1949 versus Gamma-or-Skip**. This separately authorized exploratory extension did not reverse its pretrained pilot's failed gates or establish a confirmed policy. |
 | [Earlier Issue #47 Gamma/Sharpen](ISSUE47_RESULTS.md) | Pretrained, 1,027 natural calibration images | +0.006313 points over Skip, failed primary/uncertainty and subgroup checks; ordered pair not supported as a replacement. |
 | **Current PR #53 local contrast** | **Trained Raw S20/960**, 1,479 different natural calibration images | **+0.147479** points over Raw; primary minimum and interval, two-wheeler mean, and dark-bus regression gates fail. |
 
@@ -212,9 +214,13 @@ enhancer/detector would fail.
 
 - The current image-quality router applies local contrast to **584/1,479** images,
   but only **17/52 motorcycle** and **26/156 bicycle** ground-truth instances
-  occur in processed images. Global low contrast is therefore a poor coverage
-  proxy for the rare-object objective; the feature-to-detection-response link
-  remains insufficient even though the route-control association passes.
+  occur in processed images. The [saved-match acceptance audit](ISSUE47_ACCEPTANCE.md)
+  finds that **all 35 skipped motorcycle and all 130 skipped bicycle GT** occur
+  in images failing contrast <0.20. One of those bicycle GT also occurs in an
+  image failing white-fraction <0.10; failure counts overlap. None of the other
+  guards excludes a two-wheeler-containing image in this population. This is
+  image-level route coverage, not an object-level cause of detection failure or
+  a reason to retune the frozen threshold.
 - Motorcycle and bicycle each gain only **one TP at confidence 0.25**, while
   total false positives increase **2,197 to 2,263**. Improved confidence ranking
   or localization can affect AP without changing the fixed-threshold TP count;
@@ -222,10 +228,12 @@ enhancer/detector would fail.
 - Dark-bus AP loses **1.6165 points** on just **20 GT / 16 source groups**.
   The wide interval overlaps zero, so this is a predeclared point-tolerance
   failure, **not** evidence of reliably harmful local contrast.
-- Earlier fixed routes also skipped most small-two-wheeler scenes; the low-sharpness
-  examples were sparsely supported. Overall quality proxies cannot reliably
-  identify recoverable details at the object/box scale. That is a mechanistic
-  limitation to investigate separately, not permission to choose a new threshold.
+- The earlier Gamma/Sharpen route skipped 28/29 motorcycle-containing and 54/59
+  bicycle-containing images ([saved diagnosis](ISSUE47_DISCOVERY_RESULTS.md)).
+  The current low-sharpness subset has 15 images, 12 car groups, two truck groups,
+  one motorcycle group and no bus/bicycle GT. Its three-class macro is descriptive;
+  it does not establish five-class, rare-class, physical-blur or AP-small benefit.
+  Image-level proxies and saved matches do not identify recoverable object details.
 - All **1,479** remaining eligible exploration images are now consumed. The
   historical exposure audit and group-disjoint membership prevent quietly
   reusing them for a new independent experiment. The reserved confirmation
@@ -248,3 +256,8 @@ force a train/eval metric. Further research into object-aware preprocessing,
 learned enhancement, or transformed-domain co-training would require a separately
 justified question, a legitimately fresh population, and a new prospective
 protocol; those untested directions are outside this issue's closure claim.
+
+The [final acceptance review](ISSUE47_ACCEPTANCE.md) records saturated-channel
+limits, saved-only diagnostics, notebook/integrity checks and the complete issue
+acceptance mapping. It adds no source pixels, detector inference or bootstrap draws,
+and leaves every frozen acquisition input, result and original receipt unchanged.

@@ -1,0 +1,36 @@
+{
+  "confirmation_accessed": false,
+  "existing_tracked_files_verified": 484,
+  "final_test_accessed": false,
+  "historical_preservation": {
+    "local_size_mtimes": 214854,
+    "tracked_hashes": 383
+  },
+  "limits": "Historical local files are stat-inventoried, not pixel-rehashed. Synthetic model fixtures are software checks. Saved-match diagnosis is descriptive and not independent confirmation. PR CI is checked on the final pushed head in the PR discussion.",
+  "new_bootstrap_draws": 0,
+  "new_inputs": {
+    "docs/ISSUE47_ACCEPTANCE.md": "50419038b162bd2c498e21e9ae46657e7b661aabedb1c9ac497045024cff8847",
+    "docs/ISSUE47_V3_960_RESULTS.md": "929bb96a791a46cbfa6932ef17175d8efc30b1389db728bbc55238e21827107d",
+    "docs/issue47-v3-960-acceptance/saved_audit.json": "949d0d24e7e5246092fe7e5d37f20750240b447a5c9f9d6df11932367e86fa3d",
+    "notebooks/experiments/v3/README.md": "af0abe7cd90f132ea2987231db75dd01d4cd6288982e3da74a1dddaf990bf4ac",
+    "src/vehicle_detection/v3_acceptance.py": "f58a9435f2e33140236029d0ce151a92c89f5ab824093b16fb78e403fc1ee7f5",
+    "tests/test_v3_acceptance.py": "fe3d82d2a3c306dbb2bd1eff4f943cc4cf0a0859a18df21398c0ac466e3815d7"
+  },
+  "new_scientific_inference_passes": 0,
+  "new_source_pixel_reads": 0,
+  "only_existing_files_changed": [
+    "docs/ISSUE47_V3_960_RESULTS.md",
+    "notebooks/experiments/v3/README.md"
+  ],
+  "original_acquisition_index_sha256": "96021fb64ae972b7100d7877fd88227d20975977e9fe2909ccab1b35776a78d7",
+  "original_frozen_inputs_verified": 49,
+  "original_validation_receipt_sha256": "e5f7cb50c6d0712a2a47801161979e8dfe18ecb719faff51357a29d3c1a91a8e",
+  "pr52_original_archives_and_summary_verified": true,
+  "remaining_review_threads_at_start": 0,
+  "review_base_commit": "ed76dd89edf5d290a5c3d9d1780134d76ad688a5",
+  "ruff": "ruff check . and ruff format --check . passed (142 files)",
+  "saved_native_matches_and_export_receipt_hashes_verified": true,
+  "test_log_sha256": "e740d5d6f49d29d2ef61500125b27f357e88cf6508c369e92e792625210faad4",
+  "tests": "220 passed in 113.64s; full installed-study suite, including all independent v3 defaults and comparison fresh kernels",
+  "whitespace": "git diff --check passed"
+}
