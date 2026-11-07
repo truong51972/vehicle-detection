@@ -27,6 +27,7 @@ ACTIVE = {
     "research/issue47/02_resolution_training.ipynb",
     "research/issue47/03_full_resolution_training.ipynb",
     "research/issue47/04_gamma_sharpen_pilot.ipynb",
+    "research/issue47/05_posthoc_adaptive_training.ipynb",
 }
 
 

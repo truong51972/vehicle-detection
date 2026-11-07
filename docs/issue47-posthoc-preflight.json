@@ -1,0 +1,17 @@
+{
+  "focused_native_checks": "Actual synthetic four-cell CPU evaluation and existing actual-640 selection at training960 passed; failed training cost/overwrite, original encoding/label parity, recipe isolation and fresh-kernel defaults covered",
+  "initial_checkpoint_sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+  "inputs": {
+    "docs/ISSUE47_POSTHOC_TRAINING_PLAN.md": "26f5aed490935c09b322a5e5a965df9eb9d71f1148657f3c0f54bb372bad03a1",
+    "notebooks/research/issue47/05_posthoc_adaptive_training.ipynb": "f95766e993bd64d8c25300581ddaf2cbc1c242c4735bbdfc22a40c4cef6f8df9",
+    "src/vehicle_detection/posthoc_training.py": "2b75b87748b24a171fc1fac68e1003a8b1a440b8f8c43c949d5bab7fb7b74935",
+    "tests/test_posthoc_training.py": "31db81a2bc49f846971532a6fdeb7288bc04cca7ea477882cd01ee3020fbc730"
+  },
+  "prior_acceptance_inputs_unchanged": true,
+  "ruff": "lint and format passed (146 files)",
+  "scope": "Post-hoc exploration explicitly requested after negative acceptance; prior results/gates unchanged",
+  "test_log_sha256": "718d4430e0996d1f0eecd75b8c6e55060d73a1643102acfe701d9342ad6b28cd",
+  "tests": "228 passed in 120.95s",
+  "training_recipe_matches_pr52": true,
+  "verified": true
+}

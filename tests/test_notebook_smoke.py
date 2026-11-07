@@ -115,6 +115,10 @@ def test_comparison_runs_read_only_without_local_runs_or_study_dependencies(tmp_
     shutil.copytree("docs/issue47", root / "docs/issue47")
     shutil.copytree("docs/issue47-s20-resolution-20e", root / "docs/issue47-s20-resolution-20e")
     shutil.copytree("docs/issue47-v3-960", root / "docs/issue47-v3-960")
+    if Path("docs/issue47-posthoc-adaptive-960").exists():
+        shutil.copytree(
+            "docs/issue47-posthoc-adaptive-960", root / "docs/issue47-posthoc-adaptive-960"
+        )
     before = {str(p.relative_to(root)): file_hash(p) for p in root.rglob("*") if p.is_file()}
     notebook = nbformat.read(directory / "compare.ipynb", as_version=4)
     notebook.cells.insert(
