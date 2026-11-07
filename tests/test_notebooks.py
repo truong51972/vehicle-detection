@@ -19,10 +19,15 @@ ACTIVE = {
     "experiments/v2/03_train.ipynb",
     "experiments/v2/04_eval.ipynb",
     "experiments/v3/01_experiments.ipynb",
+    "experiments/v3/02_train_prepare.ipynb",
+    "experiments/v3/03_train.ipynb",
+    "experiments/v3/04_eval.ipynb",
     "experiments/compare.ipynb",
     "research/issue47/01_method_discovery.ipynb",
     "research/issue47/02_resolution_training.ipynb",
     "research/issue47/03_full_resolution_training.ipynb",
+    "research/issue47/04_gamma_sharpen_pilot.ipynb",
+    "research/issue47/05_posthoc_adaptive_training.ipynb",
 }
 
 

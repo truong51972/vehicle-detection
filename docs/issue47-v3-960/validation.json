@@ -1,0 +1,47 @@
+{
+  "confirmation_accessed": false,
+  "evidence_index_sha256": "96021fb64ae972b7100d7877fd88227d20975977e9fe2909ccab1b35776a78d7",
+  "executed_notebook": {
+    "executed_code_cells": 4,
+    "path": "runs/issue47-v3-960/execution/01_experiments.executed.ipynb",
+    "sha256": "f7ab552ca00690884d4392662b6e6831cb7beaf28499f7e63c2f12e5f9f737ff"
+  },
+  "final_test_accessed": false,
+  "fresh_kernel_defaults": "All four v3 notebooks and compare; no local pixels/runs/weights or heavy inference dependencies; acquisition functions blocked; prerequisite bytes unchanged",
+  "historical_preservation": {
+    "local_size_mtimes": 214854,
+    "tracked_hashes": 383
+  },
+  "limits": "Software checks are not independent scientific confirmation; local preservation inventories stat historical pixels rather than cryptographically rehash them.",
+  "local_export_receipt_sha256_verified": "18affdda747252ff0bb92cd01e4cdb0b61c90d0043f52ce49b14e07fd1eacf9b",
+  "local_statistics_hashes_verified": {
+    "adaptive_local": {
+      "path": "runs/issue47-v3-960/adaptive_local/eval/paired_stats.npz",
+      "sha256": "0938f96fa5401bfb8ef827c6500a23268ce18196bf76852c0a726509091fccef"
+    },
+    "always_local": {
+      "path": "runs/issue47-v3-960/always_local/eval/paired_stats.npz",
+      "sha256": "6c6587af3a3472c98e00ca51448067ce8357239a59de390f480d3d3dabf9b888"
+    },
+    "raw": {
+      "path": "runs/issue47-v3-960/raw/eval/paired_stats.npz",
+      "sha256": "d3e7eabc6c5640e093b8975d8ff4d51950d474134f78ccc9fdeef6dbc6683891"
+    }
+  },
+  "log": {
+    "path": "runs/issue47-v3-960/execution/execution.log",
+    "sha256": "316214b51cb1dac6042ed4275213f6db7faf495356a0840e105398fbc822d239"
+  },
+  "pr52_archives_and_exact_summary_equivalence": true,
+  "ruff": "ruff check . and ruff format --check . passed (139 files)",
+  "scientific_acquisition_commit": "55d5b04186a457b2afe3f3d291755813550ca7b6",
+  "scientific_image_passes": {
+    "calibration_inference": 4437,
+    "confirmation": 0,
+    "development": 0,
+    "training": 0
+  },
+  "test_log_sha256": "0e1602a1f11d5657fe7c1d97a5ea9c749f31f6bb2d278427c8f4d9508068e9ea",
+  "tests": "214 passed in 124.25s; full installed-study suite",
+  "whitespace": "git diff --check passed"
+}

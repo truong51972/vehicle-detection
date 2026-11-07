@@ -1,0 +1,30 @@
+{
+  "ids_sha256": {
+    "train": "ca35e8665e4b7961379b75bf96c697210f29f0fd17c6a3a172c9de6903bea1bc",
+    "val": "bf2957e6f237c3c2373f9913117933e6de0ae3c7d3bcf5aa700362efa0e71ff3"
+  },
+  "images": {
+    "train": 9781,
+    "val": 13975
+  },
+  "negative_images": {
+    "train": 73,
+    "val": 121
+  },
+  "preparation_wall_seconds": 179.492675098998,
+  "prepared_sha256": "73f08bb50c44e9af931760a58f99f152cd4a5c32353817c4a02a4b468b8be16a",
+  "preservation": {
+    "local_size_mtimes": 223780,
+    "tracked_hashes": 491
+  },
+  "routing": {
+    "train": {
+      "apply": 3916,
+      "skip": 5865
+    },
+    "val": {
+      "apply": 5653,
+      "skip": 8322
+    }
+  }
+}

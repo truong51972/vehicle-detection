@@ -1,36 +1,62 @@
-# v3 — Adaptive exposure/detail exploration
+# v3 — Adaptive local contrast at trained S20/960
 
-V3 tests pixel-derived routes to Skip, mild Gamma, mild Sharpen, or the bounded
-ordered Gamma → Sharpen composition. It does not reuse historical “Adaptive V3”
-or modify completed v0/v1/v2 experiments.
+The current continuation tests bounded, highlight-protected, luminance-only local
+contrast against PR #52's trained Raw S20/960 detector. It preserves the earlier
+Gamma/Sharpen pilot as an immutable negative result. No historical policy is
+renamed or retrained.
 
-**Decision: stop.** The completed pilot failed the primary gain, supported truck
-regression, route-support and paired-interval gates. No policy is frozen and no
-confirmation, S20 preparation/training or development evaluation was run.
+**Decision: stop before confirmation/training.** The adaptive arm's measured
++0.147 AP-point primary gain is below the prospectively required +0.2 points.
+All declared uncertainty, rare-class, regression, route-control and cost checks
+are retained in the [complete result](../../../docs/ISSUE47_V3_960_RESULTS.md).
+No v3 policy/configuration, S20 export, checkpoint or development metric is claimed.
 
-Start with [01_experiments.ipynb](01_experiments.ipynb), independently executable
-from this directory or the repository root. Default Restart & Run All verifies
-and displays committed compact evidence without models, local data or inference.
-Read the [committed premeasurement plan](../../../docs/ISSUE47_PLAN.md) and
-[research decision](../../../docs/ISSUE47_RESULTS.md) for populations, hypotheses,
-gates, missing support and limitations. The plan/code were committed before new
-pixel measurement; exact sample/model/settings/code hashes are saved alongside
-the [version-local evidence](../../../docs/issue47/summary.json).
+The independent notebook lifecycle is complete:
 
-The single pilot uses 1,027 natural calibration-exploration images in 649 whole
-source groups, excludes both prior consumed rounds and reserved confirmation,
-and compares four arms on identical original IDs/five-class GT with JPEG95.
-Only the complete preregistered route may advance; components are diagnostics.
-There is no threshold tuning, runner-up promotion or post-pilot training override.
+1. [01_experiments.ipynb](01_experiments.ipynb): research design, native paired
+   exploration, per-class/cohort results, uncertainty, routes and CPU cost.
+2. [02_train_prepare.ipynb](02_train_prepare.ipynb): verifies the failed gate and
+   records skipped preparation; no original images or local exports are needed.
+3. [03_train.ipynb](03_train.ipynb): records skipped independent training and the
+   PR #52 recipe that would have applied only after confirmation.
+4. [04_eval.ipynb](04_eval.ipynb): records why there is no trained v3 development
+   evaluation. Calibration input experiments are not relabeled as model training.
 
-`ALLOW_PILOT=True` authorizes the fixed matrix only on a fresh output root with
-the original study dependencies/sources/checkpoint. An existing or incomplete
-attempt blocks execution. The completed real acquisition notebook/log live under
-ignored `runs/issue47/`; do not delete evidence to rerun consumed groups.
+Default Restart & Run All verifies committed evidence in a fresh kernel, from
+this directory or the repository root. Each notebook reads saved prerequisites
+without executing another notebook. There is no override for failed scientific
+gates. `ALLOW_PILOT=True` in 01 is the original one-shot acquisition switch;
+existing/incomplete attempts block execution and must never be removed to retry.
 
-02/03/04 and `configs/v3.yaml` are intentionally absent: the declared gates do not
-justify preparation, training or development evaluation. A future direction
-needs a distinct preregistered hypothesis on remaining unconsumed groups, not
-retuning this pilot. The [read-only comparison](../compare.ipynb) remains the only
-cross-version UI and distinguishes this pretrained pilot from completed trained
-S20 arms and historical S10 results. Final-test pixels stay sealed.
+The [prospective plan](../../../docs/ISSUE47_V3_960_PLAN.md), exact compressed
+membership and implementation were committed at `55d5b04` before measurement.
+All 1,479 remaining exploration images / 926 source groups were fixed after
+excluding recorded Issue #6/#11 and later searches. Three native 960 arms share
+original five-class GT/negatives and JPEG95: Raw, always-on local contrast, and
+pixel-routed local contrast. Only the adaptive arm could advance. The unchanged
+PR #52 Raw best checkpoint is the detector, not its original COCO initialization.
+
+The trained reference's 9,781 S20 / 13,975 development IDs and full 20-epoch recipe
+are unchanged. Candidate search opens neither development nor confirmation pixels.
+Final-test pixels remain sealed; no S100 or v4 is introduced. A negative result
+for this bounded frozen-detector policy does not reject all adaptive mechanisms
+or establish the outcome of consistent transformed-domain training.
+
+The [read-only comparison](../compare.ipynb) is the only cross-version UI. It keeps
+historical S20/640 v0/v1/v2, PR #52 Raw960 development and current calibration
+results distinct. Large pixels, weights, matching arrays and executed notebooks
+remain ignored; complete feature/read/draw evidence is losslessly compressed.
+
+Historical evidence: [original Gamma/Sharpen notebook](../../research/issue47/04_gamma_sharpen_pilot.ipynb),
+[original plan](../../../docs/ISSUE47_PLAN.md), and
+[unchanged original result](../../../docs/ISSUE47_RESULTS.md). Its failed gates
+are not revised by this continuation.
+
+## Issue closure (no follow-up PR required)
+
+The [cross-study evidence and closure assessment](../../../docs/ISSUE47_V3_960_RESULTS.md#issue-47-closure-assessment-across-completed-studies) brings the historic denoising, ordered-filter, routing, Gamma/Sharpen, local-shadow and current trained-Raw960 studies into one bounded decision. No tested adaptive candidate established confirmed promotion; some exploration and cost checks passed, while the full remaining fresh exploration pool is now consumed. This fulfills the issue's explicitly permitted negative-result branch without fabricating an S20-trained v3. Conditional preparation, training and development evaluation remain explicitly skipped, while the confirmation and final-test partitions stay sealed. Once PR #53 merges, Issue #47 can close as a completed negative study; a materially different mechanism would need a new hypothesis and fresh, legitimate evaluation data, not repeated tuning on these measurements.
+
+No previous committed scientific evidence, frozen operator, 01 acquisition notebook or historical model was modified by this closure summary.
+
+See the [final acceptance review](../../../docs/ISSUE47_ACCEPTANCE.md) for saved-feature
+gate attribution, low-sharpness support and the saturated-channel clipping limitation.

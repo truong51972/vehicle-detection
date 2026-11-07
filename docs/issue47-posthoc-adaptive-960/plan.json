@@ -1,0 +1,50 @@
+{
+  "baseline_prepared_sha256": "e0d160229f71c574c50623077770477e46072656dac1164e8377da2d011dc3f8",
+  "commit": "a94c0c896a9ad7aa099599f5e0cad98d3ca58ee1",
+  "inputs": {
+    "docs/ISSUE47_POSTHOC_TRAINING_PLAN.md": "26f5aed490935c09b322a5e5a965df9eb9d71f1148657f3c0f54bb372bad03a1",
+    "notebooks/research/issue47/05_posthoc_adaptive_training.ipynb": "f95766e993bd64d8c25300581ddaf2cbc1c242c4735bbdfc22a40c4cef6f8df9",
+    "src/vehicle_detection/baseline.py": "1caf6bf879a02988e6550afb237709381967dbcef72293fc9b7e09f4d6bd8720",
+    "src/vehicle_detection/common.py": "72bc75f7c8cde67ef261deb06368eb8c15b57b98ca946191da00aff6e187d9c8",
+    "src/vehicle_detection/datasets.py": "9c6c7709e9267c3ce421d5f4b9adae7107c587624e6e95156f28c477d70299af",
+    "src/vehicle_detection/evaluation.py": "b64f8923ee613dc20e21e55b7cd916b17c24417f4e7e5ade361acb2567fe2ab6",
+    "src/vehicle_detection/evaluation_stats.py": "227f0272b00e91790e2e0eece429e1eeb7ee10cc415b5d5fb3f101f2cb4fcd59",
+    "src/vehicle_detection/experiment_data.py": "7fae6427e0a6ea166d0959a089344e09c4d890c55d9bcb96faad690f83b2ae2b",
+    "src/vehicle_detection/five_class.py": "f299d4b34b8990923eaf70fa095236d11da75f991c399438195d75250873e8cc",
+    "src/vehicle_detection/full_resolution_training.py": "f0696e7396c638ef128a64fad131eea476eaae3ec4ab1b80f2f656e66336978e",
+    "src/vehicle_detection/method_discovery.py": "444d75aeed454a4aed9032c6da44731d645592470c0a47875fbf762346eacc76",
+    "src/vehicle_detection/posthoc_training.py": "2b75b87748b24a171fc1fac68e1003a8b1a440b8f8c43c949d5bab7fb7b74935",
+    "src/vehicle_detection/preprocess.py": "8bdc2391fc9c4c6c330e47221b6eb7f678c6206c1e53d9e3dd8e040a82e9fb8a",
+    "src/vehicle_detection/research_round3.py": "097af76bade8dc217abdd106b2ab25f53f006304c6fa07402be997e947a06dc1",
+    "src/vehicle_detection/resolution_training.py": "c3b1360dfd5ab808890673046dd9b5764862d97eeb634c7d1685f78f22c2dd81",
+    "src/vehicle_detection/training_settings.py": "1fbf34a3175f08f20bbf660d5c931ab9eb651d38657213a9ff025acd05c7a695",
+    "src/vehicle_detection/v3_adaptive.py": "87da1ed1a691ced4d436b6e3b3f1cefa0a8d914caddf050590d99d0625df8b52",
+    "tests/test_posthoc_training.py": "31db81a2bc49f846971532a6fdeb7288bc04cca7ea477882cd01ee3020fbc730",
+    "uv.lock": "5628996e92b58a1c7d43f7f458ed9a4b39aca6da6626bf7728b9a6d5d664250b"
+  },
+  "matrix": [
+    [
+      "raw",
+      "raw"
+    ],
+    [
+      "raw",
+      "adaptive"
+    ],
+    [
+      "adaptive",
+      "raw"
+    ],
+    [
+      "adaptive",
+      "adaptive"
+    ]
+  ],
+  "scope": "Post-hoc exploration; not independent confirmation",
+  "versions": {
+    "numpy": "2.4.6",
+    "opencv-python": "4.14.0.94",
+    "torch": "2.15.0",
+    "ultralytics": "8.4.198"
+  }
+}

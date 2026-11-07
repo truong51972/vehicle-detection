@@ -1,0 +1,41 @@
+{
+  "checkpoint_sha256": "b13ec9339f7a58d55dd53c46f7e0e24330a889a761f3ee8cc4a3e9764573b2cb",
+  "excluded_exposures": {
+    "docs/issue11-v1/pilot_membership.csv.gz": "486b1d53bc3f1a101047a9d90b042858ece5f564579e1e8d7cdededcd48f20a8",
+    "docs/issue45/membership.csv": "47ff16388270e949ac11e260eee7f27a14a8dd9c42a1421ad20eef11e7ca1b7f",
+    "docs/issue47/membership.csv": "ce2db7ac2d488f0b519ae79cd680cd9816f1c6196be806409935d14028ba638a",
+    "docs/issue6-v2/policy.json": "939ce2419171c68b41789a41cfe2b64b31f983eec4c749e6df8824663c7cec5f",
+    "docs/issue6/policy.json": "19521f1dc17dd5c6df0acd8b0b30d64b4600b9e41a3e73adf8b6e90d271b199a",
+    "docs/round2-preprocessing-v2/membership.csv.gz": "796ae6f2ff33f9a2d58df230791028b6bb4ba3fb268dccf91073fe294be1a9e2",
+    "docs/round2-research-v3/membership.csv.gz": "831a3d15bf3b7e0deb25271c9c6833df2db375be10616681b39ee3ff24e7081a"
+  },
+  "ids_sha256": "877b13d5f6a31fdd6af8d55f6af3b938dfafe99774a326277050d147ef8f5b12",
+  "images": 1479,
+  "maximum_inference_image_passes": 4437,
+  "membership_sha256": "6f8d6f2c4955da075bc77d0bd0f395393a265a03c3dc799316560ef06cb2b906",
+  "role": "calibration_exploration",
+  "rows_sha256": "e2d8626b4f4e5d24c487f510002d960856e5475fc017e93c73c20a3f53a619c4",
+  "source_groups": 926,
+  "support": {
+    "bicycle": {
+      "GT": 156,
+      "source_groups": 91
+    },
+    "bus": {
+      "GT": 259,
+      "source_groups": 178
+    },
+    "car": {
+      "GT": 15088,
+      "source_groups": 918
+    },
+    "motorcycle": {
+      "GT": 52,
+      "source_groups": 42
+    },
+    "truck": {
+      "GT": 626,
+      "source_groups": 307
+    }
+  }
+}

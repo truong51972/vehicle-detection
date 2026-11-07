@@ -1,0 +1,135 @@
+{
+  "analysis_sha256": "f58a9435f2e33140236029d0ce151a92c89f5ab824093b16fb78e403fc1ee7f5",
+  "cohort_support": {
+    "all": {
+      "classes": {
+        "bicycle": {
+          "GT": 156,
+          "source_groups": 91
+        },
+        "bus": {
+          "GT": 259,
+          "source_groups": 178
+        },
+        "car": {
+          "GT": 15088,
+          "source_groups": 918
+        },
+        "motorcycle": {
+          "GT": 52,
+          "source_groups": 42
+        },
+        "truck": {
+          "GT": 626,
+          "source_groups": 307
+        }
+      },
+      "images": 1479
+    },
+    "dark": {
+      "classes": {
+        "bicycle": {
+          "GT": 7,
+          "source_groups": 6
+        },
+        "bus": {
+          "GT": 20,
+          "source_groups": 16
+        },
+        "car": {
+          "GT": 3084,
+          "source_groups": 242
+        },
+        "motorcycle": {
+          "GT": 5,
+          "source_groups": 5
+        },
+        "truck": {
+          "GT": 58,
+          "source_groups": 37
+        }
+      },
+      "images": 349
+    },
+    "low_sharpness": {
+      "classes": {
+        "bicycle": {
+          "GT": 0,
+          "source_groups": 0
+        },
+        "bus": {
+          "GT": 0,
+          "source_groups": 0
+        },
+        "car": {
+          "GT": 71,
+          "source_groups": 12
+        },
+        "motorcycle": {
+          "GT": 1,
+          "source_groups": 1
+        },
+        "truck": {
+          "GT": 3,
+          "source_groups": 2
+        }
+      },
+      "images": 15
+    }
+  },
+  "inputs": {
+    "evidence.json": "96021fb64ae972b7100d7877fd88227d20975977e9fe2909ccab1b35776a78d7",
+    "features.json.gz": "7c23776cc075c657ac650bb7c74d2d6864a7dcd9dd811aee47fa055601edecc0",
+    "membership.csv.gz": "6f8d6f2c4955da075bc77d0bd0f395393a265a03c3dc799316560ef06cb2b906",
+    "validation.json": "e5f7cb50c6d0712a2a47801161979e8dfe18ecb719faff51357a29d3c1a91a8e"
+  },
+  "new_bootstrap_draws": 0,
+  "new_inference_passes": 0,
+  "new_source_pixel_reads": 0,
+  "rare_class_routing": {
+    "bicycle": {
+      "GT": 156,
+      "apply_GT": 26,
+      "apply_images": 22,
+      "exclusive_failed_gate_combinations_GT": {
+        "contrast_ge_0.20": 129,
+        "contrast_ge_0.20 + white_fraction_ge_0.10": 1
+      },
+      "overlapping_failed_gate_GT": {
+        "contrast_ge_0.20": 130,
+        "white_fraction_ge_0.10": 1
+      },
+      "skip_GT": 130,
+      "skip_images": 76
+    },
+    "motorcycle": {
+      "GT": 52,
+      "apply_GT": 17,
+      "apply_images": 14,
+      "exclusive_failed_gate_combinations_GT": {
+        "contrast_ge_0.20": 35
+      },
+      "overlapping_failed_gate_GT": {
+        "contrast_ge_0.20": 35
+      },
+      "skip_GT": 35,
+      "skip_images": 30
+    }
+  },
+  "statistics": {
+    "adaptive_local": {
+      "path": "runs/issue47-v3-960/adaptive_local/eval/paired_stats.npz",
+      "sha256": "0938f96fa5401bfb8ef827c6500a23268ce18196bf76852c0a726509091fccef"
+    },
+    "always_local": {
+      "path": "runs/issue47-v3-960/always_local/eval/paired_stats.npz",
+      "sha256": "6c6587af3a3472c98e00ca51448067ce8357239a59de390f480d3d3dabf9b888"
+    },
+    "raw": {
+      "path": "runs/issue47-v3-960/raw/eval/paired_stats.npz",
+      "sha256": "d3e7eabc6c5640e093b8975d8ff4d51950d474134f78ccc9fdeef6dbc6683891"
+    }
+  },
+  "status": "Descriptive acceptance audit; not independent validation or a new experiment",
+  "verified": "All/dark/low-sharpness class AP50/AP50:95 and TP/FP/FN match all three frozen arms"
+}
