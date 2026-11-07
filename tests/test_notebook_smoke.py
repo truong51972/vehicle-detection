@@ -157,7 +157,8 @@ patch("io.open", guarded(io.open)).start()
 @pytest.mark.parametrize(
     "notebook_path, report_name, plan_name",
     [
-        ("experiments/v3/01_experiments.ipynb", "issue47", "ISSUE47_PLAN.md"),
+        ("experiments/v3/01_experiments.ipynb", "issue47-v3-960", "ISSUE47_V3_960_PLAN.md"),
+        ("research/issue47/04_gamma_sharpen_pilot.ipynb", "issue47", "ISSUE47_PLAN.md"),
         (
             "research/issue47/01_method_discovery.ipynb",
             "issue47-discovery",
