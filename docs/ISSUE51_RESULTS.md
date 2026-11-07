@@ -75,9 +75,46 @@ Study acquisition totals: **391,240 training image exposures / 642,850 validatio
 
 The [preservation receipt](issue47-s20-resolution-20e/preservation.json) verifies every pre-acquisition tracked hash and historical local file size/mtime record. Completed v0/v1/v2, PR #48/#49/#50 evidence, models, policies and caches remain unchanged. Size/mtime inventory is not a cryptographic rehash of all historical image/model bytes. The S20/development IDs, labels, negatives, JPEG95 bytes and original geometry were verified; cross-role metadata leakage checks passed. Reserved confirmation plans/pixels and final-test pixels/headers/predictions/source hashing stay sealed. Annotation metadata was used only for integrity and declared analysis.
 
-The [native result](issue47-s20-resolution-20e/result.json), adjacent histories/settings/checkpoint receipts, [evidence hashes](issue47-s20-resolution-20e/evidence.json), and the committed research notebook provide read-only inspection. Large pixels, weights, matching arrays, executed notebooks and logs remain ignored. No v3 policy/configuration or cross-version comparison row is created; `experiments/compare.ipynb` is unchanged. PR #50 keeps its original failed gates and results. This study does not establish independent generalization.
+The [compact result](issue47-s20-resolution-20e/result.json), adjacent histories/settings/checkpoint receipts, [current evidence hashes](issue47-s20-resolution-20e/evidence.json), and the committed research notebook provide read-only inspection. Large pixels, weights, matching arrays, executed notebooks and logs remain ignored. No v3 policy/configuration or cross-version comparison row is created; `experiments/compare.ipynb` is unchanged. PR #50 keeps its original failed gates and results. This study does not establish independent generalization.
 
 Post-execution [software and preservation validation](issue51/execution_validation.json) is separate from the original pre-acquisition [implementation validation](issue51/validation.json). The earlier receipt remains historical and is not rewritten to claim acquisition had already occurred.
+
+## Evidence packaging
+
+All evidence artifacts below are versioned in Git and arrive with a normal checkout;
+no external download or local acquisition state is required. The unchanged notebook
+reads compact `result.json`, retaining every value except the draw arrays under
+`paired_interval` and each `cohort_intervals` entry. Counts, support, class/cohort
+intervals, metrics, decisions, costs and provenance retain their original precision.
+
+- [result.json.gz](issue47-s20-resolution-20e/result.json.gz) restores the complete,
+  byte-identical original result, including all 1,000 draws per cohort and the
+  original duplicated primary/all interval.
+- [membership.csv.gz](issue47-s20-resolution-20e/membership.csv.gz) restores every
+  original membership row and byte; no source-group assignment changes.
+- [evidence.acquired.json](issue47-s20-resolution-20e/evidence.acquired.json) is the
+  unchanged completed-study manifest from revision
+  `91d447d6e83c34ff9cbca1e3e1471a2adc7dbf75`. The unchanged
+  `execution_validation.json` receipt's `evidence_index_sha256` binds this preserved
+  manifest. The current `evidence.json` instead hashes the packaged representation.
+- [packaging.json](issue47-s20-resolution-20e/packaging.json) records that revision,
+  original receipt/manifest hashes, both compressed and uncompressed archive
+  hashes, and the exact summary projection. Separate
+  [packaging validation](issue51/packaging_validation.json) records the new checks.
+
+From the repository root, verify all original hashes and exact summary equivalence,
+then optionally restore the originals for inspection:
+
+```sh
+uv run --locked python -m vehicle_detection.full_resolution_evidence
+gzip -dc docs/issue47-s20-resolution-20e/result.json.gz > /tmp/issue51-result.original.json
+gzip -dc docs/issue47-s20-resolution-20e/membership.csv.gz > /tmp/issue51-membership.original.csv
+```
+
+Verification only hashes and decompresses saved evidence. Packaging changes no
+training, inference, bootstrap calculation, threshold, seed, checkpoint or scientific
+value; it opens no study pixels or sealed data. The frozen protocol, notebook,
+training/reporting implementation and original validation receipts remain unchanged.
 
 ## CPU analysis cost
 

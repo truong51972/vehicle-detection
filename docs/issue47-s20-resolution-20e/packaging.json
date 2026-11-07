@@ -1,0 +1,16 @@
+{
+  "archives": {
+    "membership.csv": {
+      "gzip_sha256": "e493da1ff073e52bd4b6d6b059334824b3f1c6dd0406430a84444372c5d4058f",
+      "uncompressed_sha256": "9bf01e572d71c62b14cb740ab8acef770afbc5777af718368a940b5655252d6a"
+    },
+    "result.json": {
+      "gzip_sha256": "b0c6582a71f1cd342bdd708f9101a6fde99f2aac47a45ca86aff9ccef158ca59",
+      "uncompressed_sha256": "048763e674b7df5259bcaf931ec192818779667125868981476a9c99e7267dcf"
+    }
+  },
+  "original_evidence_sha256": "f9e06fdfb7929a16e33270bceca906511f4edf9d4a6e33753eb23a5ec69f6edb",
+  "original_revision": "91d447d6e83c34ff9cbca1e3e1471a2adc7dbf75",
+  "original_validation_sha256": "859aafcd89fca905ee1ff8c73aab19aa3e648eda7731e55b19f4f97ef7d2c9e6",
+  "projection": "Remove only paired_interval.draws and each cohort_intervals.<cohort>.draws; retain every other value."
+}
