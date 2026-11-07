@@ -1,0 +1,212 @@
+{
+  "bicycle": {
+    "000f8d37-d4c09a0f": {
+      "adaptive_local": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "009bd04d-0f1f9967": {
+      "adaptive_local": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "5e362554-80ac256d": {
+      "adaptive_local": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 0
+      }
+    },
+    "fe01f561-8b22660f": {
+      "adaptive_local": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    }
+  },
+  "bus": {
+    "113b84e3-bdeb4b16": {
+      "adaptive_local": {
+        "FP50": 1,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "7bc4f632-0dbc5b16": {
+      "adaptive_local": {
+        "FP50": 1,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "9ed89333-a72e5be1": {
+      "adaptive_local": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "a93aa94e-6d656b8c": {
+      "adaptive_local": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 0
+      }
+    }
+  },
+  "car": {
+    "09708b42-49f4ed8a": {
+      "adaptive_local": {
+        "FP50": 1,
+        "TP50": 9
+      },
+      "raw": {
+        "FP50": 2,
+        "TP50": 6
+      }
+    },
+    "2c9f97e9-bda69823": {
+      "adaptive_local": {
+        "FP50": 1,
+        "TP50": 11
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 8
+      }
+    },
+    "5216acb2-3191882c": {
+      "adaptive_local": {
+        "FP50": 7,
+        "TP50": 6
+      },
+      "raw": {
+        "FP50": 5,
+        "TP50": 8
+      }
+    },
+    "5b952ae7-80bc6329": {
+      "adaptive_local": {
+        "FP50": 1,
+        "TP50": 3
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 5
+      }
+    }
+  },
+  "motorcycle": {
+    "000f8d37-d4c09a0f": {
+      "adaptive_local": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "26eaf75c-2940c408": {
+      "adaptive_local": {
+        "FP50": 1,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "395a0c12-b142b4b3": {
+      "adaptive_local": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    },
+    "6fc496a0-0695fa4a": {
+      "adaptive_local": {
+        "FP50": 0,
+        "TP50": 0
+      },
+      "raw": {
+        "FP50": 1,
+        "TP50": 0
+      }
+    }
+  },
+  "truck": {
+    "0ea6d5cf-4487f7d7": {
+      "adaptive_local": {
+        "FP50": 1,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 1
+      }
+    },
+    "6301e7a9-470cd7e8": {
+      "adaptive_local": {
+        "FP50": 0,
+        "TP50": 2
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 3
+      }
+    },
+    "78652566-fc227316": {
+      "adaptive_local": {
+        "FP50": 0,
+        "TP50": 4
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 3
+      }
+    },
+    "8fae78d5-e0bc7024": {
+      "adaptive_local": {
+        "FP50": 0,
+        "TP50": 1
+      },
+      "raw": {
+        "FP50": 0,
+        "TP50": 0
+      }
+    }
+  }
+}

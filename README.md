@@ -12,17 +12,21 @@ an experiment README:
   a failed [local-shadow pilot](docs/ISSUE45_RESULTS.md), followed by a separately
   committed [exploratory S20 train/eval comparison](docs/ISSUE45_S20_EXECUTION.md).
   No confirmed/released replacement policy is claimed.
-- [v3 — Adaptive exposure/detail exploration](notebooks/experiments/v3/README.md):
-  a completed preregistered natural-image routing pilot with matched components;
-  failed advancement gates, so no policy freeze or S20 training.
+- [v3 — Adaptive local contrast at trained S20/960](notebooks/experiments/v3/README.md):
+  a bounded fresh-calibration study against PR #52's Raw960 detector. The primary
+  improvement gate failed; all four lifecycle notebooks record the measured
+  result and skipped confirmation/preparation/training/evaluation. Historical
+  Gamma/Sharpen evidence remains intact.
 
 Open [experiments/compare.ipynb](notebooks/experiments/compare.ipynb) for all
 cross-version presentation/analysis. It reads committed S20 metrics, timing,
 subgroups and plots in a fresh kernel without local runs, weights or datasets.
 Historical S10 and pretrained pilot evidence stays separately attributed.
 Each version's `04_eval` only evaluates/inspects its own policy–detector pair.
-V3's pretrained calibration evidence and decision remain separate from trained
-S20 results; an untrained policy never receives a development metric row.
+The comparison separates historical S20/640 results, PR #52's verified Raw S20/960
+reference, and v3 calibration evidence; an untrained v3 never receives a development
+metric row. See the [current v3 protocol](docs/ISSUE47_V3_960_PLAN.md) and
+[complete result](docs/ISSUE47_V3_960_RESULTS.md).
 
 Issue #47 continues separately in the
 [method-discovery notebook](notebooks/research/issue47/01_method_discovery.ipynb):
@@ -45,8 +49,9 @@ with inconclusive dark-bus coverage. Defaults inspect hash-verified evidence;
 acquisition opt-ins remain guarded and historical results are preserved.
 
 Folder IDs are stable sequential experiment identities, independent of algorithm
-names, maturity and performance. A changed policy/configuration that changes the
-scientific comparison needs the next experiment ID. Each experiment README is its
+names, maturity and performance. Candidate hypotheses within an unconfirmed
+version retain distinct immutable study roots; completed policy/configuration
+changes need the next experiment ID. Each experiment README is its
 human-readable source of truth; there is no separate experiment registry.
 
 Each implemented lifecycle has independent **Restart & Run All** notebooks:
