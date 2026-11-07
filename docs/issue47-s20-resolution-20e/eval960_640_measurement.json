@@ -1,0 +1,19 @@
+{
+  "batch_mean_ms": 96.27720297951781,
+  "batch_p95_ms": 121.0990194012993,
+  "batches": 437,
+  "checkpoint_sha256": "b13ec9339f7a58d55dd53c46f7e0e24330a889a761f3ee8cc4a3e9764573b2cb",
+  "native_ms_per_image": {
+    "inference": 1.0305949873404456,
+    "loss": 0.00015446268545200447,
+    "postprocess": 0.10093613502359991,
+    "preprocess": 0.17129214038807491
+  },
+  "tensor_shapes": [
+    [
+      384,
+      672
+    ]
+  ],
+  "wall_seconds": 82.48413737000374
+}

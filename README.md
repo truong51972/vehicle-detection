@@ -37,6 +37,12 @@ consumed-calibration evidence remains separate from the completed S20 arms.
 The [training diagnostic result](docs/ISSUE47_TRAINING_RESULTS.md) retains a
 positive incremental AP estimate but fails uncertainty and dark-bus regression
 gates; no adaptive policy or S20 promotion follows.
+The separate [Issue #51 full-S20 protocol](docs/ISSUE47_FULL_TRAINING_PLAN.md) and
+[guarded research notebook](notebooks/research/issue47/03_full_resolution_training.ipynb)
+completed both 20-epoch runs and the fixed matrix with verified fixed-640 selection.
+Read the [full results](docs/ISSUE51_RESULTS.md): a positive incremental AP estimate
+with inconclusive dark-bus coverage. Defaults inspect hash-verified evidence;
+acquisition opt-ins remain guarded and historical results are preserved.
 
 Folder IDs are stable sequential experiment identities, independent of algorithm
 names, maturity and performance. A changed policy/configuration that changes the

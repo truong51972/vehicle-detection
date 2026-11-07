@@ -22,6 +22,7 @@ ACTIVE = {
     "experiments/compare.ipynb",
     "research/issue47/01_method_discovery.ipynb",
     "research/issue47/02_resolution_training.ipynb",
+    "research/issue47/03_full_resolution_training.ipynb",
 }
 
 

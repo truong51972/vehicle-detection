@@ -1,0 +1,10 @@
+{
+  "inputs": {
+    "docs/ISSUE47_FULL_TRAINING_PLAN.md": "51722aaedf4a16dbf9a95db5d654247e9da798bd45ae0dd0b2217a669ae328e6",
+    "notebooks/research/issue47/03_full_resolution_training.ipynb": "21f61365b005895d6823207038d00bc8227d2413eb20e777e80aef4e2da6b452",
+    "src/vehicle_detection/full_resolution_training.py": "f0696e7396c638ef128a64fad131eea476eaae3ec4ab1b80f2f656e66336978e"
+  },
+  "review": "https://github.com/truong51972/vehicle-detection/issues/51#issuecomment-6687645032",
+  "scope": "Verified guarded implementation only; no real data acquisition or GPU training",
+  "verified": true
+}
