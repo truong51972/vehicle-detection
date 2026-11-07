@@ -166,8 +166,8 @@ notebook hashes and **214,854** unchanged local run/weight size/mtime records.
 This is not a cryptographic rehash
 of all historical pixels. Source grouping is inferred and residual near-duplicates
 may remain; these are single-seed remaining-pool exploration results, not a final
-test or independent generalization claim. Issue #47 remains open to materially
-different, separately justified research. No S100 or v4 is started.
+test or independent generalization claim. Issue #47 may be closed as a bounded negative study once this PR merges;
+new mechanisms require independent justification. No S100 or v4 is started.
 
 Validation: **214 tests passed**, Ruff lint/format and whitespace checks passed.
 Fresh-kernel checks execute all four v3 defaults and the updated comparison from
@@ -183,3 +183,68 @@ was one real acquisition, no retry or interrupted reporting continuation.
 The separate [post-execution validation receipt](issue47-v3-960/validation.json)
 binds the unchanged acquisition evidence index, local saved-match/export hashes,
 executed notebook and software checks; it does not rewrite the scientific index.
+
+## Issue #47 closure assessment across completed studies
+
+The broader #47 acceptance criterion allows a documented negative conclusion instead of
+forcing S20 preparation and training without a defensible policy. The new v3/960
+study is one bounded hypothesis, **not** an exhaustive search of adaptive methods.
+To close the issue responsibly, interpret it together with the prior committed
+experimental evidence rather than describing the single CLAHE treatment as the
+only adaptive route considered:
+
+| Evidence | Detector / population / objective | Observed finding and decision |
+| --- | --- | --- |
+| [Issue #30, round 2](ISSUE30_RESULTS.md) | Pretrained, controlled clean/corruption scenarios, independent exploration/confirmation | Denoise-5 looked +0.6736 AP points over Skip in exploration but was **-0.4623** in confirmation; reject. Ordered Gamma/CLAHE and Sharpen/Bilateral pairs did not establish robust superiority. |
+| [Issue #30, round 3](ISSUE30_RESEARCH_ROUND3.md) | Pretrained, new 256-image slice / five-scenario sentinel | Previous route's +0.59575-point old-slice advantage over v2 became **-0.01621** on new groups under matched sentinels; fixed noise-range bilateral also failed. |
+| [Issue #45, local shadow](ISSUE45_RESULTS.md) | Pretrained, 256 natural calibration images | +0.1145 points over Raw, but below +0.2; dark-car regression and CPU mean-cost gates failed. |
+| [Earlier Issue #47 Gamma/Sharpen](ISSUE47_RESULTS.md) | Pretrained, 1,027 natural calibration images | +0.006313 points over Skip, failed primary/uncertainty and subgroup checks; ordered pair not supported as a replacement. |
+| **Current PR #53 local contrast** | **Trained Raw S20/960**, 1,479 different natural calibration images | **+0.147479** points over Raw; primary minimum and interval, two-wheeler mean, and dark-bus regression gates fail. |
+
+These rows have different detectors, groups, conditions and estimands. Only
+within-study paired deltas are interpretable; do **not** rank the absolute AP
+levels or pool them into a synthetic meta-score. They collectively establish
+repeatedly weak or non-transferable gains **for the tested policies and budgets**.
+They do not establish that enhancement is impossible or that a jointly trained
+enhancer/detector would fail.
+
+### Failure diagnosis and why no more exploration is authorized
+
+- The current image-quality router applies local contrast to **584/1,479** images,
+  but only **17/52 motorcycle** and **26/156 bicycle** ground-truth instances
+  occur in processed images. Global low contrast is therefore a poor coverage
+  proxy for the rare-object objective; the feature-to-detection-response link
+  remains insufficient even though the route-control association passes.
+- Motorcycle and bicycle each gain only **one TP at confidence 0.25**, while
+  total false positives increase **2,197 to 2,263**. Improved confidence ranking
+  or localization can affect AP without changing the fixed-threshold TP count;
+  the saved matching evidence does **not** identify every missed ground-truth box.
+- Dark-bus AP loses **1.6165 points** on just **20 GT / 16 source groups**.
+  The wide interval overlaps zero, so this is a predeclared point-tolerance
+  failure, **not** evidence of reliably harmful local contrast.
+- Earlier fixed routes also skipped most small-two-wheeler scenes; the low-sharpness
+  examples were sparsely supported. Overall quality proxies cannot reliably
+  identify recoverable details at the object/box scale. That is a mechanistic
+  limitation to investigate separately, not permission to choose a new threshold.
+- All **1,479** remaining eligible exploration images are now consumed. The
+  historical exposure audit and group-disjoint membership prevent quietly
+  reusing them for a new independent experiment. The reserved confirmation
+  and sealed final test are not fallback exploration sets.
+
+### Acceptance and final disposition
+
+The prospective design, native paired metrics, class/cohort error accounting,
+source-group uncertainty, matched CPU cost, routing control, immutable negative
+decision, complete standalone `01`-`04` notebook lifecycle, read-only comparison,
+hash-based preservation and CI validation are documented within this PR.
+**No policy passes the declared advancement gates**, so the conditional
+confirmation, S20 preparation, independently initialized v3 training and
+trained-v3 development evaluation are correctly **not performed**.
+
+**Recommendation: close Issue #47 as completed with a negative, bounded research
+result upon merging PR #53.** Keep v0/v1/v2 and PR #52 as attributed baselines;
+do not promote v3, consume confirmation/final, or create another PR merely to
+force a train/eval metric. Further research into object-aware preprocessing,
+learned enhancement, or transformed-domain co-training would require a separately
+justified question, a legitimately fresh population, and a new prospective
+protocol; those untested directions are outside this issue's closure claim.
