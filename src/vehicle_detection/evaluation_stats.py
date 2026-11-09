@@ -180,7 +180,8 @@ def factorial_bootstrap(arms, groups, classes, *, policy, resamples=500, seed=20
         return {
             "delta": float(delta),
             "ci95": [float(x) for x in np.quantile(draws, [0.025, 0.975])]
-            if len(draws) > 1 else None,
+            if len(draws) > 1
+            else None,
             "valid_draws": len(draws),
             "resamples": resamples,
         }
