@@ -1,5 +1,23 @@
 # BDD100K / YOLO26n versioned experiments
 
+## Read the study report
+
+Start with [the standalone Vietnamese report](docs/report.html)
+([Quarto source](docs/report.qmd)) for the frozen
+data splits, preprocessing formulas, training/evaluation protocol, historical
+negative findings, current S20 results, post-hoc Adaptive960 training, costs and
+limitations. It includes tracked copies of existing run figures under
+[docs/images/](docs/images/) and does not require reading source code or local
+run artifacts. Render a self-contained HTML copy with
+`quarto render docs/report.qmd --to html`; rendering performs no study execution.
+
+The report is the primary narrative entrypoint. Other retained documents and
+machine-readable evidence support immutable provenance and notebook/test replay;
+they are not competing current summaries. Superseded, dependency-free workflow
+notes have been removed rather than archived into another documentation folder.
+
+## Notebook workflow
+
 One experiment pairs an offline preprocessing policy with the detector trained on
 its output. Start with [00_data_init.ipynb](notebooks/00_data_init.ipynb), then open
 an experiment README:
@@ -17,6 +35,10 @@ an experiment README:
   improvement gate failed; all four lifecycle notebooks record the measured
   result and skipped confirmation/preparation/training/evaluation. Historical
   Gamma/Sharpen evidence remains intact.
+
+The separately authorized [post-hoc Adaptive S20/960 study](docs/report.qmd#sec-posthoc)
+did complete one independent training run and a four-cell development matrix.
+It does not reverse v3's failed prospective gates or release a confirmed policy.
 
 Open [experiments/compare.ipynb](notebooks/experiments/compare.ipynb) for all
 cross-version presentation/analysis. It reads committed S20 metrics, timing,
