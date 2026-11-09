@@ -128,7 +128,9 @@ def factorial_bootstrap(arms, groups, classes, *, policy, resamples=500, seed=20
     reference = arms[keys[0]]
     for stats in arms.values():
         for sample_id in ids:
-            if not np.array_equal(reference[sample_id]["target_cls"], stats[sample_id]["target_cls"]):
+            if not np.array_equal(
+                reference[sample_id]["target_cls"], stats[sample_id]["target_cls"]
+            ):
                 raise ValueError("Paired ground truth changed")
 
     class_ids = tuple(classes)
