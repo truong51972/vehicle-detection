@@ -187,12 +187,16 @@ patch.object(YOLO, "val", side_effect=AssertionError("Inference started")).start
     from vehicle_detection.comparison import compare_policies, evaluate_matrix
 
     matrix = evaluate_matrix(
-        root, policies=("v3",),
+        root,
+        policies=("v3",),
         run_dates={"v0": DATE, "v3": DATE},
         allow_inference=True,
     )
     assert {f"{row['model']}/{row['input']}" for row in matrix["rows"]} == {
-        "v0/v0", "v0/v3", "v3/v0", "v3/v3",
+        "v0/v0",
+        "v0/v3",
+        "v3/v0",
+        "v3/v3",
     }
     assert set(matrix["results"]) == {"v0/v0", "v0/v3", "v3/v0", "v3/v3"}
     assert {row["status"] for row in matrix["rows"]} <= {"cached", "evaluated"}
@@ -201,4 +205,3 @@ patch.object(YOLO, "val", side_effect=AssertionError("Inference started")).start
     assert ci["v3"]["contrasts"]["joint_pipeline"]["valid_draws"] > 1
     cached = evaluate_matrix(root, policies=("v3",), allow_inference=False)
     assert {row["status"] for row in cached["rows"]} == {"cached"}
-
