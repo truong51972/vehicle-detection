@@ -66,8 +66,17 @@ inspects saved results by default and only does expensive work after an explicit
 4. `v*/03_train.ipynb`: `ALLOW_TRAINING=True` trains the newest run (`RESUME=True` continues
    an interrupted one).
 5. `v*/04_eval.ipynb`: `ALLOW_INFERENCE=True` evaluates the selected checkpoint on development.
-6. [compare.ipynb](notebooks/experiments/compare.ipynb): newest evaluated run per version;
-   `BOOTSTRAP_RESAMPLES=200` adds paired CIs against v0.
+6. [compare.ipynb](notebooks/experiments/compare.ipynb): 10-cell Raw-vs-policy
+   cross-evaluation (three 2×2 studies: v1/v2/v3). No policy-to-policy cross-input
+   runs. Defaults to read-only preflight and reuse of validated diagonal/cache
+   artifacts; `ALLOW_INFERENCE=True` runs missing evaluations, never training.
+   Comparisons are stored separately under `runs/comparisons/`. An unfinished v3
+   is marked blocked without preventing v0–v2 analysis. Optional
+   `BOOTSTRAP_RESAMPLES=500` computes paired source-group 95% percentile CIs for
+   **all six factorial contrasts** per complete 2×2; these do not include training
+   seed or checkpoint-selection uncertainty. Optional
+   `MEASURE_PREPROCESS_COST=True` reports CPU policy timings on Raw JPEG95 proxy
+   images, not measured end-to-end streaming latency.
 
 ```sh
 uv sync --locked --extra study
