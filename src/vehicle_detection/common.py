@@ -3,6 +3,7 @@
 import hashlib
 import json
 import os
+import tomllib
 from pathlib import Path
 
 import cv2
@@ -37,6 +38,32 @@ def read_image(path):
     if image is None or image.size == 0:
         raise ValueError(f"Unreadable/empty image: {path}")
     return image
+
+
+PROJECT = "vehicle-detection"
+
+
+def _is_project(directory):
+    try:
+        with (directory / "pyproject.toml").open("rb") as stream:
+            return tomllib.load(stream).get("project", {}).get("name") == PROJECT
+    except (OSError, tomllib.TOMLDecodeError):
+        return False
+
+
+def project_root(start=None):
+    """Repository root from the working directory, else from the editable package location.
+
+    Jupyter kernels may start in the notebook folder, the repository or an unrelated folder.
+    """
+    start = Path(start or Path.cwd()).resolve()
+    for directory in (start, *start.parents):
+        if _is_project(directory):
+            return directory
+    package = Path(__file__).resolve().parents[2]
+    if _is_project(package):
+        return package
+    raise FileNotFoundError(f"Cannot find the {PROJECT} repository root from {start}")
 
 
 def relative(path, root):

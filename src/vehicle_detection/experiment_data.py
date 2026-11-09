@@ -139,7 +139,10 @@ def run_dir(root, experiment, date=None, *, create=False):
     pattern = re.compile(rf"{experiment}-\d{{4}}-\d\d-\d\d")
     found = sorted(p for p in runs.glob(f"{experiment}-*") if pattern.fullmatch(p.name))
     if not found:
-        raise FileNotFoundError(f"No runs/{experiment}-YYYY-MM-DD yet; prepare data first")
+        raise FileNotFoundError(
+            f"No runs/{experiment}-YYYY-MM-DD yet: in {EXPERIMENTS_DIR.as_posix()}/{experiment}/"
+            "02_train_prepare.ipynb set ALLOW_PREPARATION = True and run it first"
+        )
     return found[-1]
 
 

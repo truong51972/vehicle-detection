@@ -78,7 +78,7 @@ def test_run_dir_dates(project):
     assert run_dir(project, "v0", DATE).name == f"v0-{DATE}"
     with pytest.raises(ValueError, match="YYYY-MM-DD"):
         run_dir(project, "v0", "11-09-2026")
-    with pytest.raises(FileNotFoundError, match="prepare data first"):
+    with pytest.raises(FileNotFoundError, match="ALLOW_PREPARATION = True"):
         run_dir(project, "v0")
     for date in ("2026-01-02", "2026-11-09", "2025-12-31"):
         (project / f"runs/v0-{date}").mkdir(parents=True)

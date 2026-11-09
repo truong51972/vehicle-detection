@@ -29,9 +29,12 @@ def cells(name):
 
 
 def test_active_notebooks_are_clean_and_independent():
-    assert {
-        p.relative_to("notebooks").as_posix() for p in Path("notebooks").rglob("*.ipynb")
-    } == ACTIVE
+    found = {
+        p.relative_to("notebooks").as_posix()
+        for p in Path("notebooks").rglob("*.ipynb")
+        if ".ipynb_checkpoints" not in p.parts
+    }
+    assert found == ACTIVE
     for name in ACTIVE:
         for cell in cells(name):
             if cell["cell_type"] != "code":
@@ -75,6 +78,26 @@ def test_documentation_links_resolve_and_tracked_text_has_no_absolute_paths():
                 assert not pattern.search(path.read_text()), f"Absolute path in {name}"
 
 
+def test_project_root_ignores_kernel_working_directory(tmp_path, monkeypatch):
+    from vehicle_detection.common import project_root
+
+    repo = Path.cwd().resolve()
+    assert project_root(repo / "notebooks/experiments/v0") == repo
+    (tmp_path / "pyproject.toml").write_text('[project]\nname = "other"\n')
+    assert project_root(tmp_path / "x") == repo
+    nbformat = pytest.importorskip("nbformat")
+    nbclient = pytest.importorskip("nbclient")
+    notebook = nbformat.read("notebooks/00_data_init.ipynb", as_version=4)
+    notebook.cells.append(nbformat.v4.new_code_cell("import os\nprint(os.getcwd())"))
+    nbclient.NotebookClient(
+        notebook,
+        timeout=120,
+        kernel_name="python3",
+        resources={"metadata": {"path": str(tmp_path)}},
+    ).execute()
+    assert notebook.cells[-1].outputs[0]["text"].strip() == str(repo)
+
+
 def test_lifecycle_notebooks_run_in_fresh_kernels(project):
     nbformat = pytest.importorskip("nbformat")
     nbclient = pytest.importorskip("nbclient")
@@ -92,7 +115,7 @@ def test_lifecycle_notebooks_run_in_fresh_kernels(project):
         "notebooks",
         root / "notebooks",
         dirs_exist_ok=True,
-        ignore=shutil.ignore_patterns("v*.yaml"),
+        ignore=shutil.ignore_patterns("v*.yaml", ".ipynb_checkpoints"),
     )
 
     def run(path, overrides="", setup=""):

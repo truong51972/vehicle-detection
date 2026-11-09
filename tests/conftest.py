@@ -48,7 +48,7 @@ def project(bdd, tmp_path):
     """Isolated project root: frozen-table copy of the fixture, real version YAMLs, CPU args."""
     root = tmp_path / "project"
     (root / "configs").mkdir(parents=True)
-    (root / "pyproject.toml").touch()
+    (root / "pyproject.toml").write_text('[project]\nname = "vehicle-detection"\n')
     annotations = bdd / "bdd100k_labels_images_train.json"
     frames = json.loads(annotations.read_text())
     # A railway-only frame becomes a retained five-class negative.
