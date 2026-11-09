@@ -110,7 +110,9 @@ def _runs(root, run_dates):
                 or ctx["prepared"]["splits_sha256"] != ref_splits
                 or ctx["config"]["evaluation"] != ref_eval
             ):
-                raise ValueError("Matrix runs disagree on IDs, source groups, splits or evaluation args")
+                raise ValueError(
+                    "Matrix runs disagree on IDs, source groups, splits or evaluation args"
+                )
     return contexts, blocked
 
 
@@ -194,7 +196,10 @@ def inspect_matrix(root, *, run_dates=None, policies=POLICIES):
         })
         if result is not None:
             results[key] = result
-    return {"root": root, "contexts": contexts, "blocked": blocked, "rows": rows, "results": results}
+    return {
+        "root": root, "contexts": contexts, "blocked": blocked,
+        "rows": rows, "results": results,
+    }
 
 
 def _evaluate_cross(root, model, inputs):
