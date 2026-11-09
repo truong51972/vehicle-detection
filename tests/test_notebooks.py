@@ -81,9 +81,7 @@ def test_documentation_links_resolve_and_tracked_text_has_no_absolute_paths():
                     # Executed training notebooks retain local log paths as evidence;
                     # source cells, not transient outputs, must stay portable.
                     notebook = json.loads(content)
-                    content = "\n".join(
-                        "".join(cell["source"]) for cell in notebook["cells"]
-                    )
+                    content = "\n".join("".join(cell["source"]) for cell in notebook["cells"])
                 assert not pattern.search(content), f"Absolute path in {name}"
 
 
