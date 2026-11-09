@@ -181,3 +181,24 @@ patch.object(YOLO, "val", side_effect=AssertionError("Inference started")).start
         assert metrics["inputs"]["run"] == f"runs/{version}-{DATE}"
         assert str(root) not in json.dumps(metrics)
     run("experiments/compare.ipynb", "BOOTSTRAP_RESAMPLES = 2", guard)
+
+    # Exercise both off-diagonal YOLO.val paths on the same tiny synthetic
+    # development images. This is a CPU contract test, not scientific evidence.
+    from vehicle_detection.comparison import compare_policies, evaluate_matrix
+
+    matrix = evaluate_matrix(
+        root, policies=("v3",),
+        run_dates={"v0": DATE, "v3": DATE},
+        allow_inference=True,
+    )
+    assert {f"{row['model']}/{row['input']}" for row in matrix["rows"]} == {
+        "v0/v0", "v0/v3", "v3/v0", "v3/v3",
+    }
+    assert set(matrix["results"]) == {"v0/v0", "v0/v3", "v3/v0", "v3/v3"}
+    assert {row["status"] for row in matrix["rows"]} <= {"cached", "evaluated"}
+    contrasts, ci = compare_policies(matrix, bootstrap_resamples=8)
+    assert len(contrasts) == 6 and "v3" in ci
+    assert ci["v3"]["contrasts"]["joint_pipeline"]["valid_draws"] > 1
+    cached = evaluate_matrix(root, policies=("v3",), allow_inference=False)
+    assert {row["status"] for row in cached["rows"]} == {"cached"}
+
