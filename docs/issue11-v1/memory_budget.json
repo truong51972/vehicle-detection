@@ -1,7 +1,0 @@
-{
-  "clean_reference_cache_MiB": 675.0,
-  "generator_workspace_allowance_MiB": 256,
-  "native_FP32_input_batch_MiB": 150.0,
-  "note": "Estimates, excluding Python/protocol/Torch overhead, native activations and backend workspaces",
-  "one_uint8_BGR_frame_MiB": 2.63671875
-}

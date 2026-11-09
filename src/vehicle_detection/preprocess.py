@@ -63,6 +63,29 @@ def local_shadow(image):
     return np.clip(image.astype(np.float32) * gain[:, :, None], 0, 255).astype(np.uint8)
 
 
+def local_contrast(image, clip_limit, grid_size, gain, max_offset):
+    """Bounded CLAHE luminance offset, added equally to BGR and faded near black/white."""
+    validate_image(image)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    equalized = cv2.createCLAHE(clip_limit, (grid_size, grid_size)).apply(gray)
+    luminance = gray.astype(np.float32)
+    protection = np.clip(np.minimum(luminance - 8, 247 - luminance) / 32, 0, 1)
+    offset = np.rint(np.clip((equalized - luminance) * gain, -max_offset, max_offset) * protection)
+    return np.clip(image.astype(np.int16) + offset.astype(np.int16)[:, :, None], 0, 255).astype(
+        np.uint8
+    )
+
+
+def routes_local_contrast(scores, settings):
+    return (
+        scores["contrast"] < settings["contrast_below"]
+        and settings["brightness_above"] < scores["brightness"] < settings["brightness_below"]
+        and scores["noise"] <= settings["noise_max"]
+        and scores["black_fraction"] < settings["black_below"]
+        and scores["white_fraction"] < settings["white_below"]
+    )
+
+
 def validate_recipes(recipes):
     bounds = {
         "raw": {},
@@ -79,6 +102,20 @@ def validate_recipes(recipes):
             "sharpness_below": (0, 1e6),
             "max_filters": (0, 2),
         },
+        "local_contrast": {
+            "clip_limit": (0.1, 8),
+            "grid_size": (2, 32),
+            "gain": (0, 1),
+            "max_offset": (0, 64),
+        },
+        "adaptive_local_contrast": {
+            "contrast_below": (0, 1),
+            "brightness_above": (0, 1),
+            "brightness_below": (0, 1),
+            "noise_max": (0, 1),
+            "black_below": (0, 1),
+            "white_below": (0, 1),
+        },
     }
     for variant, settings in recipes.items():
         if variant not in bounds or set(settings) != set(bounds[variant]):
@@ -92,13 +129,15 @@ def validate_recipes(recipes):
                 or not low <= value <= high
             ):
                 raise ValueError(f"Invalid {variant}.{key}")
-            if key in {"grid_size", "max_filters"} and not isinstance(value, int):
+            if key in {"grid_size", "max_filters", "max_offset"} and not isinstance(value, int):
                 raise ValueError(f"{key} must be an integer")
     if "adaptive" in recipes:
         if not {"gamma", "clahe", "denoise", "sharpen"} <= recipes.keys():
             raise ValueError("Adaptive requires the four fixed operator settings")
         if recipes["adaptive"]["sharpness_min"] > recipes["adaptive"]["sharpness_below"]:
             raise ValueError("Adaptive sharpness bounds are reversed")
+    if "adaptive_local_contrast" in recipes and "local_contrast" not in recipes:
+        raise ValueError("Adaptive local contrast requires the local_contrast operator settings")
 
 
 def apply_recipe(image, variant, recipes):
@@ -121,6 +160,11 @@ def apply_recipe(image, variant, recipes):
         for name in chosen:
             output, _, _ = apply_recipe(output, name, recipes)
         return output, [{"name": n, "params": recipes[n]} for n in chosen], scores
+    if variant == "adaptive_local_contrast":
+        if not routes_local_contrast(scores, settings):
+            return image, [], scores
+        output, applied, _ = apply_recipe(image, "local_contrast", recipes)
+        return output, applied, scores
     if variant == "raw":
         return image, [], scores
     if variant == "gamma":
@@ -133,6 +177,8 @@ def apply_recipe(image, variant, recipes):
         output = sharpen(image, **settings)
     elif variant == "local_shadow":
         output = local_shadow(image)
+    elif variant == "local_contrast":
+        output = local_contrast(image, **settings)
     else:
         raise ValueError(f"Unknown recipe: {variant}")
     return output, [{"name": variant, "params": settings}], scores

@@ -1,8 +1,0 @@
-{
-  "declared_at_utc": "2026-11-03 16:28:30 UTC",
-  "final_test_released": false,
-  "new_development_inference_started": false,
-  "observed_before_declaration": "Completed S10 training and Raw-development epoch metrics",
-  "plan_sha256": "7e3a0dd9962daac7e457a114c038af8b95b159cdadffaf80dcb27325c21d6973",
-  "refactor_commit": "c8381e2"
-}

@@ -39,33 +39,9 @@ def read_image(path):
     return image
 
 
-def reuse_evaluation(path, identity, *, force=False):
-    """Read a completed native-val summary only when its inputs and saved plots still match."""
-    path = Path(path)
-    if force or not path.exists():
-        return None
-    cached = read_json(path)
-    result = cached["result"]
-    if cached["identity"] != identity or cached["checksum"] != digest(result):
-        raise ValueError(
-            "Evaluation cache identity/checksum changed; force reevaluation or use a new root"
-        )
-    for name, expected in result["artifacts"].items():
-        if Path(name).name != name or not (path.parent / name).is_file():
-            raise ValueError("Missing evaluation artifact; force reevaluation")
-        if file_hash(path.parent / name) != expected:
-            raise ValueError("Evaluation artifact changed; force reevaluation")
-    return result
-
-
-def freeze_json(path, value):
-    """Publish immutable JSON once; repeated equal writes leave evidence untouched."""
-    path = Path(path)
-    if path.exists():
-        if read_json(path) != value:
-            raise ValueError("Immutable identity changed; use a new version/root")
-    else:
-        write_json(path, value)
+def relative(path, root):
+    """Project-relative POSIX path for saved artifacts; never persist machine-specific roots."""
+    return Path(path).resolve().relative_to(Path(root).resolve()).as_posix()
 
 
 def require_paths(**paths):
