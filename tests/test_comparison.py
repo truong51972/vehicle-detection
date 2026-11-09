@@ -85,7 +85,7 @@ def test_shared_draw_factorial_bootstrap_and_class_cis():
     ids = [f"i{i}" for i in range(40)]
     groups = {sample: f"grp{i // 2}" for i, sample in enumerate(ids)}
     base = {}
-    for i, sample in enumerate(ids):
+    for sample in ids:
         tp = (rng.random((4, 10)) < 0.4).astype(bool)
         base[sample] = {
             "tp": tp,
