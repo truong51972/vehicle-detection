@@ -6,10 +6,13 @@ Start with [the standalone Vietnamese report](docs/report.html)
 ([Quarto source](docs/report.qmd)) for the frozen
 data splits, preprocessing formulas, training/evaluation protocol, historical
 negative findings, current S20 results, post-hoc Adaptive960 training, costs and
-limitations. It includes tracked copies of existing run figures under
+limitations, using generated plots and expandable method/diagnostic details.
+It includes tracked copies of existing run figures under
 [docs/images/](docs/images/) and does not require reading source code or local
 run artifacts. Render a self-contained HTML copy with
-`quarto render docs/report.qmd --to html`; rendering performs no study execution.
+`QUARTO_PYTHON="$PWD/.venv/bin/python" quarto render docs/report.qmd --to html`.
+Rendering only rebuilds charts from saved evidence; it does not train models,
+run inference/bootstrap, or require datasets, weights, local runs or a GPU.
 
 The report is the primary narrative entrypoint. Other retained documents and
 machine-readable evidence support immutable provenance and notebook/test replay;
