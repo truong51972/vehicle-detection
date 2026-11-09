@@ -105,3 +105,98 @@ class MatchingStats:
             },
         )
         return super().get_stats()
+
+
+def factorial_bootstrap(arms, groups, classes, *, policy, resamples=500, seed=2026):
+    """Paired cluster bootstrap of six 2x2 contrasts, with common group draws.
+
+    A = raw/raw, B = raw/policy, C = policy/raw, D = policy/policy.
+    Draw complete source groups with replacement and evaluate *all four arms*
+    on the identical resampled image IDs. Intervals are conditional on the
+    checkpoints/training seed; no multiple-comparison correction is implied.
+    """
+    if type(resamples) is not int or resamples < 2:
+        raise ValueError("Need at least two bootstrap draws")
+    if policy not in ("v1", "v2", "v3"):
+        raise ValueError("Unknown policy")
+    keys = ("v0/v0", f"v0/{policy}", f"{policy}/v0", f"{policy}/{policy}")
+    if set(arms) != set(keys):
+        raise ValueError("Bootstrap requires the complete policy 2x2")
+    ids = set(groups)
+    if not ids or any(set(stats) != ids for stats in arms.values()):
+        raise ValueError("Every arm must use the same development IDs/source groups")
+    reference = arms[keys[0]]
+    for stats in arms.values():
+        for sample_id in ids:
+            if not np.array_equal(reference[sample_id]["target_cls"], stats[sample_id]["target_cls"]):
+                raise ValueError("Paired ground truth changed")
+
+    class_ids = tuple(classes)
+    if not class_ids or len(set(class_ids)) != len(class_ids):
+        raise ValueError("Require unique, nonempty class IDs")
+
+    def effects(values):
+        a, b, c, d = values
+        return {
+            "inference_on_raw_model": b - a,
+            "training_on_processed_input": d - b,
+            "training_on_raw_input": c - a,
+            "inference_on_policy_model": d - c,
+            "joint_pipeline": d - a,
+            "interaction": (d - c) - (b - a),
+        }
+
+    whole = [class_ap(arms[key], sorted(ids)) for key in keys]
+    if any(any(cls not in arm for cls in class_ids) for arm in whole):
+        raise ValueError("A complete development evaluation must contain all five classes")
+    names = tuple(effects([0.0] * 4))
+    samples = {name: [] for name in names}
+    class_samples = {cls: {name: [] for name in names} for cls in class_ids}
+
+    members = {}
+    for sample_id, group in groups.items():
+        members.setdefault(group, []).append(sample_id)
+    group_keys = sorted(members)
+    rng = np.random.default_rng(seed)
+    for _ in range(resamples):
+        sampled_ids = [
+            item
+            for group in rng.choice(group_keys, len(group_keys), replace=True)
+            for item in members[group]
+        ]
+        values = [class_ap(arms[key], sampled_ids) for key in keys]
+        for cls in class_ids:
+            if all(cls in arm for arm in values):
+                for name, delta in effects([arm[cls] for arm in values]).items():
+                    class_samples[cls][name].append(float(delta))
+        if all(all(cls in arm for cls in class_ids) for arm in values):
+            means = [float(np.mean([arm[cls] for cls in class_ids])) for arm in values]
+            for name, delta in effects(means).items():
+                samples[name].append(float(delta))
+
+    def summarize(delta, draws):
+        return {
+            "delta": float(delta),
+            "ci95": [float(x) for x in np.quantile(draws, [0.025, 0.975])]
+            if len(draws) > 1 else None,
+            "valid_draws": len(draws),
+            "resamples": resamples,
+        }
+
+    mean_effects = effects([np.mean([arm[cls] for cls in class_ids]) for arm in whole])
+    contrasts = {name: summarize(delta, samples[name]) for name, delta in mean_effects.items()}
+    by_class = {
+        cls: {
+            name: summarize(delta, class_samples[cls][name])
+            for name, delta in effects([arm[cls] for arm in whole]).items()
+        }
+        for cls in class_ids
+    }
+    return {
+        "contrasts": contrasts,
+        "per_class": by_class,
+        "groups": len(group_keys),
+        "seed": seed,
+        "method": "paired percentile 95% source-group cluster bootstrap",
+        "limitations": "single trained seed; no checkpoint-selection or multiplicity uncertainty",
+    }
