@@ -1,9 +1,0 @@
-groups,images,route,timeofday
-6,6,gamma,dawn/dusk
-20,20,gamma,daytime
-2270,3280,gamma,night
-1,1,gamma,undefined
-862,1019,skip,dawn/dusk
-4732,7276,skip,daytime
-1715,2355,skip,night
-18,18,skip,undefined

@@ -1,295 +1,156 @@
-"""Tiny source fixtures exercise the active workflow, never scientific measurements."""
-
-import json
-import shutil
 from pathlib import Path
 
-import cv2
 import pandas as pd
 import pytest
 import yaml
-from test_study import bdd as bdd
 
-from vehicle_detection.common import digest, file_hash
-from vehicle_detection.data import scan_bdd
+from vehicle_detection.common import file_hash
 from vehicle_detection.experiment_data import (
     audit_sources,
+    config_path,
+    experiments,
     load_experiment,
-    populations,
     prepare_data,
+    run_dir,
     shared_splits,
-    source_rows,
     verify_data,
 )
-from vehicle_detection.preprocess import apply_recipe
-from vehicle_detection.protocol import group_key
+
+DATE = "2026-11-09"
 
 
-@pytest.fixture
-def experiment_project(bdd, tmp_path):
-    project = tmp_path / "project"
-    (project / "configs").mkdir(parents=True)
-    (project / "pyproject.toml").touch()
-    annotations = bdd / "bdd100k_labels_images_train.json"
-    frames = json.loads(annotations.read_text())
-    frames[1]["labels"] = [label for label in frames[1]["labels"] if label["category"] == "train"]
-    annotations.write_text(json.dumps(frames))
-    for i in (0, 4):
-        import numpy as np
-
-        image = np.random.default_rng(i).integers(0, 50, (64, 80, 3), dtype=np.uint8)
-        assert cv2.imwrite(str(bdd / f"images/100k/train/train_{i}.jpg"), image)
-    records, _, _ = scan_bdd(bdd)
-    roles = [
-        "training_pool",
-        "training_pool",
-        "training_pool",
-        "calibration",
-        "development_validation",
-        "development_validation",
-    ]
-    rows = []
-    for r in records:
-        role = (
-            roles[int(r["id"].split("_")[-1])] if r["official_split"] == "train" else "final_test"
-        )
-        rows.append(
-            {
-                "id": r["id"],
-                "group": group_key(r),
-                "source_group": group_key(r),
-                "role": role,
-                "s10": int(r["id"] in {"train_0", "train_1"}),
-                "s20": int(role == "training_pool"),
-                "source_path": str(Path(r["path"]).relative_to(bdd)),
-                "width": 80,
-                "height": 64,
-                "sha256": file_hash(r["path"]) if role != "final_test" else "",
-                "labels_sha256": digest(r["labels"]),
-            }
-        )
-    pd.DataFrame(rows).to_csv(project / "configs/splits.csv.gz", index=False)
-    shared = yaml.safe_load(Path("configs/data.yaml").read_text())
-    shared.update(data_root=str(bdd), splits_sha256=file_hash(project / "configs/splits.csv.gz"))
-    (project / "configs/data.yaml").write_text(yaml.safe_dump(shared))
-    for version in ("v0", "v1", "v2"):
-        shutil.copyfile(f"configs/{version}.yaml", project / f"configs/{version}.yaml")
-    return project
-
-
-def test_shared_table_matches_preserved_memberships_and_policy():
+def test_shared_table_matches_frozen_memberships():
     shared, rows = shared_splits(Path.cwd())
-    assert len(rows) == 79593
-    assert sum(r["s10"] for r in rows) == 4890
-    assert shared["training_subset"] == "S20"
-    assert sum(r["s20"] for r in rows) == 9781
-    assert sum(r["role"] == "development_validation" for r in rows) == 13975
-    old = pd.read_csv("docs/issue5/split_membership.csv.gz")
-    table = pd.DataFrame(rows).set_index("id")
-    for key in ("group", "source_group", "role"):
-        assert table[key].to_dict() == old.set_index("id")[key].to_dict()
-    membership = Path("docs/issue6-v2/subset_membership.csv.gz")
-    historical = pd.read_csv(membership).set_index("id")
-    summary = json.loads(Path("docs/issue6-v2/summary.json").read_text())
-    assert file_hash(membership) == summary["membership_sha256"]
-    assert shared["source_protocol_id"] == summary["protocol_id"]
-    assert shared["source_subsets_id"] == summary["subsets_id"]
-    pool = table[table.role == "training_pool"]
-    assert not historical.index.duplicated().any()
-    assert set(historical.index) == set(pool.index)
-    assert historical.group.to_dict() == pool.group.to_dict()
-    for subset in ("S10", "S20"):
-        flag = subset.lower()
-        assert historical[subset].astype(int).to_dict() == pool[flag].to_dict()
-        for key in ("group", "source_group", "sha256"):
-            assert pool.groupby(key)[flag].nunique().max() == 1
-    assert set(table.index[table.s10 == 1]) < set(table.index[table.s20 == 1])
+    table = pd.DataFrame(rows)
+    assert len(rows) == 79593 and shared["training_subset"] == "S20"
+    assert table.s10.sum() == 4890 and table.s20.sum() == 9781
     assert table.loc[table.s20 == 1, "group"].nunique() == 5915
-    policy = json.loads(Path("docs/issue6-v2/policy.json").read_text())
-    assert load_experiment(Path.cwd(), "v1")["recipes"] == policy["recipes"]
-    assert shared["source_protocol_id"] == policy["protocol_id"]
+    assert table.role.value_counts().to_dict() == {
+        "training_pool": 48903,
+        "development_validation": 13975,
+        "final_test": 9730,
+        "calibration": 6985,
+    }
+    assert (table.loc[table.role == "final_test", "sha256"] == "").all()
 
 
-def test_offline_parity_determinism_reuse_and_sealed_holdout(experiment_project, monkeypatch):
-    from vehicle_detection import experiment_data as data
+@pytest.mark.parametrize("version", ["v0", "v1", "v2", "v3"])
+def test_versions_own_full_native_args_and_relative_checkpoint(version):
+    config = load_experiment(Path.cwd(), version)
+    training = config["training"]
+    assert training["freeze"] == 0 and training["optimizer"] == "SGD"
+    assert training["batch"] == 32 and training["amp"] is True and training["imgsz"] == 640
+    assert training["hsv_v"] == 0 and training["mosaic"] == 1.0
+    assert not Path(config["checkpoint"]).is_absolute() and config["name"]
+    assert config["preparation"]["workers"] >= 1
+    base = {k: v for k, v in load_experiment(Path.cwd(), "v0").items() if k in {"training"}}
+    assert training == base["training"]
 
-    project = experiment_project
-    real_read, real_hash = data.read_image, data.file_hash
 
-    def read(path):
-        assert "/val/" not in str(path) or "/runs/" in str(path), "Final pixels opened"
-        return real_read(path)
+def test_versions_are_discovered_beside_their_notebooks():
+    assert experiments(Path.cwd()) == ["v0", "v1", "v2", "v3"]
+    assert config_path(Path.cwd(), "v2") == Path.cwd() / "notebooks/experiments/v2/v2.yaml"
+    assert not list(Path("configs").glob("v*.yaml"))
+    with pytest.raises(ValueError, match="experiment ID"):
+        config_path(Path.cwd(), "../v0")
 
-    def hashed(path):
-        assert "/val/" not in str(path) or "/runs/" in str(path), "Final pixels hashed"
+
+@pytest.mark.parametrize(
+    ("change", "message"),
+    [
+        (lambda c: c["training"].update(data="/abs/data.yaml"), "owned by the lifecycle"),
+        (lambda c: c.update(checkpoint_sha256="pinned"), "SHA256"),
+        (lambda c: c.update(checkpoint="/abs/yolo26n.pt"), "project-relative"),
+        (lambda c: c["preparation"].update(workers=0), "preparation.workers"),
+        (lambda c: c.pop("name"), "display name"),
+    ],
+)
+def test_config_rejects_invalid_version_settings(project, change, message):
+    path = config_path(project, "v1")
+    config = yaml.safe_load(path.read_text())
+    change(config)
+    path.write_text(yaml.safe_dump(config))
+    with pytest.raises(ValueError, match=message):
+        load_experiment(project, "v1")
+
+
+def test_run_dir_dates(project):
+    assert run_dir(project, "v0", DATE).name == f"v0-{DATE}"
+    with pytest.raises(ValueError, match="YYYY-MM-DD"):
+        run_dir(project, "v0", "11-09-2026")
+    with pytest.raises(FileNotFoundError, match="ALLOW_PREPARATION = True"):
+        run_dir(project, "v0")
+    for date in ("2026-01-02", "2026-11-09", "2025-12-31"):
+        (project / f"runs/v0-{date}").mkdir(parents=True)
+    (project / "runs/v0-latest").mkdir()
+    assert run_dir(project, "v0").name == "v0-2026-11-09"
+    assert run_dir(project, "v0", create=True).name.startswith("v0-")
+
+
+def test_export_is_relative_deterministic_and_sealed(project, monkeypatch):
+    from vehicle_detection import experiment_data
+
+    real_hash = experiment_data.file_hash
+
+    def guarded(path):
+        assert "/images/100k/val/" not in str(path), "Final-test pixels opened"
         return real_hash(path)
 
-    monkeypatch.setattr(data, "read_image", read)
-    monkeypatch.setattr(data, "file_hash", hashed)
-    assert audit_sources(project).sum() == 9
-    _, rows = source_rows(project)
-    for version in ("v0", "v1", "v2"):
-        native = prepare_data(project, version)
-        assert "test" not in native
-        assert native["training_subset"] == "S20" and native["seed"] == 2026
-        assert {p.stem for p in Path(native["path"]).glob("images/train/*.jpg")} == {
-            r["id"] for r in rows if r["s20"]
-        }
-        assert len(populations(rows, "S10")["train"]) == 2
-        assert len(populations(rows, "S20")["train"]) == 3
-        assert prepare_data(project, version) == native
-        assert verify_data(project, version) == native
-    raw, adaptive = (project / f"runs/{v}/data" for v in ("v0", "v1"))
-    for label in (raw / "labels").rglob("*.txt"):
-        assert label.read_bytes() == (adaptive / label.relative_to(raw)).read_bytes()
-        assert (
-            label.read_bytes() == (project / "runs/v2/data" / label.relative_to(raw)).read_bytes()
-        )
-        assert len(label.read_text().splitlines()) == (0 if label.stem == "train_1" else 5)
-    assert (raw / "labels/train/train_0.txt").read_text().splitlines()[0] == (
-        "0 0.19375 0.328125 0.3625 0.59375"
-    )
-    # Same policy runs on original development pixels, then JPEG95 exactly once.
-    config = load_experiment(project, "v1")
-    shared, _ = shared_splits(project)
-    for r in rows:
-        if r["role"] != "development_validation":
-            continue
-        image = real_read(Path(shared["data_root"]) / r["source_path"])
-        output, _, _ = apply_recipe(image, config["variant"], config["recipes"])
-        ok, encoded = cv2.imencode(".jpg", output, [cv2.IMWRITE_JPEG_QUALITY, 95])
-        assert ok and encoded.tobytes() == (adaptive / "images/val" / f"{r['id']}.jpg").read_bytes()
-    before = verify_data(project, "v1")["files_sha256"]
-    shutil.rmtree(adaptive)
-    assert prepare_data(project, "v1")["files_sha256"] == before
-    assert not list((project / "runs").rglob("images/test"))
+    monkeypatch.setattr(experiment_data, "file_hash", guarded)
+    audit_sources(project)
+    prepared = prepare_data(project, "v3", DATE, workers=2)
+    run = project / f"runs/v3-{DATE}"
+    assert prepared["path"] == f"runs/v3-{DATE}/data"
+    saved = yaml.safe_load((run / "data/data.yaml").read_text())
+    assert "path" not in saved and saved["test"] == "images/test"
+    text = "".join(p.read_text() for p in (run / "data/data.yaml", run / "data/metadata.csv"))
+    assert str(project) not in text
+    names = {
+        s: sorted(p.stem for p in (run / f"data/images/{s}").iterdir())
+        for s in ("train", "val", "test")
+    }
+    assert names["train"] == ["train_0", "train_1", "train_2"]
+    assert names["val"] == ["train_3"] and names["test"] == ["train_4", "train_5"]
+    assert (run / "data/labels/train/train_1.txt").read_text() == ""
+    assert (run / "config.yaml").is_file()
+    metadata = pd.read_csv(run / "data/metadata.csv", keep_default_na=False)
+    assert set(metadata.split) == {"train", "val", "test"} and len(metadata) == 6
+
+    again = project / "again"
+    again.mkdir()
+    for name in ("configs", "notebooks", "pyproject.toml"):
+        (again / name).symlink_to(project / name)
+    assert prepare_data(again, "v3", DATE, workers=1)["files_sha256"] == saved["files_sha256"]
+    assert prepare_data(project, "v3", DATE)["files_sha256"] == saved["files_sha256"]
 
 
-def test_preparation_rejects_changed_data_policy_inventory_and_unknown_temp(experiment_project):
-    root = experiment_project
-    prepare_data(root, "v0")
-    directory = root / "runs/v0/data"
-    label = directory / "labels/train/train_0.txt"
-    saved = label.read_bytes()
-    label.write_text("")
+def test_tampering_and_policy_changes_fail(project):
+    prepare_data(project, "v1", DATE, workers=2)
+    run = project / f"runs/v1-{DATE}/data"
+    label = run / "labels/test/train_5.txt"
+    original = label.read_text()
+    label.write_text(original + "0 0.5 0.5 0.1 0.1\n")
     with pytest.raises(ValueError, match="bytes changed"):
-        verify_data(root, "v0")
-    label.write_bytes(saved)
-    image = next((directory / "images/train").glob("*.jpg"))
-    image.unlink()
+        verify_data(project, "v1")
+    label.write_text(original)
+    (run / "images/val/extra.jpg").write_bytes(b"x")
     with pytest.raises(ValueError, match="IDs differ"):
-        verify_data(root, "v0")
-    (root / "runs/v1/data.tmp").mkdir(parents=True)
-    with pytest.raises(FileExistsError):
-        prepare_data(root, "v1")
-    config_path = root / "configs/v0.yaml"
-    config = yaml.safe_load(config_path.read_text())
-    config["training"]["epochs"] += 1
-    config_path.write_text(yaml.safe_dump(config))
-    with pytest.raises(ValueError, match="inputs/policy changed"):
-        prepare_data(root, "v0")
+        verify_data(project, "v1")
+    (run / "images/val/extra.jpg").unlink()
+    config = yaml.safe_load(config_path(project, "v1").read_text())
+    config["recipes"]["gamma"]["gamma"] = 0.8
+    config["name"] = "Renamed"
+    config_path(project, "v1").write_text(yaml.safe_dump(config))
+    with pytest.raises(ValueError, match="new run date"):
+        verify_data(project, "v1")
 
 
-@pytest.mark.parametrize("change", ["group", "id", "s10", "s20", "source_path", "sha256"])
-def test_invalid_shared_contract_fails_before_any_pixels(experiment_project, change):
-    root = experiment_project
-    path = root / "configs/splits.csv.gz"
-    table = pd.read_csv(path, keep_default_na=False)
-    if change in ("group", "id"):
-        table.loc[0, change] = table.loc[len(table) - 1, change]
-    elif change in ("s10", "s20"):
-        table.loc[table.role == "final_test", change] = 1
-    elif change == "source_path":
-        table.loc[0, change] = "../escape.jpg"
-    else:
-        table.loc[table.role == "final_test", "sha256"] = "opened"
-    table.to_csv(path, index=False)
-    shared_path = root / "configs/data.yaml"
-    shared = yaml.safe_load(shared_path.read_text())
-    shared["splits_sha256"] = file_hash(path)
-    shared_path.write_text(yaml.safe_dump(shared))
-    with pytest.raises(ValueError):
-        shared_splits(root)
-
-
-def test_source_tamper_and_symlink_fail_without_publishing_export(experiment_project):
-    root = experiment_project
-    shared, rows = shared_splits(root)
-    source = Path(shared["data_root"]) / next(r["source_path"] for r in rows if r["s10"])
-    original = source.read_bytes()
-    source.write_bytes(b"changed")
+def test_changed_source_fails(project):
+    shared = yaml.safe_load((project / "configs/data.yaml").read_text())
+    source = Path(shared["data_root"]) / "images/100k/train/train_3.jpg"
+    source.write_bytes(source.read_bytes() + b"\0")
+    assert file_hash(source)
     with pytest.raises(ValueError, match="Source image changed"):
-        prepare_data(root, "v0")
-    assert not (root / "runs/v0/data").exists()
-    source.write_bytes(original)
-    reserved = Path(shared["data_root"]) / next(
-        r["source_path"] for r in rows if r["role"] == "final_test"
-    )
-    source.unlink()
-    source.symlink_to(reserved)
-    with pytest.raises(ValueError, match="path/symlink"):
-        prepare_data(root, "v0")
-
-
-@pytest.mark.parametrize("key", ["group", "source_group", "sha256"])
-def test_subsets_reject_divided_groups_and_lost_s10_ids(experiment_project, key):
-    root = experiment_project
-    path = root / "configs/splits.csv.gz"
-    table = pd.read_csv(path, keep_default_na=False)
-    table.loc[table.id == "train_2", key] = table.loc[table.id == "train_0", key].item()
-    table.to_csv(path, index=False)
-    shared_path = root / "configs/data.yaml"
-    shared = yaml.safe_load(shared_path.read_text())
-    shared["splits_sha256"] = file_hash(path)
-    shared_path.write_text(yaml.safe_dump(shared))
-    with pytest.raises(ValueError, match="divides a source/duplicate group"):
-        shared_splits(root)
-    table.loc[table.id == "train_0", "s20"] = 0
-    table.to_csv(path, index=False)
-    shared["splits_sha256"] = file_hash(path)
-    shared_path.write_text(yaml.safe_dump(shared))
-    with pytest.raises(ValueError, match="Invalid split row"):
-        shared_splits(root)
-
-
-def test_s20_export_cannot_be_reused_as_s10(experiment_project):
-    root = experiment_project
-    prepare_data(root, "v0")
-    path = root / "configs/data.yaml"
-    shared = yaml.safe_load(path.read_text())
-    shared["training_subset"] = "S10"
-    path.write_text(yaml.safe_dump(shared))
-    with pytest.raises(ValueError, match="inputs/policy changed"):
-        prepare_data(root, "v0")
-
-
-def test_prepared_directory_symlinks_fail_before_reading_bytes(experiment_project):
-    root = experiment_project
-    prepare_data(root, "v0")
-    labels = root / "runs/v0/data/labels/train"
-    saved = labels.with_name("saved")
-    labels.rename(saved)
-    labels.symlink_to(saved, target_is_directory=True)
-    with pytest.raises(ValueError, match="directory symlink"):
-        verify_data(root, "v0")
-
-
-@pytest.mark.parametrize("experiment", ["v0", "v1"])
-def test_source_only_edit_preserves_frozen_export_reuse(
-    experiment_project, monkeypatch, tmp_path, experiment
-):
-    from vehicle_detection import experiment_data as data
-
-    operator = tmp_path / "preprocess.py"
-    operator.write_bytes(Path(data.__file__).with_name("preprocess.py").read_bytes())
-    monkeypatch.setattr(data, "__file__", str(tmp_path / "experiment_data.py"))
-    root = experiment_project
-    prepared = prepare_data(root, experiment)
-    saved = root / f"runs/{experiment}/data/data.yaml"
-    original_yaml = saved.read_bytes()
-    operator.write_text(operator.read_text() + "\n# Unrelated future operator documentation.\n")
-    assert file_hash(operator) != prepared["operator_sha256"]
-    monkeypatch.setattr(data, "source_rows", lambda *args: pytest.fail("Source work on reuse"))
-    assert verify_data(root, experiment) == prepared
-    assert prepare_data(root, experiment) == prepared
-    assert saved.read_bytes() == original_yaml
+        prepare_data(project, "v0", DATE, workers=1)
+    assert not (project / f"runs/v0-{DATE}/data").exists()
+    assert not (project / f"runs/v0-{DATE}/data.tmp").exists()

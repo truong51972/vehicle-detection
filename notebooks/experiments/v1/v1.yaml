@@ -1,0 +1,96 @@
+# v1 — Gamma-or-Skip (historical "Adaptive v2"): Gamma 0.85 when brightness < 0.12.
+id: v1
+name: Gamma-or-Skip
+variant: adaptive
+recipes:
+  adaptive:
+    brightness_below: 0.12
+    contrast_below: 0.0
+    max_filters: 1
+    noise_above: 1.0
+    sharpness_below: 0.0
+    sharpness_min: 0.0
+  clahe:
+    clip_limit: 1.2
+    grid_size: 8
+  denoise:
+    strength: 2.0
+  gamma:
+    gamma: 0.85
+  raw: {}
+  sharpen:
+    amount: 0.15
+    sigma: 1.0
+jpeg_quality: 95
+seed: 2026
+# Project-relative COCO-80 initialization; the SHA256 pins its exact bytes.
+checkpoint: weights/yolo26n.pt
+checkpoint_sha256: 9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef
+
+# Offline export (02): CPU threads for decode/policy/JPEG encode/hash.
+preparation:
+  workers: 8
+
+# Native Ultralytics train args (paths/names/seed are set by the lifecycle).
+# Full fine-tune from COCO YOLO26n; best.pt is selected on the calibration split.
+training:
+  epochs: 50
+  patience: 0
+  imgsz: 640
+  batch: 32
+  workers: 8
+  device: '0'
+  cache: false
+  amp: true
+  deterministic: true
+  freeze: 0
+  pretrained: true
+  cls_remap: true
+  optimizer: SGD
+  lr0: 0.01
+  lrf: 0.01
+  momentum: 0.937
+  weight_decay: 0.0005
+  warmup_epochs: 3.0
+  warmup_momentum: 0.8
+  warmup_bias_lr: 0.1
+  cos_lr: false
+  nbs: 64
+  rect: false
+  multi_scale: 0.0
+  # Geometry-only augmentation.
+  mosaic: 1.0
+  close_mosaic: 10
+  fliplr: 0.5
+  flipud: 0.0
+  scale: 0.5
+  translate: 0.1
+  degrees: 0.0
+  shear: 0.0
+  perspective: 0.0
+  mixup: 0.0
+  cutmix: 0.0
+  copy_paste: 0.0
+  # Photometric augmentation stays off so it does not dilute the preprocessing policy.
+  hsv_h: 0.0
+  hsv_s: 0.0
+  hsv_v: 0.0
+  bgr: 0.0
+  plots: true
+
+# Native Ultralytics val args on the development (test) split.
+evaluation:
+  imgsz: 640
+  batch: 32
+  device: '0'
+  workers: 0
+  conf: 0.001
+  iou: 0.7
+  max_det: 300
+  quantize: 32
+  nms: false
+  agnostic_nms: false
+  rect: true
+  augment: false
+  plots: true
+  verbose: false

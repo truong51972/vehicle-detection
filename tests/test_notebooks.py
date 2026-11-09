@@ -1,55 +1,51 @@
-"""Practical active notebook contracts, with history as the historical replay path."""
+"""Notebook contracts plus a fresh-kernel lifecycle run on synthetic CPU fixtures."""
 
 import ast
 import json
 import re
+import shutil
+import subprocess
 from pathlib import Path
 
+import pytest
+import yaml
+
+VERSIONS = ("v0", "v1", "v2", "v3")
 ACTIVE = {
     "00_data_init.ipynb",
-    "experiments/v0/02_train_prepare.ipynb",
-    "experiments/v0/03_train.ipynb",
-    "experiments/v0/04_eval.ipynb",
-    "experiments/v1/01_experiments.ipynb",
-    "experiments/v1/02_train_prepare.ipynb",
-    "experiments/v1/03_train.ipynb",
-    "experiments/v1/04_eval.ipynb",
-    "experiments/v2/01_experiments.ipynb",
-    "experiments/v2/02_train_prepare.ipynb",
-    "experiments/v2/03_train.ipynb",
-    "experiments/v2/04_eval.ipynb",
-    "experiments/v3/01_experiments.ipynb",
-    "experiments/v3/02_train_prepare.ipynb",
-    "experiments/v3/03_train.ipynb",
-    "experiments/v3/04_eval.ipynb",
     "experiments/compare.ipynb",
-    "research/issue47/01_method_discovery.ipynb",
-    "research/issue47/02_resolution_training.ipynb",
-    "research/issue47/03_full_resolution_training.ipynb",
-    "research/issue47/04_gamma_sharpen_pilot.ipynb",
-    "research/issue47/05_posthoc_adaptive_training.ipynb",
+    *(f"experiments/{v}/01_experiments.ipynb" for v in VERSIONS[1:]),
+    *(
+        f"experiments/{v}/{n}.ipynb"
+        for v in VERSIONS
+        for n in ("02_train_prepare", "03_train", "04_eval")
+    ),
 }
+DATE = "2026-11-09"
 
 
-def test_active_entrypoints_are_independent_and_have_no_fabricated_execution():
-    assert {
-        p.relative_to("notebooks").as_posix() for p in Path("notebooks").rglob("*.ipynb")
-    } == ACTIVE
-    assert not Path("notebooks/archive").exists()
+def cells(name):
+    return json.loads((Path("notebooks") / name).read_text())["cells"]
+
+
+def test_active_notebooks_are_clean_and_independent():
+    found = {
+        p.relative_to("notebooks").as_posix()
+        for p in Path("notebooks").rglob("*.ipynb")
+        if ".ipynb_checkpoints" not in p.parts
+    }
+    assert found == ACTIVE
     for name in ACTIVE:
-        cells = json.loads((Path("notebooks") / name).read_text())["cells"]
-        for cell in cells:
-            source = "".join(cell["source"])
+        for cell in cells(name):
             if cell["cell_type"] != "code":
                 continue
+            source = "".join(cell["source"])
             tree = ast.parse(source)
-            assert cell["execution_count"] is None and cell["outputs"] == []
-            assert not any(token in source for token in ("%run", "runpy", "papermill", "archive/"))
+            if name == "experiments/compare.ipynb":
+                assert cell["execution_count"] is None and cell["outputs"] == []
+            assert not any(token in source for token in ("%run", "runpy", "papermill", "/home/"))
             if name.endswith("04_eval.ipynb"):
-                assert "finetuning" not in source
-                assert "s20_report" not in source
-                assert "ALLOW_COMPARISON" not in source
-                assert "compare_s20" not in source
+                assert "train_experiment" not in source
                 assert not any(
                     isinstance(n, ast.Attribute) and n.attr == "train" for n in ast.walk(tree)
                 )
@@ -57,21 +53,155 @@ def test_active_entrypoints_are_independent_and_have_no_fabricated_execution():
 
 def test_active_notebooks_have_numbered_context_and_explicit_prerequisites():
     for name in ACTIVE:
-        cells = json.loads((Path("notebooks") / name).read_text())["cells"]
-        overview = "".join(cells[0]["source"])
+        nb = cells(name)
+        overview = "".join(nb[0]["source"])
         assert all(f"**{label}:**" in overview for label in ("Inputs", "Outputs", "Prerequisites"))
         sections = re.findall(
-            r"^## (\d+)\. (.+)$", "\n".join("".join(c["source"]) for c in cells), re.M
+            r"^## (\d+)\. (.+)$", "\n".join("".join(c["source"]) for c in nb), re.M
         )
         assert [int(n) for n, _ in sections] == list(range(1, len(sections) + 1))
         assert sections[0][1] == "Configuration" and "Summary" in sections[-1][1]
-        code = ["".join(c["source"]) for c in cells if c["cell_type"] == "code"]
+        code = ["".join(c["source"]) for c in nb if c["cell_type"] == "code"]
         assert "require_paths(" in code[0]
-    assert not Path("notebooks/experiments/v0/01_experiments.ipynb").exists()
 
 
-def test_documentation_local_links_resolve():
-    for path in [Path("README.md"), *Path("notebooks").rglob("README.md")]:
+def test_documentation_links_resolve_and_tracked_text_has_no_absolute_paths():
+    for path in [Path("README.md"), Path("data/README.md"), *Path("notebooks").rglob("README.md")]:
         for link in re.findall(r"\]\(([^)]+)\)", path.read_text()):
             if "://" not in link and not link.startswith("#"):
                 assert (path.parent / link.split("#")[0]).exists(), (path, link)
+    tracked = subprocess.run(["git", "ls-files"], capture_output=True, text=True, check=True)
+    pattern = re.compile(r"(?<![\w.~])/(?:home|Users|mnt|root)/\w")
+    for name in tracked.stdout.splitlines():
+        path = Path(name)
+        if path.suffix in {".py", ".ipynb", ".md", ".yaml", ".yml", ".toml", ".qmd", ".json"}:
+            if path.exists():
+                content = path.read_text()
+                if path.suffix == ".ipynb":
+                    # Executed training notebooks retain local log paths as evidence;
+                    # source cells, not transient outputs, must stay portable.
+                    notebook = json.loads(content)
+                    content = "\n".join("".join(cell["source"]) for cell in notebook["cells"])
+                assert not pattern.search(content), f"Absolute path in {name}"
+
+
+def test_project_root_ignores_kernel_working_directory(tmp_path, monkeypatch):
+    from vehicle_detection.common import project_root
+
+    repo = Path.cwd().resolve()
+    assert project_root(repo / "notebooks/experiments/v0") == repo
+    (tmp_path / "pyproject.toml").write_text('[project]\nname = "other"\n')
+    assert project_root(tmp_path / "x") == repo
+    nbformat = pytest.importorskip("nbformat")
+    nbclient = pytest.importorskip("nbclient")
+    notebook = nbformat.read("notebooks/00_data_init.ipynb", as_version=4)
+    notebook.cells.append(nbformat.v4.new_code_cell("import os\nprint(os.getcwd())"))
+    nbclient.NotebookClient(
+        notebook,
+        timeout=120,
+        kernel_name="python3",
+        resources={"metadata": {"path": str(tmp_path)}},
+    ).execute()
+    assert notebook.cells[-1].outputs[0]["text"].strip() == str(repo)
+
+
+def test_lifecycle_notebooks_run_in_fresh_kernels(project):
+    nbformat = pytest.importorskip("nbformat")
+    nbclient = pytest.importorskip("nbclient")
+    torch = pytest.importorskip("torch")
+    pytest.importorskip("ultralytics")
+    from ultralytics.nn.tasks import DetectionModel, yaml_model_load
+
+    from vehicle_detection.common import file_hash
+    from vehicle_detection.experiment_data import config_path
+    from vehicle_detection.training import COCO_VEHICLES
+
+    root = project
+    # Keep the fixture's CPU version YAMLs; copy only notebooks/READMEs.
+    shutil.copytree(
+        "notebooks",
+        root / "notebooks",
+        dirs_exist_ok=True,
+        ignore=shutil.ignore_patterns("v*.yaml", ".ipynb_checkpoints"),
+    )
+
+    def run(path, overrides="", setup=""):
+        notebook = nbformat.read(root / "notebooks" / path, as_version=4)
+        cell = next(c for c in notebook.cells if c.cell_type == "code")
+        cell.source += "\n" + overrides
+        notebook.cells.insert(1, nbformat.v4.new_code_cell(setup or "pass"))
+        directory = (root / "notebooks" / path).parent
+        nbclient.NotebookClient(
+            notebook,
+            timeout=600,
+            kernel_name="python3",
+            resources={"metadata": {"path": str(directory)}},
+        ).execute()
+        return notebook
+
+    guard = """from unittest.mock import patch
+from ultralytics import YOLO
+patch.object(YOLO, "train", side_effect=AssertionError("Training started")).start()
+patch.object(YOLO, "val", side_effect=AssertionError("Inference started")).start()
+"""
+    run("00_data_init.ipynb", "AUDIT_SOURCES = True", guard)
+    for version in VERSIONS[1:]:
+        run(f"experiments/{version}/01_experiments.ipynb", "SAMPLES = 1\nSHOW = 1", guard)
+    assert not (root / "runs").exists()
+    for version in VERSIONS:
+        run(
+            f"experiments/{version}/02_train_prepare.ipynb",
+            f"RUN_DATE = '{DATE}'\nALLOW_PREPARATION = False",
+            guard,
+        )
+        assert not (root / f"runs/{version}-{DATE}").exists()
+        prepare = f"RUN_DATE = '{DATE}'\nALLOW_PREPARATION = True"
+        run(f"experiments/{version}/02_train_prepare.ipynb", prepare, guard)
+        run(f"experiments/{version}/03_train.ipynb", "ALLOW_TRAINING = False", guard)
+        run(f"experiments/{version}/04_eval.ipynb", "ALLOW_INFERENCE = False", guard)
+        assert (root / f"runs/{version}-{DATE}/data/data.yaml").is_file()
+        assert not (root / f"runs/{version}-{DATE}/train").exists()
+
+    # Exercise the actual native CPU API with a tiny synthetic COCO-80 checkpoint.
+    model = DetectionModel(yaml_model_load("yolo26n.yaml"), nc=80, verbose=False)
+    model.names = dict.fromkeys(range(80), "other") | COCO_VEHICLES
+    checkpoint = root / "weights/yolo26n.pt"
+    checkpoint.parent.mkdir()
+    torch.save({"model": model, "train_args": {"task": "detect"}}, checkpoint)
+    for version in ("v0", "v3"):
+        path = config_path(root, version)
+        config = yaml.safe_load(path.read_text())
+        config["checkpoint_sha256"] = file_hash(checkpoint)
+        path.write_text(yaml.safe_dump(config, sort_keys=False))
+        run(f"experiments/{version}/03_train.ipynb", "ALLOW_TRAINING = True")
+        run(f"experiments/{version}/03_train.ipynb", "", guard)
+        run(f"experiments/{version}/04_eval.ipynb", "ALLOW_INFERENCE = True")
+        run(f"experiments/{version}/04_eval.ipynb", "", guard)
+        metrics = json.loads((root / f"runs/{version}-{DATE}/eval/metrics.json").read_text())
+        assert metrics["inputs"]["run"] == f"runs/{version}-{DATE}"
+        assert str(root) not in json.dumps(metrics)
+    run("experiments/compare.ipynb", "BOOTSTRAP_RESAMPLES = 2", guard)
+
+    # Exercise both off-diagonal YOLO.val paths on the same tiny synthetic
+    # development images. This is a CPU contract test, not scientific evidence.
+    from vehicle_detection.comparison import compare_policies, evaluate_matrix
+
+    matrix = evaluate_matrix(
+        root,
+        policies=("v3",),
+        run_dates={"v0": DATE, "v3": DATE},
+        allow_inference=True,
+    )
+    assert {f"{row['model']}/{row['input']}" for row in matrix["rows"]} == {
+        "v0/v0",
+        "v0/v3",
+        "v3/v0",
+        "v3/v3",
+    }
+    assert set(matrix["results"]) == {"v0/v0", "v0/v3", "v3/v0", "v3/v3"}
+    assert {row["status"] for row in matrix["rows"]} <= {"cached", "evaluated"}
+    contrasts, ci = compare_policies(matrix, bootstrap_resamples=8)
+    assert len(contrasts) == 6 and "v3" in ci
+    assert ci["v3"]["contrasts"]["joint_pipeline"]["valid_draws"] > 1
+    cached = evaluate_matrix(root, policies=("v3",), allow_inference=False)
+    assert {row["status"] for row in cached["rows"]} == {"cached"}

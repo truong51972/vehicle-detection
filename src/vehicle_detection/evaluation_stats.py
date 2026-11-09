@@ -1,12 +1,9 @@
-"""Native AP aggregation and paired group bootstrap for saved matching statistics."""
+"""Native AP aggregation and paired source-group bootstrap for saved matching statistics."""
 
-from collections import Counter
 from pathlib import Path
 
 import numpy as np
 from ultralytics.utils.metrics import ap_per_class
-
-from .data import CLASSES
 
 STAT_KEYS = ("tp", "conf", "pred_cls", "target_cls")
 
@@ -23,7 +20,7 @@ def load_stats(path):
 
 
 def class_ap(stats, ids, *, detailed=False):
-    """Native AP by represented class; optional AP50 and AP50:95 for reporting."""
+    """Native AP by represented class; optional AP50, precision and recall for reporting."""
     if not ids:
         return {}
     arrays = {k: np.concatenate([stats[i][k] for i in ids], axis=0) for k in STAT_KEYS}
@@ -43,142 +40,46 @@ def class_ap(stats, ids, *, detailed=False):
     return {int(cls): float(ap.mean()) for cls, ap in zip(values[6], values[5], strict=True)}
 
 
-def native_ap(stats, ids, *, classes=None):
-    """Descriptive observed-class AP, or a fixed-class AP requiring every target class."""
-    values = class_ap(stats, ids)
-    target = list(values) if classes is None else list(classes)
-    if not target or any(cls not in values for cls in target):
-        return None
-    return float(np.mean([values[cls] for cls in target]))
+def paired_bootstrap(before, after, groups, classes, *, resamples=200, seed=2026):
+    """Macro AP50:95 change with a 95% percentile CI, resampling whole source groups.
 
-
-def bootstrap_support(stats, pilot, *, min_class_groups=5, class_names=CLASSES):
-    if type(min_class_groups) is not int or min_class_groups < 1:
-        raise ValueError("Minimum class groups must be a positive integer")
-    if set(stats) != {r["id"] for r in pilot["rows"]}:
-        raise ValueError("Statistics must contain identical evaluation IDs")
-    support = []
-    for cls, name in enumerate(class_names):
-        counts = {r["id"]: int(np.sum(stats[r["id"]]["target_cls"] == cls)) for r in pilot["rows"]}
-        groups = {r["group"] for r in pilot["rows"] if counts[r["id"]]}
-        support.append(
-            {
-                "class_id": cls,
-                "class": name,
-                "images": sum(v > 0 for v in counts.values()),
-                "instances": sum(counts.values()),
-                "source_groups": len(groups),
-                "included": len(groups) >= min_class_groups,
-                "reason": None if len(groups) >= min_class_groups else "insufficient source groups",
-            }
-        )
-    included = [r["class_id"] for r in support if r["included"]]
-    if not included:
-        raise ValueError("No classes meet the fixed source-group support policy")
-    return {
-        "version": "fixed-supported-macro-v2",
-        "class_ids": included,
-        "class_names": [class_names[c] for c in included],
-        "minimum_source_groups": min_class_groups,
-        "support": support,
-        "missing_class_draw": "exclude macro draw; no AP imputation or redraw",
-        "population": "fixed supported classes; percentile CI conditional on their presence",
-        "limit": "Support gate is an engineering minimum, not statistical adequacy",
-    }
-
-
-def paired_interval(
-    before, after, pilot, *, resamples=100, seed=2026, min_class_groups=5, class_names=CLASSES
-):
-    if set(before) != set(after) or set(before) != {r["id"] for r in pilot["rows"]}:
+    Draws missing any fixed class are excluded from the macro interval (never imputed). The
+    interval is conditional on the two trained models: it has no seed/selection uncertainty.
+    """
+    if set(before) != set(after) or set(before) != set(groups):
         raise ValueError("Paired statistics must contain identical evaluation IDs")
-    if type(resamples) is not int or resamples < 2:
-        raise ValueError("At least two bootstrap resamples required")
     for sample_id in before:
         if not np.array_equal(before[sample_id]["target_cls"], after[sample_id]["target_cls"]):
             raise ValueError("Paired ground truth changed")
-    policy = bootstrap_support(
-        before, pilot, min_class_groups=min_class_groups, class_names=class_names
-    )
-    target = policy["class_ids"]
-    groups = {}
-    for row in pilot["rows"]:
-        groups.setdefault(row["group"], []).append(row["id"])
-    keys = sorted(groups)
-    rng, deltas, draws = np.random.default_rng(seed), [], []
-    per_class_deltas = {c: [] for c in target}
-    image_counts = {i: Counter(map(int, row["target_cls"])) for i, row in before.items()}
-    for draw in range(resamples):
-        sampled = rng.choice(keys, len(keys), replace=True)
-        ids = [i for k in sampled for i in groups[k]]
+    members = {}
+    for sample_id, group in groups.items():
+        members.setdefault(group, []).append(sample_id)
+    keys = sorted(members)
+    rng = np.random.default_rng(seed)
+    macro, per_class = [], {c: [] for c in classes}
+    for _ in range(resamples):
+        ids = [i for k in rng.choice(keys, len(keys), replace=True) for i in members[k]]
         a, b = class_ap(before, ids), class_ap(after, ids)
-        missing = [c for c in target if c not in a]
-        changes = {c: b[c] - a[c] for c in target if c in a}
-        for c, value in changes.items():
-            per_class_deltas[c].append(value)
-        recovery = None if missing else float(np.mean([changes[c] for c in target]))
-        if recovery is not None:
-            deltas.append(recovery)
-        support = []
-        for c in range(len(class_names)):
-            support.append(
-                {
-                    "class_id": c,
-                    "images": sum(image_counts[i][c] > 0 for i in ids),
-                    "instances": sum(image_counts[i][c] for i in ids),
-                    "distinct_source_groups": sum(
-                        any(image_counts[i][c] for i in groups[k]) for k in set(sampled)
-                    ),
-                    "recovery": changes.get(c),
-                }
-            )
-        draws.append(
-            {
-                "draw": draw,
-                "valid": not missing,
-                "missing_class_ids": missing,
-                "recovery": recovery,
-                "class_support": support,
-            }
-        )
-    if len(deltas) < 2:
-        raise ValueError("Fewer than two valid fixed-class draws; interval is not estimable")
-    original_ids = list(before)
-    original_a, original_b = class_ap(before, original_ids), class_ap(after, original_ids)
-    per_class = []
-    for entry in policy["support"]:
-        c = entry["class_id"]
-        values = per_class_deltas.get(c, [])
-        bounds = np.quantile(values, [0.025, 0.975]) if len(values) >= 2 else (None, None)
-        a, b = original_a.get(c), original_b.get(c)
-        per_class.append(
-            {
-                **entry,
-                "before_ap": a,
-                "after_ap": b,
-                "recovery": b - a if a is not None and b is not None else None,
-                "ci_low": float(bounds[0]) if bounds[0] is not None else None,
-                "ci_high": float(bounds[1]) if bounds[1] is not None else None,
-                "valid_draws": len(values),
-                "excluded_draws": resamples - len(values),
-                "present_draws": sum(d["class_support"][c]["images"] > 0 for d in draws),
-            }
-        )
-    low, high = np.quantile(deltas, [0.025, 0.975])
+        for c in classes:
+            if c in a and c in b:
+                per_class[c].append(b[c] - a[c])
+        if all(c in a and c in b for c in classes):
+            macro.append(float(np.mean([b[c] - a[c] for c in classes])))
+    a, b = class_ap(before, list(before)), class_ap(after, list(after))
+
+    def interval(values):
+        return [float(v) for v in np.quantile(values, [0.025, 0.975])] if len(values) > 1 else None
+
     return {
-        "estimand": policy,
-        "before_ap": float(np.mean([original_a[c] for c in target])),
-        "after_ap": float(np.mean([original_b[c] for c in target])),
-        "recovery": float(np.mean([original_b[c] - original_a[c] for c in target])),
-        "recovery_ci_low": float(low),
-        "recovery_ci_high": float(high),
+        "delta": float(np.mean([b[c] - a[c] for c in classes])),
+        "ci95": interval(macro),
+        "valid_draws": len(macro),
         "resamples": resamples,
-        "valid_draws": len(deltas),
-        "invalid_draws": resamples - len(deltas),
-        "draws": draws,
-        "per_class": per_class,
         "groups": len(keys),
-        "interval": "fixed macro AP; conditional 95% group CI; no multiplicity correction",
+        "classes": {
+            c: {"delta": b.get(c, np.nan) - a.get(c, np.nan), "ci95": interval(per_class[c])}
+            for c in classes
+        },
     }
 
 
@@ -204,3 +105,101 @@ class MatchingStats:
             },
         )
         return super().get_stats()
+
+
+def factorial_bootstrap(arms, groups, classes, *, policy, resamples=500, seed=2026):
+    """Paired cluster bootstrap of six 2x2 contrasts, with common group draws.
+
+    A = raw/raw, B = raw/policy, C = policy/raw, D = policy/policy.
+    Draw complete source groups with replacement and evaluate *all four arms*
+    on the identical resampled image IDs. Intervals are conditional on the
+    checkpoints/training seed; no multiple-comparison correction is implied.
+    """
+    if type(resamples) is not int or resamples < 2:
+        raise ValueError("Need at least two bootstrap draws")
+    if policy not in ("v1", "v2", "v3"):
+        raise ValueError("Unknown policy")
+    keys = ("v0/v0", f"v0/{policy}", f"{policy}/v0", f"{policy}/{policy}")
+    if set(arms) != set(keys):
+        raise ValueError("Bootstrap requires the complete policy 2x2")
+    ids = set(groups)
+    if not ids or any(set(stats) != ids for stats in arms.values()):
+        raise ValueError("Every arm must use the same development IDs/source groups")
+    reference = arms[keys[0]]
+    for stats in arms.values():
+        for sample_id in ids:
+            if not np.array_equal(
+                reference[sample_id]["target_cls"], stats[sample_id]["target_cls"]
+            ):
+                raise ValueError("Paired ground truth changed")
+
+    class_ids = tuple(classes)
+    if not class_ids or len(set(class_ids)) != len(class_ids):
+        raise ValueError("Require unique, nonempty class IDs")
+
+    def effects(values):
+        a, b, c, d = values
+        return {
+            "inference_on_raw_model": b - a,
+            "training_on_processed_input": d - b,
+            "training_on_raw_input": c - a,
+            "inference_on_policy_model": d - c,
+            "joint_pipeline": d - a,
+            "interaction": (d - c) - (b - a),
+        }
+
+    whole = [class_ap(arms[key], sorted(ids)) for key in keys]
+    if any(any(cls not in arm for cls in class_ids) for arm in whole):
+        raise ValueError("A complete development evaluation must contain all five classes")
+    names = tuple(effects([0.0] * 4))
+    samples = {name: [] for name in names}
+    class_samples = {cls: {name: [] for name in names} for cls in class_ids}
+
+    members = {}
+    for sample_id, group in groups.items():
+        members.setdefault(group, []).append(sample_id)
+    group_keys = sorted(members)
+    rng = np.random.default_rng(seed)
+    for _ in range(resamples):
+        sampled_ids = [
+            item
+            for group in rng.choice(group_keys, len(group_keys), replace=True)
+            for item in members[group]
+        ]
+        values = [class_ap(arms[key], sampled_ids) for key in keys]
+        for cls in class_ids:
+            if all(cls in arm for arm in values):
+                for name, delta in effects([arm[cls] for arm in values]).items():
+                    class_samples[cls][name].append(float(delta))
+        if all(all(cls in arm for cls in class_ids) for arm in values):
+            means = [float(np.mean([arm[cls] for cls in class_ids])) for arm in values]
+            for name, delta in effects(means).items():
+                samples[name].append(float(delta))
+
+    def summarize(delta, draws):
+        return {
+            "delta": float(delta),
+            "ci95": [float(x) for x in np.quantile(draws, [0.025, 0.975])]
+            if len(draws) > 1
+            else None,
+            "valid_draws": len(draws),
+            "resamples": resamples,
+        }
+
+    mean_effects = effects([np.mean([arm[cls] for cls in class_ids]) for arm in whole])
+    contrasts = {name: summarize(delta, samples[name]) for name, delta in mean_effects.items()}
+    by_class = {
+        cls: {
+            name: summarize(delta, class_samples[cls][name])
+            for name, delta in effects([arm[cls] for arm in whole]).items()
+        }
+        for cls in class_ids
+    }
+    return {
+        "contrasts": contrasts,
+        "per_class": by_class,
+        "groups": len(group_keys),
+        "seed": seed,
+        "method": "paired percentile 95% source-group cluster bootstrap",
+        "limitations": "single trained seed; no checkpoint-selection or multiplicity uncertainty",
+    }

@@ -1,76 +1,72 @@
-"""Evaluate a detector on its own offline policy's shared development population."""
+"""Evaluate one run's selected detector on its own policy's development (test) split."""
 
 import json
 from importlib.metadata import version
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
-import yaml
 from ultralytics import YOLO
 from ultralytics.models.yolo.detect import DetectionValidator
 
-from .baseline import VAL_SETTINGS
-from .common import file_hash, read_json, write_json
-from .evaluation_stats import MatchingStats
-from .experiment_data import load_experiment, verify_data
-from .five_class import FIVE_CLASSES
-from .training_settings import TRAIN_SETTINGS, validate_training_args
+from .common import file_hash, read_json, relative, write_json
+from .data import FIVE_CLASSES
+from .evaluation_stats import MatchingStats, class_ap, load_stats
+from .experiment_data import load_experiment, run_dir, verify_data
+from .training import completed_training, training_settings
+
+DARK_BELOW = 0.12
 
 
 class ExperimentValidator(MatchingStats, DetectionValidator):
     """Retain native matches for subgroup/error analysis of new evaluations."""
 
 
-def evaluate_experiment(root, experiment, *, allow_inference=False, settings=None):
-    root = Path(root).resolve()
-    prepared = verify_data(root, experiment)
-    directory = root / f"runs/{experiment}"
-    checkpoint = directory / "train/weights/best.pt"
-    history = directory / "train/results.csv"
-    if any(
-        p.resolve() != p
-        for p in (checkpoint, history, directory / "train/args.yaml", directory / "train.yaml")
-    ):
-        raise ValueError("Unexpected detector/YAML symlink")
-    args = yaml.safe_load((directory / "train/args.yaml").read_text())
-    if args["data"] != str(directory / "train.yaml"):
-        raise ValueError("Detector belongs to another experiment")
-    experiment_config = load_experiment(root, experiment)
-    expected_settings = {
-        **TRAIN_SETTINGS,
-        **experiment_config["training"],
-        "seed": experiment_config["seed"],
+def cohort_metrics(stats, metadata):
+    """Per-class AP for raw-pixel dark/bright and, for routed policies, Apply/Skip images."""
+    test = metadata[metadata.split == "test"]
+    cohorts = {
+        "dark": test.id[test.brightness < DARK_BELOW],
+        "bright": test.id[test.brightness >= DARK_BELOW],
     }
-    validate_training_args(args, directory / "train.yaml", expected_settings)
-    if pd.read_csv(history).epoch.tolist() != list(range(1, expected_settings["epochs"] + 1)):
-        raise ValueError("Native training has not completed the epoch budget")
-    training = yaml.safe_load((directory / "train.yaml").read_text())
-    raw = verify_data(root, "v0")
-    if training != {
-        **prepared,
-        "val": str(Path(raw["path"]) / "images/val"),
-        "selection_files_sha256": raw["files_sha256"],
-    }:
-        raise ValueError("Detector's prepared inputs/policy differ from evaluation")
-    config = {**VAL_SETTINGS, "half": False, **(settings or {})}
-    if config["nms"] is not False or config["augment"] or config["half"]:
-        raise ValueError("Use native FP32 NMS-free validation without augmentation")
+    applied = test.applied.astype(str)
+    if applied.ne("").any() and applied.eq("").any():
+        cohorts |= {"apply": test.id[applied.ne("")], "skip": test.id[applied.eq("")]}
+    result = {}
+    for name, ids in cohorts.items():
+        values = class_ap(stats, list(ids), detailed=True)
+        result[name] = {
+            "images": len(ids),
+            "mAP50_95": float(np.mean([v["AP50_95"] for v in values.values()])) if values else None,
+            "classes": {FIVE_CLASSES[c]: v for c, v in values.items()},
+        }
+    return result
+
+
+def evaluate_experiment(root, experiment, date=None, *, allow_inference=False, settings=None):
+    root = Path(root).resolve()
+    config = load_experiment(root, experiment)
+    run = run_dir(root, experiment, date)
+    prepared = verify_data(root, experiment, run.name.removeprefix(f"{experiment}-"))
+    if completed_training(root, run, training_settings(config)) is None:
+        raise FileNotFoundError("Training has not completed for this run; run 03_train first")
+    checkpoint = run / "train/weights/best.pt"
+    eval_settings = {**config["evaluation"], **(settings or {})}
+    if eval_settings.get("augment") or eval_settings.get("half"):
+        raise ValueError("Report native FP32 evaluation without test-time augmentation")
     identity = {
-        "experiment": experiment,
-        "training_subset": prepared["training_subset"],
-        "data_sha256": file_hash(directory / "data/data.yaml"),
+        "run": relative(run, root),
+        "files_sha256": prepared["files_sha256"],
         "checkpoint_sha256": file_hash(checkpoint),
-        "settings": config,
+        "settings": eval_settings,
         "ultralytics": version("ultralytics"),
     }
-    output = directory / "eval"
+    output = run / "eval"
     saved = output / "metrics.json"
-    if output.resolve() != output or saved.is_symlink():
-        raise ValueError("Unexpected evaluation/checkpoint symlink")
     if saved.exists():
         result = read_json(saved)
         if result["inputs"] != identity:
-            raise ValueError("Evaluation inputs/settings changed; use a new experiment ID")
+            raise ValueError("Evaluation inputs/settings changed; delete eval/ or use a new run")
         return result
     if not allow_inference:
         raise FileNotFoundError("No saved metrics; explicitly set ALLOW_INFERENCE=True")
@@ -79,29 +75,26 @@ def evaluate_experiment(root, experiment, *, allow_inference=False, settings=Non
     model = YOLO(str(checkpoint))
     if model.names != dict(enumerate(FIVE_CLASSES)):
         raise ValueError("Detector taxonomy differs from shared five-class labels")
-    if model.model.yaml.get("yaml_file") != "yolo26n.yaml":
-        raise ValueError("Expected YOLO26n detector")
-    if model.ckpt["train_args"]["data"] != args["data"]:
-        raise ValueError("Checkpoint belongs to another experiment")
+    data = root / prepared["path"] / "data.yaml"
+    # Ultralytics needs absolute runtime paths; metrics.json stores only relative ones.
     metrics = model.val(
         validator=ExperimentValidator,
-        data=str(directory / "data/data.yaml"),
-        split="val",
-        project=str(directory),
+        data=str(data),
+        split="test",
+        project=str(run),
         name="eval",
         exist_ok=True,
-        **config,
+        seed=config["seed"],
+        **eval_settings,
     )
     precision, recall, map50, map5095 = map(float, metrics.mean_results())
+    stats = load_stats(output / "paired_stats.npz")
+    metadata = pd.read_csv(root / prepared["path"] / "metadata.csv", keep_default_na=False)
     result = {
         "inputs": identity,
-        "overall": {
-            "precision": precision,
-            "recall": recall,
-            "mAP50": map50,
-            "mAP50_95": map5095,
-        },
+        "overall": {"precision": precision, "recall": recall, "mAP50": map50, "mAP50_95": map5095},
         "classes": json.loads(metrics.to_json(decimals=8)),
+        "cohorts": cohort_metrics(stats, metadata),
         "speed_ms": metrics.speed,
         "role": "development_validation",
         "final_test_accessed": False,
@@ -110,23 +103,14 @@ def evaluate_experiment(root, experiment, *, allow_inference=False, settings=Non
     return result
 
 
-def historical_result(root, branch):
-    """Read committed historical measurements without relabeling them as new runs."""
-    if branch not in {"raw", "adaptive"}:
-        raise ValueError("Expected a historical Raw/Adaptive branch")
-    root = Path(root)
-    training = read_json(root / "docs/issue21/s10_results.json")
-    matrix = read_json(root / "docs/development-five-v1/matrix.json")
-    result = next(r for r in matrix["evaluations"] if r["evaluation"] == f"{branch}-{branch}")
-    identity = result["identity"]
-    if (
-        training["final_test_accessed"]
-        or matrix["final_test_accessed"]
-        or identity["class_names"] != FIVE_CLASSES
-        or identity["checkpoint_sha256"]
-        != training["branches"][branch]["checkpoints"]["best"]["sha256"]
-        or identity["protocol_id"] != training["protocol_id"]
-        or identity["policy_id"] != training["policy_id"]
-    ):
-        raise ValueError("Historical measurement provenance differs")
-    return result
+def saved_result(root, experiment, date=None):
+    """Newest (or dated) run of a version that has saved development metrics, else None."""
+    runs = Path(root).resolve() / "runs"
+    if date is not None:
+        candidates = [run_dir(root, experiment, date)]
+    else:
+        candidates = sorted(runs.glob(f"{experiment}-????-??-??"), reverse=True)
+    for run in candidates:
+        if (run / "eval/metrics.json").is_file():
+            return run, read_json(run / "eval/metrics.json")
+    return None
