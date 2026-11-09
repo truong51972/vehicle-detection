@@ -293,7 +293,7 @@ def result_table(report):
     """Results and statuses, with percentage-unit display fields."""
     rows = []
     for row in report["rows"]:
-        item = dict(row)
+        item = {**row, "mAP50_pct": np.nan, "mAP50_95_pct": np.nan}
         result = report["results"].get(cell_name(row["model"], row["input"]))
         if result:
             item.update({k + "_pct": result["overall"][k] * 100 for k in ("mAP50", "mAP50_95")})
