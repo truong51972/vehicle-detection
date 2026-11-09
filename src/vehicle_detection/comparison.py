@@ -31,9 +31,7 @@ def comparison_pairs(policies=POLICIES):
     if not policies or len(set(policies)) != len(policies) or set(policies) - set(POLICIES):
         raise ValueError("Select distinct policies from v1, v2, v3")
     return [("v0", "v0")] + [
-        pair
-        for policy in policies
-        for pair in (("v0", policy), (policy, "v0"), (policy, policy))
+        pair for policy in policies for pair in (("v0", policy), (policy, "v0"), (policy, policy))
     ]
 
 
@@ -172,33 +170,36 @@ def inspect_matrix(root, *, run_dates=None, policies=POLICIES):
         key = cell_name(model_version, input_version)
         absent = [v for v in (model_version, input_version) if v not in contexts]
         if absent:
-            rows.append({
-                "model": model_version,
-                "input": input_version,
-                "status": "blocked",
-                "detail": "; ".join(blocked.get(v, v) for v in dict.fromkeys(absent)),
-            })
+            rows.append(
+                {
+                    "model": model_version,
+                    "input": input_version,
+                    "status": "blocked",
+                    "detail": "; ".join(blocked.get(v, v) for v in dict.fromkeys(absent)),
+                }
+            )
             continue
         model, inputs = contexts[model_version], contexts[input_version]
         diagonal = model_version == input_version
-        target = (
-            model["run"] / "eval"
-            if diagonal
-            else _output(root, model["run"], inputs["run"])
-        )
+        target = model["run"] / "eval" if diagonal else _output(root, model["run"], inputs["run"])
         identity = _diagonal_identity(model) if diagonal else _identity(model, inputs)
         status, result = _cached(target, identity, set(inputs["metadata"].index))
-        rows.append({
-            "model": model_version,
-            "input": input_version,
-            "status": status,
-            "detail": relative(target, root),
-        })
+        rows.append(
+            {
+                "model": model_version,
+                "input": input_version,
+                "status": status,
+                "detail": relative(target, root),
+            }
+        )
         if result is not None:
             results[key] = result
     return {
-        "root": root, "contexts": contexts, "blocked": blocked,
-        "rows": rows, "results": results,
+        "root": root,
+        "contexts": contexts,
+        "blocked": blocked,
+        "rows": rows,
+        "results": results,
     }
 
 
@@ -254,8 +255,10 @@ def evaluate_matrix(
     Stale/incomplete cells are fail-closed: never delete, overwrite or silently
     recompute them. The diagonal is always owned by each version's 04_eval.
     """
-    report = preflight if preflight is not None else inspect_matrix(
-        root, run_dates=run_dates, policies=policies
+    report = (
+        preflight
+        if preflight is not None
+        else inspect_matrix(root, run_dates=run_dates, policies=policies)
     )
     if report["root"] != Path(root).resolve():
         raise ValueError("Preflight belongs to a different project root")
@@ -293,9 +296,7 @@ def result_table(report):
         item = dict(row)
         result = report["results"].get(cell_name(row["model"], row["input"]))
         if result:
-            item.update(
-                {k + "_pct": result["overall"][k] * 100 for k in ("mAP50", "mAP50_95")}
-            )
+            item.update({k + "_pct": result["overall"][k] * 100 for k in ("mAP50", "mAP50_95")})
         rows.append(item)
     return pd.DataFrame(rows)
 
@@ -312,9 +313,10 @@ def compare_policies(report, *, bootstrap_resamples=0, seed=2026):
     stats_cache = {}
     rows, intervals = [], {}
     for policy in POLICIES:
-        keys = [cell_name(*pair) for pair in (
-            ("v0", "v0"), ("v0", policy), (policy, "v0"), (policy, policy)
-        )]
+        keys = [
+            cell_name(*pair)
+            for pair in (("v0", "v0"), ("v0", policy), (policy, "v0"), (policy, policy))
+        ]
         if not all(key in available for key in keys):
             continue
         a, b, c, d = [available[key]["overall"]["mAP50_95"] for key in keys]
@@ -338,8 +340,12 @@ def compare_policies(report, *, bootstrap_resamples=0, seed=2026):
         raw = contexts["v0"]["metadata"]
         groups = raw.source_group.to_dict()
         intervals[policy] = factorial_bootstrap(
-            arms, groups, range(len(FIVE_CLASSES)), policy=policy,
-            resamples=bootstrap_resamples, seed=seed,
+            arms,
+            groups,
+            range(len(FIVE_CLASSES)),
+            policy=policy,
+            resamples=bootstrap_resamples,
+            seed=seed,
         )
     frame = pd.DataFrame(rows)
     if not frame.empty and intervals:
@@ -367,24 +373,34 @@ def policy_cohorts(report, *, policy):
     metadata = contexts[policy]["metadata"].reset_index(drop=True)
     rows = []
     for model_version, input_version in (
-        ("v0", "v0"), ("v0", policy), (policy, "v0"), (policy, policy)
+        ("v0", "v0"),
+        ("v0", policy),
+        (policy, "v0"),
+        (policy, policy),
     ):
         key = cell_name(model_version, input_version)
         if key not in results:
             continue
         model, inputs = contexts[model_version], contexts[input_version]
-        folder = (model["run"] / "eval") if model_version == input_version else _output(
-            report["root"], model["run"], inputs["run"]
+        folder = (
+            (model["run"] / "eval")
+            if model_version == input_version
+            else _output(report["root"], model["run"], inputs["run"])
         )
         measures = cohort_metrics(load_stats(folder / "paired_stats.npz"), metadata)
         for cohort, item in measures.items():
-            rows.append({
-                "model": model_version, "input": input_version,
-                "cohort": cohort, "images": item["images"],
-                "mAP50_95_pct": item["mAP50_95"] * 100 if item["mAP50_95"] is not None else np.nan,
-            })
+            rows.append(
+                {
+                    "model": model_version,
+                    "input": input_version,
+                    "cohort": cohort,
+                    "images": item["images"],
+                    "mAP50_95_pct": item["mAP50_95"] * 100
+                    if item["mAP50_95"] is not None
+                    else np.nan,
+                }
+            )
     return pd.DataFrame(rows)
-
 
 
 def benchmark_preprocessing(report, *, samples=128, repeats=3, seed=2026):
@@ -420,11 +436,17 @@ def benchmark_preprocessing(report, *, samples=128, repeats=3, seed=2026):
             if ctx is None:
                 continue
             if v == "v0":
-                records.append({
-                    "policy": v, "samples": len(images), "repeats": repeats,
-                    "mean_ms": 0.0, "p50_ms": 0.0, "p95_ms": 0.0,
-                    "note": "Raw has no external policy operation",
-                })
+                records.append(
+                    {
+                        "policy": v,
+                        "samples": len(images),
+                        "repeats": repeats,
+                        "mean_ms": 0.0,
+                        "p50_ms": 0.0,
+                        "p95_ms": 0.0,
+                        "note": "Raw has no external policy operation",
+                    }
+                )
                 continue
             variant, recipes = ctx["config"]["variant"], ctx["config"]["recipes"]
             for image in images[: min(5, len(images))]:
@@ -435,13 +457,17 @@ def benchmark_preprocessing(report, *, samples=128, repeats=3, seed=2026):
                     begin = time.perf_counter()
                     apply_recipe(image, variant, recipes)
                     measurements.append((time.perf_counter() - begin) * 1000)
-            records.append({
-                "policy": v, "samples": len(images), "repeats": repeats,
-                "mean_ms": float(np.mean(measurements)),
-                "p50_ms": float(np.quantile(measurements, 0.5)),
-                "p95_ms": float(np.quantile(measurements, 0.95)),
-                "note": "CPU policy + routing only; Raw JPEG proxy",
-            })
+            records.append(
+                {
+                    "policy": v,
+                    "samples": len(images),
+                    "repeats": repeats,
+                    "mean_ms": float(np.mean(measurements)),
+                    "p50_ms": float(np.quantile(measurements, 0.5)),
+                    "p95_ms": float(np.quantile(measurements, 0.95)),
+                    "note": "CPU policy + routing only; Raw JPEG proxy",
+                }
+            )
     finally:
         cv2.setNumThreads(original_threads)
     return pd.DataFrame(records)
@@ -454,9 +480,14 @@ def training_cost(report):
         path = ctx["run"] / "train/results.csv"
         history = pd.read_csv(path)
         history.columns = history.columns.str.strip()
-        rows.append({
-            "model": v, "epochs": len(history),
-            "train_minutes": float(history["time"].iloc[-1]) / 60 if "time" in history else np.nan,
-            "source": relative(path, report["root"]),
-        })
+        rows.append(
+            {
+                "model": v,
+                "epochs": len(history),
+                "train_minutes": float(history["time"].iloc[-1]) / 60
+                if "time" in history
+                else np.nan,
+                "source": relative(path, report["root"]),
+            }
+        )
     return pd.DataFrame(rows)
