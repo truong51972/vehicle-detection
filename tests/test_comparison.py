@@ -19,13 +19,17 @@ def test_exact_ten_cells_and_no_policy_to_policy_mismatch():
     assert len(pairs) == len(set(pairs)) == 10
     assert set(pairs) == {
         ("v0", "v0"),
-        ("v0", "v1"), ("v1", "v0"), ("v1", "v1"),
-        ("v0", "v2"), ("v2", "v0"), ("v2", "v2"),
-        ("v0", "v3"), ("v3", "v0"), ("v3", "v3"),
+        ("v0", "v1"),
+        ("v1", "v0"),
+        ("v1", "v1"),
+        ("v0", "v2"),
+        ("v2", "v0"),
+        ("v2", "v2"),
+        ("v0", "v3"),
+        ("v3", "v0"),
+        ("v3", "v3"),
     }
-    assert comparison_pairs(("v3",)) == [
-        ("v0", "v0"), ("v0", "v3"), ("v3", "v0"), ("v3", "v3")
-    ]
+    assert comparison_pairs(("v3",)) == [("v0", "v0"), ("v0", "v3"), ("v3", "v0"), ("v3", "v3")]
     with pytest.raises(ValueError, match="Unsupported"):
         cell_name("v1", "v2")
     with pytest.raises(ValueError, match="distinct"):
@@ -36,14 +40,16 @@ def test_exact_ten_cells_and_no_policy_to_policy_mismatch():
 
 def test_factorial_contrast_definition_and_zero_baseline():
     values = contrasts(0.25, 0.28, 0.26, 0.32)
-    assert values == pytest.approx({
-        "inference_on_raw_model": 0.03,
-        "training_on_processed_input": 0.04,
-        "training_on_raw_input": 0.01,
-        "inference_on_policy_model": 0.06,
-        "joint_pipeline": 0.07,
-        "interaction": 0.03,
-    })
+    assert values == pytest.approx(
+        {
+            "inference_on_raw_model": 0.03,
+            "training_on_processed_input": 0.04,
+            "training_on_raw_input": 0.01,
+            "inference_on_policy_model": 0.06,
+            "joint_pipeline": 0.07,
+            "interaction": 0.03,
+        }
+    )
     assert all(abs(x) < 1e-12 for x in contrasts(0.2, 0.2, 0.2, 0.2).values())
 
 
