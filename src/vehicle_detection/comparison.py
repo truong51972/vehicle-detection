@@ -241,13 +241,19 @@ def _evaluate_cross(root, model, inputs):
     return result
 
 
-def evaluate_matrix(root, *, run_dates=None, policies=POLICIES, allow_inference=False):
+def evaluate_matrix(
+    root, *, run_dates=None, policies=POLICIES, allow_inference=False, preflight=None
+):
     """Reuse valid caches; only infer missing cells on explicit opt-in.
 
     Stale/incomplete cells are fail-closed: never delete, overwrite or silently
     recompute them. The diagonal is always owned by each version's 04_eval.
     """
-    report = inspect_matrix(root, run_dates=run_dates, policies=policies)
+    report = preflight if preflight is not None else inspect_matrix(
+        root, run_dates=run_dates, policies=policies
+    )
+    if report["root"] != Path(root).resolve():
+        raise ValueError("Preflight belongs to a different project root")
     if not allow_inference:
         return report
     from .evaluation import evaluate_experiment
@@ -372,4 +378,80 @@ def policy_cohorts(report, *, policy):
                 "cohort": cohort, "images": item["images"],
                 "mAP50_95_pct": item["mAP50_95"] * 100 if item["mAP50_95"] is not None else np.nan,
             })
+    return pd.DataFrame(rows)
+
+
+
+def benchmark_preprocessing(report, *, samples=128, repeats=3, seed=2026):
+    """Optional CPU-only policy timing, using saved Raw JPEGs as proxy inputs.
+
+    Excludes image decode, JPEG encoding, disk I/O and the detector. This is not
+    an end-to-end deployment benchmark and does not reproduce original-source
+    preprocessing bytes. No original/final images are opened here.
+    """
+    import time
+
+    import cv2
+
+    from .common import read_image
+    from .preprocess import apply_recipe
+
+    if samples < 1 or repeats < 1:
+        raise ValueError("Require positive samples/repeats")
+    raw = report["contexts"].get("v0")
+    if raw is None:
+        return pd.DataFrame()
+    ids = sorted(raw["metadata"].index)
+    chosen = np.random.default_rng(seed).choice(ids, min(len(ids), samples), replace=False)
+    images = [
+        read_image(raw["run"] / "data/images/test" / f"{sample_id}.jpg") for sample_id in chosen
+    ]
+    original_threads = cv2.getNumThreads()
+    records = []
+    try:
+        cv2.setNumThreads(1)
+        for v in VERSIONS:
+            ctx = report["contexts"].get(v)
+            if ctx is None:
+                continue
+            if v == "v0":
+                records.append({
+                    "policy": v, "samples": len(images), "repeats": repeats,
+                    "mean_ms": 0.0, "p50_ms": 0.0, "p95_ms": 0.0,
+                    "note": "Raw has no external policy operation",
+                })
+                continue
+            variant, recipes = ctx["config"]["variant"], ctx["config"]["recipes"]
+            for image in images[: min(5, len(images))]:
+                apply_recipe(image, variant, recipes)
+            measurements = []
+            for _ in range(repeats):
+                for image in images:
+                    begin = time.perf_counter()
+                    apply_recipe(image, variant, recipes)
+                    measurements.append((time.perf_counter() - begin) * 1000)
+            records.append({
+                "policy": v, "samples": len(images), "repeats": repeats,
+                "mean_ms": float(np.mean(measurements)),
+                "p50_ms": float(np.quantile(measurements, 0.5)),
+                "p95_ms": float(np.quantile(measurements, 0.95)),
+                "note": "CPU policy + routing only; Raw JPEG proxy",
+            })
+    finally:
+        cv2.setNumThreads(original_threads)
+    return pd.DataFrame(records)
+
+
+def training_cost(report):
+    """Reported native training duration from saved Ultralytics results.csv."""
+    rows = []
+    for v, ctx in report["contexts"].items():
+        path = ctx["run"] / "train/results.csv"
+        history = pd.read_csv(path)
+        history.columns = history.columns.str.strip()
+        rows.append({
+            "model": v, "epochs": len(history),
+            "train_minutes": float(history["time"].iloc[-1]) / 60 if "time" in history else np.nan,
+            "source": relative(path, report["root"]),
+        })
     return pd.DataFrame(rows)
