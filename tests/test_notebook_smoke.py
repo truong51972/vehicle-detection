@@ -113,6 +113,12 @@ def test_comparison_runs_read_only_without_local_runs_or_study_dependencies(tmp_
     shutil.copyfile("notebooks/experiments/compare.ipynb", directory / "compare.ipynb")
     shutil.copytree("docs/issue45-s20", root / "docs/issue45-s20")
     shutil.copytree("docs/issue47", root / "docs/issue47")
+    shutil.copytree("docs/issue47-s20-resolution-20e", root / "docs/issue47-s20-resolution-20e")
+    shutil.copytree("docs/issue47-v3-960", root / "docs/issue47-v3-960")
+    if Path("docs/issue47-posthoc-adaptive-960").exists():
+        shutil.copytree(
+            "docs/issue47-posthoc-adaptive-960", root / "docs/issue47-posthoc-adaptive-960"
+        )
     before = {str(p.relative_to(root)): file_hash(p) for p in root.rglob("*") if p.is_file()}
     notebook = nbformat.read(directory / "compare.ipynb", as_version=4)
     notebook.cells.insert(
@@ -157,7 +163,11 @@ patch("io.open", guarded(io.open)).start()
 @pytest.mark.parametrize(
     "notebook_path, report_name, plan_name",
     [
-        ("experiments/v3/01_experiments.ipynb", "issue47", "ISSUE47_PLAN.md"),
+        ("experiments/v3/01_experiments.ipynb", "issue47-v3-960", "ISSUE47_V3_960_PLAN.md"),
+        ("experiments/v3/02_train_prepare.ipynb", "issue47-v3-960", "ISSUE47_V3_960_PLAN.md"),
+        ("experiments/v3/03_train.ipynb", "issue47-v3-960", "ISSUE47_V3_960_PLAN.md"),
+        ("experiments/v3/04_eval.ipynb", "issue47-v3-960", "ISSUE47_V3_960_PLAN.md"),
+        ("research/issue47/04_gamma_sharpen_pilot.ipynb", "issue47", "ISSUE47_PLAN.md"),
         (
             "research/issue47/01_method_discovery.ipynb",
             "issue47-discovery",
@@ -185,6 +195,14 @@ def test_research_defaults_run_with_only_committed_evidence(
     shutil.copyfile(f"docs/{plan_name}", root / f"docs/{plan_name}")
     path = directory / Path(notebook_path).name
     shutil.copyfile(f"notebooks/{notebook_path}", path)
+    result = root / f"docs/{report_name}/result.json"
+    if result.exists():
+        from vehicle_detection.common import read_json
+
+        for name in read_json(result).get("inputs", {}):
+            target = root / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(name, target)
     before = {str(p.relative_to(root)): file_hash(p) for p in root.rglob("*") if p.is_file()}
     notebook = nbformat.read(path, as_version=4)
     notebook.cells.insert(
@@ -198,6 +216,14 @@ for module in ("torch", "ultralytics", "vehicle_detection.evaluation_stats",
 patch("vehicle_detection.v3_pilot.shared_splits", side_effect=AssertionError("Read splits")).start()
 patch("vehicle_detection.v3_pilot.source_rows", side_effect=AssertionError("Read sources")).start()
 patch("vehicle_detection.v3_pilot.apply", side_effect=AssertionError("Replayed pixels")).start()
+patch("vehicle_detection.v3_adaptive.population",
+      side_effect=AssertionError("Selected new population")).start()
+patch("vehicle_detection.v3_adaptive.source_rows",
+      side_effect=AssertionError("Read original metadata")).start()
+patch("vehicle_detection.v3_adaptive.acquire",
+      side_effect=AssertionError("Started scientific acquisition")).start()
+patch("vehicle_detection.v3_adaptive.apply",
+      side_effect=AssertionError("Replayed preprocessing")).start()
 patch("vehicle_detection.method_discovery.source_rows",
       side_effect=AssertionError("Read original metadata")).start()
 patch("vehicle_detection.method_discovery.build_diagnosis",
@@ -214,4 +240,4 @@ patch("vehicle_detection.method_discovery.build_diagnosis",
     assert before == {
         str(p.relative_to(root)): file_hash(p) for p in root.rglob("*") if p.is_file()
     }
-    assert all(not (root / name).exists() for name in ("runs", "weights", "data", "configs"))
+    assert all(not (root / name).exists() for name in ("runs", "weights", "data"))
