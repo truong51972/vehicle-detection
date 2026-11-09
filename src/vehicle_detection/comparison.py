@@ -13,7 +13,6 @@ import pandas as pd
 from .common import file_hash, read_json, relative, write_json
 from .data import FIVE_CLASSES
 from .experiment_data import load_experiment, run_dir, verify_data
-from .training import completed_training, training_settings
 
 POLICIES = ("v1", "v2", "v3")
 VERSIONS = ("v0", *POLICIES)
@@ -69,6 +68,8 @@ def _metadata(run):
 
 
 def _runs(root, run_dates):
+    from .training import completed_training, training_settings
+
     contexts, blocked = {}, {}
     for v in VERSIONS:
         try:
