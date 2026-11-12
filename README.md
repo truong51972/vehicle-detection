@@ -142,6 +142,12 @@ Extract BDD100K under `data/bdd100k/` (see [data/README.md](data/README.md)). Th
 `9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef`. Nothing is downloaded
 automatically.
 
+## Video demo
+
+See [the local Gradio demo](docs/demo.md) for independent model/preprocessing
+selection, video preview/download, timing and detection counts. Use its separate
+`demo` environment; the `study` and `demo` extras cannot be installed together.
+
 ## Checks
 
 ```sh
