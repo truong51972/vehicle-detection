@@ -1,0 +1,6 @@
+{
+  "best_sha256": "f7df49cba55152a60133f5764e9e44d9a09f263ad7333d95072583044e748ce8",
+  "epochs_run": 50,
+  "run": "runs/v1-2026-11-09",
+  "selection": "calibration (Ultralytics val split, native fitness)"
+}
