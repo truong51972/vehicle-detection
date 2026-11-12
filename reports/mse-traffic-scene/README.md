@@ -1,70 +1,41 @@
-# FPT MSE Computer Vision report — Quarto scaffold
+# FPT MSE Computer Vision — báo cáo Quarto
 
-**Status: structure only. No PDF rendering, no completed report, no verified two-model integration.**
+**Chỉ có một file báo cáo: [`report.qmd`](report.qmd).** Không còn Quarto Book hay các file `.qmd` tách theo chương.
 
-Tracks [#64](https://github.com/truong51972/vehicle-detection/issues/64). This is a new combined-report project. **Do not replace** the existing vehicle-only [docs/report.qmd](../../docs/report.qmd) or historical DOCX/PDF exports.
+Trạng thái: **mới là khung**, chưa chuyển đầy đủ nội dung Word và **chưa render PDF**.
 
-## Scope and emphasis
+## Tổ chức
 
-- **Course:** Computer Vision (per project-team clarification). The provided FPT template literally says *Image and Video Processing*; confirm the official course name with the lecturer before submission.
-- **Core scientific subject:** image formation and quality, gamma, local illumination adjustment, CLAHE, Canny/edges, color/contrast, object size, bounding-box geometry, evaluation under darkness/occlusion, image/video pipeline and computer-vision failure cases.
-- **YOLO26n:** a fixed object-detection instrument/benchmark. Explain detection outputs and the reproducibility controls needed to compare CV image-processing policies, **not** a tutorial on neural network architectures or training optimization.
-- **Two branches:** five vehicle classes (BDD100K) and six traffic-sign classes (separate source and dataset). Never average mAP across the datasets.
-- **Evidence boundary:** no reported joint-demo FPS, joint mAP, distance-in-metres or driving-control accuracy unless the corresponding experiments have genuinely run.
+Trong `report.qmd` theo đúng thứ tự: metadata 4 thành viên/MSSV, Abstract, Chapter 1 Introduction, Chapter 2 Literature Review, Chapter 3 Methodology (Dataset + Computer Vision Algorithms), Chapter 4 Simulation Results, Chapter 5 Conclusions, References, các phụ lục A–C.
 
-## Project organization
+Toàn bộ nội dung học thuật và cấu hình Quarto/PDF được lưu trong một file `report.qmd`. Các file phụ trợ không phải báo cáo: `references.bib` (trích dẫn), `evidence/manifest.yml` (nguồn kết quả), `FPT_TEMPLATE_CHECKLIST.md` (19 findings), `figures/` (ảnh tương lai), `scripts/check_scaffold.py` (kiểm tra cấu trúc).
 
-| File / directory | Purpose |
-| --- | --- |
-| `_quarto.yml` | Quarto book chapter order and prospective PDF configuration |
-| `index.qmd`, `frontmatter/` | Preface, abstract and contributor metadata |
-| `chapters/` | Exactly five FPT-oriented report chapters |
-| `appendices/` | CV operator details, experiment protocol and evidence mapping |
-| `references.bib`, `references.qmd` | Source-based citations, generated bibliography |
-| `styles/fpt-mse.tex` | Initial LaTeX typography; **not yet visually validated** |
-| `styles/title-pages.tex` | Prepared two-cover layout with four members; **not wired into render** until duplication with Quarto's default title page is resolved |
-| `evidence/` | Provenance register, unresolved data/checkpoint requirements |
-| `figures/` | Future source-backed diagrams and plots |
-| `FPT_TEMPLATE_CHECKLIST.md` | All findings (F01–F19), grouped for implementation |
-| `scripts/check_scaffold.py` | No-dependency, static structure-only validation |
+Giữ nguyên `docs/report.qmd` của project (nghiên cứu Vehicle Detection, xuất HTML) và các báo cáo/experiment hiện hữu.
 
-## Members (provided by the team)
+## Trọng tâm học thuật
 
-1. Đỗ Hữu Phát — 26MS23351
-2. Trần Trung Hiếu — 26MS23355
-3. Đinh Quốc Bảo — 26MS23350
-4. Trường Trần Quốc — 26MS23361
+Môn **Computer Vision**: xử lý ảnh theo độ sáng, histogram, Gamma, CLAHE, Canny/biên, ROI, ảnh nhỏ, hình học bounding box, độ che khuất, tiền xử lý video, so sánh lỗi trên cùng frame. YOLO26n là công cụ phát hiện để đánh giá các biến đổi ảnh, không phải trọng tâm tối ưu Deep Learning.
 
-These four names and IDs are authoritative for this scaffold. The original FPT template shows six example member slots; do not invent two additional members. Lecturer identity and official course wording are **to be confirmed**.
+Template FPT có chữ *Image and Video Processing*; cần xác nhận tên học phần chính thức, tên giảng viên và định dạng bìa trước khi nộp. Giữ **đúng bốn thành viên** do nhóm cung cấp, không thêm thành viên theo ví dụ sáu người trong template.
 
-## Editing order
-
-1. Confirm course title, lecturer, report title and permission to use a Vietnamese-language report.
-2. Add actual related research to Chapter 2; separate prior literature from explanatory background.
-3. Fill Chapter 3 from pinned preprocessing/evaluation code and data manifests.
-4. Fill Chapter 4 from *existing verified* outputs. Keep batch-32 v0–v3 and matched batch-16 v0/v1/v4 distinct.
-5. Obtain missing sign-model evidence and a genuinely measured two-branch video demo if the final title claims integrated perception.
-6. Finish discussion, limitations, references and figures. Only **then** validate PDF fidelity to the 12-page FPT sample.
-
-## Validation
-
-The only validation intended for this PR is a static source check:
+## Kiểm tra khung (không render)
 
 ```bash
 python reports/mse-traffic-scene/scripts/check_scaffold.py
 ```
 
-**No PDF was rendered for this PR, by request.** When the team authorizes that next phase, prospective command:
+## Xuất PDF về sau — hiện chưa chạy
 
 ```bash
-quarto render reports/mse-traffic-scene --to pdf
+quarto render reports/mse-traffic-scene/report.qmd --to pdf
 ```
 
-PDF generation will require Quarto, a suitable TeX installation and licensed/installed Vietnamese-capable fonts. The current configuration (including `Times New Roman` and header layout) is **provisional**; do not claim visual or compilation parity until a real build, inspection and comparison are performed.
+Cần Quarto, TeX và font Times tương thích tiếng Việt. Cấu hình format PDF hiện mới là dự kiến; hai trang bìa theo FPT, Abstract double spacing, bố cục tiêu đề chương, số trang và khả năng render đều chưa được kiểm chứng trực quan.
 
-## Source policy
+## Quy tắc nguồn
 
-- No automatic train/inference/download during report generation; `execute.enabled=false` in this initial scaffold.
-- No guessed numerical results or screenshots presented as new measurements.
-- Keep cross-references and citations in native Quarto syntax; figures must identify source, dataset, split, run and whether GT or prediction.
-- `docs/report.qmd`, experimental notebooks, `runs/`, and raw checkpoints are outside this PR's scope.
+- Chỉ lấy bảng/đồ thị từ evidence có định danh run, dataset, split và checkpoint.
+- Giữ riêng Study A v0–v3 batch 32 và Study B v0/v1/v4 batch 16.
+- Kết quả biển báo Phát/Hiếu được nhóm cung cấp nhưng còn thiếu artifact độc lập của Hiếu.
+- Chưa được báo cáo FPS/mAP hệ thống ghép khi chưa chạy hai detector thực tế.
+- Không mở sealed final holdout hoặc tự chạy train/inference khi dựng báo cáo.

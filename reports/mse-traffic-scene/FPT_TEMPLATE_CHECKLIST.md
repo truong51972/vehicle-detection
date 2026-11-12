@@ -41,10 +41,10 @@
 - [ ] Discuss image/video geometry, resized box coordinate mapping and actual end-to-end processing cost.
 - [ ] Keep YOLO26n training details limited to reproducibility controls.
 
-## PR boundary
+## PR boundary — single source of truth
 
-- [x] Create isolated `reports/mse-traffic-scene/` source scaffold.
-- [x] Populate four verified member names/IDs.
-- [x] Create five CV-oriented chapter outlines and evidence policy.
-- [x] Prepare bibliography, appendix layout, LaTeX-style draft and future cover file.
-- [ ] **NOT REQUESTED NOW:** render PDF, inspect its typography, finalize contents, conduct experiments or close F01–F19.
+- [x] One standalone `reports/mse-traffic-scene/report.qmd` contains YAML, Abstract, all five chapters, References, Appendices and all four member IDs.
+- [x] Remove the former `index.qmd`, individual chapter/appendix QMDs, `_quarto.yml`, and detached cover/style metadata files.
+- [x] Preserve `references.bib`, evidence source manifest and the 19 review findings.
+- [ ] NOT REQUESTED: fill the full report prose or claim unverified experiments.
+- [ ] NOT REQUESTED: render PDF or visually verify exact FPT cover/abstract/numbering/layout.

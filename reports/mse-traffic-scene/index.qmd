@@ -1,9 +1,0 @@
-# Lời mở đầu {.unnumbered}
-
-**TRẠNG THÁI: KHUNG BÁO CÁO — CHƯA HOÀN THIỆN.**
-
-Báo cáo được tổ chức theo năm chương của FPT MSE template, điều chỉnh nội dung cho học phần **Computer Vision**. Hướng nghiên cứu tập trung vào đặc trưng ảnh và ảnh hưởng của các toán tử xử lý ảnh đến việc phát hiện phương tiện và biển báo.
-
-Chương 1 xác định bài toán; Chương 2 tổng quan công trình nghiên cứu liên quan; Chương 3 trình bày dữ liệu và phương pháp xử lý ảnh; Chương 4 đánh giá kết quả có chứng cứ; Chương 5 tổng kết.
-
-> TODO: Thay lời giới thiệu kỹ thuật này bằng phần mở đầu phù hợp khi hoàn thành nội dung. Thông tin nhóm xem tại `frontmatter/contributors.yml`; trang bìa hai bản theo template xem `styles/title-pages.tex` (chưa kết nối với trình render).

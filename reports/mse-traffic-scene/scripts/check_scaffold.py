@@ -1,68 +1,56 @@
-"""Static checks for the Quarto source scaffold. Does NOT invoke Quarto or render PDF."""
+"""Validate the single report.qmd source scaffold without rendering PDF."""
 
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-REQUIRED = [
-    "_quarto.yml",
-    "index.qmd",
-    "frontmatter/abstract.qmd",
-    "frontmatter/contributors.yml",
-    "chapters/01-introduction.qmd",
-    "chapters/02-literature-review.qmd",
-    "chapters/03-methodology.qmd",
-    "chapters/04-results.qmd",
-    "chapters/05-conclusions.qmd",
-    "references.qmd",
-    "references.bib",
-    "appendices/A-cv-operators.qmd",
-    "appendices/B-experiment-protocol.qmd",
-    "appendices/C-evidence-register.qmd",
-    "styles/fpt-mse.tex",
-    "styles/title-pages.tex",
-    "evidence/manifest.yml",
-    "FPT_TEMPLATE_CHECKLIST.md",
-]
-EXPECTED_MEMBERS = {
+MAIN = ROOT / "report.qmd"
+COMPANIONS = ("references.bib", "evidence/manifest.yml", "FPT_TEMPLATE_CHECKLIST.md", "README.md")
+MEMBERS = {
     "Đỗ Hữu Phát": "26MS23351",
     "Trần Trung Hiếu": "26MS23355",
     "Đinh Quốc Bảo": "26MS23350",
     "Trường Trần Quốc": "26MS23361",
 }
+HEADINGS = (
+    "# Tóm tắt {.unnumbered}",
+    "# Giới thiệu (Introduction)",
+    "# Tổng quan nghiên cứu (Literature Review)",
+    "# Phương pháp (Methodology — Dataset + Algorithms)",
+    "# Kết quả thực nghiệm (Simulation Results)",
+    "# Kết luận (Conclusions)",
+    "# Tài liệu tham khảo {.unnumbered}",
+    "# Tham số và công thức các toán tử xử lý ảnh",
+    "# Giao thức đánh giá, ngưỡng và chi phí",
+    "# Nguồn, artifact và giới hạn tái lập",
+)
 
 
 def main() -> None:
-    missing = [path for path in REQUIRED if not (ROOT / path).is_file()]
-    if missing:
-        raise SystemExit(f"Missing report files: {missing}")
-
-    config = (ROOT / "_quarto.yml").read_text(encoding="utf-8")
-    contributors = (ROOT / "frontmatter/contributors.yml").read_text(encoding="utf-8")
-    cover = (ROOT / "styles/title-pages.tex").read_text(encoding="utf-8")
-    for name, sid in EXPECTED_MEMBERS.items():
-        for path, source in [("_quarto.yml", config), ("contributors.yml", contributors)]:
-            if name not in source:
-                raise SystemExit(f"Missing {name} in {path}")
-        if sid not in contributors or sid not in cover:
-            raise SystemExit(f"Missing ID {sid} in contributor metadata or cover")
-
-    chapter_paths = [f"chapters/0{i}-{suffix}.qmd" for i, suffix in enumerate(
-        ("introduction", "literature-review", "methodology", "results", "conclusions"), 1
-    )]
-    positions = [config.find("    - " + path) for path in chapter_paths]
+    qmds = sorted(ROOT.rglob("*.qmd"))
+    if qmds != [MAIN]:
+        raise SystemExit(f"Expected exactly one report.qmd, found: {qmds}")
+    for relative_path in COMPANIONS:
+        if not (ROOT / relative_path).is_file():
+            raise SystemExit(f"Missing source companion: {relative_path}")
+    source = MAIN.read_text(encoding="utf-8")
+    if not source.startswith("---\n") or "\n---\n" not in source[4:]:
+        raise SystemExit("Missing YAML front matter")
+    yaml_header = source.split("\n---\n", 1)[0]
+    if "  pdf:" not in yaml_header or "documentclass: report" not in yaml_header:
+        raise SystemExit("Expected standalone Quarto PDF report metadata")
+    if "type: book" in source or "    - index.qmd" in source:
+        raise SystemExit("Unexpected Quarto Book configuration")
+    if "enabled: false" not in yaml_header:
+        raise SystemExit("QMD code execution must be disabled in scaffold")
+    for name, student_id in MEMBERS.items():
+        if name not in yaml_header or student_id not in yaml_header:
+            raise SystemExit(f"Missing member or ID: {name} / {student_id}")
+    positions = [source.find(heading) for heading in HEADINGS]
     if any(pos < 0 for pos in positions) or positions != sorted(positions):
-        raise SystemExit("FPT five-chapter ordering is missing or incorrect")
-    if "type: book" not in config or "pdf:" not in config:
-        raise SystemExit("Expected Quarto book and prospective PDF configuration")
-    if "enabled: false" not in config:
-        raise SystemExit("Scaffold must keep executable code disabled")
-    if "Computer Vision" not in (ROOT / "README.md").read_text(encoding="utf-8"):
-        raise SystemExit("CV course emphasis missing from README")
-    for path in chapter_paths:
-        content = (ROOT / path).read_text(encoding="utf-8")
-        if not content.startswith("# "):
-            raise SystemExit(f"Missing primary heading: {path}")
-    print(f"OK — {len(REQUIRED)} required files, 5 chapters, 4 members; no render performed")
+        raise SystemExit("Required sections missing or out of FPT order")
+    if source.count("\n\\appendix\n") != 1:
+        raise SystemExit("Expected exactly one PDF appendix switch")
+    print("OK — one report.qmd, four members, five chapters, references, three appendices. No render performed.")
 
 
 if __name__ == "__main__":
