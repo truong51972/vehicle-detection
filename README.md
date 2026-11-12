@@ -92,6 +92,16 @@ Source auditing and CPU preprocessing benchmarks also default to disabled.
    the provenance index explicitly for new runs/caches; never refresh hashes simply
    to admit a changed artifact.
 
+   New semantically valid cells have status `unindexed` (pending attestation),
+   with absolute descriptive metrics in coverage and their own chart. They are
+   excluded from verified factorial effects, CIs and matched rankings. `stale`
+   means a changed hash or invalid identity, not merely an absent index entry.
+   After opt-in inference, review the live `inspect_matrix` cache validation,
+   export/checkpoint/metadata/NPZ identities, training recipe, split/GT and runtime
+   evidence. Add the reviewed profile and source hashes manually to
+   `configs/comparison_evidence.json` in a reviewable change, then reload the report.
+   The notebook never updates the evidence index automatically.
+
    `ALLOW_INFERENCE=True` separately runs missing cells for `INFERENCE_POLICIES`
    (one compatible profile per call), preserving full export/checkpoint/cache
    validation. It never starts training or re-export, and refuses stale/incomplete
@@ -100,12 +110,27 @@ Source auditing and CPU preprocessing benchmarks also default to disabled.
    all six contrasts of complete, matched 2×2 studies when NPZ statistics and group
    metadata exist. These intervals exclude training seed/checkpoint-selection
    uncertainty and multiple-comparison adjustment. Deltas are percentage points.
-   Fixed-ID cohort plots require validated routing metadata; a missing cohort is
-   unavailable, not AP=0. A qualitative gallery requires compatible box predictions,
+   Saved per-run cohort summaries have their own descriptive, non-paired charts
+   with image support, represented classes and unrecorded GT counts labeled.
+   Fixed-ID cohort comparisons still require validated routing metadata and paired
+   statistics; a missing/unsupported cohort is N/A, not AP=0.
+   A qualitative gallery requires compatible box predictions,
    GT and fixed development pixels, absent from the published report inputs.
-   `MEASURE_PREPROCESS_COST=True` requires validated Raw JPEG95 exports and measures
-   CPU routing/operators separately. Native GPU timings exclude that policy cost;
-   they are never summed into an unmeasured end-to-end latency.
+   `MEASURE_PREPROCESS_COST=True` measures v0–v3 CPU routing/operators;
+   `MEASURE_V4_PREPROCESS_COST=True` independently enables v4. Both need only a
+   validated Raw development JPEG95 export, with no detector/profile preflight.
+   Records include sampling seed/count/repeats/ID hash, proxy run, OpenCV version,
+   CPU/platform and thread count plus mean/p50/p95. Native GPU timings exclude
+   that policy cost; they are never summed into unmeasured end-to-end latency.
+
+   `EXPORT_REPORT=True` writes PNGs, CSV tables and a provenance/settings/source-hash
+   manifest into a **new** directory under `reports/comparison/`. Its generated
+   `README.md` embeds the PNGs for GitHub viewing when published. Choose a new
+   `REPORT_DIR` for each snapshot; raw experiment artifacts and existing reports
+   cannot be overwritten. Export is off by default and never rewrites notebook
+   outputs or the evidence index.
+   See the [generated development snapshot](reports/comparison/published-v0-v4/README.md)
+   for the published figures, CSVs and provenance manifest (bootstrap and CPU timing off).
 
 ```sh
 uv sync --locked --extra study

@@ -243,7 +243,12 @@ patch.object(experiment_data, "prepare_data", side_effect=AssertionError("Export
 
     # Exercise both off-diagonal YOLO.val paths on the same tiny synthetic
     # development images. This is a CPU contract test, not scientific evidence.
-    from vehicle_detection.comparison import compare_policies, evaluate_matrix
+    from vehicle_detection.comparison import (
+        compare_policies,
+        evaluate_matrix,
+        inspect_report,
+        result_table,
+    )
 
     matrix = evaluate_matrix(
         root,
@@ -264,3 +269,43 @@ patch.object(experiment_data, "prepare_data", side_effect=AssertionError("Export
     assert ci["v3"]["contrasts"]["joint_pipeline"]["valid_draws"] > 1
     cached = evaluate_matrix(root, policies=("v3",), allow_inference=False)
     assert {row["status"] for row in cached["rows"]} == {"cached"}
+
+    # Newly evaluated native cells remain visible but cannot enter report effects
+    # until an explicit review attests their identities, split and runtime.
+    from vehicle_detection.common import write_json
+
+    pending = inspect_report(root)
+    overview = result_table(pending).set_index(["model", "input"])
+    assert overview.loc[("v0", "v3"), "status"] == "unindexed"
+    assert overview.loc[("v0", "v3"), "mAP50_95_pct"] == pytest.approx(
+        matrix["results"]["v0/v3"]["overall"]["mAP50_95"] * 100
+    )
+    assert set(pending["unindexed"]) == {"v0/v3", "v3/v0"}
+    assert compare_policies(pending, bootstrap_resamples=2)[0].empty
+    index_path = root / "configs/comparison_evidence.json"
+    assert not index_path.exists()
+    shared = yaml.safe_load((root / "configs/data.yaml").read_text())
+    index = {"runs": {}, "artifacts": {}}
+    for version in ("v0", "v3"):
+        ctx = pending["contexts"][version]
+        index["runs"][ctx["run_id"]] = {
+            "profile": "synthetic-cpu",
+            "runtime": "synthetic native CPU contract test",
+            "source": "test fixture; never scientific evidence",
+            "splits_sha256": shared["splits_sha256"],
+        }
+        for name in (
+            "config.yaml",
+            "train/complete.json",
+            "eval/metrics.json",
+            "data/metadata.csv",
+        ):
+            path = ctx["run"] / name
+            index["artifacts"][path.relative_to(root).as_posix()] = file_hash(path)
+    for key in pending["unindexed"]:
+        path = pending["paths"][key] / "metrics.json"
+        index["artifacts"][path.relative_to(root).as_posix()] = file_hash(path)
+    write_json(index_path, index)
+    reviewed = inspect_report(root)
+    assert not reviewed["unindexed"]
+    assert len(compare_policies(reviewed)[0]) == 6

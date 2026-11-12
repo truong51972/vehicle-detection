@@ -23,6 +23,7 @@ STATUS_COLORS = {
     "blocked": "#f4d49b",
     "stale": "#e8a1a1",
     "incomplete": "#d0b6dd",
+    "unindexed": "#a9bfdc",
 }
 
 
@@ -55,7 +56,8 @@ def plot_coverage(report):
     for row in report["rows"]:
         y, x = VERSIONS.index(row["model"]), VERSIONS.index(row["input"])
         grid[y, x] = statuses.index(row["status"])
-        result = report["results"].get(f"{row['model']}/{row['input']}")
+        key = f"{row['model']}/{row['input']}"
+        result = report["results"].get(key) or report.get("unindexed", {}).get(key)
         value = f"\n{result['overall']['mAP50_95'] * 100:.3f}%" if result else ""
         ax.text(x, y, row["status"] + value, ha="center", va="center", fontsize=9)
     ax.imshow(
@@ -131,6 +133,79 @@ def plot_overall(report):
         report,
         [k for s in studies for k in s["keys"]],
         "Baseline bars are gray. Percentages and percentage-point changes are distinct.",
+    )
+
+
+def plot_unindexed(report):
+    """Absolute pending results, never baseline deltas or verified rankings."""
+    pending = dict(report.get("unindexed", {}))
+    pending.update(
+        {
+            f"{r['model']}/{r['input']}": report["results"][f"{r['model']}/{r['input']}"]
+            for r in report["rows"]
+            if r["status"] == "unindexed" and f"{r['model']}/{r['input']}" in report["results"]
+        }
+    )
+    fig, axes = plt.subplots(1, 4, figsize=(18, max(3.5, len(pending) * 0.4)))
+    for ax, metric in zip(axes, METRICS, strict=True):
+        if not pending:
+            _unavailable(ax, "No results pending attestation")
+            continue
+        ax.barh(list(pending), [r["overall"][metric] * 100 for r in pending.values()])
+        ax.set(xlabel=f"{metric} (%)", title=metric, xlim=(0, 100))
+    fig.suptitle("Unindexed / pending attestation · descriptive only · no matched treatment effect")
+    return _note(
+        fig,
+        report,
+        pending,
+        "Identity/hash review required before factorial effects, CIs or matched rankings.",
+    )
+
+
+def plot_saved_cohorts(report, frame):
+    keys = list(frame.pair.unique()) if not frame.empty else []
+    fig, axes = plt.subplots(
+        max(1, (len(keys) + 1) // 2),
+        2,
+        figsize=(14, max(4, (len(keys) + 1) // 2 * 3.5)),
+        squeeze=False,
+    )
+    for ax in axes.flat:
+        ax.set_axis_off()
+    if not keys:
+        _unavailable(axes[0, 0], "Saved descriptive cohort summaries unavailable")
+    for ax, key in zip(axes.flat, keys, strict=False):
+        ax.set_axis_on()
+        group = frame.loc[frame.pair == key]
+        ax.bar(range(len(group)), group.mAP50_95_pct, color="#4e91a8")
+        for x, row in enumerate(group.itertuples()):
+            value = row.mAP50_95_pct
+            support = f"n={row.images:g}" if np.isfinite(row.images) else "n=N/A"
+            gt = f"GT={row.gt_instances:g}" if np.isfinite(row.gt_instances) else "GT unrecorded"
+            label = f"{value:.2f}%" if np.isfinite(value) else "N/A"
+            ax.text(
+                x,
+                value + 1 if np.isfinite(value) else 1,
+                f"{label}\n{support}\n{gt}\nclasses={row.represented_classes}",
+                ha="center",
+                fontsize=8,
+            )
+        maximum = group.mAP50_95_pct.max()
+        ax.set(
+            title=f"{key} · {group.profile.iloc[0]}",
+            ylabel="Saved mAP50:95 (%)",
+            xticks=range(len(group)),
+            xticklabels=group.cohort,
+            xlim=(-0.6, len(group) - 0.4),
+            ylim=(0, max(40, maximum + 20) if np.isfinite(maximum) else 40),
+        )
+    fig.suptitle("Saved within-run cohorts · descriptive, non-paired, not causal")
+    return _note(
+        fig,
+        report,
+        keys,
+        "No paired membership/GT claim. Missing or unsupported cohorts are N/A; "
+        "GT-instance counts may be unrecorded.",
     )
 
 
@@ -402,23 +477,32 @@ def plot_cost(report, histories, cpu_cost=None):
         )
         ax.legend(fontsize=8)
         ax = axes[row, 2]
-        if cpu_cost is None or cpu_cost.empty:
+        policies = {k.split("/")[0] for k in keys}
+        cost = (
+            cpu_cost.loc[cpu_cost.policy.isin(policies)]
+            if cpu_cost is not None and not cpu_cost.empty
+            else None
+        )
+        if cost is None or cost.empty:
             _unavailable(
                 ax,
-                "CPU policy mean/p50/p95 unavailable. Optional benchmark needs "
-                "exported development Raw JPEG proxies. Offline preparation is not "
+                (
+                    "v4 policy cost unavailable. Enable MEASURE_V4_PREPROCESS_COST. "
+                    if "v4" in policies
+                    else "CPU policy mean/p50/p95 unavailable. "
+                )
+                + "Optional benchmark needs validated Raw development JPEG proxies. "
+                "Offline preparation is not "
                 "online latency.",
             )
-        elif row == 0:
-            cpu_cost.set_index("policy")[["mean_ms", "p50_ms", "p95_ms"]].plot.barh(ax=ax)
+        else:
+            cost.set_index("policy")[["mean_ms", "p50_ms", "p95_ms"]].plot.barh(ax=ax)
             ax.set(
                 xlabel="CPU policy ms/image · separate benchmark",
                 title="Raw JPEG95 proxy; one OpenCV thread",
             )
-        else:
-            _unavailable(ax, "CPU benchmark displayed once; do not add to native GPU timings.")
         runtime = report["contexts"][study["baseline"].split("/")[0]]["runtime"]
-        axes[row, 0].text(0, -0.22, fill(runtime, 60), transform=axes[row, 0].transAxes, fontsize=7)
+        axes[row, 0].text(0, -0.35, fill(runtime, 60), transform=axes[row, 0].transAxes, fontsize=7)
     fig.suptitle("Accuracy / documented costs · compare within runtime and evaluation profile only")
     return _note(
         fig,
@@ -427,3 +511,70 @@ def plot_cost(report, histories, cpu_cost=None):
         "Native timings exclude external policy; no summed end-to-end latency. Timing "
         "order/cache/thermal effects uncontrolled; no speedup claim.",
     )
+
+
+def export_report(report, directory, *, figures, tables, settings):
+    """Opt-in PNG/CSV bundle; refuse existing destinations or experimental paths."""
+    import re
+    from datetime import UTC, datetime
+    from pathlib import Path
+
+    from .common import file_hash, relative, write_json
+
+    directory = Path(directory).resolve()
+    derived = (report["root"] / "reports/comparison").resolve()
+    if not directory.is_relative_to(derived):
+        raise ValueError("Export only to a dedicated directory under reports/comparison/")
+    if any(not re.fullmatch(r"[a-z0-9_]+", name) for name in (*figures, *tables)):
+        raise ValueError("Use simple lowercase artifact names")
+    if directory.exists():
+        raise FileExistsError("Report destination already exists; choose a new directory")
+    sources = {}
+    for folder in report["paths"].values():
+        for name in ("metrics.json", "paired_stats.npz"):
+            path = folder / name
+            if path.is_file():
+                sources[relative(path, report["root"])] = file_hash(path)
+    for ctx in report["contexts"].values():
+        for name in ("config.yaml", "train/complete.json", "train/args.yaml", "train/results.csv"):
+            path = ctx["run"] / name
+            if path.is_file():
+                sources[relative(path, report["root"])] = file_hash(path)
+    for name in ("data.yaml", "splits.csv.gz", "comparison_evidence.json"):
+        path = report["root"] / "configs" / name
+        if path.is_file():
+            sources[relative(path, report["root"])] = file_hash(path)
+    directory.mkdir(parents=True)
+    readme = [
+        "# Generated development comparison\n",
+        "See manifest.json for run IDs, profiles, checkpoint/source hashes, status and settings. "
+        "Saved cohorts and pending evidence are descriptive, non-paired and not causal. "
+        "External CPU timings are separate from native GPU timings. Final holdout sealed.\n",
+    ]
+    for name, figure in figures.items():
+        figure.savefig(directory / f"{name}.png", dpi=120)
+        readme.append(f"\n## {name.replace('_', ' ')}\n\n![{name}]({name}.png)\n")
+    for name, table in tables.items():
+        table.to_csv(directory / f"{name}.csv", index=False)
+        readme.append(f"\n[{name}]({name}.csv)\n")
+    (directory / "README.md").write_text("\n".join(readme))
+    manifest = {
+        "generated_at": datetime.now(UTC).isoformat(),
+        "split": "development_validation",
+        "final_test_accessed": False,
+        "settings": settings,
+        "provenance": report["provenance"],
+        "coverage": report["rows"],
+        "sources_sha256": sources,
+        "cells": {
+            key: {
+                "inputs": result["inputs"],
+                "pending_attestation": key in report.get("unindexed", {})
+                or not report["contexts"][key.split("/")[0]].get("verified", False),
+            }
+            for key, result in {**report["results"], **report.get("unindexed", {})}.items()
+        },
+        "artifacts_sha256": {p.name: file_hash(p) for p in sorted(directory.iterdir())},
+    }
+    write_json(directory / "manifest.json", manifest)
+    return directory

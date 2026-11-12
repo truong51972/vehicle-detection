@@ -481,3 +481,180 @@ def test_fixed_cohort_membership_gt_support_and_changed_gt(tmp_path):
     np.savez_compressed(report["paths"]["v0/v1"] / "paired_stats.npz", **arrays)
     with pytest.raises(ValueError, match="ground truth changed"):
         policy_cohorts(report, policy="v1")
+
+
+def test_saved_cohorts_survive_archive_only_without_claiming_paired_evidence(report_archive):
+    import matplotlib
+
+    matplotlib.use("Agg", force=True)
+    import matplotlib.pyplot as plt
+
+    from vehicle_detection.comparison import inspect_report, policy_cohorts, saved_cohorts
+    from vehicle_detection.comparison_plots import plot_saved_cohorts
+
+    report = inspect_report(report_archive)
+    frame = saved_cohorts(report)
+    assert len(frame) == 24
+    v4 = frame.loc[frame.pair == "v4/v4"].set_index("cohort")
+    assert v4.loc["dark", "images"] == 3307
+    assert v4.loc["apply", "images"] == 13750
+    assert v4.loc["dark", "mAP50_95_pct"] == pytest.approx(22.6386043661)
+    assert np.isnan(v4.loc["dark", "gt_instances"])
+    raw_skip = frame.loc[(frame.pair == "v0/v0") & (frame.cohort == "skip")].iloc[0]
+    assert np.isnan(raw_skip.mAP50_95_pct)
+    assert policy_cohorts(report, policy="v4").empty
+    # An empty class population must not turn a stored zero into an AP estimate.
+    report["results"]["v4/v4"]["cohorts"]["skip"] = {
+        "images": 0,
+        "classes": {},
+        "mAP50_95": 0,
+    }
+    frame = saved_cohorts(report)
+    assert np.isnan(
+        frame.loc[(frame.pair == "v4/v4") & (frame.cohort == "skip"), "mAP50_95_pct"].iloc[0]
+    )
+    fig = plot_saved_cohorts(report, frame)
+    fig.canvas.draw()
+    assert "non-paired" in fig._suptitle.get_text() and "not causal" in fig._suptitle.get_text()
+    text = " ".join(t.get_text() for ax in fig.axes for t in ax.texts)
+    assert "N/A" in text and "n=3307" in text and "GT unrecorded" in text
+    plt.close(fig)
+
+
+def test_unindexed_cross_is_visible_but_excluded_until_reviewed_attestation(report_archive):
+    import matplotlib
+
+    matplotlib.use("Agg", force=True)
+    import matplotlib.pyplot as plt
+
+    from vehicle_detection.common import file_hash, read_json
+    from vehicle_detection.comparison import (
+        compare_policies,
+        inspect_report,
+        matched_studies,
+        result_table,
+    )
+    from vehicle_detection.comparison_plots import plot_unindexed
+
+    index_path = report_archive / "configs/comparison_evidence.json"
+    index = read_json(index_path)
+    relative_path = "runs/comparisons/v0-2026-11-09__v1-2026-11-09/metrics.json"
+    reviewed_hash = index["artifacts"].pop(relative_path)
+    write_json(index_path, index)
+    before = file_hash(index_path)
+    report = inspect_report(report_archive)
+    table = result_table(report).set_index(["model", "input"])
+    assert table.loc[("v0", "v1"), "status"] == "unindexed"
+    assert table.loc[("v0", "v1"), "mAP50_95_pct"] == pytest.approx(25.7717051518)
+    assert "v0/v1" not in report["results"] and "v0/v1" in report["unindexed"]
+    assert set(compare_policies(report, bootstrap_resamples=2)[0].policy) == {"v2", "v3"}
+    assert "v0/v1" not in matched_studies(report)[0]["keys"]
+    fig = plot_unindexed(report)
+    fig.canvas.draw()
+    assert all("pp" not in ax.get_xlabel() for ax in fig.axes)
+    plt.close(fig)
+    assert file_hash(index_path) == before  # Reading never attests new evidence.
+    index["artifacts"][relative_path] = reviewed_hash
+    write_json(index_path, index)
+    reviewed = inspect_report(report_archive)
+    assert "v0/v1" in reviewed["results"] and not reviewed["unindexed"]
+    assert len(compare_policies(reviewed)[0]) == 18
+    # Invalid evidence is still stale even without an index entry.
+    index["artifacts"].pop(relative_path)
+    write_json(index_path, index)
+    path = report_archive / relative_path
+    payload = read_json(path)
+    payload["inputs"]["checkpoint_sha256"] = "wrong checkpoint"
+    write_json(path, payload)
+    invalid = inspect_report(report_archive)
+    assert "v0/v1" not in invalid["unindexed"]
+    assert (
+        next(r for r in invalid["rows"] if (r["model"], r["input"]) == ("v0", "v1"))["status"]
+        == "stale"
+    )
+
+
+def test_v4_cpu_benchmark_needs_only_raw_export_and_records_measurement_context(
+    project, monkeypatch
+):
+    import cv2
+
+    import vehicle_detection.comparison as comparison
+    from vehicle_detection.experiment_data import load_experiment, prepare_data
+
+    prepare_data(project, "v0", "2026-11-09")
+    run = project / "runs/v0-2026-11-09"
+    config = load_experiment(project, "v4")
+    config["training"]["batch"] = config["evaluation"]["batch"] = 16
+    report = {
+        "root": project,
+        "mode": "report",
+        "contexts": {
+            "v0": {"run": run, "metadata": comparison._metadata(run)},
+            "v4": {"config": config},
+        },
+    }
+    original_verify = comparison.verify_data
+    verified = []
+
+    def verify(root, version, date):
+        verified.append(version)
+        return original_verify(root, version, date)
+
+    monkeypatch.setattr(comparison, "verify_data", verify)
+    threads = cv2.getNumThreads()
+    result = comparison.benchmark_preprocessing(report, policies=("v4",), samples=1, repeats=1)
+    assert verified == ["v0"] and cv2.getNumThreads() == threads
+    row = result.iloc[0]
+    assert row.policy == "v4" and row.samples == row.repeats == 1
+    assert row.mean_ms >= 0 and row.p50_ms <= row.p95_ms
+    assert row.opencv == cv2.__version__ and row.opencv_threads == 1
+    assert row.cpu and row.platform and row.source_run == "v0-2026-11-09"
+    assert row.seed == 2026 and len(row.sample_ids_sha256) == 64
+    assert not (project / "runs/v4-2026-11-09").exists()
+    assert not (run / "train").exists()
+
+
+def test_portable_export_pins_sources_and_refuses_raw_or_existing_paths(report_archive):
+    import matplotlib
+
+    matplotlib.use("Agg", force=True)
+    import matplotlib.pyplot as plt
+
+    from vehicle_detection.common import file_hash, read_json
+    from vehicle_detection.comparison import inspect_report, result_table, saved_cohorts
+    from vehicle_detection.comparison_plots import export_report, plot_coverage
+
+    report = inspect_report(report_archive)
+    before = {p: file_hash(p) for p in report_archive.rglob("*") if p.is_file()}
+    directory = report_archive / "reports/comparison/test-snapshot"
+    figure = plot_coverage(report)
+    export_report(
+        report,
+        directory,
+        figures={"coverage": figure},
+        tables={"coverage": result_table(report), "saved_cohorts": saved_cohorts(report)},
+        settings={"bootstrap_resamples": 0},
+    )
+    plt.close(figure)
+    manifest = read_json(directory / "manifest.json")
+    assert manifest["final_test_accessed"] is False
+    assert manifest["settings"]["bootstrap_resamples"] == 0
+    assert {p["profile"] for p in manifest["provenance"]} == {
+        "historical-batch32",
+        "matched-batch16",
+    }
+    assert (
+        manifest["cells"]["v4/v4"]["inputs"]["checkpoint_sha256"]
+        == report["contexts"]["v4"]["checkpoint_sha256"]
+    )
+    for source, expected in manifest["sources_sha256"].items():
+        assert file_hash(report_archive / source) == expected
+    for artifact, expected in manifest["artifacts_sha256"].items():
+        assert file_hash(directory / artifact) == expected
+    assert "![coverage](coverage.png)" in (directory / "README.md").read_text()
+    assert before == {p: file_hash(p) for p in before}
+    with pytest.raises(FileExistsError, match="already exists"):
+        export_report(report, directory, figures={}, tables={}, settings={})
+    with pytest.raises(ValueError, match="dedicated directory"):
+        export_report(report, report_archive / "runs", figures={}, tables={}, settings={})

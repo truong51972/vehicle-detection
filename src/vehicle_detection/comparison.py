@@ -11,7 +11,7 @@ from zipfile import BadZipFile
 import numpy as np
 import pandas as pd
 
-from .common import file_hash, read_json, relative, write_json
+from .common import digest, file_hash, read_json, relative, write_json
 from .data import FIVE_CLASSES
 from .experiment_data import load_experiment, run_dir, verify_data
 
@@ -308,10 +308,38 @@ def result_table(report):
             "profile": model.get("profile", "live preflight"),
             **{k + "_pct": np.nan for k in metrics},
         }
-        result = report["results"].get(cell_name(row["model"], row["input"]))
+        key = cell_name(row["model"], row["input"])
+        result = report["results"].get(key) or report.get("unindexed", {}).get(key)
         if result:
             item.update({k + "_pct": result["overall"][k] * 100 for k in metrics})
         rows.append(item)
+    return pd.DataFrame(rows)
+
+
+def saved_cohorts(report):
+    """Within-run saved summaries only; counts do not establish paired membership."""
+    rows = []
+    for key, result in report["results"].items():
+        model, inputs = key.split("/")
+        if model != inputs:
+            continue
+        for cohort in ("dark", "bright", "apply", "skip"):
+            saved = result.get("cohorts", {}).get(cohort, {})
+            value = saved.get("mAP50_95")
+            supported = saved.get("images", 0) > 0 and bool(saved.get("classes"))
+            rows.append(
+                {
+                    "pair": key,
+                    "profile": report["contexts"][model]["profile"],
+                    "cohort": cohort,
+                    "images": saved.get("images", np.nan),
+                    "gt_instances": saved.get("gt_instances", np.nan),
+                    "represented_classes": len(saved.get("classes", {})),
+                    "mAP50_95_pct": value * 100
+                    if supported and value is not None and np.isfinite(value)
+                    else np.nan,
+                }
+            )
     return pd.DataFrame(rows)
 
 
@@ -439,13 +467,15 @@ def policy_cohorts(report, *, policy):
     return pd.DataFrame(rows)
 
 
-def benchmark_preprocessing(report, *, samples=128, repeats=3, seed=2026):
+def benchmark_preprocessing(report, *, policies=VERSIONS, samples=128, repeats=3, seed=2026):
     """Optional CPU-only policy timing, using saved Raw JPEGs as proxy inputs.
 
     Excludes image decode, JPEG encoding, disk I/O and the detector. This is not
     an end-to-end deployment benchmark and does not reproduce original-source
     preprocessing bytes. No original/final images are opened here.
     """
+    import os
+    import platform
     import time
 
     import cv2
@@ -455,19 +485,37 @@ def benchmark_preprocessing(report, *, samples=128, repeats=3, seed=2026):
 
     if samples < 1 or repeats < 1:
         raise ValueError("Require positive samples/repeats")
+    if not policies or len(set(policies)) != len(policies) or set(policies) - set(VERSIONS):
+        raise ValueError("Select distinct CPU benchmark policies from v0–v4")
     raw = report["contexts"].get("v0")
     if raw is None:
         return pd.DataFrame()
+    if report.get("mode") == "report":
+        # CPU timing needs only the Raw export, never a compatible detector profile.
+        verify_data(report["root"], "v0", raw["run"].name.removeprefix("v0-"))
     ids = sorted(raw["metadata"].index)
     chosen = np.random.default_rng(seed).choice(ids, min(len(ids), samples), replace=False)
     images = [
         read_image(raw["run"] / "data/images/test" / f"{sample_id}.jpg") for sample_id in chosen
     ]
+    provenance = {
+        "samples": len(images),
+        "repeats": repeats,
+        "seed": seed,
+        "sample_ids_sha256": digest(sorted(chosen.tolist())),
+        "source_run": raw["run"].name,
+        "input_proxy": "Raw JPEG95 development exports",
+        "opencv": cv2.__version__,
+        "opencv_threads": 1,
+        "cpu": platform.processor() or platform.machine(),
+        "cpu_count": os.cpu_count(),
+        "platform": platform.platform(),
+    }
     original_threads = cv2.getNumThreads()
     records = []
     try:
         cv2.setNumThreads(1)
-        for v in VERSIONS:
+        for v in policies:
             ctx = report["contexts"].get(v)
             if ctx is None:
                 continue
@@ -475,8 +523,7 @@ def benchmark_preprocessing(report, *, samples=128, repeats=3, seed=2026):
                 records.append(
                     {
                         "policy": v,
-                        "samples": len(images),
-                        "repeats": repeats,
+                        **provenance,
                         "mean_ms": 0.0,
                         "p50_ms": 0.0,
                         "p95_ms": 0.0,
@@ -496,8 +543,7 @@ def benchmark_preprocessing(report, *, samples=128, repeats=3, seed=2026):
             records.append(
                 {
                     "policy": v,
-                    "samples": len(images),
-                    "repeats": repeats,
+                    **provenance,
                     "mean_ms": float(np.mean(measurements)),
                     "p50_ms": float(np.quantile(measurements, 0.5)),
                     "p95_ms": float(np.quantile(measurements, 0.95)),
@@ -585,6 +631,7 @@ def inspect_report(root, *, run_dates=None):
         "contexts": {},
         "blocked": {},
         "results": {},
+        "unindexed": {},
         "paths": {},
         "rows": [],
         "provenance": [],
@@ -730,8 +777,8 @@ def inspect_report(root, *, run_dates=None):
         key = cell_name(model, inputs)
         detail = ""
         if key in report["results"]:
-            status = "cached"
             ctx = report["contexts"][model]
+            status = "cached" if ctx["verified"] else "unindexed"
             detail = ctx["profile"] + (
                 "; archived protocol" if ctx["verified"] else "; descriptive only"
             )
@@ -751,7 +798,7 @@ def inspect_report(root, *, run_dates=None):
             detail = "; ".join(reason for _, reason in reasons)
         else:
             a, b = (report["contexts"][v] for v in (model, inputs))
-            if not compatible_runs(a, b):
+            if protocol(a["config"]) != protocol(b["config"]):
                 status, detail = (
                     "blocked",
                     "Non-comparable or unverified training/evaluation/runtime profiles",
@@ -774,17 +821,27 @@ def inspect_report(root, *, run_dates=None):
                             "role": "development_validation",
                             "classes": FIVE_CLASSES,
                         }
-                        if not check_index(path):
-                            raise ValueError(
-                                "Unindexed cross-cache; archived metadata identity unavailable"
-                            )
+                        indexed = check_index(path)
+                        metadata_path = b["run"] / "data/metadata.csv"
+                        if metadata_path.is_file() and (
+                            file_hash(metadata_path) != expected["input_metadata_sha256"]
+                        ):
+                            raise ValueError("Cross-cache input metadata identity changed")
                         status, result = read_result(folder, expected)
                         if result is not None:
-                            report["results"][key] = result
+                            if indexed and compatible_runs(a, b):
+                                report["results"][key] = result
+                            else:
+                                status = "unindexed"
+                                report["unindexed"][key] = result
                             report["paths"][key] = folder
                     else:
                         status, _ = read_result(folder, {})
                     detail = relative(folder, root)
+                    if status == "unindexed":
+                        detail += (
+                            "; pending attestation; descriptive only, excluded from effects/CI"
+                        )
                 except (ValueError, KeyError, TypeError, OSError, EOFError, BadZipFile) as exc:
                     status, detail = "stale", str(exc)
         report["rows"].append({"model": model, "input": inputs, "status": status, "detail": detail})
