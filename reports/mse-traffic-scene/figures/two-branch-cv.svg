@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="480" viewBox="0 0 1200 480" role="img" aria-label="Sơ đồ CV gồm một nguồn video, hai nhánh phát hiện độc lập và bước hợp nhất tọa độ đề xuất">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#64748B"/></marker></defs>
+<rect width="1200" height="480" fill="#F8FAFC"/>
+<text x="42" y="48" font-family="DejaVu Sans,Arial" font-size="24" font-weight="700" fill="#172C3C">Computer Vision: hai nhánh trên cùng khung hình</text>
+<text x="42" y="76" font-family="DejaVu Sans,Arial" font-size="15" fill="#64748B">Sơ đồ kiến trúc đề xuất — không phải kết quả đã chạy và đo FPS</text>
+<rect x="40" y="200" width="200" height="88" rx="16" fill="#FFFFFF" stroke="#172C3C" stroke-width="2.6"/><rect x="48" y="208" width="7" height="72" rx="3" fill="#172C3C"/><text x="62" y="234" font-family="DejaVu Sans,Arial,sans-serif" font-size="19" font-weight="700" fill="#172C3C">Frame / Video</text><text x="62" y="260" font-family="DejaVu Sans,Arial,sans-serif" font-size="14" fill="#64748B">W × H, frame ID</text>
+<rect x="298" y="115" width="252" height="95" rx="16" fill="#FFFFFF" stroke="#1D4ED8" stroke-width="2.6"/><rect x="306" y="123" width="7" height="79" rx="3" fill="#1D4ED8"/><text x="320" y="149" font-family="DejaVu Sans,Arial,sans-serif" font-size="19" font-weight="700" fill="#172C3C">Xử lý ảnh phương tiện</text><text x="320" y="175" font-family="DejaVu Sans,Arial,sans-serif" font-size="14" fill="#64748B">v0–v4: ánh sáng, biên</text>
+<rect x="298" y="288" width="252" height="95" rx="16" fill="#FFFFFF" stroke="#0D9488" stroke-width="2.6"/><rect x="306" y="296" width="7" height="79" rx="3" fill="#0D9488"/><text x="320" y="322" font-family="DejaVu Sans,Arial,sans-serif" font-size="19" font-weight="700" fill="#172C3C">Xử lý ảnh biển báo</text><text x="320" y="348" font-family="DejaVu Sans,Arial,sans-serif" font-size="14" fill="#64748B">resize / data policy</text>
+<rect x="612" y="115" width="220" height="95" rx="16" fill="#FFFFFF" stroke="#1D4ED8" stroke-width="2.6"/><rect x="620" y="123" width="7" height="79" rx="3" fill="#1D4ED8"/><text x="634" y="149" font-family="DejaVu Sans,Arial,sans-serif" font-size="19" font-weight="700" fill="#172C3C">Vehicle detector</text><text x="634" y="175" font-family="DejaVu Sans,Arial,sans-serif" font-size="14" fill="#64748B">5 lớp, bbox, score</text>
+<rect x="612" y="288" width="220" height="95" rx="16" fill="#FFFFFF" stroke="#0D9488" stroke-width="2.6"/><rect x="620" y="296" width="7" height="79" rx="3" fill="#0D9488"/><text x="634" y="322" font-family="DejaVu Sans,Arial,sans-serif" font-size="19" font-weight="700" fill="#172C3C">Traffic-sign detector</text><text x="634" y="348" font-family="DejaVu Sans,Arial,sans-serif" font-size="14" fill="#64748B">6 lớp, bbox, score</text>
+<rect x="902" y="200" width="250" height="96" rx="16" fill="#FFFFFF" stroke="#C65A11" stroke-width="2.6"/><rect x="910" y="208" width="7" height="80" rx="3" fill="#C65A11"/><text x="924" y="234" font-family="DejaVu Sans,Arial,sans-serif" font-size="19" font-weight="700" fill="#172C3C">Hợp nhất tọa độ</text><text x="924" y="260" font-family="DejaVu Sans,Arial,sans-serif" font-size="14" fill="#64748B">Cùng frame gốc, overlay</text>
+<g stroke="#64748B" stroke-width="2.6" fill="none" marker-end="url(#arrow)">
+<path d="M240 244H268V162H292"/><path d="M240 244H268V335H292"/>
+<path d="M550 162H606"/><path d="M550 335H606"/>
+<path d="M832 162H865V238H896"/><path d="M832 335H865V257H896"/>
+</g>
+<text x="40" y="437" font-family="DejaVu Sans,Arial" font-size="14" fill="#64748B">Tách 2 hệ nhãn: car/truck/bus/motorcycle/bicycle và 6 loại biển báo. Không cộng mAP giữa 2 dataset.</text>
+</svg>
