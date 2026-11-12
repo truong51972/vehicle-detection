@@ -32,6 +32,10 @@ it streams to an intermediate MPEG-4 MP4 and converts it to H.264/yuv420p with
 FFmpeg. An unavailable encoder or failed conversion produces an error rather than
 offering an unplayable download.
 
+FFmpeg conversion has a separate default timeout of **600 seconds**. On slower
+CPUs or with larger clips, raise it at launch, for example `--encoding-timeout 1800`.
+A timeout names this option in its error and removes partial files.
+
 ## Workflow
 
 1. Upload an MP4, MOV or AVI video.
@@ -91,9 +95,11 @@ video frames are decoded, inferred and written incrementally.
 Defaults are 200 MiB/upload, 120 seconds, 7,200 frames, and 8,294,400 pixels/frame.
 Change them with `--max-mb`, `--max-seconds`, `--max-frames`, `--max-pixels` (positive
 integers). The service checks metadata before processing and enforces decoded
-frame/duration/pixel limits as well. Invalid/missing FPS falls back to 30 with an
-explicit report warning; duration is then an estimate. Frame count metadata may
-be absent, in which case progress shows processed frames without a percentage.
+frame/duration/pixel limits as well. Upload paths, type, size, output paths, device
+and video metadata are validated before loading the detector. Invalid/missing FPS
+falls back to 30 with an explicit report warning; duration is then an estimate.
+Frame count metadata may be absent, in which case progress shows processed frames
+without a percentage.
 A stream ending substantially before its declared frame count is rejected.
 
 H.264/yuv420p requires even width and height; odd-size inputs are rejected with
@@ -117,9 +123,15 @@ leave system temporary files for OS cleanup.
 # Lightweight pipeline, registry, limits and error tests, without a model/GPU.
 uv run --locked pytest -q tests/test_inference.py
 
-# Also exercise UI wiring when Gradio is installed.
+# Exercise UI wiring and real H.264 encode/decode (requires FFmpeg/ffprobe).
 UV_PROJECT_ENVIRONMENT=.venv-demo uv run --locked --extra demo pytest -q tests/test_inference.py
 ```
+
+The separate `demo-smoke` CI job installs only the `demo` extra and FFmpeg, rejects
+any skipped demo test, and checks runtime imports/app construction. Its CPU-only
+synthetic MP4 tests exercise real video IO and H.264 conversion, verify yuv420p,
+frame count, dimensions and FPS with ffprobe and full decode, and pass the output
+through the Gradio video component. They stub only the detector; no GPU is needed.
 
 Use a short local clip to check `model=v0, preprocessing=v0`, then
 `model=v0, preprocessing=v3`. Both should preserve frame count/FPS/dimensions;

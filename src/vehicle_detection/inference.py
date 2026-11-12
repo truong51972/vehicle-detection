@@ -50,6 +50,7 @@ class VideoLimits:
     max_seconds: int = 120
     max_pixels: int = 3840 * 2160
     max_frames: int = 7200
+    encoding_timeout_seconds: int = 600
 
     def __post_init__(self):
         if any(type(value) is not int or value <= 0 for value in vars(self).values()):
@@ -183,7 +184,16 @@ def open_writer(path, fps, size):
     raise ValueError("Cannot open an MP4 encoder; install OpenCV video codecs and FFmpeg")
 
 
-def finish_video(intermediate, output, codec, frames, size, fps):
+def finish_video(
+    intermediate,
+    output,
+    codec,
+    frames,
+    size,
+    fps,
+    *,
+    timeout=DEFAULT_LIMITS.encoding_timeout_seconds,
+):
     if codec == "avc1":
         intermediate.replace(output)
     else:
@@ -208,8 +218,13 @@ def finish_video(intermediate, output, codec, frames, size, fps):
                 ],
                 check=True,
                 capture_output=True,
-                timeout=120,
+                timeout=timeout,
             )
+        except subprocess.TimeoutExpired as exc:
+            raise ValueError(
+                f"FFmpeg conversion exceeded {timeout} seconds; "
+                "increase --encoding-timeout for this CPU/video"
+            ) from exc
         except (OSError, subprocess.SubprocessError) as exc:
             detail = (getattr(exc, "stderr", b"") or b"").decode(errors="replace")[-1000:]
             raise ValueError(
@@ -251,11 +266,6 @@ def infer_video(
         raise ValueError(entry.error or "Select an available model version")
     if not math.isfinite(confidence) or not 0 <= confidence <= 1:
         raise ValueError("Confidence must be in [0, 1]")
-    validate_device(device)
-    if file_hash(entry.checkpoint) != entry.sha256:
-        raise ValueError("Checkpoint changed since startup; restart to validate the registry")
-    model = load_detector(entry.checkpoint)
-    model_load_seconds = perf_counter() - start
     source, output = Path(source), Path(output)
     if source.suffix.lower() not in {".mp4", ".mov", ".avi"} or not source.is_file():
         raise ValueError("Upload a local MP4, MOV or AVI file")
@@ -266,6 +276,7 @@ def infer_video(
     intermediate = output.with_name(output.stem + ".encoding.mp4")
     if intermediate.exists() or intermediate.resolve() == source.resolve():
         raise ValueError("Intermediate output already exists; use a fresh output directory")
+    validate_device(device)
     capture = cv2.VideoCapture(str(source))
     writer = None
     timings = {
@@ -292,6 +303,11 @@ def infer_video(
         height = capture.get(cv2.CAP_PROP_FRAME_HEIGHT)
         if width * height > limits.max_pixels:
             raise ValueError(f"Video exceeds the {limits.max_pixels} pixel frame limit")
+        loading_at = perf_counter()
+        if file_hash(entry.checkpoint) != entry.sha256:
+            raise ValueError("Checkpoint changed since startup; restart to validate the registry")
+        model = load_detector(entry.checkpoint)
+        model_load_seconds = perf_counter() - loading_at
         while True:
             if cancelled is not None and cancelled():
                 raise ValueError("Inference cancelled; partial output removed")
@@ -337,7 +353,15 @@ def infer_video(
         writer = None
         if cancelled is not None and cancelled():
             raise ValueError("Inference cancelled; partial output removed")
-        finish_video(intermediate, output, codec, frames, size, fps)
+        finish_video(
+            intermediate,
+            output,
+            codec,
+            frames,
+            size,
+            fps,
+            timeout=limits.encoding_timeout_seconds,
+        )
         if cancelled is not None and cancelled():
             raise ValueError("Inference cancelled; partial output removed")
         final_encoding_seconds = perf_counter() - encoding_at

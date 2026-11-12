@@ -1,11 +1,13 @@
-"""Demo contracts with lightweight detectors and incremental video IO stubs."""
+"""Demo contracts with detector stubs and both simulated and real video IO."""
 
 import json
 import runpy
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import Mock
 
 import cv2
 import numpy as np
@@ -16,6 +18,7 @@ from vehicle_detection import inference
 from vehicle_detection.common import file_hash
 from vehicle_detection.data import FIVE_CLASSES
 from vehicle_detection.experiment_data import config_path, load_experiment
+from vehicle_detection.inference import finish_video
 from vehicle_detection.preprocess import apply_recipe
 
 REPO = Path(__file__).resolve().parents[1]
@@ -178,7 +181,7 @@ def video_job(registry_root, tmp_path, monkeypatch):
 
     capture = Capture()
     monkeypatch.setattr(inference.cv2, "VideoCapture", lambda path: capture)
-    writer = SimpleNamespace(written=0, released=False)
+    writer = SimpleNamespace(written=0, released=False, codec="avc1")
 
     def write(frame):
         # A frame must be written before the next one is decoded.
@@ -193,10 +196,12 @@ def video_job(registry_root, tmp_path, monkeypatch):
     def open_writer(path, fps, size):
         path.write_bytes(b"partial encoded video")
         assert fps > 0 and size == (80, 64)
-        return writer, "avc1"
+        return writer, writer.codec
 
     monkeypatch.setattr(inference, "open_writer", open_writer)
-    monkeypatch.setattr(inference, "finish_video", lambda src, dst, *args: src.replace(dst))
+    monkeypatch.setattr(
+        inference, "finish_video", lambda src, dst, *args, **kwargs: src.replace(dst)
+    )
     return SimpleNamespace(
         source=source, output=output, entry=entry, model=model, capture=capture, writer=writer
     )
@@ -277,6 +282,7 @@ def test_checkpoint_changes_and_existing_outputs_rejected(video_job):
     with pytest.raises(ValueError, match="new .mp4"):
         inference.infer_video(job.source, job.output, job.entry, load_experiment(REPO, "v0"))
     assert job.output.read_bytes() == b"keep existing output"
+    job.output.unlink()
     job.entry.checkpoint.write_bytes(b"changed")
     with pytest.raises(ValueError, match="Checkpoint changed"):
         inference.infer_video(job.source, job.output, job.entry, load_experiment(REPO, "v0"))
@@ -316,20 +322,49 @@ def test_gpu_unavailable_and_invalid_limits(monkeypatch):
         inference.validate_device("0")
     with pytest.raises(ValueError, match="positive integers"):
         inference.VideoLimits(max_seconds=0)
+    with pytest.raises(ValueError, match="positive integers"):
+        inference.VideoLimits(encoding_timeout_seconds=0)
 
 
-@pytest.mark.parametrize("failure", ["suffix", "empty", "size", "confidence", "pixels"])
-def test_video_input_boundaries(video_job, failure):
+@pytest.mark.parametrize(
+    "failure",
+    [
+        "suffix",
+        "missing",
+        "empty",
+        "size",
+        "confidence",
+        "pixels",
+        "output",
+        "output_suffix",
+        "intermediate",
+        "duration",
+        "device",
+    ],
+)
+def test_video_input_boundaries(video_job, monkeypatch, failure):
     job = video_job
+    loader = Mock(side_effect=AssertionError("Detector loaded for an invalid upload"))
+    monkeypatch.setattr(inference, "load_detector", loader)
     confidence = float("nan") if failure == "confidence" else 0.25
     limits = inference.VideoLimits(max_pixels=100 if failure == "pixels" else 80 * 64)
     if failure == "suffix":
         job.source = job.source.rename(job.source.with_suffix(".txt"))
+    elif failure == "missing":
+        job.source.unlink()
     elif failure == "empty":
         job.source.write_bytes(b"")
     elif failure == "size":
         with job.source.open("wb") as stream:
             stream.truncate(201 * 1024**2)
+    elif failure == "output":
+        job.output.write_bytes(b"keep")
+    elif failure == "output_suffix":
+        job.output = job.output.with_suffix(".avi")
+    elif failure == "intermediate":
+        job.output.with_suffix(".encoding.mp4").write_bytes(b"keep")
+    elif failure == "duration":
+        job.capture.declared = 7201
     with pytest.raises(ValueError):
         inference.infer_video(
             job.source,
@@ -338,14 +373,16 @@ def test_video_input_boundaries(video_job, failure):
             load_experiment(REPO, "v0"),
             confidence=confidence,
             limits=limits,
+            device="invalid" if failure == "device" else "cpu",
         )
-    assert not job.model.inputs and not job.output.exists()
+    loader.assert_not_called()
+    assert job.output.exists() == (failure == "output")
 
 
 def test_conversion_failure_removes_partial_files(video_job, monkeypatch):
     job = video_job
 
-    def failed(src, dst, *args):
+    def failed(src, dst, *args, **kwargs):
         dst.write_bytes(b"partial conversion")
         raise ValueError("FFmpeg conversion failed")
 
@@ -354,6 +391,119 @@ def test_conversion_failure_removes_partial_files(video_job, monkeypatch):
         inference.infer_video(job.source, job.output, job.entry, load_experiment(REPO, "v0"))
     assert job.writer.released and job.capture.released
     assert not job.output.exists() and not job.output.with_suffix(".encoding.mp4").exists()
+
+
+def test_conversion_timeout_can_exceed_two_minutes(tmp_path, monkeypatch):
+    intermediate, output = tmp_path / "encoding.mp4", tmp_path / "out.mp4"
+    intermediate.write_bytes(b"encoded")
+
+    def convert(command, **kwargs):
+        assert kwargs["timeout"] == 900
+        simulated_seconds = 121
+        if kwargs["timeout"] < simulated_seconds:
+            raise subprocess.TimeoutExpired(command, kwargs["timeout"])
+        output.write_bytes(b"converted")
+
+    monkeypatch.setattr(inference.subprocess, "run", convert)
+    monkeypatch.setattr(
+        inference.cv2,
+        "VideoCapture",
+        lambda path: SimpleNamespace(
+            read=lambda: (True, np.zeros((64, 80, 3), np.uint8)),
+            get=lambda prop: {cv2.CAP_PROP_FRAME_COUNT: 3, cv2.CAP_PROP_FPS: 10}[prop],
+            release=lambda: None,
+        ),
+    )
+    finish_video(intermediate, output, "mp4v", 3, (80, 64), 10, timeout=900)
+    assert output.exists() and not intermediate.exists()
+
+
+@pytest.mark.parametrize("failure", ["timeout", "codec"])
+def test_ffmpeg_errors_report_cause_and_clean_up(video_job, monkeypatch, failure):
+    job = video_job
+    job.writer.codec = "mp4v"
+    monkeypatch.setattr(inference, "finish_video", finish_video)
+
+    def convert(command, **kwargs):
+        assert kwargs["timeout"] == 17
+        job.output.write_bytes(b"partial conversion")
+        if failure == "timeout":
+            raise subprocess.TimeoutExpired(command, kwargs["timeout"])
+        raise subprocess.CalledProcessError(1, command, stderr=b"encoder unavailable")
+
+    monkeypatch.setattr(inference.subprocess, "run", convert)
+    message = "17 seconds.*--encoding-timeout" if failure == "timeout" else "encoder unavailable"
+    with pytest.raises(ValueError, match=message):
+        inference.infer_video(
+            job.source,
+            job.output,
+            job.entry,
+            load_experiment(REPO, "v0"),
+            limits=inference.VideoLimits(encoding_timeout_seconds=17),
+        )
+    assert job.capture.released and job.writer.released
+    assert not job.output.exists() and not job.output.with_suffix(".encoding.mp4").exists()
+
+
+@pytest.mark.parametrize("version", ["v0", "v3"])
+def test_real_mp4_is_h264_decodable_and_accepted_by_gradio(registry_root, tmp_path, version):
+    gr = pytest.importorskip("gradio")
+    if not shutil.which("ffmpeg") or not shutil.which("ffprobe"):
+        pytest.skip("Real MP4 smoke test requires FFmpeg and ffprobe")
+    add_run(registry_root)
+    entry = inference.discover_models(registry_root)["v0"]
+    source, output = tmp_path / "source.mp4", tmp_path / "out.mp4"
+    writer = cv2.VideoWriter(str(source), cv2.VideoWriter_fourcc(*"mp4v"), 10, (80, 64))
+    assert writer.isOpened()
+    try:
+        for i in range(4):
+            writer.write(np.full((64, 80, 3), 40 + i, np.uint8))
+    finally:
+        writer.release()
+    summary = inference.infer_video(
+        source, output, entry, load_experiment(REPO, version), device="cpu"
+    )
+    probe = subprocess.run(
+        [
+            "ffprobe",
+            "-v",
+            "error",
+            "-select_streams",
+            "v:0",
+            "-show_entries",
+            "stream=codec_name,pix_fmt,width,height,r_frame_rate,nb_frames",
+            "-of",
+            "json",
+            str(output),
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    stream = json.loads(probe.stdout)["streams"][0]
+    assert stream == {
+        "codec_name": "h264",
+        "pix_fmt": "yuv420p",
+        "width": 80,
+        "height": 64,
+        "r_frame_rate": "10/1",
+        "nb_frames": "4",
+    }
+    capture = cv2.VideoCapture(str(output))
+    decoded = 0
+    try:
+        assert capture.get(cv2.CAP_PROP_FPS) == pytest.approx(10)
+        while True:
+            ok, frame = capture.read()
+            if not ok:
+                break
+            assert frame.shape == (64, 80, 3)
+            decoded += 1
+    finally:
+        capture.release()
+    assert decoded == summary["frames"] == 4
+    video = gr.Video(interactive=False)
+    assert video.postprocess(str(output)).path == str(output)
 
 
 def test_demo_ui_wiring_and_cleanup(registry_root, monkeypatch):

@@ -27,3 +27,32 @@ jobs:
           enable-cache: true
       - run: uv sync --locked --python 3.11 --extra study
       - run: uv run --extra study pytest -q tests/test_comparison.py tests/test_evaluation.py tests/test_notebooks.py
+
+  demo-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.13.6"
+          enable-cache: true
+      - run: sudo apt-get update && sudo apt-get install --yes ffmpeg
+      - run: uv sync --locked --python 3.11 --extra demo
+      - run: uv run --locked --extra demo pytest -q tests/test_inference.py --junitxml=demo-tests.xml
+      - name: Require unskipped demo tests and runtime imports
+        run: |
+          uv run --locked --extra demo python - <<'PY'
+          import xml.etree.ElementTree as ET
+          import gradio
+          import torch
+          from ultralytics import YOLO
+          from apps.gradio_demo import build_app
+          from vehicle_detection.common import project_root
+
+          report = ET.parse("demo-tests.xml")
+          assert list(report.iter("testcase")), "No demo tests ran"
+          assert not list(report.iter("skipped")), "Demo tests must not skip"
+          app = build_app(project_root())
+          app.close()
+          PY

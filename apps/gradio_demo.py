@@ -137,8 +137,13 @@ def main():
     parser.add_argument("--max-seconds", type=int, default=120)
     parser.add_argument("--max-pixels", type=int, default=3840 * 2160)
     parser.add_argument("--max-frames", type=int, default=7200)
+    parser.add_argument(
+        "--encoding-timeout", type=int, default=600, help="FFmpeg timeout in seconds"
+    )
     args = parser.parse_args()
-    limits = VideoLimits(args.max_mb, args.max_seconds, args.max_pixels, args.max_frames)
+    limits = VideoLimits(
+        args.max_mb, args.max_seconds, args.max_pixels, args.max_frames, args.encoding_timeout
+    )
     app = build_app(project_root(), device=args.device, limits=limits)
     app.launch(server_name="127.0.0.1", server_port=args.port, max_file_size=f"{args.max_mb}mb")
 
