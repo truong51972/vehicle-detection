@@ -1,6 +1,6 @@
 {
   "base_commit": "af9e4931d73e49a302f94627cf16fcfcc200c752",
-  "branch": "feat/v4-canny-edge-detection",
+  "branch": "v4",
   "source_repository": "https://github.com/truong51972/vehicle-detection",
   "scope": "v4 sources, notebook lifecycle, tests, local issue documents, native run/checkpoints, two final report editions",
   "v0_v3_sources_unchanged": true,
