@@ -1,0 +1,31 @@
+# Local-only checkpoints. Source revisions and SHA256 identify the reviewed bytes.
+traffic-sign-hieu:
+  label: Hiếu — YOLO26n (832)
+  source_repository: ec2003/VN-traffic-sign-detection
+  source_revision: 1bcf75eebbb3b255f622ade63900cead00abd863
+  source_checkpoint: output/working/runs/detect/train/weights/best.pt
+  checkpoint: weights/external/traffic-sign-hieu.pt
+  sha256: 9e25eab0aa5a3895d5ccf9b37ab730075953c368fd8b57b34f30dd859639150d
+  imgsz: 832
+  task: detect
+  category: traffic-sign
+  preprocessing: native
+  names: &sign_names
+    - No U-turn
+    - No going opposite
+    - No stopping
+    - No waiting
+    - Roundabout ahead
+    - Speed limit 60kmh
+traffic-sign-phat:
+  label: Phát — YOLO26n (640)
+  source_repository: dhphat/traffic-sign-detection
+  source_revision: f3c30d8be4e31404a73e8621d8fb050a62c90e05
+  source_checkpoint: runs/detect/runs/detect/traffic_sign_train/weights/best.pt
+  checkpoint: weights/external/traffic-sign-phat.pt
+  sha256: f42c8c553b266c728883236596fb133624094c68df2159864e447ef2ac0a07ef
+  imgsz: 640
+  task: detect
+  category: traffic-sign
+  preprocessing: native
+  names: *sign_names
