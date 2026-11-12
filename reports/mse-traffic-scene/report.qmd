@@ -68,59 +68,86 @@ Lecturer identity/course wording must be confirmed.
 
 # Tóm tắt {.unnumbered}
 
-> TODO — Viết tóm tắt sau khi hoàn thiện Chương 4. Giới hạn **150 từ** theo template Master's, nêu vấn đề Computer Vision, dữ liệu, các toán tử xử lý ảnh, thiết lập kiểm chứng, kết quả thật sự đo được và giới hạn. Không đưa hình, bảng hoặc kết quả phỏng đoán vào đây.
+Nhận thức cảnh giao thông từ ảnh và video chịu ảnh hưởng của điều kiện chiếu sáng, tương phản, mật độ chi tiết và kích thước đối tượng. Báo cáo khảo sát năm chính sách xử lý ảnh đối với phát hiện năm lớp phương tiện trên BDD100K, đồng thời phân tích hai phương án phát hiện sáu loại biển báo giao thông Việt Nam. Các phép biến đổi Gamma, hiệu chỉnh vùng tối, CLAHE và tăng cường chi tiết có tham chiếu Canny được xem xét cùng kết quả phát hiện, độ ổn định theo lớp và giới hạn đánh giá. Trên nhóm thực nghiệm đối chứng phù hợp, v4 chưa vượt ảnh gốc. Hai nhánh biển báo có dữ liệu và giao thức khác nhau nên cần đối chiếu thận trọng. Việc tích hợp hai nhánh trên cùng video vẫn là hướng triển khai, chưa phải kết quả đã đo.
 
-**Từ khóa (dự kiến):** Computer Vision; phát hiện phương tiện; phát hiện biển báo; Gamma; CLAHE; Canny; YOLO26n.
-
-> LAYOUT TODO: Template yêu cầu lặp tên đề tài ngay phía trên Abstract và khoảng cách dòng gấp đôi. Việc căn chỉnh này cần xác minh khi render; không coi bản QMD hiện tại là đã khớp mẫu.
+**Từ khóa:** thị giác máy tính; xử lý ảnh; phát hiện phương tiện; phát hiện biển báo; Gamma; CLAHE; Canny; YOLO26n.
 
 # Giới thiệu (Introduction)
 
 ## Bối cảnh và động lực
 
-> TODO: Trình bày các thách thức **thị giác máy tính** của cảnh giao thông: ánh sáng không đồng đều, ảnh tối, biên yếu, đối tượng nhỏ, che khuất, nén ảnh và khác biệt bộ dữ liệu. Không dẫn sang hệ thống tự lái/ước lượng khoảng cách nếu đề tài không thực hiện.
+Một khung hình giao thông đồng thời chứa phương tiện, biển báo, vạch đường, vùng nền và các nguồn nhiễu thị giác. Với các hệ thống camera, cùng một đối tượng có thể xuất hiện rất khác nhau giữa ban ngày và ban đêm, trên vùng bị bóng đổ hoặc ánh sáng ngược, khi di chuyển gây nhòe, hay khi kích thước đối tượng chỉ chiếm vài chục pixel. Những biến thiên này tác động trước hết lên **tín hiệu ảnh**: phân bố mức xám, độ tương phản cục bộ, độ sắc nét, mức nhiễu và cấu trúc biên.
 
-## Bài toán và phạm vi
+Nghiên cứu BDD100K cho thấy nhu cầu đánh giá nhận thức giao thông trên nhiều điều kiện cảnh quan, thời tiết và ánh sáng thay vì một tập cảnh đồng nhất [@yu2020bdd100k]. Trong đồ án này, mô hình phát hiện YOLO26n được dùng như **thiết bị đo chức năng**: sau khi thay đổi đầu vào bằng thuật toán Computer Vision, ta kiểm tra xem chất lượng phát hiện bounding box và loại đối tượng có thay đổi hay không. Việc một ảnh trông sáng hoặc sắc nét hơn **không tự động chứng minh** độ chính xác phát hiện cao hơn.
 
-> TODO: Xác định rõ hai nhóm đầu ra: (1) bounding box và lớp phương tiện; (2) bounding box và lớp biển báo. Giữ hai dataset, hai detector và hai hệ nhãn riêng.
+Hai hướng công việc của nhóm được giữ tách biệt về dữ liệu và bằng chứng: phát hiện phương tiện trên BDD100K và phát hiện biển báo giao thông Việt Nam. Trong giai đoạn hiện tại, nhóm có các kết quả đánh giá riêng và một thiết kế giao diện tích hợp chung; chưa có bằng chứng từ việc chạy hai detector trên cùng một video.
 
-## Câu hỏi nghiên cứu
+## Phát biểu bài toán
 
-1. Các phép biến đổi độ sáng, tương phản và biên ảnh ảnh hưởng thế nào tới kết quả phát hiện phương tiện khi so với ảnh gốc trong cùng điều kiện?
-2. Phát hiện biển báo có những sai số nào theo lớp, kích thước đầu vào và số lượng đối tượng chuẩn?
-3. Khi đặt hai detector trên cùng chuỗi khung hình, có thể đo được những gì về hình học, độ trễ và lỗi hệ thống? **Chỉ báo kết quả thực tế nếu demo đã được chạy.**
+Với khung ảnh màu \(I\in\mathbb{R}^{H\times W\times 3}\), một chính sách xử lý ảnh \(T_k\) tạo ảnh \(I_k=T_k(I)\). Detector \(D\) trả về tập dự đoán \(\mathcal{B}=\{(x_1,y_1,x_2,y_2,c,s)\}\), với vị trí hộp, lớp \(c\) và điểm tin cậy \(s\). Câu hỏi không chỉ là chất lượng cảm nhận của \(I_k\), mà là **mối liên hệ giữa biến đổi ảnh và kết quả định vị/phân loại** trên cùng ground truth.
 
-## Mục tiêu và đóng góp
+Nhánh phương tiện khảo sát năm lớp **car, truck, bus, motorcycle, bicycle**, tương ứng với bộ nhãn được giữ lại trong dự án vehicle [@vehicleRepo2026]. Nhánh biển báo dùng sáu lớp riêng trên dữ liệu Vietnamese Traffic Signs Detection v7; cách xây dựng hai hướng biển báo của Đỗ Hữu Phát và Trần Trung Hiếu khác nhau, vì thế cần phân tích cả định nghĩa dữ liệu, phương pháp chuẩn bị ảnh và giao thức kiểm tra [@phatRepo2026; @hieuRepo2026].
 
-> TODO: Phân biệt thuật toán xử lý ảnh, kiểm chứng thực nghiệm, phân tích lỗi, thành phần detection và phần tích hợp đã làm/chưa làm. Không mô tả việc đề xuất là thành tựu triển khai.
+**Phạm vi đo lường:** detection từ ảnh tĩnh; kiểm tra độ nhạy với độ sáng, cấu trúc biên và kích thước ảnh; phân tích chỉ số hộp phát hiện. Báo cáo **không** tuyên bố đã ước lượng khoảng cách theo mét, tracking ổn định, điều khiển phương tiện hay chứng minh tính sẵn sàng triển khai an toàn.
 
-## Bố cục báo cáo
+## Mục tiêu và câu hỏi nghiên cứu
 
-> TODO: Giới thiệu đúng năm chương theo FPT template.
+1. Tìm hiểu đặc trưng ảnh giao thông và cơ chế của Gamma, hiệu chỉnh chiếu sáng cục bộ, CLAHE, Canny; mô tả khi nào phép biến đổi được áp dụng hoặc bị bỏ qua.
+2. Đánh giá ảnh gốc và ảnh xử lý bằng các **đối chứng có cùng giao thức**, nêu rõ tác động lên AP, recall, từng lớp và nhóm ánh sáng.
+3. Đối chiếu hai quy trình biển báo dựa trên đúng artifact của từng repository, tránh đánh đồng kích thước ảnh lúc đánh giá với kích thước lúc huấn luyện.
+4. Đề xuất hợp đồng đầu ra để ghép hai detector vào cùng khung hình, có quy tắc quy đổi tọa độ và kế hoạch đo chi phí xử lý video.
+
+Các câu hỏi nghiên cứu tương ứng là: (RQ1) Xử lý ảnh có cải thiện phát hiện phương tiện trên đối chứng phù hợp không? (RQ2) Dữ liệu/chuẩn bị ảnh và kích thước ảnh có thể giải thích sự khác nhau của hai nhánh biển báo đến mức nào? (RQ3) Điều kiện nào cần thỏa trước khi có thể kết luận về một hệ thống phát hiện tích hợp từ video?
+
+## Đóng góp và giới hạn của đồ án
+
+Đóng góp thực chứng hiện có gồm các chính sách v0–v4, log đánh giá vehicle có lưu định danh model/split, và hai bộ hiện vật phát hiện biển báo do thành viên nhóm cung cấp. Đóng góp phân tích nằm ở việc gắn thay đổi tín hiệu ảnh với **đối chứng định lượng** thay vì chỉ so sánh hình ảnh trước–sau. Đóng góp kiến trúc về tích hợp hai nhánh hiện là **thiết kế**, không phải một hệ thống đã được đánh giá đầu cuối.
+
+Báo cáo tổ chức theo mẫu FPT MSE: Chương 2 khảo sát các công trình liên quan; Chương 3 mô tả dữ liệu, thuật toán CV, quy trình đánh giá; Chương 4 trình bày kết quả theo từng nhóm bằng chứng; Chương 5 kết luận và chỉ ra giới hạn.
 
 # Tổng quan nghiên cứu (Literature Review)
 
-**Mục đích chương này là tổng quan tài liệu học thuật có dẫn nguồn và xác định research gap, không phải một chương giải thích thuật ngữ sơ cấp.**
+## Thị giác máy tính trong cảnh giao thông và dữ liệu đa điều kiện
 
-## Phát hiện phương tiện và biển báo trong Computer Vision
+Bài toán phát hiện đối tượng giao thông chịu ảnh hưởng đồng thời của biến thiên ngoại cảnh (thời tiết, thời điểm, góc nhìn) và biến thiên nội tại của đối tượng (kích thước, màu, che khuất, chuyển động). BDD100K được thiết kế nhằm mở rộng độ đa dạng cảnh lái xe và hỗ trợ nhiều tác vụ CV, trong đó có object detection [@yu2020bdd100k]. Vì vậy, việc khảo sát độ nhạy theo nhóm ảnh tối hoặc theo lớp hiếm có ý nghĩa hơn một chỉ số tổng hợp duy nhất.
 
-> TODO: Tìm và đối chiếu các công trình liên quan; tập trung vào dữ liệu, điều kiện chụp, đối tượng nhỏ, lỗi phát hiện, khả năng áp dụng và hạn chế. Bộ BDD100K có bài báo nguồn @yu2020bdd100k.
+Đối với biển báo, đặc điểm thị giác khác phương tiện: biển báo thường nhỏ, có hình dạng, màu sắc và ký hiệu mang tính quy ước; khác biệt giữa các lớp có thể nằm ở vài chi tiết gần nhau. Việc tăng độ phân giải suy luận có thể giúp giữ chi tiết, nhưng đồng thời làm tăng chi phí xử lý và không thể khôi phục các thành phần ảnh đã mất do nhòe hoặc nén. Hai dự án biển báo đang dùng cùng tên họ mô hình nhưng không có một giao thức tiền xử lý/huấn luyện hoàn toàn đồng nhất; các chỉ số cần được quy về cùng nguồn và điều kiện khi so sánh [@phatRepo2026; @hieuRepo2026].
 
-## Ảnh sáng yếu, gamma và tương phản cục bộ
+## Hiệu chỉnh mức xám và Gamma
 
-> TODO: Tổng hợp các kết quả nghiên cứu về gamma correction, local illumination và CLAHE; phân biệt giả thuyết ảnh dễ nhìn hơn với bằng chứng tăng AP. Bổ sung bài báo phù hợp; tài liệu OpenCV chỉ đóng vai trò giải thích toán tử.
+Biến đổi Gamma là một ánh xạ điểm phi tuyến, thường được mô tả trên pixel chuẩn hóa bằng \(y=x^\gamma\), với \(x,y\in[0,1]\). Nếu \(\gamma<1\), các mức xám thấp được nâng lên mạnh hơn so với mức cao; nhưng vùng tối không chứa thông tin tín hiệu hữu ích sẽ vẫn không có thêm chi tiết thực. Tác động của Gamma phụ thuộc vào encoding, thứ tự kênh màu và bước lượng tử hóa; mô hình hóa toán học phải đối chiếu implementation thật.
 
-## Biên ảnh, Canny và chi tiết không gian
+Trong cảnh giao thông, nâng sáng có thể làm lộ ranh giới thân xe trên nền tối, đồng thời làm nhiễu vùng thiếu sáng và các nguồn phát quang dễ bị bão hòa. Vì vậy, nên đánh giá riêng ảnh *được xử lý* và ảnh *được bỏ qua*, đối chiếu cùng định nghĩa độ sáng, thay vì suy luận từ ảnh minh họa đơn lẻ.
 
-> TODO: Trình bày nguyên lý edge detection, lý do đường biên nền có thể bị tăng cùng đường biên vật thể, và các nghiên cứu liên quan. Tham khảo Canny @canny1986edge.
+## Tương phản cục bộ: AHE và CLAHE
 
-## Đối tượng nhỏ, hình học hộp và sai số đánh giá
+Cân bằng histogram toàn ảnh dùng phân phối mức xám chung để phân bổ lại dải cường độ, nhưng có thể bỏ qua thay đổi cục bộ. Adaptive Histogram Equalization (AHE) mở rộng phép biến đổi đến các ô không gian; nghiên cứu của Pizer và cộng sự chỉ ra hạn chế khuếch đại nhiễu trong các vùng tương đối đồng nhất và đề xuất các biến thể khắc phục [@pizer1987adaptive]. CLAHE áp giới hạn phân phối histogram ở từng ô để tránh khuếch đại tương phản quá mức và nội suy giữa các ô [@zuiderveld1994clahe].
 
-> TODO: Literature về scale, occlusion, illumination cohorts, precision/recall/AP, IoU và false negatives. Tránh biến phần này thành hướng dẫn tối ưu training.
+Với ảnh xe chạy qua bóng râm, CLAHE có thể hỗ trợ tăng độ tương phản vùng cần quan sát. Tuy nhiên, vùng nền nhiều hoa văn có thể được tăng cường cùng đối tượng. Do đó, đồ án chỉ xem CLAHE là một **giả thuyết xử lý tín hiệu cần đo bằng detector**, không mặc nhiên coi đó là nâng cấp có ích.
 
-## Khoảng trống nghiên cứu và vị trí của đề tài
+## Canny, thông tin biên và sai lệch giữa thị giác người và detector
 
-> TODO: Dựng bảng có trích dẫn: công trình / dữ liệu / kỹ thuật CV / phép đo / giới hạn / liên hệ với nghiên cứu hiện tại. Phát biểu research gap **chỉ sau khi đọc đủ nguồn thực tế**.
+Canny đưa ra một cách phát hiện biên dựa trên các tiêu chí phát hiện và định vị; xấp xỉ thực hành gồm lọc Gaussian, ước lượng gradient, loại cực đại không mong muốn và kết nối biên bằng hai ngưỡng [@canny1986edge]. Trong giao thông, biên xe có thể hữu ích cho định vị; tuy nhiên, ranh giới biển quảng cáo, vỉa hè, kết cấu mặt đường và nhiễu nén cũng tạo biên.
+
+Cần phân biệt **Canny edge map** (đầu ra có tính cấu trúc) với **ảnh RGB sau tăng cường dựa trên biên Canny** (đầu vào của detector). Tăng mật độ biên không đồng nghĩa tăng tín hiệu ngữ nghĩa. Đồ án kiểm tra chính giả thuyết này trong phiên bản v4 và phân tích hậu quả đối với các lớp xe hai bánh.
+
+## Kích thước vật thể, hình học bounding box và phép đo
+
+Sau resize hoặc letterbox, hộp dự đoán được biểu diễn trong một hệ tọa độ trung gian. Muốn ghép kết quả của hai detector trên cùng frame phải đảo phép biến đổi tỉ lệ/padding một cách nhất quán. Không thể lấy tọa độ sau resize để trực tiếp vẽ lên ảnh gốc nếu chưa quy đổi.
+
+Về đánh giá, Intersection over Union (IoU) lượng hóa phần chồng khít giữa hộp dự đoán và ground truth. AP@0.50 đánh giá với ngưỡng IoU 0,50, còn AP@0.50:0.95 tổng hợp nhiều ngưỡng khắt khe hơn. Ở lớp có rất ít ví dụ, biến động vài dự đoán có thể gây thay đổi đáng kể về kết quả; nên công bố **support, AP theo lớp và điều kiện dữ liệu** bên cạnh mAP.
+
+## Những công trình hiện có và khoảng trống nghiên cứu
+
+| Nguồn | Đóng góp liên quan | Giới hạn khi áp dụng vào đồ án |
+|:--|:--|:--|
+| @yu2020bdd100k | Dữ liệu giao thông đa dạng với nhiều tác vụ thị giác máy tính | Không tự trả lời hiệu quả của từng preprocessing policy |
+| @pizer1987adaptive | Cân bằng histogram thích nghi và hệ quả khuếch đại nhiễu | Không đo trực tiếp AP phương tiện trên BDD100K |
+| @zuiderveld1994clahe | Giới hạn histogram nhằm kiểm soát tăng tương phản cục bộ | Chất lượng hiển thị chưa phải bằng chứng tăng detector AP |
+| @canny1986edge | Nguyên lý biên có mục tiêu phát hiện/định vị | Edge map không đồng nghĩa cải thiện detection |
+| @phatRepo2026; @hieuRepo2026 | Hai thực nghiệm phát hiện biển báo giao thông Việt Nam | Chưa có phép đánh giá chung hoàn toàn được tái lập trên cùng môi trường |
+
+Từ đối chiếu này, khoảng trống **trong phạm vi đồ án** là thiếu một bảng đo có đối chứng cho các xử lý ảnh cụ thể, phân rã theo độ sáng/lớp/kích thước và không làm lẫn kết quả các nhóm chạy khác cấu hình. Phần phát hiện biển báo bổ sung một đối tượng có đặc tính thị giác khác xe; tuy nhiên, phép so sánh hai phương án biển báo và phép ghép video phải được giới hạn theo mức bằng chứng thực tế, không được tuyên bố thành đóng góp thống kê vượt dữ liệu.
 
 # Phương pháp (Methodology — Dataset + Algorithms)
 
