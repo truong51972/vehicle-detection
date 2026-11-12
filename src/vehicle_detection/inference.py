@@ -16,32 +16,12 @@ import yaml
 from .common import digest, file_hash, read_json
 from .data import FIVE_CLASSES
 from .experiment_data import load_experiment, policy_identity
+from .model_registry import DetectorSpec as ModelEntry
+from .model_registry import load_detector
 from .preprocess import apply_recipe, validate_image
 
 VERSIONS = tuple(f"v{i}" for i in range(5))
 EXPLORATORY = "exploratory / out-of-distribution pair"
-
-
-@dataclass(frozen=True)
-class ModelEntry:
-    version: str
-    checkpoint: Path | None = None
-    sha256: str = ""
-    policy_id: str = ""
-    imgsz: int = 640
-    error: str = ""
-    rejected: tuple[str, ...] = ()
-
-    def identity(self):
-        return {
-            "version": self.version,
-            "checkpoint": str(self.checkpoint) if self.checkpoint else None,
-            "sha256": self.sha256,
-            "training_policy_id": self.policy_id,
-            "imgsz": self.imgsz,
-            "unavailable_reason": self.error,
-            "rejected_runs": list(self.rejected),
-        }
 
 
 @dataclass(frozen=True)
@@ -58,22 +38,6 @@ class VideoLimits:
 
 
 DEFAULT_LIMITS = VideoLimits()
-
-
-def load_detector(checkpoint):
-    """Only load trusted local checkpoints; never trigger an automatic weight download."""
-    checkpoint = Path(checkpoint)
-    if not checkpoint.is_file():
-        raise ValueError(f"Missing checkpoint: {checkpoint}; restore its train/weights/best.pt")
-    try:
-        from ultralytics import YOLO
-
-        model = YOLO(str(checkpoint))
-        if model.task != "detect" or model.names != dict(enumerate(FIVE_CLASSES)):
-            raise ValueError(f"Expected detection taxonomy {FIVE_CLASSES}")
-        return model
-    except Exception as exc:
-        raise ValueError(f"Cannot load {checkpoint}: {exc}") from exc
 
 
 def discover_models(root):
@@ -131,39 +95,58 @@ def validate_device(device):
         raise ValueError("CUDA GPU 0 is unavailable; select cpu or install a CUDA-enabled PyTorch")
 
 
-def process_frame(frame, model, policy, *, confidence, imgsz, device):
-    """Apply the independently selected policy, JPEG95, then draw on source coordinates."""
+def process_frame(
+    frame, model, policy, *, confidence, imgsz, device, spec=None, canvas=None, prefix=False
+):
+    """Vehicle policy + JPEG95 or native sign input; draw in source coordinates."""
     validate_image(frame)
     start = perf_counter()
-    processed, applied, _ = apply_recipe(frame, policy["variant"], policy["recipes"])
-    if processed.shape != frame.shape or processed.dtype != frame.dtype:
-        raise ValueError("Preprocessing changed frame geometry/dtype")
-    preprocess_end = perf_counter()
-    ok, encoded = cv2.imencode(".jpg", processed, [cv2.IMWRITE_JPEG_QUALITY, 95])
-    if not ok:
-        raise ValueError("JPEG95 encoding failed")
-    processed = cv2.imdecode(encoded, cv2.IMREAD_COLOR)
-    if processed is None or processed.shape != frame.shape:
-        raise ValueError("JPEG95 decoding failed or changed geometry")
+    native = spec is not None and spec.preprocessing == "native"
+    names = spec.names if spec is not None else FIVE_CLASSES
+    processed, applied = frame.copy(), False
+    preprocess_seconds = jpeg_seconds = 0.0
+    if not native:
+        processed, applied, _ = apply_recipe(processed, policy["variant"], policy["recipes"])
+        if processed.shape != frame.shape or processed.dtype != frame.dtype:
+            raise ValueError("Preprocessing changed frame geometry/dtype")
+        preprocess_end = perf_counter()
+        ok, encoded = cv2.imencode(".jpg", processed, [cv2.IMWRITE_JPEG_QUALITY, 95])
+        if not ok:
+            raise ValueError("JPEG95 encoding failed")
+        processed = cv2.imdecode(encoded, cv2.IMREAD_COLOR)
+        if processed is None or processed.shape != frame.shape:
+            raise ValueError("JPEG95 decoding failed or changed geometry")
+        preprocess_seconds = preprocess_end - start
+        jpeg_seconds = perf_counter() - preprocess_end
     jpeg_end = perf_counter()
     result = model.predict(
         source=processed, conf=confidence, imgsz=imgsz, device=device, verbose=False, save=False
     )[0]
     # Copy detections to CPU here so inference timing includes asynchronous CUDA work.
-    classes = result.boxes.cls.cpu().numpy().astype(int).tolist()
+    classes = result.boxes.cls.cpu().numpy().tolist()
     inference_end = perf_counter()
-    if any(c < 0 or c >= len(FIVE_CLASSES) for c in classes):
-        raise ValueError("Detector returned a class outside the five-class taxonomy")
-    annotated = result.plot(img=frame.copy(), conf=True, labels=True, line_width=2)
+    if any(not math.isfinite(c) or c != int(c) or c < 0 or c >= len(names) for c in classes):
+        raise ValueError("Detector returned a class outside its validated taxonomy")
+    original_names = result.names if prefix else None
+    try:
+        if prefix:
+            group = "Sign" if native else "Vehicle"
+            result.names = {i: f"{group} / {name}" for i, name in enumerate(names)}
+        annotated = result.plot(
+            img=(frame if canvas is None else canvas).copy(), conf=True, labels=True, line_width=2
+        )
+    finally:
+        if prefix:
+            result.names = original_names
     if annotated.shape != frame.shape:
         raise ValueError("Detector rendering changed frame geometry")
     return (
         annotated,
         bool(applied),
-        Counter(FIVE_CLASSES[c] for c in classes),
+        Counter(names[int(c)] for c in classes),
         {
-            "preprocessing": preprocess_end - start,
-            "jpeg": jpeg_end - preprocess_end,
+            "preprocessing": preprocess_seconds,
+            "jpeg": jpeg_seconds,
             "model_inference": inference_end - jpeg_end,
             "rendering_encoding": perf_counter() - inference_end,
         },
@@ -259,11 +242,23 @@ def infer_video(
     limits=DEFAULT_LIMITS,
     progress=None,
     cancelled=None,
+    sign_entry=None,
 ):
     """Process one frame at a time; caller owns output lifetime. Remove partial files on failure."""
     start = perf_counter()
-    if entry.error or entry.checkpoint is None:
-        raise ValueError(entry.error or "Select an available model version")
+    entries = [entry] if sign_entry is None else [entry, sign_entry]
+    for selected in entries:
+        if selected.error or selected.checkpoint is None:
+            raise ValueError(selected.error or "Select an available model")
+    if sign_entry is not None and (
+        entry.category != "vehicle" or sign_entry.category != "traffic-sign"
+    ):
+        raise ValueError("Combined mode needs one Vehicle and one Traffic Sign model")
+    vehicle = entry.category == "vehicle"
+    if vehicle and policy is None:
+        raise ValueError("Select a Vehicle preprocessing policy")
+    if not vehicle and policy is not None:
+        raise ValueError("Traffic Sign models require native frames without a Vehicle policy")
     if not math.isfinite(confidence) or not 0 <= confidence <= 1:
         raise ValueError("Confidence must be in [0, 1]")
     source, output = Path(source), Path(output)
@@ -283,7 +278,8 @@ def infer_video(
         stage: []
         for stage in ("decode", "preprocessing", "jpeg", "model_inference", "rendering_encoding")
     }
-    counts = Counter(dict.fromkeys(FIVE_CLASSES, 0))
+    detector_timings = [{stage: [] for stage in timings if stage != "decode"} for _ in entries]
+    counts = [Counter(dict.fromkeys(selected.names, 0)) for selected in entries]
     applied_count = frames = 0
     warnings = []
     try:
@@ -304,9 +300,15 @@ def infer_video(
         if width * height > limits.max_pixels:
             raise ValueError(f"Video exceeds the {limits.max_pixels} pixel frame limit")
         loading_at = perf_counter()
-        if file_hash(entry.checkpoint) != entry.sha256:
-            raise ValueError("Checkpoint changed since startup; restart to validate the registry")
-        model = load_detector(entry.checkpoint)
+        models = []
+        for selected in entries:
+            if cancelled is not None and cancelled():
+                raise ValueError("Inference cancelled; partial output removed")
+            if file_hash(selected.checkpoint) != selected.sha256:
+                raise ValueError(
+                    "Checkpoint changed since startup; restart to validate the registry"
+                )
+            models.append(load_detector(selected.checkpoint, names=selected.names))
         model_load_seconds = perf_counter() - loading_at
         while True:
             if cancelled is not None and cancelled():
@@ -330,9 +332,28 @@ def infer_video(
                 raise ValueError("Video resolution changes between frames; use a fixed-size source")
             if frames + 1 > limits.max_frames or (frames + 1) / fps > limits.max_seconds:
                 raise ValueError("Decoded video exceeds the configured duration/frame limit")
-            annotated, applied, detections, elapsed = process_frame(
-                frame, model, policy, confidence=confidence, imgsz=entry.imgsz, device=device
-            )
+            annotated = frame
+            elapsed = dict.fromkeys(timings, 0.0)
+            for i, (selected, model) in enumerate(zip(entries, models, strict=True)):
+                if cancelled is not None and cancelled():
+                    raise ValueError("Inference cancelled; partial output removed")
+                annotated, applied, detections, measured = process_frame(
+                    frame,
+                    model,
+                    policy if selected.category == "vehicle" else None,
+                    confidence=confidence,
+                    imgsz=selected.imgsz,
+                    device=device,
+                    spec=selected,
+                    canvas=annotated,
+                    prefix=sign_entry is not None,
+                )
+                counts[i].update(detections)
+                if selected.category == "vehicle":
+                    applied_count += applied
+                for stage, seconds in measured.items():
+                    detector_timings[i][stage].append(seconds)
+                    elapsed[stage] += seconds
             encoded_at = perf_counter()
             writer.write(annotated)
             elapsed["rendering_encoding"] += perf_counter() - encoded_at
@@ -340,8 +361,6 @@ def infer_video(
             for stage, seconds in elapsed.items():
                 timings[stage].append(seconds)
             frames += 1
-            applied_count += applied
-            counts.update(detections)
             if progress is not None:
                 progress(frames, declared)
         if not frames:
@@ -366,34 +385,53 @@ def infer_video(
             raise ValueError("Inference cancelled; partial output removed")
         final_encoding_seconds = perf_counter() - encoding_at
         total_seconds = perf_counter() - start
+        detector_reports = []
+        for i, selected in enumerate(entries):
+            detector_report = {
+                "model": selected.identity(),
+                "detections_per_class": dict(counts[i]),
+                "stages": summarize_timings(detector_timings[i]),
+            }
+            if selected.category == "vehicle":
+                detector_report["routing"] = {
+                    "Apply": applied_count,
+                    "Skip": frames - applied_count,
+                }
+            detector_reports.append(detector_report)
         return {
+            "mode": "Combined" if sign_entry else ("Vehicle" if vehicle else "Traffic Sign"),
             "model": entry.identity(),
-            "preprocessing_version": policy["id"],
-            "preprocessing_policy_id": digest(policy_identity(policy)),
-            "pair": EXPLORATORY if entry.version != policy["id"] else "matched model/policy",
+            "detectors": detector_reports,
+            "preprocessing_version": policy["id"] if vehicle else "native",
+            "preprocessing_policy_id": digest(policy_identity(policy)) if vehicle else None,
+            "pair": (
+                (EXPLORATORY if entry.version != policy["id"] else "matched model/policy")
+                if vehicle
+                else "native sign inference"
+            ),
             "confidence": confidence,
             "device": device,
             "frames": frames,
             "resolution": list(size),
             "source_fps": fps,
             "duration_seconds": frames / fps,
-            "detections_per_class": dict(counts),
-            "routing": {"Apply": applied_count, "Skip": frames - applied_count},
+            "detections_per_class": (
+                dict(counts[0])
+                if sign_entry is None
+                else {selected.version: dict(counts[i]) for i, selected in enumerate(entries)}
+            ),
+            "routing": {"Apply": applied_count, "Skip": frames - applied_count}
+            if vehicle
+            else None,
             "total_seconds": total_seconds,
             "end_to_end_fps": frames / total_seconds,
             "model_load_seconds": model_load_seconds,
             "final_encoding_seconds": final_encoding_seconds,
-            "stages": {
-                stage: {
-                    "total_seconds": sum(samples),
-                    "mean_ms": 1000 * np.mean(samples),
-                    "p50_ms": 1000 * np.percentile(samples, 50),
-                    "p95_ms": 1000 * np.percentile(samples, 95),
-                }
-                for stage, samples in timings.items()
-            },
+            "stages": summarize_timings(timings),
             "timing_note": (
-                "Wall-clock demo timings include JPEG95 and video work; not study speed_ms"
+                "Wall-clock demo timings include all detectors and video work; not study speed_ms. "
+                "JPEG95 applies only to Vehicle. Counts sum detections across frames, not tracks. "
+                "Sign AP values are not a controlled head-to-head comparison."
             ),
             "warnings": warnings,
         }
@@ -408,3 +446,15 @@ def infer_video(
         capture.release()
         if writer is not None:
             writer.release()
+
+
+def summarize_timings(timings):
+    return {
+        stage: {
+            "total_seconds": sum(samples),
+            "mean_ms": 1000 * np.mean(samples),
+            "p50_ms": 1000 * np.percentile(samples, 50),
+            "p95_ms": 1000 * np.percentile(samples, 95),
+        }
+        for stage, samples in timings.items()
+    }

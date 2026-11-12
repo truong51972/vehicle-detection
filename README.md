@@ -98,8 +98,9 @@ automatically.
 
 ## Video demo
 
-See [the local Gradio demo](docs/demo.md) for independent model/preprocessing
-selection, video preview/download, timing and detection counts. Use its separate
+See [the local Gradio demo](docs/demo.md) for Vehicle, Traffic Sign (Hiếu/Phát), and
+Combined detection, independent Vehicle model/preprocessing selection, video
+preview/download, timing and detection counts. Use its separate
 `demo` environment; the `study` and `demo` extras cannot be installed together.
 
 ## Checks

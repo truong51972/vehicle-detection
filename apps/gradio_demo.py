@@ -16,12 +16,17 @@ from vehicle_detection.inference import (
     discover_models,
     infer_video,
 )
+from vehicle_detection.model_registry import discover_sign_models
+
+MODES = ("Vehicle", "Traffic Sign", "Combined")
 
 
 def build_app(root, *, device="cpu", limits=DEFAULT_LIMITS):
     root = Path(root).resolve()
     registry = discover_models(root)
     available = [version for version, entry in registry.items() if not entry.error]
+    sign_registry = discover_sign_models(root)
+    signs = [key for key, entry in sign_registry.items() if not entry.error]
     policies, policy_errors = {}, {}
     for version in VERSIONS:
         try:
@@ -29,14 +34,17 @@ def build_app(root, *, device="cpu", limits=DEFAULT_LIMITS):
         except Exception as exc:
             policy_errors[version] = str(exc)
 
-    def pair_warning(model_version, policy_version):
+    def pair_warning(model_version, policy_version, detection_mode="Vehicle"):
+        if detection_mode == "Traffic Sign":
+            return "Native / No additional filtering. This video demo does not measure AP."
         if model_version and policy_version and model_version != policy_version:
             return f"**{EXPLORATORY}**. Cross-policy results do not establish AP improvements."
         return "Matched model/policy. This video demo does not measure AP."
 
-    with gr.Blocks(title="Vehicle detection demo", delete_cache=(600, 3600)) as app:
+    with gr.Blocks(title="Road detection demo", delete_cache=(600, 3600)) as app:
         gr.Markdown(
-            "# Vehicle detection\nUpload a video and choose a model and preprocessing policy."
+            "# Road detection\nUpload once and detect vehicles, traffic signs, or both. "
+            "Counts sum detections across frames, not unique tracked objects."
         )
         gr.Markdown(
             f"Limits: {limits.max_mb} MiB, {limits.max_seconds} seconds, "
@@ -44,25 +52,39 @@ def build_app(root, *, device="cpu", limits=DEFAULT_LIMITS):
             "Output keeps source dimensions and FPS; audio is omitted."
         )
         upload = gr.File(label="Upload MP4 / MOV / AVI", file_types=[".mp4", ".mov", ".avi"])
+        mode = gr.Radio(MODES, value="Vehicle", label="Detection mode")
+        with gr.Group() as vehicle_controls:
+            with gr.Row():
+                model = gr.Dropdown(
+                    available,
+                    value=available[0] if available else None,
+                    label="Model version (unavailable versions excluded)",
+                    interactive=bool(available),
+                )
+                policy = gr.Dropdown(
+                    [(f"{v} — {config['name']}", v) for v, config in policies.items()],
+                    value=next(iter(policies), None),
+                    label="Preprocessing version",
+                )
+        with gr.Group(visible=False) as sign_controls:
+            sign = gr.Dropdown(
+                [(sign_registry[key].label, key) for key in signs],
+                value=signs[0] if signs else None,
+                label="Traffic Sign model (unavailable models excluded)",
+                interactive=bool(signs),
+            )
+            gr.Markdown("Preprocessing: **Native / No additional filtering**")
         with gr.Row():
-            model = gr.Dropdown(
-                available,
-                value=available[0] if available else None,
-                label="Model version (unavailable versions excluded)",
-                interactive=bool(available),
-            )
-            policy = gr.Dropdown(
-                [(f"{v} — {config['name']}", v) for v, config in policies.items()],
-                value=next(iter(policies), None),
-                label="Preprocessing version",
-            )
             confidence = gr.Slider(0, 1, value=0.25, step=0.01, label="Detection confidence")
             device_choice = gr.Dropdown(["cpu", "0"], value=device, label="Device (0 = CUDA GPU)")
         warning = gr.Markdown(pair_warning(model.value, policy.value))
-        model.change(pair_warning, [model, policy], warning, queue=False)
-        policy.change(pair_warning, [model, policy], warning, queue=False)
+        model.change(pair_warning, [model, policy, mode], warning, queue=False)
+        policy.change(pair_warning, [model, policy, mode], warning, queue=False)
         with gr.Accordion("Checkpoint identities and unavailable versions", open=not available):
-            gr.JSON({v: entry.identity() for v, entry in registry.items()}, label="Models")
+            gr.JSON(
+                {v: entry.identity() for v, entry in (registry | sign_registry).items()},
+                label="Models",
+            )
             if policy_errors:
                 gr.JSON(policy_errors, label="Unavailable policies")
         with gr.Row():
@@ -77,6 +99,26 @@ def build_app(root, *, device="cpu", limits=DEFAULT_LIMITS):
         report = gr.JSON(label="Timing, detections and preprocessing report")
         cancel_state = gr.State({"requested": False})
 
+        def change_mode(detection_mode, model_version, policy_version):
+            needs_vehicle = detection_mode != "Traffic Sign"
+            needs_sign = detection_mode != "Vehicle"
+            ready = (not needs_vehicle or bool(available and policies)) and (
+                not needs_sign or bool(signs)
+            )
+            return (
+                gr.update(visible=needs_vehicle),
+                gr.update(visible=needs_sign),
+                gr.update(interactive=ready),
+                pair_warning(model_version, policy_version, detection_mode),
+            )
+
+        mode.change(
+            change_mode,
+            [mode, model, policy],
+            [vehicle_controls, sign_controls, run, warning],
+            queue=False,
+        )
+
         def run_job(
             source,
             model_version,
@@ -84,22 +126,36 @@ def build_app(root, *, device="cpu", limits=DEFAULT_LIMITS):
             conf,
             selected_device,
             state,
+            detection_mode="Vehicle",
+            sign_version=None,
             progress=gr.Progress(),  # noqa: B008 — Gradio injects progress through the default.
         ):
             state["requested"] = False
             if not source:
                 raise gr.Error("Upload an MP4, MOV or AVI video first")
-            if model_version not in available or policy_version not in policies:
+            if detection_mode not in MODES:
+                raise gr.Error("Select Vehicle, Traffic Sign or Combined mode")
+            needs_vehicle = detection_mode != "Traffic Sign"
+            needs_sign = detection_mode != "Vehicle"
+            if needs_vehicle and (model_version not in available or policy_version not in policies):
                 raise gr.Error("Select an available model and preprocessing version")
+            if needs_sign and sign_version not in signs:
+                reason = sign_registry.get(sign_version)
+                raise gr.Error(
+                    reason.error if reason else "Select an available Traffic Sign model; see Models"
+                )
             try:
                 with TemporaryDirectory(prefix="vehicle-demo-") as temporary:
-                    output = Path(temporary) / f"{model_version}-{policy_version}.mp4"
+                    output = Path(temporary) / "annotated.mp4"
                     progress(0, desc="Validating and loading model")
                     summary = infer_video(
                         source,
                         output,
-                        registry[model_version],
-                        policies[policy_version],
+                        registry[model_version] if needs_vehicle else sign_registry[sign_version],
+                        policies[policy_version] if needs_vehicle else None,
+                        sign_entry=(
+                            sign_registry[sign_version] if detection_mode == "Combined" else None
+                        ),
                         confidence=conf,
                         device=selected_device,
                         limits=limits,
@@ -116,7 +172,7 @@ def build_app(root, *, device="cpu", limits=DEFAULT_LIMITS):
 
         run.click(
             run_job,
-            [upload, model, policy, confidence, device_choice, cancel_state],
+            [upload, model, policy, confidence, device_choice, cancel_state, mode, sign],
             [original, annotated, download, report],
             concurrency_limit=1,
             concurrency_id="inference",
