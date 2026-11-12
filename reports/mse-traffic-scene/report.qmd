@@ -1,0 +1,316 @@
+---
+title: "Nhận thức cảnh giao thông: Phát hiện phương tiện và biển báo"
+subtitle: "Báo cáo đồ án học phần Computer Vision — FPT University (MSE)"
+lang: vi
+author:
+  - "Đỗ Hữu Phát"
+  - "Trần Trung Hiếu"
+  - "Đinh Quốc Bảo"
+  - "Trường Trần Quốc"
+group-members:
+  - name: "Đỗ Hữu Phát"
+    student-id: "26MS23351"
+  - name: "Trần Trung Hiếu"
+    student-id: "26MS23355"
+  - name: "Đinh Quốc Bảo"
+    student-id: "26MS23350"
+  - name: "Trường Trần Quốc"
+    student-id: "26MS23361"
+course: "Computer Vision"
+degree-context: "MSE"
+bibliography: references.bib
+execute:
+  enabled: false
+format:
+  pdf:
+    documentclass: report
+    top-level-division: chapter
+    pdf-engine: xelatex
+    papersize: letter
+    fontsize: 12pt
+    mainfont: "Times New Roman"
+    linestretch: 1.5
+    geometry:
+      - margin=1in
+    toc: true
+    toc-depth: 2
+    number-sections: true
+    number-depth: 2
+    lof: true
+    lot: true
+    colorlinks: false
+    include-in-header:
+      - text: |
+          % Provisional FPT typography; not yet rendered or visually validated.
+          \usepackage{setspace}
+          \usepackage{fancyhdr}
+          \AtBeginDocument{\onehalfspacing\setlength{\parindent}{0pt}\setlength{\parskip}{12pt}}
+          \pagestyle{fancy}
+          \fancyhf{}
+          \fancyhead[R]{\thepage}
+          \renewcommand{\headrulewidth}{0pt}
+          \fancypagestyle{plain}{\fancyhf{}\fancyhead[R]{\thepage}\renewcommand{\headrulewidth}{0pt}}
+crossref:
+  fig-title: "Hình"
+  tbl-title: "Bảng"
+  appendix-title: "Phụ lục"
+  appendix-delim: ":"
+---
+
+<!--
+SINGLE FILE REPORT SCAFFOLD; NOT A FINISHED OR RENDERED PDF.
+Keep all five chapters, abstract, references, appendices in this one file.
+Template-specific two title pages, abstract/title spacing, exact chapter heading
+positioning remain TODO for a later PDF validation task.
+Course "Computer Vision" given by user; sample template "Image and Video Processing".
+Lecturer identity/course wording must be confirmed.
+-->
+
+# Tóm tắt {.unnumbered}
+
+> TODO — Viết tóm tắt sau khi hoàn thiện Chương 4. Giới hạn **150 từ** theo template Master's, nêu vấn đề Computer Vision, dữ liệu, các toán tử xử lý ảnh, thiết lập kiểm chứng, kết quả thật sự đo được và giới hạn. Không đưa hình, bảng hoặc kết quả phỏng đoán vào đây.
+
+**Từ khóa (dự kiến):** Computer Vision; phát hiện phương tiện; phát hiện biển báo; Gamma; CLAHE; Canny; YOLO26n.
+
+> LAYOUT TODO: Template yêu cầu lặp tên đề tài ngay phía trên Abstract và khoảng cách dòng gấp đôi. Việc căn chỉnh này cần xác minh khi render; không coi bản QMD hiện tại là đã khớp mẫu.
+
+# Giới thiệu (Introduction)
+
+## Bối cảnh và động lực
+
+> TODO: Trình bày các thách thức **thị giác máy tính** của cảnh giao thông: ánh sáng không đồng đều, ảnh tối, biên yếu, đối tượng nhỏ, che khuất, nén ảnh và khác biệt bộ dữ liệu. Không dẫn sang hệ thống tự lái/ước lượng khoảng cách nếu đề tài không thực hiện.
+
+## Bài toán và phạm vi
+
+> TODO: Xác định rõ hai nhóm đầu ra: (1) bounding box và lớp phương tiện; (2) bounding box và lớp biển báo. Giữ hai dataset, hai detector và hai hệ nhãn riêng.
+
+## Câu hỏi nghiên cứu
+
+1. Các phép biến đổi độ sáng, tương phản và biên ảnh ảnh hưởng thế nào tới kết quả phát hiện phương tiện khi so với ảnh gốc trong cùng điều kiện?
+2. Phát hiện biển báo có những sai số nào theo lớp, kích thước đầu vào và số lượng đối tượng chuẩn?
+3. Khi đặt hai detector trên cùng chuỗi khung hình, có thể đo được những gì về hình học, độ trễ và lỗi hệ thống? **Chỉ báo kết quả thực tế nếu demo đã được chạy.**
+
+## Mục tiêu và đóng góp
+
+> TODO: Phân biệt thuật toán xử lý ảnh, kiểm chứng thực nghiệm, phân tích lỗi, thành phần detection và phần tích hợp đã làm/chưa làm. Không mô tả việc đề xuất là thành tựu triển khai.
+
+## Bố cục báo cáo
+
+> TODO: Giới thiệu đúng năm chương theo FPT template.
+
+# Tổng quan nghiên cứu (Literature Review)
+
+**Mục đích chương này là tổng quan tài liệu học thuật có dẫn nguồn và xác định research gap, không phải một chương giải thích thuật ngữ sơ cấp.**
+
+## Phát hiện phương tiện và biển báo trong Computer Vision
+
+> TODO: Tìm và đối chiếu các công trình liên quan; tập trung vào dữ liệu, điều kiện chụp, đối tượng nhỏ, lỗi phát hiện, khả năng áp dụng và hạn chế. Bộ BDD100K có bài báo nguồn @yu2020bdd100k.
+
+## Ảnh sáng yếu, gamma và tương phản cục bộ
+
+> TODO: Tổng hợp các kết quả nghiên cứu về gamma correction, local illumination và CLAHE; phân biệt giả thuyết ảnh dễ nhìn hơn với bằng chứng tăng AP. Bổ sung bài báo phù hợp; tài liệu OpenCV chỉ đóng vai trò giải thích toán tử.
+
+## Biên ảnh, Canny và chi tiết không gian
+
+> TODO: Trình bày nguyên lý edge detection, lý do đường biên nền có thể bị tăng cùng đường biên vật thể, và các nghiên cứu liên quan. Tham khảo Canny @canny1986edge.
+
+## Đối tượng nhỏ, hình học hộp và sai số đánh giá
+
+> TODO: Literature về scale, occlusion, illumination cohorts, precision/recall/AP, IoU và false negatives. Tránh biến phần này thành hướng dẫn tối ưu training.
+
+## Khoảng trống nghiên cứu và vị trí của đề tài
+
+> TODO: Dựng bảng có trích dẫn: công trình / dữ liệu / kỹ thuật CV / phép đo / giới hạn / liên hệ với nghiên cứu hiện tại. Phát biểu research gap **chỉ sau khi đọc đủ nguồn thực tế**.
+
+# Phương pháp (Methodology — Dataset + Algorithms)
+
+## Tổng quan quy trình xử lý ảnh và phát hiện
+
+> TODO: Sơ đồ đầu vào khung hình → trích đặc trưng ảnh → quyết định Apply/Skip → phép biến đổi pixel → mã hóa/resize → detector → hộp/nhãn → đánh giá. Phân biệt xử lý offline với chi phí inference trực tuyến.
+
+## Biểu diễn ảnh và đặc trưng thị giác máy tính
+
+### Không gian màu, grayscale và phân bố độ sáng
+
+> TODO: Phân tích biểu diễn BGR/RGB/grayscale, histogram luminance, độ sáng trung bình, vùng cháy sáng/vùng mất chi tiết và khác biệt giữa chỉnh màu với phục hồi thông tin thực. Dùng cùng ROI/scale khi minh họa trước–sau.
+
+### Tương phản, nhiễu, độ sắc nét và biên ảnh
+
+> TODO: Nêu định nghĩa và cách đo contrast, noise, sharpness, edge density theo mã nguồn; trực quan hóa histogram, gradients và kết quả Canny có GT/ROI để kiểm chứng giả thuyết.
+
+### Hình học ảnh, resize/letterbox và bounding box
+
+> TODO: Quy ước hệ tọa độ pixel, chuẩn hóa YOLO, phép biến đổi tỷ lệ và padding; kiểm tra phép ánh xạ bounding box về frame gốc với sai số tọa độ đo được. Tách lỗi định vị hình học khỏi lỗi nhận dạng lớp.
+
+### Video và tính liên tục theo thời gian
+
+> TODO: Xác định frame sampling, thời điểm, motion blur/occlusion và độ ổn định detection qua các frame. Tracking/ước lượng khoảng cách **không thuộc kết quả đã thực hiện** nếu chưa có phép thử và ground truth.
+
+## Dữ liệu, ground truth và phân chia tập
+
+### Nhánh phương tiện: BDD100K
+
+> TODO: Đối chiếu `configs/data.yaml`, split manifest, nguồn nhãn, năm lớp, tính độc lập theo nhóm nguồn và các giới hạn tránh trùng. Phân biệt training pool, S20, calibration, development và **final holdout chưa mở**.
+
+### Nhánh biển báo: dữ liệu Việt Nam
+
+> TODO: Gắn dataset version, định nghĩa sáu lớp, cách chia train/valid/test, danh sách ảnh/GT và mức độ tin cậy của thông tin nhóm cung cấp. Kiểm tra trùng trước khi kết luận khái quát.
+
+## Các thuật toán xử lý ảnh v0–v4
+
+### v0 — Raw / đối chứng
+
+> TODO: Cố định pipeline xuất JPEG, hệ tọa độ và annotation.
+
+### v1 — Gamma-or-Skip
+
+> TODO: Biến đổi phi tuyến độ sáng, điều kiện chọn frame, artifacts và clipping.
+
+### v2 — Local-shadow adjustment
+
+> TODO: Ước lượng trường sáng, smooth map, gain cục bộ; ảnh hưởng tới nhiễu và bão hòa.
+
+### v3 — Bounded local-contrast enhancement
+
+> TODO: CLAHE, clipping/offset bounds, chính sách Apply/Skip; phân tích chi tiết vùng ảnh.
+
+### v4 — Canny-guided detail enhancement
+
+> TODO: Grayscale/Gaussian/Canny, biên, vùng ảnh gần biên, ảnh hưởng biên nền, mật độ biên và routing. **Không** tuyên bố Canny là một model detector độc lập.
+
+## Detector như công cụ đánh giá ảnh
+
+> TODO: Giới thiệu YOLO26n ngắn gọn (đầu vào, confidence, class, bbox). Cấu hình huấn luyện chỉ ở mức kiểm soát biến số (same initialization, split, imgsz, seed, epochs, batch). Không dành phần lớn chương cho optimizer, loss hoặc tinh chỉnh mô hình.
+
+## Chỉ số và giao thức đánh giá Computer Vision
+
+> TODO: IoU, precision, recall, AP50/AP50:95, per-class AP/GT support, per-size AP, lighting cohorts; định nghĩa việc so sánh **theo từng study có đối chứng**, không trộn batch 32 và batch 16.
+
+## Nhánh biển báo và so sánh kích thước 640/960
+
+> TODO: Phân biệt thay đổi imgsz khi đánh giá với việc train hai model; nêu rõ evidence Phát vs Hiếu hiện không đồng đều.
+
+## Tích hợp trên cùng khung hình — đề xuất hoặc thực nghiệm
+
+> TODO: Contract frame_id, timestamp, source dimensions, model ID, class namespace, confidence, bbox_xyxy trên tọa độ gốc; đo latency end-to-end. Chỉ chuyển đoạn này từ “đề xuất” sang “đã thực hiện” khi có logs và video.
+
+# Kết quả thực nghiệm (Simulation Results)
+
+**Chỉ điền kết quả đo được và kiểm tra nguồn. Không chạy inference/training trong bước render báo cáo.**
+
+## Nguồn bằng chứng và khả năng so sánh
+
+> TODO: Bảng study ID, run ID, checkpoint SHA, split SHA, đánh giá độc lập hay nhóm báo cáo, điều kiện phần cứng, trạng thái hiện có/thiếu. Không coi số liệu từ hai bộ dữ liệu là cùng một phép chấm.
+
+## Kết quả ảnh đầu vào và CV operators
+
+> TODO: Ảnh Raw/v1/v2/v3/v4 cùng frame với ROI có cùng tọa độ và mức phóng đại, histogram/luminance và edge maps nếu có thể tái tạo từ nguồn. Phân biệt hình minh họa với dự đoán detector.
+
+## Phương tiện — đánh giá theo từng study
+
+### Study A — v0/v1/v2/v3, batch 32
+
+> TODO: Bảng mAP50, mAP50:95 và delta đối chứng, per-class AP và nhóm ảnh tối. Giữ dấu/đơn vị điểm phần trăm và các giới hạn một seed.
+
+### Study B — matched v0/v1/v4, batch 16
+
+> TODO: Trình bày riêng đối chứng cùng cấu hình, per-class AP và Apply/Skip của v4; không xếp chung v4 với Study A.
+
+### Phân tích lỗi theo kích thước, độ sáng và lớp
+
+> TODO: Đồ thị GT support, recall, small-object error, false negatives/false positives và ví dụ ảnh; chỉ dựng biểu đồ từ số liệu hiện có.
+
+## Biển báo — hai detector, hai kích thước đánh giá
+
+> TODO: Kết quả Phát/Hiếu 640/960 **do nhóm cung cấp**, biểu đồ per-class và GT support. Đánh dấu rõ thiếu artifact model Hiếu và nguy cơ trùng/augment giữa tập test; không tính khoảng tin cậy từ số liệu tổng hợp không đủ.
+
+## Kết quả thử nghiệm ghép hai nhánh (nếu có)
+
+> TODO: Đây **chưa phải kết quả đã thực hiện** trong baseline DOCX. Chỉ thêm video frames, log/IDs, latencies, mAP theo từng nhánh nếu thực sự có kiểm chứng. Một demo xe-only không đại diện cho tích hợp xe + biển báo.
+
+## Thảo luận, độ tin cậy và giới hạn
+
+> TODO: Giải thích trade-off thị giác máy tính (độ sáng/độ tương phản/biên/chi phí), ảnh nhỏ và lỗi. Kết luận chỉ ở mức tương xứng với evidence.
+
+# Kết luận (Conclusions)
+
+## Trả lời các câu hỏi nghiên cứu
+
+> TODO: Trả lời từng câu hỏi ở Chương 1, dựa trên **kết quả đã được kiểm chứng** trong Chương 4. Phân biệt cải thiện mang tính mô tả với kết luận có độ tin cậy thống kê.
+
+## Đóng góp về Computer Vision
+
+> TODO: Tóm tắt bằng chứng của các toán tử trên dữ liệu giao thông, phân tích ánh sáng/biên/vật thể nhỏ và giao thức đánh giá ảnh/video. Không biến phần kết luận thành tổng kết một bài tối ưu training.
+
+## Hạn chế và hướng phát triển
+
+> TODO: Nêu đầy đủ các giới hạn: single seed, các study khác batch, final holdout chưa đo, test biển báo ít đối tượng và thiếu artifact của Hiếu, pipeline hai model chưa chạy chung/đo tốc độ nếu chưa có minh chứng.
+
+# Tài liệu tham khảo {.unnumbered}
+
+::: {#refs}
+:::
+
+
+```{=latex}
+\appendix
+```
+
+# Tham số và công thức các toán tử xử lý ảnh
+
+## Đặc trưng thống kê ảnh
+
+> TODO: Định nghĩa luminance/brightness, contrast, noise estimate, black/white fraction và edge density đúng theo mã nguồn; kèm đơn vị, chiều ảnh, màu và hệ tọa độ.
+
+## Gamma correction
+
+Với giá trị kênh được chuẩn hóa \(x\in[0,1]\), có thể mô tả phép Gamma bằng \(y=x^\gamma\); để tái lập cần đối chiếu chính xác thứ tự màu/round/clip của implementation.
+
+## CLAHE và tăng tương phản có giới hạn
+
+> TODO: Mô tả clip limit, grid, phép pha trộn độ chênh, bảo vệ vùng bão hòa; nêu phân biệt cải thiện ảnh nhìn thấy và AP đo được.
+
+## Canny và vùng ảnh gần biên
+
+> TODO: Smoothing, gradient, nonmaximum suppression, hysteresis thresholds, mask dilation/softening và điểm khác giữa edge map và ảnh đưa vào detector.
+
+## Bảng tham số gốc
+
+> TODO: Điền từ config versioned/commit cụ thể, không chép số từ nhiều lần thử nghiệm không tương thích.
+
+# Giao thức đánh giá, ngưỡng và chi phí
+
+## Dataset roles, split identity và leakage controls
+
+> TODO: Bảng vai trò split, số ảnh, nhóm nguồn, hash và quy định không mở final holdout.
+
+## Cấu hình thực nghiệm theo study
+
+> TODO: Ghi riêng Study A v0–v3/batch32 và Study B v0/v1/v4/batch16; checkpoint/seed/epoch/image size/augment settings. Các study khác 20-epoch/960 phải ở nhóm riêng.
+
+## Đánh giá và thống kê
+
+> TODO: IoU, AP interpolation/aggregation, confidence threshold, max detections, NMS/end-to-end settings, số GT, định nghĩa lighting cohorts và đánh giá đối chứng từng lớp.
+
+## Thời gian và tài nguyên
+
+> TODO: Đo decode, preprocessing, inference, postprocessing và I/O theo cùng thiết bị/khung hình; tách FPS native của thư viện và FPS toàn video.
+
+# Nguồn, artifact và giới hạn tái lập
+
+## Nguồn vehicle
+
+> TODO: Bảng notebook, `metrics.json`, `results.csv`, training/eval config, commit/run SHA, nguồn GT, xác minh hệ nhãn và từng lần chốt số.
+
+## Nguồn traffic sign
+
+> TODO: Repository `dhphat/traffic-sign-detection`; báo cáo nguồn; số nhóm cung cấp; tình trạng thiếu checkpoint/config/model Hiếu, chưa chạy lại test và giới hạn trùng lặp.
+
+## Chỉ số không thể tự suy ra
+
+> TODO: Không tự phát minh thống kê bootstrap/confidence interval, per-class confusions khi thiếu prediction, combined mAP/FPS hoặc đo khoảng cách theo mét.
+
+## Bảng claim → evidence → confidence
+
+> TODO: Một dòng cho mỗi kết luận có số liệu hoặc claim quan trọng, trỏ tới path/commit/hash và đánh dấu verified / reported / proposal.
+
