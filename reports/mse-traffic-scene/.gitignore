@@ -1,0 +1,15 @@
+# Quarto / LaTeX generated outputs (not part of the source scaffold)
+_book/
+.quarto/
+*_files/
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.out
+*.synctex.gz
+*.toc
+*.log

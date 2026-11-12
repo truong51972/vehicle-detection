@@ -1,0 +1,17 @@
+# Giao thức đánh giá, ngưỡng và chi phí
+
+## Dataset roles, split identity và leakage controls
+
+> TODO: Bảng vai trò split, số ảnh, nhóm nguồn, hash và quy định không mở final holdout.
+
+## Cấu hình thực nghiệm theo study
+
+> TODO: Ghi riêng Study A v0–v3/batch32 và Study B v0/v1/v4/batch16; checkpoint/seed/epoch/image size/augment settings. Các study khác 20-epoch/960 phải ở nhóm riêng.
+
+## Đánh giá và thống kê
+
+> TODO: IoU, AP interpolation/aggregation, confidence threshold, max detections, NMS/end-to-end settings, số GT, định nghĩa lighting cohorts và đánh giá đối chứng từng lớp.
+
+## Thời gian và tài nguyên
+
+> TODO: Đo decode, preprocessing, inference, postprocessing và I/O theo cùng thiết bị/khung hình; tách FPS native của thư viện và FPS toàn video.

@@ -1,0 +1,53 @@
+# Phương pháp (Methodology — Dataset + Algorithms)
+
+## Tổng quan quy trình xử lý ảnh và phát hiện
+
+> TODO: Sơ đồ đầu vào khung hình → trích đặc trưng ảnh → quyết định Apply/Skip → phép biến đổi pixel → mã hóa/resize → detector → hộp/nhãn → đánh giá. Phân biệt xử lý offline với chi phí inference trực tuyến.
+
+## Dữ liệu, ground truth và phân chia tập
+
+### Nhánh phương tiện: BDD100K
+
+> TODO: Đối chiếu \`configs/data.yaml\`, split manifest, nguồn nhãn, năm lớp, tính độc lập theo nhóm nguồn và các giới hạn tránh trùng. Phân biệt training pool, S20, calibration, development và **final holdout chưa mở**.
+
+### Nhánh biển báo: dữ liệu Việt Nam
+
+> TODO: Gắn dataset version, định nghĩa sáu lớp, cách chia train/valid/test, danh sách ảnh/GT và mức độ tin cậy của thông tin nhóm cung cấp. Kiểm tra trùng trước khi kết luận khái quát.
+
+## Các thuật toán xử lý ảnh v0–v4
+
+### v0 — Raw / đối chứng
+
+> TODO: Cố định pipeline xuất JPEG, hệ tọa độ và annotation.
+
+### v1 — Gamma-or-Skip
+
+> TODO: Biến đổi phi tuyến độ sáng, điều kiện chọn frame, artifacts và clipping.
+
+### v2 — Local-shadow adjustment
+
+> TODO: Ước lượng trường sáng, smooth map, gain cục bộ; ảnh hưởng tới nhiễu và bão hòa.
+
+### v3 — Bounded local-contrast enhancement
+
+> TODO: CLAHE, clipping/offset bounds, chính sách Apply/Skip; phân tích chi tiết vùng ảnh.
+
+### v4 — Canny-guided detail enhancement
+
+> TODO: Grayscale/Gaussian/Canny, biên, vùng ảnh gần biên, ảnh hưởng biên nền, mật độ biên và routing. **Không** tuyên bố Canny là một model detector độc lập.
+
+## Detector như công cụ đánh giá ảnh
+
+> TODO: Giới thiệu YOLO26n ngắn gọn (đầu vào, confidence, class, bbox). Cấu hình huấn luyện chỉ ở mức kiểm soát biến số (same initialization, split, imgsz, seed, epochs, batch). Không dành phần lớn chương cho optimizer, loss hoặc tinh chỉnh mô hình.
+
+## Chỉ số và giao thức đánh giá Computer Vision
+
+> TODO: IoU, precision, recall, AP50/AP50:95, per-class AP/GT support, per-size AP, lighting cohorts; định nghĩa việc so sánh **theo từng study có đối chứng**, không trộn batch 32 và batch 16.
+
+## Nhánh biển báo và so sánh kích thước 640/960
+
+> TODO: Phân biệt thay đổi imgsz khi đánh giá với việc train hai model; nêu rõ evidence Phát vs Hiếu hiện không đồng đều.
+
+## Tích hợp trên cùng khung hình — đề xuất hoặc thực nghiệm
+
+> TODO: Contract frame_id, timestamp, source dimensions, model ID, class namespace, confidence, bbox_xyxy trên tọa độ gốc; đo latency end-to-end. Chỉ chuyển đoạn này từ “đề xuất” sang “đã thực hiện” khi có logs và video.

@@ -1,0 +1,23 @@
+% FPT MSE template-inspired typography scaffold.
+% IMPORTANT: not rendered or visually validated yet.
+% The template specifies 12pt Times-family body, 1.5 spacing, no first-line
+% indent and 12pt paragraph spacing. Exact margin/header/title-page placement
+% must be compared to the official 12-page PDF during a later render phase.
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\AtBeginDocument{%
+  \onehalfspacing
+  \setlength{\parindent}{0pt}%
+  \setlength{\parskip}{12pt}%
+}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyhead[R]{\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+}
+% TODO: centered two-line "Chapter N" + title, abstract double spacing,
+% roman front-matter numbering and exact cover treatment after PDF inspection.

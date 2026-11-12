@@ -1,0 +1,7 @@
+# Tóm tắt {.unnumbered}
+
+> TODO — Viết tóm tắt sau khi hoàn thiện Chương 4. Giới hạn **150 từ** theo template Master's, nêu vấn đề Computer Vision, dữ liệu, các toán tử xử lý ảnh, thiết lập kiểm chứng, kết quả thật sự đo được và giới hạn. Không đưa hình, bảng hoặc kết quả phỏng đoán vào đây.
+
+**Từ khóa (dự kiến):** Computer Vision; phát hiện phương tiện; phát hiện biển báo; Gamma; CLAHE; Canny; YOLO26n.
+
+> LAYOUT TODO: Template yêu cầu lặp tên đề tài ngay phía trên Abstract và khoảng cách dòng gấp đôi. Việc căn chỉnh này cần xác minh khi render; không coi bản QMD hiện tại là đã khớp mẫu.

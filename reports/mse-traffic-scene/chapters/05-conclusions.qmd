@@ -1,0 +1,13 @@
+# Kết luận (Conclusions)
+
+## Trả lời các câu hỏi nghiên cứu
+
+> TODO: Trả lời từng câu hỏi ở Chương 1, dựa trên **kết quả đã được kiểm chứng** trong Chương 4. Phân biệt cải thiện mang tính mô tả với kết luận có độ tin cậy thống kê.
+
+## Đóng góp về Computer Vision
+
+> TODO: Tóm tắt bằng chứng của các toán tử trên dữ liệu giao thông, phân tích ánh sáng/biên/vật thể nhỏ và giao thức đánh giá ảnh/video. Không biến phần kết luận thành tổng kết một bài tối ưu training.
+
+## Hạn chế và hướng phát triển
+
+> TODO: Nêu đầy đủ các giới hạn: single seed, các study khác batch, final holdout chưa đo, test biển báo ít đối tượng và thiếu artifact của Hiếu, pipeline hai model chưa chạy chung/đo tốc độ nếu chưa có minh chứng.

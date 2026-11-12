@@ -1,0 +1,27 @@
+# A source register, not new metrics. Pin hashes/paths only when verified.
+scope: combined_vehicle_traffic_sign_report
+status: scaffold_only
+vehicle:
+  repository: "truong51972/vehicle-detection"
+  source_report: "reports/BDD100K_v0_v4_De_hieu_2026-11-12/"
+  existing_quarto_report: "docs/report.qmd"
+  study_a:
+    variants: [v0, v1, v2, v3]
+    batch: 32
+    status: "historical_saved_results; requires pinned run/commit mapping"
+  study_b:
+    variants: [v0, v1, v4]
+    batch: 16
+    status: "matched_results_reported; requires pinned run/commit mapping"
+  final_holdout: "sealed; no new access authorized"
+traffic_sign:
+  repository: "dhphat/traffic-sign-detection"
+  reported_models: ["Phát", "Hiếu"]
+  reported_eval_sizes: [640, 960]
+  status: "group_reported; not independently reproduced"
+  missing: ["Hiếu checkpoint", "Hiếu args/history", "test image/GT manifest", "version-pinned independent metrics"]
+integration:
+  status: "proposed_only"
+  measured_joint_fps: null
+  measured_joint_ap: null
+  demonstrated_video: null
