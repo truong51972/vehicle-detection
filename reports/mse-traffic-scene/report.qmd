@@ -119,6 +119,8 @@ Biến đổi Gamma là một ánh xạ điểm phi tuyến, thường được 
 
 Trong cảnh giao thông, nâng sáng có thể làm lộ ranh giới thân xe trên nền tối, đồng thời làm nhiễu vùng thiếu sáng và các nguồn phát quang dễ bị bão hòa. Vì vậy, nên đánh giá riêng ảnh *được xử lý* và ảnh *được bỏ qua*, đối chiếu cùng định nghĩa độ sáng, thay vì suy luận từ ảnh minh họa đơn lẻ.
 
+![Đường biến đổi Gamma 0,85 so với ánh xạ đồng nhất trên miền cường độ [0,1]. Đây là đồ thị hàm số lý thuyết, không phải kết quả detection hay histogram đo trên ảnh BDD100K.](figures/gamma-mapping.svg){#fig-gamma-mapping width=83%}
+
 ## Tương phản cục bộ: AHE và CLAHE
 
 Cân bằng histogram toàn ảnh dùng phân phối mức xám chung để phân bổ lại dải cường độ, nhưng có thể bỏ qua thay đổi cục bộ. Adaptive Histogram Equalization (AHE) mở rộng phép biến đổi đến các ô không gian; nghiên cứu của Pizer và cộng sự chỉ ra hạn chế khuếch đại nhiễu trong các vùng tương đối đồng nhất và đề xuất các biến thể khắc phục [@pizer1987adaptive]. CLAHE áp giới hạn phân phối histogram ở từng ô để tránh khuếch đại tương phản quá mức và nội suy giữa các ô [@zuiderveld1994clahe].
@@ -267,6 +269,8 @@ Repo **ec2003/VN-traffic-sign-detection** lưu notebook từ chuẩn bị dữ l
 - Không chỉnh sửa trực tiếp các tập validation/test theo mô tả repo; cấu hình huấn luyện sau chuẩn bị dữ liệu là **imgsz 832**, **70 epoch**, batch **12**, AdamW và seed **0** [@hieuRepo2026].
 
 pHash là kỹ thuật Computer Vision đo độ giống nhau từ biểu diễn ảnh đã giảm tần số không gian; nó có ích để giảm trùng trong một phân vùng, nhưng **lọc trong tập train không chứng minh độc lập train/valid/test**. Các phép lật ngang cũng cần đánh giá theo ngữ nghĩa của ký hiệu biển báo, tránh tạo mẫu ảnh có hình dạng không hợp lệ theo thực tế giao thông.
+
+![Phân bố nhãn trong hiện vật huấn luyện của repo Hiếu (hình nguồn, không tạo lại từ tập dataset trong phiên biên soạn). Histogram này không chứng minh test class balance hay độc lập giữa train và test.](figures/hieu-label-distribution.jpg){#fig-hieu-labels width=91%}
 
 ### Tại sao chưa được kết luận model nào vượt trội?
 

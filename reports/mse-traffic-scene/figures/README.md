@@ -11,3 +11,6 @@ All graphics referenced by `report.qmd` must identify their origin and status.
 Phát's demo example is **linked** to its source repository, not copied (no explicit repository-level redistribution license was established).
 
 Figures must not imply a new inference run. No synthetic predictions, made-up qualitative accuracy or fake ground truth may be substituted.
+
+- `gamma-mapping.svg` — original **theoretical** Gamma 0.85 mapping vs identity, not measured CV scores or dataset samples.
+- `hieu-label-distribution.jpg` — copied **unchanged** from [Hiếu's training-label plot](https://github.com/ec2003/VN-traffic-sign-detection/blob/1bcf75eebbb3b255f622ade63900cead00abd863/assets/training_label_distribution.jpg). Attribution and licensing cautions above also apply. Training distribution is not test support.
