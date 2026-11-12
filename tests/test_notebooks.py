@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-VERSIONS = ("v0", "v1", "v2", "v3")
+VERSIONS = ("v0", "v1", "v2", "v3", "v4")
 ACTIVE = {
     "00_data_init.ipynb",
     "experiments/compare.ipynb",
@@ -74,6 +74,12 @@ def test_documentation_links_resolve_and_tracked_text_has_no_absolute_paths():
     pattern = re.compile(r"(?<![\w.~])/(?:home|Users|mnt|root)/\w")
     for name in tracked.stdout.splitlines():
         path = Path(name)
+        # Ultralytics archives its absolute runtime paths in native args.yaml.
+        # Keep those measurements intact while checking portable source/config files.
+        if path.match("runs/*/train/args.yaml") or name == (
+            "docs/v4/evidence/matched_raw/train/args.yaml"
+        ):
+            continue
         if path.suffix in {".py", ".ipynb", ".md", ".yaml", ".yml", ".toml", ".qmd", ".json"}:
             if path.exists():
                 content = path.read_text()

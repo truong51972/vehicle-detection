@@ -227,5 +227,9 @@ __marimo__/
 *.pt
 *.onnx
 *.engine
+
+# Publish the two v4 trained checkpoints as dated experiment evidence only.
+!/runs/v4-2026-11-10/train/weights/best.pt
+!/runs/v4-2026-11-10/train/weights/last.pt
 /processed/
 /cache/

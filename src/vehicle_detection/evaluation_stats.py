@@ -117,7 +117,7 @@ def factorial_bootstrap(arms, groups, classes, *, policy, resamples=500, seed=20
     """
     if type(resamples) is not int or resamples < 2:
         raise ValueError("Need at least two bootstrap draws")
-    if policy not in ("v1", "v2", "v3"):
+    if policy not in ("v1", "v2", "v3", "v4"):
         raise ValueError("Unknown policy")
     keys = ("v0/v0", f"v0/{policy}", f"{policy}/v0", f"{policy}/{policy}")
     if set(arms) != set(keys):

@@ -70,7 +70,7 @@ def project(bdd, tmp_path):
                 "role": role,
                 "s10": int(r["id"] in {"train_0", "train_1"}),
                 "s20": int(role == "training_pool"),
-                "source_path": str(Path(r["path"]).relative_to(bdd)),
+                "source_path": Path(r["path"]).relative_to(bdd).as_posix(),
                 "width": 80,
                 "height": 64,
                 "sha256": file_hash(r["path"]) if role != "final_test" else "",
@@ -81,7 +81,7 @@ def project(bdd, tmp_path):
     shared = yaml.safe_load((REPO / "configs/data.yaml").read_text())
     shared.update(data_root=str(bdd), splits_sha256=file_hash(root / "configs/splits.csv.gz"))
     (root / "configs/data.yaml").write_text(yaml.safe_dump(shared))
-    for version in ("v0", "v1", "v2", "v3"):
+    for version in ("v0", "v1", "v2", "v3", "v4"):
         config = yaml.safe_load(config_path(REPO, version).read_text())
         config["training"].update(epochs=1, batch=2, nbs=2, imgsz=64, workers=0, device="cpu")
         config["training"].update(amp=False, mosaic=0.0, close_mosaic=0, plots=False)

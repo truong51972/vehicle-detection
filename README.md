@@ -1,6 +1,6 @@
 # BDD100K / YOLO26n versioned preprocessing experiments
 
-Does an offline enhancement policy (brightness, contrast, local illumination) applied
+Does an offline enhancement policy (brightness, contrast, local illumination, edge detail) applied
 before YOLO26n help detect vehicles, especially two-wheelers, on BDD100K? Each version
 pairs one offline policy with a detector **fully fine-tuned** on that policy's output.
 
@@ -10,6 +10,7 @@ pairs one offline policy with a detector **fully fine-tuned** on that policy's o
 | [v1](notebooks/experiments/v1/README.md) | Gamma-or-Skip | [v1.yaml](notebooks/experiments/v1/v1.yaml) |
 | [v2](notebooks/experiments/v2/README.md) | Local-shadow | [v2.yaml](notebooks/experiments/v2/v2.yaml) |
 | [v3](notebooks/experiments/v3/README.md) | Adaptive local contrast | [v3.yaml](notebooks/experiments/v3/v3.yaml) |
+| [v4](notebooks/experiments/v4/README.md) | Canny-guided detail | [v4.yaml](notebooks/experiments/v4/v4.yaml) |
 
 ## Protocol
 
@@ -26,11 +27,13 @@ pairs one offline policy with a detector **fully fine-tuned** on that policy's o
   policy recipes, pinned checkpoint (project-relative path + SHA256), export threads
   (`preparation.workers`) and every native Ultralytics training/evaluation argument.
   Shared protocol (splits, taxonomy, data root, seed, JPEG95) stays in `configs/`.
-- **Training:** all versions currently share one recipe: full fine-tune (`freeze: 0`) from the pinned COCO
+- **Training:** v0–v3 share the canonical recipe: full fine-tune (`freeze: 0`) from the pinned COCO
   `weights/yolo26n.pt`, SGD lr0 0.01, 50 epochs, batch 32, AMP, imgsz 640,
   geometry-only augmentation (mosaic/flip/scale/translate; HSV off so photometric
   augmentation does not dilute the policy). A version may change `imgsz` (e.g. 960) if
   its processing needs it — change `training.imgsz` and `evaluation.imgsz` together.
+  V4 uses batch16/workers0 on a 6 GiB GPU; comparisons require a matched
+  batch16 Raw control. See [v4 results](docs/v4/RESULTS.md).
 - **Evaluation:** native FP32 NMS-free validation, conf 0.001, max_det 300; AP50:95
   macro over five classes, plus dark (raw brightness < 0.12) / bright and Apply/Skip
   cohorts from saved per-image matches. Single seed; CIs from source-group bootstrap
@@ -38,7 +41,7 @@ pairs one offline policy with a detector **fully fine-tuned** on that policy's o
 
 ## Run layout
 
-Each run is dated and self-contained (gitignored):
+Each run is dated and self-contained (original/processed images remain gitignored; selected v4 evidence is published):
 
 ```text
 runs/<version>-<YYYY-MM-DD>/
@@ -60,14 +63,14 @@ inspects saved results by default and only does expensive work after an explicit
 
 1. [00_data_init.ipynb](notebooks/00_data_init.ipynb): frozen membership; `AUDIT_SOURCES=True`
    audits original non-final sources.
-2. `v*/01_experiments.ipynb` (v1–v3): policy preview on calibration originals; read-only.
+2. `v*/01_experiments.ipynb` (v1–v4): policy preview on calibration originals; read-only.
 3. `v*/02_train_prepare.ipynb`: `ALLOW_PREPARATION=True` exports today's run
    (`RUN_DATE=None`) or a given `RUN_DATE="YYYY-MM-DD"`.
 4. `v*/03_train.ipynb`: `ALLOW_TRAINING=True` trains the newest run (`RESUME=True` continues
    an interrupted one).
 5. `v*/04_eval.ipynb`: `ALLOW_INFERENCE=True` evaluates the selected checkpoint on development.
-6. [compare.ipynb](notebooks/experiments/compare.ipynb): 10-cell Raw-vs-policy
-   cross-evaluation (three 2×2 studies: v1/v2/v3). No policy-to-policy cross-input
+6. [compare.ipynb](notebooks/experiments/compare.ipynb): 13-cell Raw-vs-policy
+   cross-evaluation (four 2×2 studies: v1/v2/v3/v4). No policy-to-policy cross-input
    runs. Defaults to read-only preflight and reuse of validated diagonal/cache
    artifacts; `ALLOW_INFERENCE=True` runs missing evaluations, never training.
    Comparisons are stored separately under `runs/comparisons/`. An unfinished v3
@@ -106,3 +109,8 @@ frozen-backbone study (`freeze=11`, no augmentation, 20 epochs). Its preprocessi
 stayed within ±0.15 AP points of Raw while resolution 640→960 gave about +4 points. Its
 evidence files were removed in this refactor; to re-render
 [report.qmd](docs/report.qmd) or replay that study, check out commit `948e1d3`.
+
+## V4 package
+
+See [v4 publication guide](docs/v4/README.md) for notebooks, local issue bodies,
+executed artifacts, matched Raw results, checkpoints and Vietnamese reports.

@@ -32,6 +32,7 @@ testpaths = ["tests"]
 
 [tool.ruff]
 line-length = 100
+extend-exclude = ["runs", "weights", "data/bdd100k"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]

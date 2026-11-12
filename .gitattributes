@@ -1,2 +1,8 @@
 # Frozen CSV evidence uses CRLF; preserve its recorded checksum.
 docs/round2-preprocessing-v2/sample_support.csv whitespace=cr-at-eol
+
+# Native v4 evidence is hash-bound: preserve exact bytes across platforms.
+runs/v4-2026-11-10/** -text whitespace=cr-at-eol
+runs/v4-execution-2026-11-10/** -text whitespace=cr-at-eol
+docs/v4/evidence/** -text whitespace=cr-at-eol
+docs/v4/comparison.csv -text whitespace=cr-at-eol
