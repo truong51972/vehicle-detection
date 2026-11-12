@@ -151,75 +151,138 @@ Từ đối chiếu này, khoảng trống **trong phạm vi đồ án** là thi
 
 # Phương pháp (Methodology — Dataset + Algorithms)
 
-## Tổng quan quy trình xử lý ảnh và phát hiện
+## Thiết kế nghiên cứu: xử lý ảnh trước, phát hiện sau
 
-> TODO: Sơ đồ đầu vào khung hình → trích đặc trưng ảnh → quyết định Apply/Skip → phép biến đổi pixel → mã hóa/resize → detector → hộp/nhãn → đánh giá. Phân biệt xử lý offline với chi phí inference trực tuyến.
+Đề tài được tổ chức theo hai nhánh độc lập. Nhánh phương tiện thực hiện so sánh các ảnh được biến đổi bởi các chính sách CV trên cùng hệ nhãn và cùng quy trình tạo bộ dữ liệu. Nhánh biển báo xem xét cách lựa chọn, lọc và biến đổi ảnh đầu vào trước khi sử dụng detector. Cả hai đều dùng YOLO26n để tạo hộp dự đoán; **đối tượng nghiên cứu chính là ảnh, dữ liệu và quy trình xử lý**, không phải thiết kế kiến trúc mạng mới.
 
-## Biểu diễn ảnh và đặc trưng thị giác máy tính
+![Sơ đồ khái niệm về hai nhánh CV và thao tác hợp nhất bounding box; phần ghép hai nhánh là thiết kế, chưa có số đo thực nghiệm.](figures/two-branch-cv.svg){#fig-cv-pipeline width=95%}
 
-### Không gian màu, grayscale và phân bố độ sáng
+Quy trình phương tiện được chuẩn hóa như sau:
 
-> TODO: Phân tích biểu diễn BGR/RGB/grayscale, histogram luminance, độ sáng trung bình, vùng cháy sáng/vùng mất chi tiết và khác biệt giữa chỉnh màu với phục hồi thông tin thực. Dùng cùng ROI/scale khi minh họa trước–sau.
+1. Đọc cùng tập ảnh gốc và nhãn bounding box.
+2. Đo đặc trưng ảnh, quyết định có áp dụng chính sách hay không.
+3. Áp dụng một trong năm chính sách v0–v4 **độc lập**, không xếp chồng các phiên bản.
+4. Xuất ảnh bằng JPEG quality 95 theo pipeline thực nghiệm, giữ kích thước và tọa độ gốc.
+5. Nạp checkpoint tương ứng, đánh giá trên tập development có cùng ID ảnh và nhãn.
+6. Tổng hợp AP/recall theo lớp, theo độ sáng và theo **nhóm thực nghiệm có cùng điều kiện đối chứng**.
 
-### Tương phản, nhiễu, độ sắc nét và biên ảnh
+Trong demo/video tương lai, chi phí xử lý ảnh phải đo trên luồng trực tiếp; chi phí chuẩn bị dữ liệu offline **không phải** độ trễ vận hành của video.
 
-> TODO: Nêu định nghĩa và cách đo contrast, noise, sharpness, edge density theo mã nguồn; trực quan hóa histogram, gradients và kết quả Canny có GT/ROI để kiểm chứng giả thuyết.
+## Biểu diễn ảnh, vùng sáng và thống kê thị giác
 
-### Hình học ảnh, resize/letterbox và bounding box
+Ảnh đầu vào có ba kênh màu; bước xử lý nội bộ tùy thuật toán có thể chuyển BGR sang grayscale trước khi ước lượng chất lượng ảnh hoặc tìm cạnh. Gọi \(Y(u,v)\) là độ sáng tại pixel \((u,v)\) với giá trị 8-bit, một chỉ số độ sáng toàn cục có thể tính bằng \(\mu_Y = \frac{1}{255HW}\sum_{u,v}Y(u,v)\). Độ tương phản toàn ảnh có thể mô tả bằng độ lệch chuẩn chuẩn hóa \(\sigma_Y/255\); nhưng chỉ số này không phản ánh hết sự chênh sáng trong một vùng nhỏ.
 
-> TODO: Quy ước hệ tọa độ pixel, chuẩn hóa YOLO, phép biến đổi tỷ lệ và padding; kiểm tra phép ánh xạ bounding box về frame gốc với sai số tọa độ đo được. Tách lỗi định vị hình học khỏi lỗi nhận dạng lớp.
+Repo vehicle đo đặc trưng chất lượng sau khi giảm ảnh grayscale về cạnh dài tối đa 512 pixel, dùng trung bình cho brightness, độ lệch chuẩn cho contrast, độ biến thiên Laplacian cho sharpness và ước lượng noise theo sai khác với median filter; chính sách v4 còn dựa vào tỷ lệ pixel biên. Những biến này phục vụ *routing*, không phải kết quả nhận dạng ngữ nghĩa. Điều kiện Apply/Skip cần được cố định trước khi xem kết quả detector để tránh đánh giá thiên lệch.
 
-### Video và tính liên tục theo thời gian
+**Lưu ý thị giác:** tăng brightness của ảnh có vùng bị cháy sáng không thể khôi phục chi tiết trắng đã bị clipping; tương tự, tăng contrast hoặc sharpen có thể làm rõ cả noise và texture nền.
 
-> TODO: Xác định frame sampling, thời điểm, motion blur/occlusion và độ ổn định detection qua các frame. Tracking/ước lượng khoảng cách **không thuộc kết quả đã thực hiện** nếu chưa có phép thử và ground truth.
+## Nhánh phương tiện: dữ liệu BDD100K và hình học nhãn
 
-## Dữ liệu, ground truth và phân chia tập
+Bộ BDD100K cung cấp dữ liệu cảnh đường phố đa điều kiện [@yu2020bdd100k]. Dự án vehicle giữ năm lớp **car, truck, bus, motorcycle, bicycle**; lớp tên **train** trong dữ liệu nguồn không nằm trong taxonomy đầu ra. Việc chuẩn bị ảnh và nhãn sử dụng các định nghĩa phân chia đã cố định trong cấu hình source; S20 là một tập con của training pool, không được cộng lại như một split mới [@vehicleRepo2026].
 
-### Nhánh phương tiện: BDD100K
+| Vai trò | Số ảnh | Sử dụng và giới hạn |
+|:--|--:|:--|
+| Training pool | 48.903 | Nguồn tạo bộ train |
+| S20 | 9.781 | **Subset** của training pool dùng fine-tune; không cộng vào tổng pool |
+| Calibration | 6.985 | Hiệu chỉnh/chọn mô hình theo giao thức dự án |
+| Development evaluation | 13.975 | Báo cáo kết quả của các phiên bản |
+| Sealed final holdout | 9.730 | **Chưa dùng để chốt kết quả ở giai đoạn này** |
 
-> TODO: Đối chiếu `configs/data.yaml`, split manifest, nguồn nhãn, năm lớp, tính độc lập theo nhóm nguồn và các giới hạn tránh trùng. Phân biệt training pool, S20, calibration, development và **final holdout chưa mở**.
+: Phân vai tập dữ liệu trong nghiên cứu phương tiện; số liệu từ bộ cấu hình/evidence hiện có, không phải toàn bộ tập BDD100K. {#tbl-vehicle-splits}
 
-### Nhánh biển báo: dữ liệu Việt Nam
+Ảnh và bbox được xử lý trên hệ tọa độ gốc. Nếu một ảnh kích thước \(W\times H\) chuyển thành kích thước \(W'\times H'\) bằng resize thuần, cần dùng \(x=x'W/W'\) và \(y=y'H/H'\) để trở về gốc. Với letterbox, phải trừ padding trước khi chia theo tỉ lệ scale. Trong nghiên cứu không đổi hình học, box GT vẫn giữ nguyên khi áp dụng Gamma/CLAHE/Canny; trong video cần kiểm tra lại tọa độ sau suy luận.
 
-> TODO: Gắn dataset version, định nghĩa sáu lớp, cách chia train/valid/test, danh sách ảnh/GT và mức độ tin cậy của thông tin nhóm cung cấp. Kiểm tra trùng trước khi kết luận khái quát.
+![Ví dụ ground truth trên ảnh development từ dự án vehicle. Đây là hình nhãn chuẩn, không phải ảnh chứng minh model đã dự đoán đúng.](../../docs/images/development-raw-gt.jpg){#fig-vehicle-ground-truth width=92%}
 
-## Các thuật toán xử lý ảnh v0–v4
+### Mất cân bằng lớp và kích thước đối tượng
 
-### v0 — Raw / đối chứng
+Trong tập development, các đối tượng **car** chiếm phần lớn số bounding box; xe máy và xe đạp có số mẫu ít hơn nhiều. Do đó, một thay đổi có AP trung bình biến động nhỏ vẫn có thể che dấu hồi quy lớn của lớp ít gặp. Khi đánh giá một chính sách xử lý ảnh, báo cáo cả số GT, per-class AP/recall, các ảnh bị bỏ sót và kích thước hộp được quan sát là yêu cầu quan trọng về Computer Vision.
 
-> TODO: Cố định pipeline xuất JPEG, hệ tọa độ và annotation.
+## Các chính sách biến đổi ảnh v0–v4
+
+| Phiên bản | Tín hiệu ảnh / thao tác CV | Chính sách | Rủi ro cần kiểm tra |
+|:--|:--|:--|:--|
+| **v0 Raw** | Ảnh gốc làm đối chứng, vẫn theo cùng đường xuất JPEG | Always keep | Nhiễu và điều kiện ánh sáng gốc |
+| **v1 Gamma-or-Skip** | Gamma 0,85 | Apply khi brightness dưới 0,12 | Nâng noise ở vùng rất tối; lệch phân bố ảnh |
+| **v2 Local-shadow** | Trường chiếu sáng làm mượt, gain 1×–2× | Điều chỉnh vùng tối trong ảnh | Khuếch đại nền/nhiễu, saturation |
+| **v3 Adaptive local contrast** | CLAHE clip 1,5, lưới 8×8, offset có biên | Apply khi tương phản thấp và các gate phù hợp | Tăng texture nền, biến màu khi kênh clipping |
+| **v4 Canny-guided detail** | Phát hiện biên Canny và tăng chi tiết cục bộ quanh biên | Gate dựa brightness/noise/edge density | Tăng biên nền và artifact nén |
+
+: Các phép xử lý ảnh chính trong repository vehicle, theo YAML v1–v4 hiện hành. {#tbl-vehicle-policies}
+
+### v0 — Ảnh gốc làm đối chứng
+
+Raw giữ pixel sau bước giải mã và xuất dữ liệu theo cùng thiết lập mã hóa JPEG quality 95. Đối chứng này giúp tách lợi ích của thuật toán xử lý ảnh khỏi khác biệt do định dạng đầu vào. Nếu bypass một bước trong lúc inference nhưng không bypass lúc train, cần ghi rõ vì đó là **domain shift** trong quan sát của detector.
 
 ### v1 — Gamma-or-Skip
 
-> TODO: Biến đổi phi tuyến độ sáng, điều kiện chọn frame, artifacts và clipping.
+Với \(x\in[0,1]\), chính sách v1 áp dụng \(f(x)=x^{0.85}\) khi độ sáng toàn ảnh nhỏ hơn 0,12. Vùng còn lại Skip. Đây là phép biến đổi phi tuyến theo cường độ pixel; không thay đổi hình học bbox và không thêm thông tin vật thể đã mất. Phần v1 từng được gọi là “Adaptive v2” trong các thí nghiệm cũ, nhưng trong taxonomy hiện hành phải giữ nhãn **v1 Gamma**, không nhầm với v2 Local-shadow.
 
-### v2 — Local-shadow adjustment
+### v2 — Hiệu chỉnh bóng cục bộ
 
-> TODO: Ước lượng trường sáng, smooth map, gain cục bộ; ảnh hưởng tới nhiễu và bão hòa.
+v2 ước lượng trường illumination từ grayscale bằng Gaussian smoothing (sigma 16), tính hệ số nâng sáng biến đổi theo vùng và giới hạn gain trong khoảng **1× đến 2×**. Điều này khác Gamma áp một ánh xạ lên toàn ảnh: một xe nằm trong bóng râm có thể nhận điều chỉnh khác vùng trời sáng. Tuy nhiên, vùng tối thường đi cùng thiếu tín hiệu/nhiễu nhiều; mức gain lớn không đảm bảo cải thiện khả năng định vị bbox.
 
-### v3 — Bounded local-contrast enhancement
+### v3 — CLAHE có giới hạn và routing
 
-> TODO: CLAHE, clipping/offset bounds, chính sách Apply/Skip; phân tích chi tiết vùng ảnh.
+v3 xây dựng phép CLAHE trên grayscale với clip limit **1,5** và grid **8×8**, sau đó lấy một phần độ chênh mức sáng để hiệu chỉnh ảnh gốc. Biên thay đổi tối đa **12 mức 8-bit** trên mỗi kênh nhằm tránh thay đổi cực đoan. Gate yêu cầu tương phản nhỏ hơn **0,20**, brightness trong khoảng **0,04–0,80**, noise tối đa **0,01**, cùng ngưỡng tỷ lệ pixel rất tối/rất sáng; ngoài phạm vi này ảnh giữ nguyên [@vehicleRepo2026].
 
-### v4 — Canny-guided detail enhancement
+Cách thiết kế này phản ánh hai mối quan tâm CV: nâng tương phản **cục bộ** ở vùng có tín hiệu nhưng tránh tăng mạnh nhiễu hoặc clipping. Việc giữ cùng hệ tọa độ giúp so sánh GT với prediction không bị ảnh hưởng bởi phép biến đổi không gian.
 
-> TODO: Grayscale/Gaussian/Canny, biên, vùng ảnh gần biên, ảnh hưởng biên nền, mật độ biên và routing. **Không** tuyên bố Canny là một model detector độc lập.
+### v4 — Tăng chi tiết có tham chiếu Canny
 
-## Detector như công cụ đánh giá ảnh
+v4 sử dụng Gaussian blur (sigma 1), các ngưỡng Canny **50/150**, mặt nạ vùng gần biên và tăng chi tiết với hệ số **0,5**, giới hạn offset **12**. Gate xét brightness 0,04–0,90, noise không quá 0,02 và edge density trong khoảng 0,001–0,20. Các phép tăng chi tiết diễn ra ở độ phân giải ảnh ban đầu, trong khi phép kiểm tra quality sử dụng ảnh giảm kích thước. Đây là **ảnh RGB được tăng cường quanh biên**, không phải đưa trực tiếp một edge map nhị phân vào detector.
 
-> TODO: Giới thiệu YOLO26n ngắn gọn (đầu vào, confidence, class, bbox). Cấu hình huấn luyện chỉ ở mức kiểm soát biến số (same initialization, split, imgsz, seed, epochs, batch). Không dành phần lớn chương cho optimizer, loss hoặc tinh chỉnh mô hình.
+Cần đo không chỉ AP mà cả tỷ lệ Apply. Nếu gần như mọi ảnh đều Apply, chính sách có tên *adaptive* nhưng thực tế vận hành gần như **always-on**; chi phí và nguy cơ tăng biên nền cần được phân tích như một lựa chọn xử lý ảnh.
 
-## Chỉ số và giao thức đánh giá Computer Vision
+## Hai nhóm thực nghiệm có đối chứng riêng
 
-> TODO: IoU, precision, recall, AP50/AP50:95, per-class AP/GT support, per-size AP, lighting cohorts; định nghĩa việc so sánh **theo từng study có đối chứng**, không trộn batch 32 và batch 16.
+Để tránh đánh giá một hiệu ứng xử lý ảnh dựa trên khác biệt không liên quan, các model được báo cáo theo hai nhóm có cấu hình nhất quán hơn:
 
-## Nhánh biển báo và so sánh kích thước 640/960
+| Nhóm | Phiên bản | Resolution | Batch train/eval | Cách so sánh |
+|:--|:--|:--|:--|:--|
+| Study A | v0, v1, v2, v3 | 640 | 32 | So từng phiên bản với Raw cùng Study A |
+| Study B | Raw control, v1, v4 | 640 | 16 | Ưu tiên đối chứng Raw batch 16 đã lưu trong evidence v4 |
 
-> TODO: Phân biệt thay đổi imgsz khi đánh giá với việc train hai model; nêu rõ evidence Phát vs Hiếu hiện không đồng đều.
+: Tách nhóm nghiên cứu để giảm nguy cơ so sánh sai điều kiện. {#tbl-vehicle-studies}
 
-## Tích hợp trên cùng khung hình — đề xuất hoặc thực nghiệm
+Việc dùng cùng checkpoint khởi tạo, seed, 50 epoch, split và giao thức đánh giá giúp giảm nhiễu thiết kế, nhưng **không loại trừ hoàn toàn tác động của stochastic training hoặc khác biệt hệ thống**. Số liệu hiện có là một seed cho mỗi nhánh; không dùng từ “cải thiện chắc chắn” nếu chưa có phép lặp/ước lượng bất định. Các thử nghiệm độc lập về độ phân giải 960 hoặc 20 epoch ở các nhánh nghiên cứu khác không được ghép vào bảng này.
 
-> TODO: Contract frame_id, timestamp, source dimensions, model ID, class namespace, confidence, bbox_xyxy trên tọa độ gốc; đo latency end-to-end. Chỉ chuyển đoạn này từ “đề xuất” sang “đã thực hiện” khi có logs và video.
+## Nhánh biển báo: sáu lớp và hai quy trình CV
+
+Cả hai repository dẫn tới bộ **Vietnamese Traffic Signs Detection v7** theo chuẩn YOLO, có phân chia được báo cáo là **2.118 train / 196 validation / 103 test**, sáu lớp: No U-turn, No going opposite, No stopping, No waiting, Roundabout ahead và Speed limit 60kmh. Repo Phát lưu cấu hình data với nguồn Roboflow v7; repo Hiếu trình bày quy trình xử lý dataset cùng nguồn trong README [@phatRepo2026; @hieuRepo2026].
+
+### Phương án Phát: giữ pipeline cơ sở và đánh giá ảnh đa kích thước
+
+Repo **dhphat/traffic-sign-detection** lưu script huấn luyện, đánh giá, xử lý video, checkpoint và biểu đồ. File cấu hình run cho thấy YOLO26n, ảnh **640**, **50 epoch**, batch **32**, SGD và seed **42** trên thiết bị **MPS**. Script **eval.py** nạp một checkpoint rồi đánh giá tập test ở **640** và **960**; đây là hai **kích thước suy luận**, không chứng minh hai mô hình đã được huấn luyện riêng ở hai kích thước.
+
+Một chú ý về dữ liệu: README Roboflow trong repository mô tả auto-contrast, exposure, blur và salt-and-pepper augmentation ở dữ liệu phát hành. Vì vậy, “ảnh gốc” ở nhánh biển báo có thể đã qua một preprocessing pipeline của bộ nguồn; không nên gọi đó là ảnh camera raw chưa chỉnh [@phatRepo2026].
+
+### Phương án Hiếu: pHash và augmentation theo lớp hiếm
+
+Repo **ec2003/VN-traffic-sign-detection** lưu notebook từ chuẩn bị dữ liệu tới suy luận, cấu hình run, hai checkpoint, đồ thị train/val và một số ảnh test. Phần xử lý dữ liệu do repo mô tả tập trung vào **cân bằng lớp và kiểm soát trùng gần**:
+
+- Phân bố trước lọc: **2.730** instance train, gồm lớp No waiting **939**, Speed limit 60kmh **189**.
+- Lọc bằng **perceptual hash (pHash)** với Hamming threshold **5** trên nhóm ảnh thuộc lớp dày; README cho biết loại **902** ảnh gần trùng, để lại **1.216** ảnh trước augmentation, số instance giảm từ **2.730** xuống **1.507**.
+- Tăng cường nhẹ trên ảnh giữ lại; thêm các phép xoay (tới 12°), biến đổi brightness/contrast, blur, shift/scale cho ảnh chứa lớp speed limit hiếm. Bounding box phải được biến đổi theo ảnh và loại trường hợp không còn đủ vùng hiển thị.
+- Không chỉnh sửa trực tiếp các tập validation/test theo mô tả repo; cấu hình huấn luyện sau chuẩn bị dữ liệu là **imgsz 832**, **70 epoch**, batch **12**, AdamW và seed **0** [@hieuRepo2026].
+
+pHash là kỹ thuật Computer Vision đo độ giống nhau từ biểu diễn ảnh đã giảm tần số không gian; nó có ích để giảm trùng trong một phân vùng, nhưng **lọc trong tập train không chứng minh độc lập train/valid/test**. Các phép lật ngang cũng cần đánh giá theo ngữ nghĩa của ký hiệu biển báo, tránh tạo mẫu ảnh có hình dạng không hợp lệ theo thực tế giao thông.
+
+### Tại sao chưa được kết luận model nào vượt trội?
+
+Hai nhánh khác cách chuẩn bị train, lượng ảnh sau lọc, kích thước lúc train, augmentation, batch, optimizer, seed và môi trường. Vì thế, chênh lệch AP tổng hợp giữa Phát và Hiếu chỉ là **so sánh kết quả hệ thống theo từng giao thức**, không phải causal ablation của riêng pHash, CLAHE hoặc YOLO26n. Để kiểm định một xử lý CV cụ thể, cần cùng data IDs, giữ nguyên checkpoint/evaluation pipeline, chỉ thay **một** thành phần xử lý hoặc dùng thiết kế có đối chứng được định nghĩa trước.
+
+## Thước đo và phép kiểm tra hình học
+
+Với hai hộp \(A,B\), IoU được xác định bởi \( |A\cap B|/|A\cup B| \). Các mức AP50 và AP50:95 chấm độ khớp hộp dưới ngưỡng IoU khác nhau. Precision/Recall ở một ngưỡng confidence cụ thể không được suy ra trực tiếp từ mAP; cần giữ quy định confidence và NMS khi đọc bảng hoặc so sánh confusion matrix.
+
+Trong bối cảnh CV, mỗi bảng số liệu phải có **tập ảnh, số GT, phiên bản transform, kích thước ảnh, cấu hình suy luận và nguồn artifact**. Khi chuyển ảnh qua resize/letterbox, chỉ số bbox dự đoán phải được quy về ảnh gốc trước khi vẽ chung hai nhánh. Đây là điều kiện cần để nhận xét một detection là bị lệch vị trí hay thiếu đối tượng.
+
+## Thiết kế tích hợp trên cùng video — chưa xác nhận thực nghiệm
+
+Kiến trúc đề xuất sử dụng một decoder video duy nhất, gắn frame ID và timestamp trước khi tách hai nhánh. Nhánh phương tiện áp chính sách v0–v4 đã chọn; nhánh biển báo đi theo chuẩn ảnh phù hợp checkpoint. Mỗi nhánh trả về class namespace riêng, tọa độ được quy về **ảnh gốc**, confidence và thời gian xử lý. Bộ hợp nhất không đổi ý nghĩa lớp, chỉ kết hợp hai tập bounding box trên cùng frame.
+
+Để biến thiết kế thành kết quả, cần chạy video thực, lưu ảnh/clip đầu ra, checkpoint SHA, log chọn preprocess, số khung hình, lỗi decode, thời gian decode → xử lý → suy luận hai nhánh → dựng overlay → encode; báo cáo FPS theo toàn pipeline thay vì lấy nghịch đảo một bộ đếm inference của Ultralytics. Việc dự án vehicle đã có Gradio demo không tự chứng minh đã tích hợp detector biển báo.
 
 # Kết quả thực nghiệm (Simulation Results)
 
