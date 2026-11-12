@@ -74,17 +74,38 @@ Source auditing and CPU preprocessing benchmarks also default to disabled.
 4. `v*/03_train.ipynb`: `ALLOW_TRAINING=True` trains the newest run (`RESUME=True` continues
    an interrupted one).
 5. `v*/04_eval.ipynb`: `ALLOW_INFERENCE=True` evaluates the selected checkpoint on development.
-6. [compare.ipynb](notebooks/experiments/compare.ipynb): 13-cell Raw-vs-policy
-   cross-evaluation (four 2×2 studies: v1/v2/v3/v4). No policy-to-policy cross-input
-   runs. Defaults to read-only preflight and reuse of validated diagonal/cache
-   artifacts; `ALLOW_INFERENCE=True` runs missing evaluations, never training.
-   Comparisons are stored separately under `runs/comparisons/`. An unfinished v3
-   is marked blocked without preventing v0–v2 analysis. Optional
-   `BOOTSTRAP_RESAMPLES=500` computes paired source-group 95% percentile CIs for
-   **all six factorial contrasts** per complete 2×2; these do not include training
-   seed or checkpoint-selection uncertainty. Optional
-   `MEASURE_PREPROCESS_COST=True` reports CPU policy timings on Raw JPEG95 proxy
-   images, not measured end-to-end streaming latency.
+6. [compare.ipynb](notebooks/experiments/compare.ipynb): evidence-aware v0–v4
+   report, pinned to the published run dates by default. **Restart & Run All needs
+   no GPU, weights, original pixels or dataset exports.** It reads run config
+   snapshots, `eval/metrics.json` and `train/complete.json`; histories/native args
+   and paired NPZ statistics are optional diagnostics. The archived matched Raw
+   control has `metrics.json` directly in `docs/v4/evidence/matched_raw/`.
+   All 13 permitted Raw-vs-policy cells remain visible; absent, stale, incomplete
+   or incompatible evidence is disclosed. No policy-to-policy inputs are allowed.
+
+   `configs/comparison_evidence.json` pins archive artifact hashes, frozen split/GT
+   attestations and runtime sources. This validates saved evidence without claiming
+   to revalidate exported pixels/boxes. Historical batch-32 v0–v3 and matched
+   batch-16 Raw/v4 have separate baselines, plots and cost panels. The archived
+   `v5_raw-2026-11-11` alias never substitutes for historical `v0/v0`; v4's diagonal
+   does not complete its 2×2. Unindexed runs are descriptive-only. Review and extend
+   the provenance index explicitly for new runs/caches; never refresh hashes simply
+   to admit a changed artifact.
+
+   `ALLOW_INFERENCE=True` separately runs missing cells for `INFERENCE_POLICIES`
+   (one compatible profile per call), preserving full export/checkpoint/cache
+   validation. It never starts training or re-export, and refuses stale/incomplete
+   caches. New cross-results live in `runs/comparisons/`.
+   `BOOTSTRAP_RESAMPLES=500` enables paired source-group 95% percentile CIs for
+   all six contrasts of complete, matched 2×2 studies when NPZ statistics and group
+   metadata exist. These intervals exclude training seed/checkpoint-selection
+   uncertainty and multiple-comparison adjustment. Deltas are percentage points.
+   Fixed-ID cohort plots require validated routing metadata; a missing cohort is
+   unavailable, not AP=0. A qualitative gallery requires compatible box predictions,
+   GT and fixed development pixels, absent from the published report inputs.
+   `MEASURE_PREPROCESS_COST=True` requires validated Raw JPEG95 exports and measures
+   CPU routing/operators separately. Native GPU timings exclude that policy cost;
+   they are never summed into an unmeasured end-to-end latency.
 
 ```sh
 uv sync --locked --extra study

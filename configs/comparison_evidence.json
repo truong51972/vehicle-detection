@@ -1,0 +1,96 @@
+{
+  "artifacts": {
+    "docs/v4/evidence/matched_raw/config.yaml": "814482a99c131a598ebeff59d073211c4cbc0e7eba636f5ae7de40c8eeb2784b",
+    "docs/v4/evidence/matched_raw/metrics.json": "42d9e674b20a4f104ef41745a8ec5451aa6b0908bea795f9a9b31d11d01df310",
+    "docs/v4/evidence/matched_raw/train/args.yaml": "d16818bea2aef7a1c539bffd42df2184ed8f95082f6ff420d8f461d7adf0cf90",
+    "docs/v4/evidence/matched_raw/train/complete.json": "d474f0b6c0d05008696f80478870f81e9ebf6eb6c865b5f98c2ef79a869ba08e",
+    "docs/v4/evidence/matched_raw/train/results.csv": "f151a247dd7e7be267641539ee430215f9ca51bf7b703cf03ce07217f7d12149",
+    "runs/comparisons/v0-2026-11-09__v1-2026-11-09/metrics.json": "7eb17758b6526134b7bce740e51224e37e00d04f48225288743827742267ac19",
+    "runs/comparisons/v0-2026-11-09__v1-2026-11-09/paired_stats.npz": "766edee3655b4667b47434d5671b04e4296a2463ecbcd4aab5873aff82ce1397",
+    "runs/comparisons/v0-2026-11-09__v2-2026-11-09/metrics.json": "f37e75704050aa1c5fe14b81c65606d5a077b77ffd76b42863f7f345b60b3d38",
+    "runs/comparisons/v0-2026-11-09__v2-2026-11-09/paired_stats.npz": "d7f8199edf97f8712ca6196c792ee8853bd67e973fdb4bb9fd550e8d4fffd7c8",
+    "runs/comparisons/v0-2026-11-09__v3-2026-11-09/metrics.json": "20db81e7e42d1cacb614b97dc828c0cf9064caf740483287a4cec1c685a8dc47",
+    "runs/comparisons/v0-2026-11-09__v3-2026-11-09/paired_stats.npz": "de03679d439befd339f46572f80a441f507e53b6ce58ccae2fb2a6998c343f99",
+    "runs/comparisons/v1-2026-11-09__v0-2026-11-09/metrics.json": "bae06cafe3d48014b98af79e6decb386376c1f9696cdf26847c20fd6dfcba390",
+    "runs/comparisons/v1-2026-11-09__v0-2026-11-09/paired_stats.npz": "2d1b648fe93ccef25718a6669184e1932b5dcb99bacf7d46a15e2f57a58bd854",
+    "runs/comparisons/v2-2026-11-09__v0-2026-11-09/metrics.json": "b47add4eea215fd5e0574cc1b140a263c7c97901dec33429aab5193db594f3ae",
+    "runs/comparisons/v2-2026-11-09__v0-2026-11-09/paired_stats.npz": "2206fbffa04177638b2aadb88b7e651ca7f3e16849b1b5931e4d1d01c6b8f0d4",
+    "runs/comparisons/v3-2026-11-09__v0-2026-11-09/metrics.json": "6d94f5267c0585a902384cd8096e13baebe634647e88cd4e331b0289f4fb07f8",
+    "runs/comparisons/v3-2026-11-09__v0-2026-11-09/paired_stats.npz": "99351f1fee12935a49a62fc9349fb79dba21dca5f13f5310ab62d34c347e903f",
+    "runs/v0-2026-11-09/config.yaml": "1fe815614d0db85049f704ab1d7ab6dd7e2c149b16ebd280677546b694fa166f",
+    "runs/v0-2026-11-09/eval/metrics.json": "b9c54376b1f09c23c695908818d6aac584173bd35acc5103bce991c28a0fac4c",
+    "runs/v0-2026-11-09/eval/paired_stats.npz": "9cf064a56ef1bd87ce42e7394dac1546d3a333070d87e9af480f907e5d24a19b",
+    "runs/v0-2026-11-09/train/args.yaml": "a3825ca1ac456f2b659baf81d5371d33bba404f8c061e69b706235356e4820f3",
+    "runs/v0-2026-11-09/train/complete.json": "0fa05a69f7a33adc8ca17ecd3bc4f49ff1861822b27382a5a9dda2e7223df5be",
+    "runs/v0-2026-11-09/train/results.csv": "dbfa04dfc7bff16655f16d5f8b231ac37bab1659d78696de427b6e711910b686",
+    "runs/v1-2026-11-09/config.yaml": "e9f3b56cbc860607f4867cc4d18bf4cd1a21de8d4c2d5a31ccaeadc2eea2d1e8",
+    "runs/v1-2026-11-09/eval/metrics.json": "4b20a256c9f3f2cbaf406243377c64a98155e19609f5e24ea1ababa58659c40d",
+    "runs/v1-2026-11-09/eval/paired_stats.npz": "025c798b2f11bf32cf796ce0a9ddb5ae6612b29aa5c6c1acc308d71e9fce6510",
+    "runs/v1-2026-11-09/train/args.yaml": "96a2e8c0771ada6ce4bf9c3eb55476a4f1208bda16be9ca88fa5dcdb1a13639a",
+    "runs/v1-2026-11-09/train/complete.json": "ee5f3e89f2ef79f40d5065c57f0eb6f35025ce223cb3a8bf410f9a7ff7c14d99",
+    "runs/v1-2026-11-09/train/results.csv": "d2abb63036a4d50b20dba293e85f133f3f6943e58d1c9f23aaf2434e3469529d",
+    "runs/v2-2026-11-09/config.yaml": "e9a92715e374d52f810c632275b7b6180c26e41315ae1fad36f075161ca9ad46",
+    "runs/v2-2026-11-09/eval/metrics.json": "66136b844888e48920d96ffb89308c03ede0962c2e5a0ea0454baf557236bc04",
+    "runs/v2-2026-11-09/eval/paired_stats.npz": "7e98e4dea8b4e635fc15e70be7a8288a445da0ca800b1f275d5288a85be1ed09",
+    "runs/v2-2026-11-09/train/args.yaml": "bc46b301da8f659d42a9cbd856774289eb82aca2381ff2c41d1c52ecd22f6e07",
+    "runs/v2-2026-11-09/train/complete.json": "1ed83067b55370e466f6b129c84c59b55054dde5a89d6a5fc633076eb6f08b41",
+    "runs/v2-2026-11-09/train/results.csv": "252dd78b362272833fb775239a27253e174a827c2f7b68339089045fa077ac84",
+    "runs/v3-2026-11-09/config.yaml": "c88504dacc2edbe3fea7fc25d5d6a515d298d8fe75f58beb8cf6701d34ab0354",
+    "runs/v3-2026-11-09/eval/metrics.json": "769ff891fd90935cce20663d9030247c0a582a5dc85e81044f65ba55b73566ef",
+    "runs/v3-2026-11-09/eval/paired_stats.npz": "ed3c9307b46ad28b6aa6c85cc96c932712bf41ed244b748b06f1affe8f3b809f",
+    "runs/v3-2026-11-09/train/args.yaml": "59b5450519029dc56947042dfd950ba3e768b7d1f8d1740cadeec5952678904c",
+    "runs/v3-2026-11-09/train/complete.json": "49566bd51a3f8e021294377c59c1f1e85c91f094da4b95b95e38339c30ce18af",
+    "runs/v3-2026-11-09/train/results.csv": "b1075c0e341a540351843ab0acbc74ffcd3a2689e0ab0faae6b1e19b09c084b5",
+    "runs/v4-2026-11-10/config.yaml": "c54eda494c98bce496492cf92cd29dd4bbe7eec04d11fab652b6fedda9f6f592",
+    "runs/v4-2026-11-10/eval/metrics.json": "450285c64fd3d5adbc1f6eb64ca961bc8d0ac5ed15f29afb1114878a3bacf678",
+    "runs/v4-2026-11-10/eval/paired_stats.npz": "c9099c917368d7df30666104e400ba51500a9f1173d2a752e5bf47305d6dd146",
+    "runs/v4-2026-11-10/train/args.yaml": "89a968e249d62f61ae1036dffb0f65ba75d79a525416042f35c525a781c9ab1d",
+    "runs/v4-2026-11-10/train/complete.json": "ee0868151bc08f57b551f3cd5d4eaae6e036ed41c47446d5dbebdf3a5c3f3e41",
+    "runs/v4-2026-11-10/train/results.csv": "82e57a577656190b1bc3845d546b428f291218c13f889ef97fda5b7372574579"
+  },
+  "note": "Archived protocol attestations; hashes validate saved evidence, not exported pixels/GT. Runtime sources are the executed notebooks and docs/v4/RESULTS.md. Extend explicitly for new runs.",
+  "runs": {
+    "v0-2026-11-09": {
+      "limits": "Single seed; frozen split/GT attested by archived protocol, exports not revalidated; OpenCV runtime unrecorded.",
+      "profile": "historical-batch32",
+      "runtime": "Python 3.11.14; PyTorch 2.15.0+cu132; Ultralytics 8.4.198; RTX 5060 Ti 16 GiB; OpenCV unrecorded",
+      "source": "notebooks/experiments/v0/04_eval.ipynb",
+      "splits_sha256": "b7a6aba1d1f72e1b1e3eceda8e8427d41f44408067fad63ee68479137714cb96"
+    },
+    "v1-2026-11-09": {
+      "limits": "Single seed; frozen split/GT attested by archived protocol, exports not revalidated; OpenCV runtime unrecorded.",
+      "profile": "historical-batch32",
+      "runtime": "Python 3.11.14; PyTorch 2.15.0+cu132; Ultralytics 8.4.198; RTX 5060 Ti 16 GiB; OpenCV unrecorded",
+      "source": "notebooks/experiments/v1/04_eval.ipynb",
+      "splits_sha256": "b7a6aba1d1f72e1b1e3eceda8e8427d41f44408067fad63ee68479137714cb96"
+    },
+    "v2-2026-11-09": {
+      "limits": "Single seed; frozen split/GT attested by archived protocol, exports not revalidated; OpenCV runtime unrecorded.",
+      "profile": "historical-batch32",
+      "runtime": "Python 3.11.14; PyTorch 2.15.0+cu132; Ultralytics 8.4.198; RTX 5060 Ti 16 GiB; OpenCV unrecorded",
+      "source": "notebooks/experiments/v2/04_eval.ipynb",
+      "splits_sha256": "b7a6aba1d1f72e1b1e3eceda8e8427d41f44408067fad63ee68479137714cb96"
+    },
+    "v3-2026-11-09": {
+      "limits": "Single seed; frozen split/GT attested by archived protocol, exports not revalidated; OpenCV runtime unrecorded.",
+      "profile": "historical-batch32",
+      "runtime": "Python 3.11.14; PyTorch 2.15.0+cu132; Ultralytics 8.4.198; RTX 5060 Ti 16 GiB; OpenCV unrecorded",
+      "source": "notebooks/experiments/v3/04_eval.ipynb",
+      "splits_sha256": "b7a6aba1d1f72e1b1e3eceda8e8427d41f44408067fad63ee68479137714cb96"
+    },
+    "v4-2026-11-10": {
+      "limits": "Single seed; frozen split/GT attested by archived protocol, exports not revalidated. OpenCV 5 differs from locked <5 environment.",
+      "profile": "matched-batch16",
+      "runtime": "PyTorch 2.7.1+cu126; Ultralytics 8.4.198; OpenCV 5.0.0; GTX 1660 Ti 6 GiB",
+      "source": "docs/v4/RESULTS.md",
+      "splits_sha256": "b7a6aba1d1f72e1b1e3eceda8e8427d41f44408067fad63ee68479137714cb96"
+    },
+    "v5_raw-2026-11-11": {
+      "limits": "Single seed; frozen split/GT attested by archived protocol, exports not revalidated. OpenCV 5 differs from locked <5 environment.",
+      "profile": "matched-batch16",
+      "runtime": "PyTorch 2.7.1+cu126; Ultralytics 8.4.198; OpenCV 5.0.0; GTX 1660 Ti 6 GiB",
+      "source": "docs/v4/RESULTS.md",
+      "splits_sha256": "b7a6aba1d1f72e1b1e3eceda8e8427d41f44408067fad63ee68479137714cb96"
+    }
+  }
+}
