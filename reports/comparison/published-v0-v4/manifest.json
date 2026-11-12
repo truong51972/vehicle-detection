@@ -1,0 +1,621 @@
+{
+  "artifacts_sha256": {
+    "README.md": "f10047a5f29f6a246555fded5beffda351bdbcf9ceb15214b3936058c3037bf5",
+    "classes.png": "266c70b96288698974be59b31c3e3b1f1ab5d766e9f2b993db8cccd84501d054",
+    "convergence.png": "63f76d8dbee3e5e2deb75acc26254665eca173f203b2e9438d4f6a2bf76eec75",
+    "cost.png": "06e7d8fd4ed462c798ff988d90b34a858ebfa38e515f1d014fab0727f471bfbd",
+    "coverage.csv": "05e1c66bd0ee6c2f33b3efce6965d4b8b6c0720bff6d40409e1970ccefcd8816",
+    "coverage.png": "e651a132df50d2ac95f562b379293d35f8e2eb623f001a30a545d54ffa8afcf5",
+    "effects.csv": "db0fa7d647ca5ab43666049a71ccc66ca9604b2680f49c047862303d5cbf9c77",
+    "effects.png": "a8d2452cea04904dc052cf2afcd9fdd8fd4573d9282897b768caa04ce0b2db39",
+    "factorial.png": "6d10f92c516b2bf1224ed544e392e14d58254cd305d2d70477ce7b4611ae3fd7",
+    "overall.png": "8b6e16c70aadcab56c9c3a2043bcadd3376da4fa8a33aa06d295e52e329be025",
+    "paired_cohorts.png": "50ab3cd4b002d5d7cbbbd2b66070074fcf8789e70067a2a415232b89dbfbaa66",
+    "pending_attestation.png": "82c5bfbb8b566f961a3cc1389d716a834e8178fd016f45588a6b813303c7bca0",
+    "provenance.csv": "22f5030176dc2fd5dc082d27c1b54dec587d3f26e4bd921f200a506b18a8f393",
+    "saved_cohorts.csv": "daa432e65017586b1f80df69935da1dfb0c52986f4da1e0c546f3d13c48062a5",
+    "saved_cohorts.png": "b62cec6006107032886e5f41735b7171c8bf14e1f85ef512d36d1906dc77ad58"
+  },
+  "cells": {
+    "matched_raw/matched_raw": {
+      "inputs": {
+        "checkpoint_sha256": "125d18b74d6fe85955b1bc09f8a1e603ce364f31899a69a3a26d47219706ed73",
+        "files_sha256": "d15d6b747b59c7b81c8f25733dab217d271aef7656dad000ac5526a0833bf399",
+        "run": "runs/v5_raw-2026-11-11",
+        "settings": {
+          "agnostic_nms": false,
+          "augment": false,
+          "batch": 16,
+          "conf": 0.001,
+          "device": "0",
+          "imgsz": 640,
+          "iou": 0.7,
+          "max_det": 300,
+          "nms": false,
+          "plots": true,
+          "quantize": 32,
+          "rect": true,
+          "verbose": false,
+          "workers": 0
+        },
+        "ultralytics": "8.4.198"
+      },
+      "pending_attestation": false
+    },
+    "v0/v0": {
+      "inputs": {
+        "checkpoint_sha256": "9cba1dc3d39c9a9146af18a852eff1068e2cff6fa91637245641a00cb2979e5f",
+        "files_sha256": "e20246110069db7b6239ff0e0ba1fcaab7ac2fd109f6e35158bc84e55564586a",
+        "run": "runs/v0-2026-11-09",
+        "settings": {
+          "agnostic_nms": false,
+          "augment": false,
+          "batch": 32,
+          "conf": 0.001,
+          "device": "0",
+          "imgsz": 640,
+          "iou": 0.7,
+          "max_det": 300,
+          "nms": false,
+          "plots": true,
+          "quantize": 32,
+          "rect": true,
+          "verbose": false,
+          "workers": 0
+        },
+        "ultralytics": "8.4.198"
+      },
+      "pending_attestation": false
+    },
+    "v0/v1": {
+      "inputs": {
+        "checkpoint_sha256": "9cba1dc3d39c9a9146af18a852eff1068e2cff6fa91637245641a00cb2979e5f",
+        "classes": [
+          "car",
+          "truck",
+          "bus",
+          "motorcycle",
+          "bicycle"
+        ],
+        "input_files_sha256": "54d6d338c297d6ea2d8406602cbc7c3ca8260c5922e051682c4e91f61b9536cf",
+        "input_metadata_sha256": "621094d077cce4ae7d2556b779a5fe0b3c287ef9363e392f456ae49f9ae4f17a",
+        "input_run": "v1-2026-11-09",
+        "model_run": "v0-2026-11-09",
+        "role": "development_validation",
+        "settings": {
+          "agnostic_nms": false,
+          "augment": false,
+          "batch": 32,
+          "conf": 0.001,
+          "device": "0",
+          "imgsz": 640,
+          "iou": 0.7,
+          "max_det": 300,
+          "nms": false,
+          "plots": true,
+          "quantize": 32,
+          "rect": true,
+          "verbose": false,
+          "workers": 0
+        },
+        "ultralytics": "8.4.198"
+      },
+      "pending_attestation": false
+    },
+    "v0/v2": {
+      "inputs": {
+        "checkpoint_sha256": "9cba1dc3d39c9a9146af18a852eff1068e2cff6fa91637245641a00cb2979e5f",
+        "classes": [
+          "car",
+          "truck",
+          "bus",
+          "motorcycle",
+          "bicycle"
+        ],
+        "input_files_sha256": "4b14480aff59cac29fa6dae22f26f720ff153015e3b7b1ff57bba3fb14754f36",
+        "input_metadata_sha256": "0c6e6db4462a58f2eb4fb0b052daa65fa2195dd9cb233f6f331fd69ab90970eb",
+        "input_run": "v2-2026-11-09",
+        "model_run": "v0-2026-11-09",
+        "role": "development_validation",
+        "settings": {
+          "agnostic_nms": false,
+          "augment": false,
+          "batch": 32,
+          "conf": 0.001,
+          "device": "0",
+          "imgsz": 640,
+          "iou": 0.7,
+          "max_det": 300,
+          "nms": false,
+          "plots": true,
+          "quantize": 32,
+          "rect": true,
+          "verbose": false,
+          "workers": 0
+        },
+        "ultralytics": "8.4.198"
+      },
+      "pending_attestation": false
+    },
+    "v0/v3": {
+      "inputs": {
+        "checkpoint_sha256": "9cba1dc3d39c9a9146af18a852eff1068e2cff6fa91637245641a00cb2979e5f",
+        "classes": [
+          "car",
+          "truck",
+          "bus",
+          "motorcycle",
+          "bicycle"
+        ],
+        "input_files_sha256": "3f9bb2a78e6f4e37911b1115777818a1bf33c3e7453b3450f689abdb8b8b19a3",
+        "input_metadata_sha256": "bd58024fd9eb6b577166209a97148c82e604a20088512842f81064bb46bef1cb",
+        "input_run": "v3-2026-11-09",
+        "model_run": "v0-2026-11-09",
+        "role": "development_validation",
+        "settings": {
+          "agnostic_nms": false,
+          "augment": false,
+          "batch": 32,
+          "conf": 0.001,
+          "device": "0",
+          "imgsz": 640,
+          "iou": 0.7,
+          "max_det": 300,
+          "nms": false,
+          "plots": true,
+          "quantize": 32,
+          "rect": true,
+          "verbose": false,
+          "workers": 0
+        },
+        "ultralytics": "8.4.198"
+      },
+      "pending_attestation": false
+    },
+    "v1/v0": {
+      "inputs": {
+        "checkpoint_sha256": "f7df49cba55152a60133f5764e9e44d9a09f263ad7333d95072583044e748ce8",
+        "classes": [
+          "car",
+          "truck",
+          "bus",
+          "motorcycle",
+          "bicycle"
+        ],
+        "input_files_sha256": "e20246110069db7b6239ff0e0ba1fcaab7ac2fd109f6e35158bc84e55564586a",
+        "input_metadata_sha256": "e8c1979b1f1e2e3d62176724d4d3c4b0676397048d06fcd64169b756adb38a64",
+        "input_run": "v0-2026-11-09",
+        "model_run": "v1-2026-11-09",
+        "role": "development_validation",
+        "settings": {
+          "agnostic_nms": false,
+          "augment": false,
+          "batch": 32,
+          "conf": 0.001,
+          "device": "0",
+          "imgsz": 640,
+          "iou": 0.7,
+          "max_det": 300,
+          "nms": false,
+          "plots": true,
+          "quantize": 32,
+          "rect": true,
+          "verbose": false,
+          "workers": 0
+        },
+        "ultralytics": "8.4.198"
+      },
+      "pending_attestation": false
+    },
+    "v1/v1": {
+      "inputs": {
+        "checkpoint_sha256": "f7df49cba55152a60133f5764e9e44d9a09f263ad7333d95072583044e748ce8",
+        "files_sha256": "54d6d338c297d6ea2d8406602cbc7c3ca8260c5922e051682c4e91f61b9536cf",
+        "run": "runs/v1-2026-11-09",
+        "settings": {
+          "agnostic_nms": false,
+          "augment": false,
+          "batch": 32,
+          "conf": 0.001,
+          "device": "0",
+          "imgsz": 640,
+          "iou": 0.7,
+          "max_det": 300,
+          "nms": false,
+          "plots": true,
+          "quantize": 32,
+          "rect": true,
+          "verbose": false,
+          "workers": 0
+        },
+        "ultralytics": "8.4.198"
+      },
+      "pending_attestation": false
+    },
+    "v2/v0": {
+      "inputs": {
+        "checkpoint_sha256": "bcd20547a595d7b796fcc16f886444b4de2e3339aebe4e5a66dd76af843515f1",
+        "classes": [
+          "car",
+          "truck",
+          "bus",
+          "motorcycle",
+          "bicycle"
+        ],
+        "input_files_sha256": "e20246110069db7b6239ff0e0ba1fcaab7ac2fd109f6e35158bc84e55564586a",
+        "input_metadata_sha256": "e8c1979b1f1e2e3d62176724d4d3c4b0676397048d06fcd64169b756adb38a64",
+        "input_run": "v0-2026-11-09",
+        "model_run": "v2-2026-11-09",
+        "role": "development_validation",
+        "settings": {
+          "agnostic_nms": false,
+          "augment": false,
+          "batch": 32,
+          "conf": 0.001,
+          "device": "0",
+          "imgsz": 640,
+          "iou": 0.7,
+          "max_det": 300,
+          "nms": false,
+          "plots": true,
+          "quantize": 32,
+          "rect": true,
+          "verbose": false,
+          "workers": 0
+        },
+        "ultralytics": "8.4.198"
+      },
+      "pending_attestation": false
+    },
+    "v2/v2": {
+      "inputs": {
+        "checkpoint_sha256": "bcd20547a595d7b796fcc16f886444b4de2e3339aebe4e5a66dd76af843515f1",
+        "files_sha256": "4b14480aff59cac29fa6dae22f26f720ff153015e3b7b1ff57bba3fb14754f36",
+        "run": "runs/v2-2026-11-09",
+        "settings": {
+          "agnostic_nms": false,
+          "augment": false,
+          "batch": 32,
+          "conf": 0.001,
+          "device": "0",
+          "imgsz": 640,
+          "iou": 0.7,
+          "max_det": 300,
+          "nms": false,
+          "plots": true,
+          "quantize": 32,
+          "rect": true,
+          "verbose": false,
+          "workers": 0
+        },
+        "ultralytics": "8.4.198"
+      },
+      "pending_attestation": false
+    },
+    "v3/v0": {
+      "inputs": {
+        "checkpoint_sha256": "ef48c39aa68f03bc4efb3a293af96227cf9db82c99090df6d189c0f58b1816f9",
+        "classes": [
+          "car",
+          "truck",
+          "bus",
+          "motorcycle",
+          "bicycle"
+        ],
+        "input_files_sha256": "e20246110069db7b6239ff0e0ba1fcaab7ac2fd109f6e35158bc84e55564586a",
+        "input_metadata_sha256": "e8c1979b1f1e2e3d62176724d4d3c4b0676397048d06fcd64169b756adb38a64",
+        "input_run": "v0-2026-11-09",
+        "model_run": "v3-2026-11-09",
+        "role": "development_validation",
+        "settings": {
+          "agnostic_nms": false,
+          "augment": false,
+          "batch": 32,
+          "conf": 0.001,
+          "device": "0",
+          "imgsz": 640,
+          "iou": 0.7,
+          "max_det": 300,
+          "nms": false,
+          "plots": true,
+          "quantize": 32,
+          "rect": true,
+          "verbose": false,
+          "workers": 0
+        },
+        "ultralytics": "8.4.198"
+      },
+      "pending_attestation": false
+    },
+    "v3/v3": {
+      "inputs": {
+        "checkpoint_sha256": "ef48c39aa68f03bc4efb3a293af96227cf9db82c99090df6d189c0f58b1816f9",
+        "files_sha256": "3f9bb2a78e6f4e37911b1115777818a1bf33c3e7453b3450f689abdb8b8b19a3",
+        "run": "runs/v3-2026-11-09",
+        "settings": {
+          "agnostic_nms": false,
+          "augment": false,
+          "batch": 32,
+          "conf": 0.001,
+          "device": "0",
+          "imgsz": 640,
+          "iou": 0.7,
+          "max_det": 300,
+          "nms": false,
+          "plots": true,
+          "quantize": 32,
+          "rect": true,
+          "verbose": false,
+          "workers": 0
+        },
+        "ultralytics": "8.4.198"
+      },
+      "pending_attestation": false
+    },
+    "v4/v4": {
+      "inputs": {
+        "checkpoint_sha256": "74a1338bf2645328509f2e16baf90b4c41ba6df7ae4c70e7e69f33d3e1049dfb",
+        "files_sha256": "0f95e24230940196d356b3e902eacf5dd8429625ab4bb6ed4199e5bf3ff8da9f",
+        "run": "runs/v4-2026-11-10",
+        "settings": {
+          "agnostic_nms": false,
+          "augment": false,
+          "batch": 16,
+          "conf": 0.001,
+          "device": "0",
+          "imgsz": 640,
+          "iou": 0.7,
+          "max_det": 300,
+          "nms": false,
+          "plots": true,
+          "quantize": 32,
+          "rect": true,
+          "verbose": false,
+          "workers": 0
+        },
+        "ultralytics": "8.4.198"
+      },
+      "pending_attestation": false
+    }
+  },
+  "coverage": [
+    {
+      "detail": "historical-batch32; archived protocol",
+      "input": "v0",
+      "model": "v0",
+      "status": "cached"
+    },
+    {
+      "detail": "runs/comparisons/v0-2026-11-09__v1-2026-11-09",
+      "input": "v1",
+      "model": "v0",
+      "status": "cached"
+    },
+    {
+      "detail": "runs/comparisons/v1-2026-11-09__v0-2026-11-09",
+      "input": "v0",
+      "model": "v1",
+      "status": "cached"
+    },
+    {
+      "detail": "historical-batch32; archived protocol",
+      "input": "v1",
+      "model": "v1",
+      "status": "cached"
+    },
+    {
+      "detail": "runs/comparisons/v0-2026-11-09__v2-2026-11-09",
+      "input": "v2",
+      "model": "v0",
+      "status": "cached"
+    },
+    {
+      "detail": "runs/comparisons/v2-2026-11-09__v0-2026-11-09",
+      "input": "v0",
+      "model": "v2",
+      "status": "cached"
+    },
+    {
+      "detail": "historical-batch32; archived protocol",
+      "input": "v2",
+      "model": "v2",
+      "status": "cached"
+    },
+    {
+      "detail": "runs/comparisons/v0-2026-11-09__v3-2026-11-09",
+      "input": "v3",
+      "model": "v0",
+      "status": "cached"
+    },
+    {
+      "detail": "runs/comparisons/v3-2026-11-09__v0-2026-11-09",
+      "input": "v0",
+      "model": "v3",
+      "status": "cached"
+    },
+    {
+      "detail": "historical-batch32; archived protocol",
+      "input": "v3",
+      "model": "v3",
+      "status": "cached"
+    },
+    {
+      "detail": "Non-comparable or unverified training/evaluation/runtime profiles",
+      "input": "v4",
+      "model": "v0",
+      "status": "blocked"
+    },
+    {
+      "detail": "Non-comparable or unverified training/evaluation/runtime profiles",
+      "input": "v0",
+      "model": "v4",
+      "status": "blocked"
+    },
+    {
+      "detail": "matched-batch16; archived protocol",
+      "input": "v4",
+      "model": "v4",
+      "status": "cached"
+    }
+  ],
+  "final_test_accessed": false,
+  "generated_at": "2026-11-12T13:10:47.393232+00:00",
+  "provenance": [
+    {
+      "baseline_eligible": true,
+      "checkpoint_sha256": "9cba1dc3d39c9a9146af18a852eff1068e2cff6fa91637245641a00cb2979e5f",
+      "config_sha256": "1fe815614d0db85049f704ab1d7ab6dd7e2c149b16ebd280677546b694fa166f",
+      "limits": "Single seed; frozen split/GT attested by archived protocol, exports not revalidated; OpenCV runtime unrecorded.",
+      "metrics": "runs/v0-2026-11-09/eval/metrics.json",
+      "metrics_sha256": "b9c54376b1f09c23c695908818d6aac584173bd35acc5103bce991c28a0fac4c",
+      "model/input": "v0/v0",
+      "profile": "historical-batch32",
+      "protocol_source": "notebooks/experiments/v0/04_eval.ipynb",
+      "run_id": "v0-2026-11-09",
+      "runtime": "Python 3.11.14; PyTorch 2.15.0+cu132; Ultralytics 8.4.198; RTX 5060 Ti 16 GiB; OpenCV unrecorded",
+      "split": "development_validation",
+      "splits_sha256": "b7a6aba1d1f72e1b1e3eceda8e8427d41f44408067fad63ee68479137714cb96"
+    },
+    {
+      "baseline_eligible": true,
+      "checkpoint_sha256": "f7df49cba55152a60133f5764e9e44d9a09f263ad7333d95072583044e748ce8",
+      "config_sha256": "e9f3b56cbc860607f4867cc4d18bf4cd1a21de8d4c2d5a31ccaeadc2eea2d1e8",
+      "limits": "Single seed; frozen split/GT attested by archived protocol, exports not revalidated; OpenCV runtime unrecorded.",
+      "metrics": "runs/v1-2026-11-09/eval/metrics.json",
+      "metrics_sha256": "4b20a256c9f3f2cbaf406243377c64a98155e19609f5e24ea1ababa58659c40d",
+      "model/input": "v1/v1",
+      "profile": "historical-batch32",
+      "protocol_source": "notebooks/experiments/v1/04_eval.ipynb",
+      "run_id": "v1-2026-11-09",
+      "runtime": "Python 3.11.14; PyTorch 2.15.0+cu132; Ultralytics 8.4.198; RTX 5060 Ti 16 GiB; OpenCV unrecorded",
+      "split": "development_validation",
+      "splits_sha256": "b7a6aba1d1f72e1b1e3eceda8e8427d41f44408067fad63ee68479137714cb96"
+    },
+    {
+      "baseline_eligible": true,
+      "checkpoint_sha256": "bcd20547a595d7b796fcc16f886444b4de2e3339aebe4e5a66dd76af843515f1",
+      "config_sha256": "e9a92715e374d52f810c632275b7b6180c26e41315ae1fad36f075161ca9ad46",
+      "limits": "Single seed; frozen split/GT attested by archived protocol, exports not revalidated; OpenCV runtime unrecorded.",
+      "metrics": "runs/v2-2026-11-09/eval/metrics.json",
+      "metrics_sha256": "66136b844888e48920d96ffb89308c03ede0962c2e5a0ea0454baf557236bc04",
+      "model/input": "v2/v2",
+      "profile": "historical-batch32",
+      "protocol_source": "notebooks/experiments/v2/04_eval.ipynb",
+      "run_id": "v2-2026-11-09",
+      "runtime": "Python 3.11.14; PyTorch 2.15.0+cu132; Ultralytics 8.4.198; RTX 5060 Ti 16 GiB; OpenCV unrecorded",
+      "split": "development_validation",
+      "splits_sha256": "b7a6aba1d1f72e1b1e3eceda8e8427d41f44408067fad63ee68479137714cb96"
+    },
+    {
+      "baseline_eligible": true,
+      "checkpoint_sha256": "ef48c39aa68f03bc4efb3a293af96227cf9db82c99090df6d189c0f58b1816f9",
+      "config_sha256": "c88504dacc2edbe3fea7fc25d5d6a515d298d8fe75f58beb8cf6701d34ab0354",
+      "limits": "Single seed; frozen split/GT attested by archived protocol, exports not revalidated; OpenCV runtime unrecorded.",
+      "metrics": "runs/v3-2026-11-09/eval/metrics.json",
+      "metrics_sha256": "769ff891fd90935cce20663d9030247c0a582a5dc85e81044f65ba55b73566ef",
+      "model/input": "v3/v3",
+      "profile": "historical-batch32",
+      "protocol_source": "notebooks/experiments/v3/04_eval.ipynb",
+      "run_id": "v3-2026-11-09",
+      "runtime": "Python 3.11.14; PyTorch 2.15.0+cu132; Ultralytics 8.4.198; RTX 5060 Ti 16 GiB; OpenCV unrecorded",
+      "split": "development_validation",
+      "splits_sha256": "b7a6aba1d1f72e1b1e3eceda8e8427d41f44408067fad63ee68479137714cb96"
+    },
+    {
+      "baseline_eligible": true,
+      "checkpoint_sha256": "74a1338bf2645328509f2e16baf90b4c41ba6df7ae4c70e7e69f33d3e1049dfb",
+      "config_sha256": "c54eda494c98bce496492cf92cd29dd4bbe7eec04d11fab652b6fedda9f6f592",
+      "limits": "Single seed; frozen split/GT attested by archived protocol, exports not revalidated. OpenCV 5 differs from locked <5 environment.",
+      "metrics": "runs/v4-2026-11-10/eval/metrics.json",
+      "metrics_sha256": "450285c64fd3d5adbc1f6eb64ca961bc8d0ac5ed15f29afb1114878a3bacf678",
+      "model/input": "v4/v4",
+      "profile": "matched-batch16",
+      "protocol_source": "docs/v4/RESULTS.md",
+      "run_id": "v4-2026-11-10",
+      "runtime": "PyTorch 2.7.1+cu126; Ultralytics 8.4.198; OpenCV 5.0.0; GTX 1660 Ti 6 GiB",
+      "split": "development_validation",
+      "splits_sha256": "b7a6aba1d1f72e1b1e3eceda8e8427d41f44408067fad63ee68479137714cb96"
+    },
+    {
+      "baseline_eligible": true,
+      "checkpoint_sha256": "125d18b74d6fe85955b1bc09f8a1e603ce364f31899a69a3a26d47219706ed73",
+      "config_sha256": "814482a99c131a598ebeff59d073211c4cbc0e7eba636f5ae7de40c8eeb2784b",
+      "limits": "Single seed; frozen split/GT attested by archived protocol, exports not revalidated. OpenCV 5 differs from locked <5 environment.",
+      "metrics": "docs/v4/evidence/matched_raw/metrics.json",
+      "metrics_sha256": "42d9e674b20a4f104ef41745a8ec5451aa6b0908bea795f9a9b31d11d01df310",
+      "model/input": "matched_raw/matched_raw",
+      "profile": "matched-batch16",
+      "protocol_source": "docs/v4/RESULTS.md",
+      "run_id": "v5_raw-2026-11-11",
+      "runtime": "PyTorch 2.7.1+cu126; Ultralytics 8.4.198; OpenCV 5.0.0; GTX 1660 Ti 6 GiB",
+      "split": "development_validation",
+      "splits_sha256": "b7a6aba1d1f72e1b1e3eceda8e8427d41f44408067fad63ee68479137714cb96"
+    }
+  ],
+  "settings": {
+    "bootstrap_resamples": 0,
+    "bootstrap_seed": 2026,
+    "cost_repeats": 3,
+    "cost_samples": 128,
+    "run_dates": {
+      "v0": "2026-11-09",
+      "v1": "2026-11-09",
+      "v2": "2026-11-09",
+      "v3": "2026-11-09",
+      "v4": "2026-11-10"
+    }
+  },
+  "sources_sha256": {
+    "configs/comparison_evidence.json": "9ac9c409397078340a3bf879585f35339e25649810cfbc539c460039c7ac966e",
+    "configs/data.yaml": "0e81943cecef8c54845ebf189046078d3daabd27107cbf050c047abf3fb9abe1",
+    "configs/splits.csv.gz": "b7a6aba1d1f72e1b1e3eceda8e8427d41f44408067fad63ee68479137714cb96",
+    "docs/v4/evidence/matched_raw/config.yaml": "814482a99c131a598ebeff59d073211c4cbc0e7eba636f5ae7de40c8eeb2784b",
+    "docs/v4/evidence/matched_raw/metrics.json": "42d9e674b20a4f104ef41745a8ec5451aa6b0908bea795f9a9b31d11d01df310",
+    "docs/v4/evidence/matched_raw/train/args.yaml": "d16818bea2aef7a1c539bffd42df2184ed8f95082f6ff420d8f461d7adf0cf90",
+    "docs/v4/evidence/matched_raw/train/complete.json": "d474f0b6c0d05008696f80478870f81e9ebf6eb6c865b5f98c2ef79a869ba08e",
+    "docs/v4/evidence/matched_raw/train/results.csv": "f151a247dd7e7be267641539ee430215f9ca51bf7b703cf03ce07217f7d12149",
+    "runs/comparisons/v0-2026-11-09__v1-2026-11-09/metrics.json": "7eb17758b6526134b7bce740e51224e37e00d04f48225288743827742267ac19",
+    "runs/comparisons/v0-2026-11-09__v1-2026-11-09/paired_stats.npz": "766edee3655b4667b47434d5671b04e4296a2463ecbcd4aab5873aff82ce1397",
+    "runs/comparisons/v0-2026-11-09__v2-2026-11-09/metrics.json": "f37e75704050aa1c5fe14b81c65606d5a077b77ffd76b42863f7f345b60b3d38",
+    "runs/comparisons/v0-2026-11-09__v2-2026-11-09/paired_stats.npz": "d7f8199edf97f8712ca6196c792ee8853bd67e973fdb4bb9fd550e8d4fffd7c8",
+    "runs/comparisons/v0-2026-11-09__v3-2026-11-09/metrics.json": "20db81e7e42d1cacb614b97dc828c0cf9064caf740483287a4cec1c685a8dc47",
+    "runs/comparisons/v0-2026-11-09__v3-2026-11-09/paired_stats.npz": "de03679d439befd339f46572f80a441f507e53b6ce58ccae2fb2a6998c343f99",
+    "runs/comparisons/v1-2026-11-09__v0-2026-11-09/metrics.json": "bae06cafe3d48014b98af79e6decb386376c1f9696cdf26847c20fd6dfcba390",
+    "runs/comparisons/v1-2026-11-09__v0-2026-11-09/paired_stats.npz": "2d1b648fe93ccef25718a6669184e1932b5dcb99bacf7d46a15e2f57a58bd854",
+    "runs/comparisons/v2-2026-11-09__v0-2026-11-09/metrics.json": "b47add4eea215fd5e0574cc1b140a263c7c97901dec33429aab5193db594f3ae",
+    "runs/comparisons/v2-2026-11-09__v0-2026-11-09/paired_stats.npz": "2206fbffa04177638b2aadb88b7e651ca7f3e16849b1b5931e4d1d01c6b8f0d4",
+    "runs/comparisons/v3-2026-11-09__v0-2026-11-09/metrics.json": "6d94f5267c0585a902384cd8096e13baebe634647e88cd4e331b0289f4fb07f8",
+    "runs/comparisons/v3-2026-11-09__v0-2026-11-09/paired_stats.npz": "99351f1fee12935a49a62fc9349fb79dba21dca5f13f5310ab62d34c347e903f",
+    "runs/v0-2026-11-09/config.yaml": "1fe815614d0db85049f704ab1d7ab6dd7e2c149b16ebd280677546b694fa166f",
+    "runs/v0-2026-11-09/eval/metrics.json": "b9c54376b1f09c23c695908818d6aac584173bd35acc5103bce991c28a0fac4c",
+    "runs/v0-2026-11-09/eval/paired_stats.npz": "9cf064a56ef1bd87ce42e7394dac1546d3a333070d87e9af480f907e5d24a19b",
+    "runs/v0-2026-11-09/train/args.yaml": "a3825ca1ac456f2b659baf81d5371d33bba404f8c061e69b706235356e4820f3",
+    "runs/v0-2026-11-09/train/complete.json": "0fa05a69f7a33adc8ca17ecd3bc4f49ff1861822b27382a5a9dda2e7223df5be",
+    "runs/v0-2026-11-09/train/results.csv": "dbfa04dfc7bff16655f16d5f8b231ac37bab1659d78696de427b6e711910b686",
+    "runs/v1-2026-11-09/config.yaml": "e9f3b56cbc860607f4867cc4d18bf4cd1a21de8d4c2d5a31ccaeadc2eea2d1e8",
+    "runs/v1-2026-11-09/eval/metrics.json": "4b20a256c9f3f2cbaf406243377c64a98155e19609f5e24ea1ababa58659c40d",
+    "runs/v1-2026-11-09/eval/paired_stats.npz": "025c798b2f11bf32cf796ce0a9ddb5ae6612b29aa5c6c1acc308d71e9fce6510",
+    "runs/v1-2026-11-09/train/args.yaml": "96a2e8c0771ada6ce4bf9c3eb55476a4f1208bda16be9ca88fa5dcdb1a13639a",
+    "runs/v1-2026-11-09/train/complete.json": "ee5f3e89f2ef79f40d5065c57f0eb6f35025ce223cb3a8bf410f9a7ff7c14d99",
+    "runs/v1-2026-11-09/train/results.csv": "d2abb63036a4d50b20dba293e85f133f3f6943e58d1c9f23aaf2434e3469529d",
+    "runs/v2-2026-11-09/config.yaml": "e9a92715e374d52f810c632275b7b6180c26e41315ae1fad36f075161ca9ad46",
+    "runs/v2-2026-11-09/eval/metrics.json": "66136b844888e48920d96ffb89308c03ede0962c2e5a0ea0454baf557236bc04",
+    "runs/v2-2026-11-09/eval/paired_stats.npz": "7e98e4dea8b4e635fc15e70be7a8288a445da0ca800b1f275d5288a85be1ed09",
+    "runs/v2-2026-11-09/train/args.yaml": "bc46b301da8f659d42a9cbd856774289eb82aca2381ff2c41d1c52ecd22f6e07",
+    "runs/v2-2026-11-09/train/complete.json": "1ed83067b55370e466f6b129c84c59b55054dde5a89d6a5fc633076eb6f08b41",
+    "runs/v2-2026-11-09/train/results.csv": "252dd78b362272833fb775239a27253e174a827c2f7b68339089045fa077ac84",
+    "runs/v3-2026-11-09/config.yaml": "c88504dacc2edbe3fea7fc25d5d6a515d298d8fe75f58beb8cf6701d34ab0354",
+    "runs/v3-2026-11-09/eval/metrics.json": "769ff891fd90935cce20663d9030247c0a582a5dc85e81044f65ba55b73566ef",
+    "runs/v3-2026-11-09/eval/paired_stats.npz": "ed3c9307b46ad28b6aa6c85cc96c932712bf41ed244b748b06f1affe8f3b809f",
+    "runs/v3-2026-11-09/train/args.yaml": "59b5450519029dc56947042dfd950ba3e768b7d1f8d1740cadeec5952678904c",
+    "runs/v3-2026-11-09/train/complete.json": "49566bd51a3f8e021294377c59c1f1e85c91f094da4b95b95e38339c30ce18af",
+    "runs/v3-2026-11-09/train/results.csv": "b1075c0e341a540351843ab0acbc74ffcd3a2689e0ab0faae6b1e19b09c084b5",
+    "runs/v4-2026-11-10/config.yaml": "c54eda494c98bce496492cf92cd29dd4bbe7eec04d11fab652b6fedda9f6f592",
+    "runs/v4-2026-11-10/eval/metrics.json": "450285c64fd3d5adbc1f6eb64ca961bc8d0ac5ed15f29afb1114878a3bacf678",
+    "runs/v4-2026-11-10/eval/paired_stats.npz": "c9099c917368d7df30666104e400ba51500a9f1173d2a752e5bf47305d6dd146",
+    "runs/v4-2026-11-10/train/args.yaml": "89a968e249d62f61ae1036dffb0f65ba75d79a525416042f35c525a781c9ab1d",
+    "runs/v4-2026-11-10/train/complete.json": "ee0868151bc08f57b551f3cd5d4eaae6e036ed41c47446d5dbebdf3a5c3f3e41",
+    "runs/v4-2026-11-10/train/results.csv": "82e57a577656190b1bc3845d546b428f291218c13f889ef97fda5b7372574579"
+  },
+  "split": "development_validation"
+}

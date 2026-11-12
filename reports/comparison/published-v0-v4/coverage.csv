@@ -1,0 +1,14 @@
+model,input,status,detail,split,model_run,input_run,profile,mAP50_pct,mAP50_95_pct,precision_pct,recall_pct
+v0,v0,cached,historical-batch32; archived protocol,development_validation,v0-2026-11-09,v0-2026-11-09,historical-batch32,42.03494311636247,25.7931259944256,58.07676500622014,38.719869925900454
+v0,v1,cached,runs/comparisons/v0-2026-11-09__v1-2026-11-09,development_validation,v0-2026-11-09,v1-2026-11-09,historical-batch32,42.02226632046647,25.771705151787867,58.1998593226746,38.76853903925038
+v1,v0,cached,runs/comparisons/v1-2026-11-09__v0-2026-11-09,development_validation,v1-2026-11-09,v0-2026-11-09,historical-batch32,41.66531912776571,25.443539991401646,56.121079122606375,39.16096668417327
+v1,v1,cached,historical-batch32; archived protocol,development_validation,v1-2026-11-09,v1-2026-11-09,historical-batch32,41.71768006173936,25.437398489042494,55.790756697689346,39.37088228770341
+v0,v2,cached,runs/comparisons/v0-2026-11-09__v2-2026-11-09,development_validation,v0-2026-11-09,v2-2026-11-09,historical-batch32,41.73917889706609,25.61337276710743,57.686386459399344,38.682437594644576
+v2,v0,cached,runs/comparisons/v2-2026-11-09__v0-2026-11-09,development_validation,v2-2026-11-09,v0-2026-11-09,historical-batch32,41.820420918113435,25.423145275322735,57.302364568048006,38.911169075548685
+v2,v2,cached,historical-batch32; archived protocol,development_validation,v2-2026-11-09,v2-2026-11-09,historical-batch32,41.961530819416666,25.472424334711246,57.89754587193098,38.96669328604244
+v0,v3,cached,runs/comparisons/v0-2026-11-09__v3-2026-11-09,development_validation,v0-2026-11-09,v3-2026-11-09,historical-batch32,42.00686173589535,25.783035398001193,58.327111684063794,38.76913942261683
+v3,v0,cached,runs/comparisons/v3-2026-11-09__v0-2026-11-09,development_validation,v3-2026-11-09,v0-2026-11-09,historical-batch32,42.15508416643184,25.699615198191733,56.317018524577044,39.301118507347724
+v3,v3,cached,historical-batch32; archived protocol,development_validation,v3-2026-11-09,v3-2026-11-09,historical-batch32,42.13480554221601,25.728290852499548,56.905370637689444,38.9623298681261
+v0,v4,blocked,Non-comparable or unverified training/evaluation/runtime profiles,development_validation,v0-2026-11-09,v4-2026-11-10,historical-batch32,,,,
+v4,v0,blocked,Non-comparable or unverified training/evaluation/runtime profiles,development_validation,v4-2026-11-10,v0-2026-11-09,matched-batch16,,,,
+v4,v4,cached,matched-batch16; archived protocol,development_validation,v4-2026-11-10,v4-2026-11-10,matched-batch16,42.034500378484765,25.670799758007533,56.713684661464036,39.428822789604986
