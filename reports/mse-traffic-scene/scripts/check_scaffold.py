@@ -1,7 +1,7 @@
 """Static, no-render validation for the single-file CV academic report."""
 
-from pathlib import Path
 import re
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MAIN = ROOT / "report.qmd"
@@ -66,7 +66,9 @@ def main() -> None:
     bib = (ROOT / "references.bib").read_text(encoding="utf-8")
     keys = set(re.findall(r"@\w+\{([A-Za-z0-9_-]+),", bib))
     citations = set(re.findall(r"(?<![A-Za-z0-9])@([A-Za-z][A-Za-z0-9_-]*)", text))
-    missing_refs = sorted(c for c in citations if not c.startswith(("fig-", "tbl-")) and c not in keys)
+    missing_refs = sorted(
+        c for c in citations if not c.startswith(("fig-", "tbl-")) and c not in keys
+    )
     if missing_refs:
         raise SystemExit(f"Unresolved bibliography keys: {missing_refs}")
 
