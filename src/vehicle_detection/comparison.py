@@ -14,7 +14,7 @@ from .common import file_hash, read_json, relative, write_json
 from .data import FIVE_CLASSES
 from .experiment_data import load_experiment, run_dir, verify_data
 
-POLICIES = ("v1", "v2", "v3")
+POLICIES = ("v1", "v2", "v3", "v4")
 VERSIONS = ("v0", *POLICIES)
 CONTRASTS = (
     "inference_on_raw_model",
@@ -27,9 +27,9 @@ CONTRASTS = (
 
 
 def comparison_pairs(policies=POLICIES):
-    """Ten unique valid cells, not the full 4x4 Cartesian product."""
+    """Thirteen valid cells: one shared Raw cell and three per policy."""
     if not policies or len(set(policies)) != len(policies) or set(policies) - set(POLICIES):
-        raise ValueError("Select distinct policies from v1, v2, v3")
+        raise ValueError("Select distinct policies from v1, v2, v3, v4")
     return [("v0", "v0")] + [
         pair for policy in policies for pair in (("v0", policy), (policy, "v0"), (policy, policy))
     ]

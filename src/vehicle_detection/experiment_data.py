@@ -16,7 +16,7 @@ from .data import FIVE_CLASSES, annotation_profile, group_key, remap_boxes, scan
 from .preprocess import apply_recipe, validate_recipes
 
 EXPERIMENTS_DIR = Path("notebooks/experiments")
-VARIANTS = {"raw", "adaptive", "local_shadow", "adaptive_local_contrast"}
+VARIANTS = {"raw", "adaptive", "local_shadow", "adaptive_local_contrast", "adaptive_canny_detail"}
 # Ultralytics split → frozen role. Calibration selects checkpoints; development is reported.
 ROLES = {"val": "calibration", "test": "development_validation"}
 FEATURES = ("brightness", "contrast", "sharpness", "noise", "black_fraction", "white_fraction")

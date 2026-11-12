@@ -86,6 +86,51 @@ def routes_local_contrast(scores, settings):
     )
 
 
+def canny_edges(image, low_threshold, high_threshold, blur_sigma):
+    """Full-resolution Canny support; thresholds use Sobel magnitude, not luminance."""
+    validate_image(image)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    smooth = cv2.GaussianBlur(gray, (0, 0), blur_sigma)
+    return cv2.Canny(smooth, low_threshold, high_threshold, apertureSize=3, L2gradient=True)
+
+
+def canny_detail(
+    image,
+    low_threshold,
+    high_threshold,
+    blur_sigma,
+    detail_sigma,
+    amount,
+    max_offset,
+    mask_radius,
+    *,
+    edges=None,
+):
+    """Canny-guided, bounded luminance detail; preserve color, geometry and source bytes."""
+    validate_image(image)
+    if edges is None:
+        edges = canny_edges(image, low_threshold, high_threshold, blur_sigma)
+    # Finite support keeps pixels outside the edge neighbourhood exactly unchanged.
+    kernel = np.ones((2 * mask_radius + 1, 2 * mask_radius + 1), np.uint8)
+    mask = cv2.dilate(edges, kernel).astype(np.float32) / 255
+    mask = cv2.GaussianBlur(mask, (3, 3), 0.8)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY).astype(np.float32)
+    detail = gray - cv2.GaussianBlur(gray, (0, 0), detail_sigma)
+    protection = np.clip(np.minimum(gray - 8, 247 - gray) / 32, 0, 1)
+    offset = np.rint(np.clip(detail * amount, -max_offset, max_offset) * mask * protection)
+    return np.clip(image.astype(np.int16) + offset.astype(np.int16)[:, :, None], 0, 255).astype(
+        np.uint8
+    )
+
+
+def routes_canny_detail(scores, settings):
+    return (
+        settings["brightness_above"] < scores["brightness"] < settings["brightness_below"]
+        and scores["noise"] <= settings["noise_max"]
+        and settings["edge_density_above"] < scores["edge_density"] < settings["edge_density_below"]
+    )
+
+
 def validate_recipes(recipes):
     bounds = {
         "raw": {},
@@ -116,6 +161,22 @@ def validate_recipes(recipes):
             "black_below": (0, 1),
             "white_below": (0, 1),
         },
+        "canny_detail": {
+            "low_threshold": (0, 1443),
+            "high_threshold": (0, 1443),
+            "blur_sigma": (0.1, 5),
+            "detail_sigma": (0.1, 5),
+            "amount": (0, 2),
+            "max_offset": (0, 64),
+            "mask_radius": (0, 5),
+        },
+        "adaptive_canny_detail": {
+            "brightness_above": (0, 1),
+            "brightness_below": (0, 1),
+            "noise_max": (0, 1),
+            "edge_density_above": (0, 1),
+            "edge_density_below": (0, 1),
+        },
     }
     for variant, settings in recipes.items():
         if variant not in bounds or set(settings) != set(bounds[variant]):
@@ -129,7 +190,9 @@ def validate_recipes(recipes):
                 or not low <= value <= high
             ):
                 raise ValueError(f"Invalid {variant}.{key}")
-            if key in {"grid_size", "max_filters", "max_offset"} and not isinstance(value, int):
+            if key in {"grid_size", "max_filters", "max_offset", "mask_radius"} and not isinstance(
+                value, int
+            ):
                 raise ValueError(f"{key} must be an integer")
     if "adaptive" in recipes:
         if not {"gamma", "clahe", "denoise", "sharpen"} <= recipes.keys():
@@ -138,6 +201,17 @@ def validate_recipes(recipes):
             raise ValueError("Adaptive sharpness bounds are reversed")
     if "adaptive_local_contrast" in recipes and "local_contrast" not in recipes:
         raise ValueError("Adaptive local contrast requires the local_contrast operator settings")
+    if "canny_detail" in recipes:
+        settings = recipes["canny_detail"]
+        if settings["low_threshold"] >= settings["high_threshold"]:
+            raise ValueError("Canny thresholds must be strictly increasing")
+    if "adaptive_canny_detail" in recipes:
+        if "canny_detail" not in recipes:
+            raise ValueError("Adaptive Canny detail requires the canny_detail operator settings")
+        settings = recipes["adaptive_canny_detail"]
+        for feature in ("brightness", "edge_density"):
+            if settings[f"{feature}_above"] >= settings[f"{feature}_below"]:
+                raise ValueError(f"Canny {feature} bounds must be strictly increasing")
 
 
 def apply_recipe(image, variant, recipes):
@@ -145,6 +219,16 @@ def apply_recipe(image, variant, recipes):
     validate_image(image)
     settings = recipes[variant]
     scores = quality(image)
+    if variant == "adaptive_canny_detail":
+        operator = recipes["canny_detail"]
+        edges = canny_edges(
+            image, operator["low_threshold"], operator["high_threshold"], operator["blur_sigma"]
+        )
+        scores["edge_density"] = float(np.mean(edges != 0))
+        if not routes_canny_detail(scores, settings):
+            return image, [], scores
+        output = canny_detail(image, **operator, edges=edges)
+        return output, [{"name": "canny_detail", "params": operator}], scores
     if variant == "adaptive":
         wanted = {
             "gamma": scores["brightness"] < settings["brightness_below"],
@@ -179,6 +263,8 @@ def apply_recipe(image, variant, recipes):
         output = local_shadow(image)
     elif variant == "local_contrast":
         output = local_contrast(image, **settings)
+    elif variant == "canny_detail":
+        output = canny_detail(image, **settings)
     else:
         raise ValueError(f"Unknown recipe: {variant}")
     return output, [{"name": variant, "params": settings}], scores

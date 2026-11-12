@@ -1,3 +1,4 @@
+import shutil
 from pathlib import Path
 
 import pandas as pd
@@ -34,21 +35,25 @@ def test_shared_table_matches_frozen_memberships():
     assert (table.loc[table.role == "final_test", "sha256"] == "").all()
 
 
-@pytest.mark.parametrize("version", ["v0", "v1", "v2", "v3"])
+@pytest.mark.parametrize("version", ["v0", "v1", "v2", "v3", "v4"])
 def test_versions_own_full_native_args_and_relative_checkpoint(version):
     config = load_experiment(Path.cwd(), version)
     training = config["training"]
     assert training["freeze"] == 0 and training["optimizer"] == "SGD"
-    assert training["batch"] == 32 and training["amp"] is True and training["imgsz"] == 640
+    assert training["batch"] == (16 if version in {"v4"} else 32)
+    assert training["amp"] is True and training["imgsz"] == 640
     assert training["hsv_v"] == 0 and training["mosaic"] == 1.0
     assert not Path(config["checkpoint"]).is_absolute() and config["name"]
     assert config["preparation"]["workers"] >= 1
     base = {k: v for k, v in load_experiment(Path.cwd(), "v0").items() if k in {"training"}}
-    assert training == base["training"]
+    expected = dict(base["training"])
+    if version in {"v4"}:
+        expected.update(batch=16, workers=0)
+    assert training == expected
 
 
 def test_versions_are_discovered_beside_their_notebooks():
-    assert experiments(Path.cwd()) == ["v0", "v1", "v2", "v3"]
+    assert experiments(Path.cwd()) == ["v0", "v1", "v2", "v3", "v4"]
     assert config_path(Path.cwd(), "v2") == Path.cwd() / "notebooks/experiments/v2/v2.yaml"
     assert not list(Path("configs").glob("v*.yaml"))
     with pytest.raises(ValueError, match="experiment ID"):
@@ -60,7 +65,7 @@ def test_versions_are_discovered_beside_their_notebooks():
     [
         (lambda c: c["training"].update(data="/abs/data.yaml"), "owned by the lifecycle"),
         (lambda c: c.update(checkpoint_sha256="pinned"), "SHA256"),
-        (lambda c: c.update(checkpoint="/abs/yolo26n.pt"), "project-relative"),
+        (lambda c: c.update(checkpoint=str(Path("/abs/yolo26n.pt").resolve())), "project-relative"),
         (lambda c: c["preparation"].update(workers=0), "preparation.workers"),
         (lambda c: c.pop("name"), "display name"),
     ],
@@ -119,7 +124,11 @@ def test_export_is_relative_deterministic_and_sealed(project, monkeypatch):
     again = project / "again"
     again.mkdir()
     for name in ("configs", "notebooks", "pyproject.toml"):
-        (again / name).symlink_to(project / name)
+        source = project / name
+        if source.is_dir():
+            shutil.copytree(source, again / name)
+        else:
+            shutil.copy2(source, again / name)
     assert prepare_data(again, "v3", DATE, workers=1)["files_sha256"] == saved["files_sha256"]
     assert prepare_data(project, "v3", DATE)["files_sha256"] == saved["files_sha256"]
 

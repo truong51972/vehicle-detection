@@ -1,0 +1,14 @@
+{
+  "phase": "complete",
+  "updated_at": "2026-11-10T22:51:42.836526+00:00",
+  "experiment": "v4",
+  "run_date": "2026-11-10",
+  "metrics": "D:\\truong_research_project\\vehicle-detection-branches\\main\\runs\\v4-2026-11-10\\eval\\metrics.json",
+  "overall": {
+    "mAP50": 0.4203450037848476,
+    "mAP50_95": 0.25670799758007534,
+    "precision": 0.5671368466146404,
+    "recall": 0.3942882278960499
+  },
+  "final_test_accessed": false
+}

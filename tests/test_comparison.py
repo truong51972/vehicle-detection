@@ -1,4 +1,4 @@
-"""Contracts for the 10-cell Raw-vs-policy comparison (no production inference)."""
+"""Contracts for the 13-cell Raw-vs-policy comparison (no production inference)."""
 
 from pathlib import Path
 
@@ -14,9 +14,9 @@ from vehicle_detection.comparison import (
 )
 
 
-def test_exact_ten_cells_and_no_policy_to_policy_mismatch():
+def test_exact_thirteen_cells_and_no_policy_to_policy_mismatch():
     pairs = comparison_pairs()
-    assert len(pairs) == len(set(pairs)) == 10
+    assert len(pairs) == len(set(pairs)) == 13
     assert set(pairs) == {
         ("v0", "v0"),
         ("v0", "v1"),
@@ -28,6 +28,9 @@ def test_exact_ten_cells_and_no_policy_to_policy_mismatch():
         ("v0", "v3"),
         ("v3", "v0"),
         ("v3", "v3"),
+        ("v0", "v4"),
+        ("v4", "v0"),
+        ("v4", "v4"),
     }
     assert comparison_pairs(("v3",)) == [("v0", "v0"), ("v0", "v3"), ("v3", "v0"), ("v3", "v3")]
     with pytest.raises(ValueError, match="Unsupported"):
@@ -35,7 +38,7 @@ def test_exact_ten_cells_and_no_policy_to_policy_mismatch():
     with pytest.raises(ValueError, match="distinct"):
         comparison_pairs(("v1", "v1"))
     with pytest.raises(ValueError, match="distinct"):
-        comparison_pairs(("v4",))
+        comparison_pairs(("v5",))
 
 
 def test_factorial_contrast_definition_and_zero_baseline():
@@ -83,7 +86,8 @@ def test_raw_vs_policy_paths_do_not_modify_training_layout(tmp_path):
     assert path != inputs / "eval"
 
 
-def test_shared_draw_factorial_bootstrap_and_class_cis():
+@pytest.mark.parametrize("policy", ["v1", "v4"])
+def test_shared_draw_factorial_bootstrap_and_class_cis(policy):
     pytest.importorskip("ultralytics")
     from vehicle_detection.evaluation_stats import factorial_bootstrap
 
@@ -99,8 +103,8 @@ def test_shared_draw_factorial_bootstrap_and_class_cis():
             "pred_cls": np.array([0, 1, 0, 1]),
             "target_cls": np.array([0, 1]),
         }
-    arms = {key: base for key in ("v0/v0", "v0/v1", "v1/v0", "v1/v1")}
-    same = factorial_bootstrap(arms, groups, [0, 1], policy="v1", resamples=30)
+    arms = {key: base for key in ("v0/v0", f"v0/{policy}", f"{policy}/v0", f"{policy}/{policy}")}
+    same = factorial_bootstrap(arms, groups, [0, 1], policy=policy, resamples=30)
     assert same["groups"] == 20
     for contrast in same["contrasts"].values():
         assert contrast["delta"] == pytest.approx(0)
@@ -112,7 +116,7 @@ def test_shared_draw_factorial_bootstrap_and_class_cis():
         for record in by_contrast.values()
     )
     altered = {key: dict(base) for key in arms}
-    altered["v1/v1"] = {sample: dict(record) for sample, record in base.items()}
-    altered["v1/v1"]["i0"]["target_cls"] = np.array([1])
+    altered[f"{policy}/{policy}"] = {sample: dict(record) for sample, record in base.items()}
+    altered[f"{policy}/{policy}"]["i0"]["target_cls"] = np.array([1])
     with pytest.raises(ValueError, match="ground truth"):
-        factorial_bootstrap(altered, groups, [0, 1], policy="v1", resamples=10)
+        factorial_bootstrap(altered, groups, [0, 1], policy=policy, resamples=10)

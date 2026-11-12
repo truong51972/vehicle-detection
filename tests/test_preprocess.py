@@ -13,7 +13,7 @@ def image(seed=0, scale=1.0, offset=0):
     return np.clip(base * scale + offset, 0, 255).astype(np.uint8)
 
 
-@pytest.mark.parametrize("version", ["v0", "v1", "v2", "v3"])
+@pytest.mark.parametrize("version", ["v0", "v1", "v2", "v3", "v4"])
 def test_every_version_policy_preserves_geometry_and_source(version):
     config = yaml.safe_load(config_path(".", version).read_text())
     validate_recipes(config["recipes"])
