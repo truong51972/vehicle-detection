@@ -5,7 +5,7 @@
 ## P0 — Experimental truth
 
 - [ ] **F01** Actual vehicle + traffic-sign same-frame demonstration, or explicitly title/scope as two independent studies with proposed integration.
-- [ ] **F02** Hiếu/Phát traffic-sign reproducibility: both checkpoints/configs, test IDs/GT, 640/960 settings, test artifacts; reconcile conflicting Phát AP50:95 reports.
+- [ ] **F02** Hiếu/Phát traffic-sign reproducibility: **both checkpoints/configs are now confirmed present in their repos**; obtain common test IDs/GT, machine-readable 640/960 results, identical evaluation settings; reconcile conflicts before claiming a replicated comparison.
 
 ## P1 — Computer Vision and experiment protocol
 
@@ -18,8 +18,8 @@
 
 ## P1 — FPT MSE template
 
-- [ ] **F09** Genuine Chapter 2 **Literature Review**, with research gap and cited related work, not a generic knowledge tutorial.
-- [ ] **F10** Chapter 4 **Simulation Results** must separate measured evidence from proposals.
+- [x] **F09** First source-backed Chapter 2 **Literature Review** and research gap are drafted in one report.qmd. Expand the scholarly corpus and check final citations during PDF review.
+- [x] **F10** Initial Chapter 4 distinguishes verified vehicle JSON, per-repo sign evidence, group-reported 640/960, and unimplemented integration. Further evidence/experiments remain open.
 - [ ] **F11** Compare two cover pages with official template; use exactly four verified team members, confirm lecturer/course/title.
 - [ ] **F12** Abstract has title above it, ≤150 words (master's) and double spacing; remove internal evidence-snapshot notes.
 - [ ] **F13** Centered two-line chapter headings, upper-right page numbering, correct front-matter transitions when PDF render is permitted.
@@ -31,7 +31,7 @@
 - [ ] **F16** Remove repeated limitations/checklists and avoid 53-table overload; keep detailed settings in appendices.
 - [ ] **F17** Improve weak/dark montage, readable figures, CV-centric paired deltas, small-object error and clear captions.
 - [ ] **F18** Fix glued words, stretched justified paragraphs, clipped tables/captions and Vietnamese glyph issues.
-- [ ] **F19** BibTeX + source hashes; claim-by-claim evidence map; no invented statistics or missing-artifact substitution.
+- [ ] **F19** BibTeX now contains pinned source repos and real CV papers; evidence manifest exists, but claim-by-claim artifact SHA256/complete sign-test rerun is not yet achieved.
 
 ## Intended Computer Vision emphasis
 
