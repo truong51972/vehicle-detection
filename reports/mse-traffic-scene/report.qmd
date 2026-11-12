@@ -286,41 +286,137 @@ Kiến trúc đề xuất sử dụng một decoder video duy nhất, gắn fram
 
 # Kết quả thực nghiệm (Simulation Results)
 
-**Chỉ điền kết quả đo được và kiểm tra nguồn. Không chạy inference/training trong bước render báo cáo.**
+## Kiểm kê nguồn và nguyên tắc đọc bảng
 
-## Nguồn bằng chứng và khả năng so sánh
+Các số liệu trong chương được chia theo nguồn: **(V)** file evaluation đã có trong repository vehicle; **(P)** README/CSV/args của Phát; **(H)** README/CSV/args của Hiếu; **(N)** bảng được cung cấp trong dự thảo nhóm nhưng chưa có JSON test độc lập tại cấu hình đó. Kết quả giữa các nguồn không được trộn thành một leaderboard nếu split hoặc cách chuẩn bị ảnh khác nhau.
 
-> TODO: Bảng study ID, run ID, checkpoint SHA, split SHA, đánh giá độc lập hay nhóm báo cáo, điều kiện phần cứng, trạng thái hiện có/thiếu. Không coi số liệu từ hai bộ dữ liệu là cùng một phép chấm.
+| Mã | Nguồn | Bằng chứng kiểm tra được | Giới hạn |
+|:--|:--|:--|:--|
+| V-A | Vehicle study A | runs/v0–v3-2026-11-09/eval/metrics.json; cấu hình batch 32 | Một seed, development evaluation |
+| V-B | Vehicle study B | docs/v4/evidence/matched_raw/metrics.json và runs/v4-2026-11-10/eval/metrics.json; batch 16 | Một seed, chưa mở final holdout |
+| P | Phát | args.yaml, results.csv, best.pt, ảnh validation; eval.py | File metrics.json test 640/960 mô tả trong README **không có trong tree** tại commit đã kiểm tra |
+| H | Hiếu | args.yaml, results.csv, best.pt, README test @832, PR/confusion/prediction assets | Thiếu machine-readable test summary 832 và raw dataset trong Git; chưa tự chạy lại |
+| N | Dự thảo nhóm | Bảng 640/960 cho Phát và Hiếu, support test 103 ảnh | Chưa đối chiếu JSON test theo cùng giao thức/cùng test IDs |
 
-## Kết quả ảnh đầu vào và CV operators
+: Phân loại mức chứng cứ; “có checkpoint” khác với “đã tái lập bài test”. {#tbl-evidence-status}
 
-> TODO: Ảnh Raw/v1/v2/v3/v4 cùng frame với ROI có cùng tọa độ và mức phóng đại, histogram/luminance và edge maps nếu có thể tái tạo từ nguồn. Phân biệt hình minh họa với dự đoán detector.
+## Phương tiện: độ chính xác tổng thể dưới các thuật toán xử lý ảnh
 
-## Phương tiện — đánh giá theo từng study
+### Study A — v0 đến v3, batch 32
 
-### Study A — v0/v1/v2/v3, batch 32
+Các model v0–v3 được so sánh trên cùng 13.975 ảnh development, eval imgsz 640 và batch 32. File JSON lưu AP theo lớp và theo nhóm độ sáng. Bảng trình bày giá trị phần trăm, **không** phải phân số 0–1.
 
-> TODO: Bảng mAP50, mAP50:95 và delta đối chứng, per-class AP và nhóm ảnh tối. Giữ dấu/đơn vị điểm phần trăm và các giới hạn một seed.
+| Chính sách | AP50 (%) | AP50:95 (%) | ΔAP50:95 so Raw (điểm %) |
+|:--|--:|--:|--:|
+| v0 Raw | 42,035 | 25,793 | 0,000 |
+| v1 Gamma | 41,718 | 25,437 | −0,356 |
+| v2 Local-shadow | 41,962 | 25,472 | −0,321 |
+| v3 CLAHE có gate | 42,135 | 25,728 | −0,065 |
 
-### Study B — matched v0/v1/v4, batch 16
+: Study A — kết quả đo trên development, dựa vào runs/v0–v3-2026-11-09/eval/metrics.json. {#tbl-study-a}
 
-> TODO: Trình bày riêng đối chứng cùng cấu hình, per-class AP và Apply/Skip của v4; không xếp chung v4 với Study A.
+Theo AP50, v3 nhỉnh hơn v0 khoảng **0,100 điểm phần trăm**. Nhưng theo AP50:95, v3 **thấp hơn v0 khoảng 0,065 điểm**. Điều này cho thấy cách phát biểu “v3 cải thiện detection” phụ thuộc chỉ số được chọn. Vì AP50:95 đòi hỏi hộp chính xác hơn ở nhiều mức IoU, không nên diễn giải một gia tăng nhỏ ở AP50 như bằng chứng cải thiện định vị đồng đều.
 
-### Phân tích lỗi theo kích thước, độ sáng và lớp
+![Hai nhóm kết quả vehicle được vẽ tách riêng, không tạo xếp hạng tổng giữa các cohort khác batch. Đơn vị AP50:95 là %.](figures/vehicle-ap-studies.svg){#fig-vehicle-study-groups width=95%}
 
-> TODO: Đồ thị GT support, recall, small-object error, false negatives/false positives và ví dụ ảnh; chỉ dựng biểu đồ từ số liệu hiện có.
+### Vùng ảnh tối: tín hiệu có điều kiện, không phải thành công toàn cục
 
-## Biển báo — hai detector, hai kích thước đánh giá
+Với nhóm **3.307** ảnh tối theo định nghĩa brightness trong repo, AP50:95 của v0 là **22,968%**, v3 là **23,809%** (chênh khoảng **+0,841 điểm phần trăm**). Dấu hiệu này cho thấy transform có thể hữu ích với một nhóm chiếu sáng cụ thể, mặc dù kết quả tổng thể v3 không vượt đối chứng theo AP50:95.
 
-> TODO: Kết quả Phát/Hiếu 640/960 **do nhóm cung cấp**, biểu đồ per-class và GT support. Đánh dấu rõ thiếu artifact model Hiếu và nguy cơ trùng/augment giữa tập test; không tính khoảng tin cậy từ số liệu tổng hợp không đủ.
+Cần ghi rõ nhóm ảnh tối đã là một phân tầng được xác định bởi thuật toán quality; các giá trị phân tầng không chứng minh tính khái quát sang mọi cảnh ban đêm hoặc những loại camera khác. Không suy ra statistical significance khi chỉ có một lần chạy và chưa có bootstrap theo ảnh/nhóm video.
 
-## Kết quả thử nghiệm ghép hai nhánh (nếu có)
+### Study B — Canny v4 so với Raw batch 16
 
-> TODO: Đây **chưa phải kết quả đã thực hiện** trong baseline DOCX. Chỉ thêm video frames, log/IDs, latencies, mAP theo từng nhánh nếu thực sự có kiểm chứng. Một demo xe-only không đại diện cho tích hợp xe + biển báo.
+Study B có đối chứng Raw được lưu riêng tại docs/v4/evidence/matched_raw, cùng cấu hình batch 16 với v4. Đây là cặp được phép dùng để thảo luận tác động của v4; **không** dùng v0 batch 32 ở Study A để so trực tiếp với v4.
 
-## Thảo luận, độ tin cậy và giới hạn
+| Chính sách | AP50 (%) | AP50:95 (%) | Chênh AP50:95 so Raw (điểm %) |
+|:--|--:|--:|--:|
+| Raw đối chứng batch 16 | 42,596 | 25,822 | 0,000 |
+| v4 Canny-guided | 42,035 | 25,671 | −0,151 |
 
-> TODO: Giải thích trade-off thị giác máy tính (độ sáng/độ tương phản/biên/chi phí), ảnh nhỏ và lỗi. Kết luận chỉ ở mức tương xứng với evidence.
+: Study B — phép đối chứng Raw–v4 batch 16, file metrics.json từ evidence v4. {#tbl-study-b}
+
+Kết quả cho thấy v4 giảm **0,562 điểm AP50** và **0,151 điểm AP50:95** so với Raw cùng batch. Trong nhóm v4, bước xử lý được kích hoạt ở **13.750/13.975 ảnh ≈ 98,39%**. Do tỷ lệ Skip rất nhỏ, lợi ích của cơ chế gate cần xem xét lại về mặt chi phí và nhiễu biên. Đặc biệt, kết quả không ủng hộ khẳng định rằng “bổ sung Canny chắc chắn giúp phát hiện vật thể nhỏ tốt hơn”.
+
+## Phân tích sai số theo lớp phương tiện
+
+Số hộp GT trên development rất lệch: **car 142.541**, **truck 5.965**, **bus 2.276**, **motorcycle 562**, **bicycle 1.430**. Tổng là **152.774**; car chiếm khoảng **93,3%**. Về nguyên tắc mAP lấy trung bình AP theo lớp, nhưng **độ tin cậy của ước lượng AP theo từng lớp** còn phụ thuộc số đối tượng, độ khó, và tính phụ thuộc của ảnh cùng video.
+
+| Lớp | GT boxes | AP50 Raw B (%) | AP50 v4 (%) | Δ AP50 (điểm %) |
+|:--|--:|--:|--:|--:|
+| car | 142.541 | 72,014 | 72,087 | +0,073 |
+| truck | 5.965 | 46,736 | 47,038 | +0,301 |
+| bus | 2.276 | 42,955 | 43,058 | +0,103 |
+| motorcycle | 562 | 21,751 | 19,902 | **−1,849** |
+| bicycle | 1.430 | 29,524 | 28,088 | **−1,436** |
+
+: Per-class AP50 trong Study B theo các file Raw/v4; chênh làm tròn theo điểm phần trăm. {#tbl-vehicle-class-deltas}
+
+Đây là góc nhìn quan trọng cho môn Computer Vision. Một phép tăng cường biên có thể làm rõ những ranh giới đối tượng lớn, nhưng cũng tăng biên nền hoặc artifact quanh xe hai bánh nhỏ. Bảng số liệu **cho thấy tương quan về kết quả**, chưa đủ để kết luận cơ chế gây lỗi. Để chứng minh nguyên nhân, cần ví dụ định vị vùng ảnh, edge map và cặp prediction được lưu trên cùng frame.
+
+![Ví dụ prediction thực tế của nhánh Vehicle trên ảnh development. Cần đối chiếu cùng frame với Hình @fig-vehicle-ground-truth để phân tích false positive, false negative và sai số vị trí.](../../docs/images/development-raw-pred.jpg){#fig-vehicle-raw-pred width=92%}
+
+## Phát hiện biển báo: dữ liệu, tác động của xử lý ảnh và độ phân giải
+
+### Hai phương án đang khác nhau những gì?
+
+| Khía cạnh | Nhánh Phát | Nhánh Hiếu |
+|:--|:--|:--|
+| Source | dhphat/traffic-sign-detection | ec2003/VN-traffic-sign-detection |
+| Dataset gốc báo cáo | Vietnamese Traffic Signs Detection v7 | Cùng dataset version v7 |
+| Xử lý dữ liệu | Theo tập Roboflow xuất sẵn | pHash dedup train + augmentation chọn lọc lớp hiếm |
+| Kích thước lúc train | 640 | 832 |
+| Epoch / batch | 50 / 32 | 70 / 12 |
+| Optimizer / seed | SGD / 42 | AdamW / 0 |
+| Hiện vật có trong repo | best.pt, args.yaml, 50 dòng results.csv, validation plots | best.pt/last.pt, args.yaml, 70 dòng results.csv, validation + test plot |
+| Thao tác đánh giá công khai | Script test ở 640 và 960 | README/notebook báo cáo test ở 832 |
+
+: Cấu hình từ các repository thành viên ở commit cố định trong phụ lục; bảng này nêu yếu tố **gây nhiễu phép so sánh**, không nhằm xếp hạng người thực hiện. {#tbl-sign-pipelines}
+
+Hai nhánh cùng dùng sáu lớp nhưng **không phải hai checkpoint được train dưới một phép đối chứng hoàn toàn giống nhau**. Việc Hiếu có bước pHash và augmentation mục tiêu là một khác biệt về Computer Vision đáng mô tả, tuy nhiên không thể quy mọi thay đổi AP cho riêng bước này.
+
+### Bằng chứng từ history và báo cáo test của từng repository
+
+Từ file results.csv của Phát, mAP50:95 **validation tốt nhất** là khoảng **75,416% tại epoch 42**; đây là kết quả theo từng epoch trên validation, không phải test. Repo lưu best.pt nhưng **không có file metrics.json test** tại commit đã kiểm tra, dù script eval.py có thể tạo file này [@phatRepo2026].
+
+Với Hiếu, README báo cáo best validation AP50:95 **76,35% tại epoch 56**. README còn ghi một lần đánh giá **test @832** với AP50 **97,27%**, AP50:95 **78,36%**, precision **96,86%**, recall **96,33%**. Những số này được dẫn **theo README repository**, chưa được chạy tái lập trong lần chỉnh báo cáo này. Test ở imgsz 832 **không** phải test ở imgsz 640 hay 960 [@hieuRepo2026].
+
+![Prediction trên tập test do repository Hiếu cung cấp; ảnh được sao lưu từ nguồn theo commit ghi trong phụ lục. Đây không phải lần inference mới của báo cáo.](figures/hieu-test-predictions.jpg){#fig-hieu-test-pred width=94%}
+
+![Precision–Recall trên test theo assets của repository Hiếu. Đường cong thuộc một mô hình và một phép đánh giá cụ thể, không đại diện cho cả hai detector.](figures/hieu-test-pr.png){#fig-hieu-test-pr width=90%}
+
+Repo Phát cũng lưu các ảnh demo suy luận. Ví dụ có thể xem [ảnh demo Phát số 01](https://github.com/dhphat/traffic-sign-detection/blob/f3c30d8be4e31404a73e8621d8fb050a62c90e05/share/demo/demo_01_v109-020.jpg); đây là **hình tham chiếu từ nguồn**, không phải sản phẩm tích hợp hai detector của nhóm.
+
+### Bảng so sánh 640/960 nhóm cung cấp — chưa được tái lập
+
+Bản dự thảo nhóm ghi kết quả test sau, nhưng tại các commit đã kiểm tra, **chưa có đủ file kết quả test machine-readable ở cả hai kích thước cho cả hai checkpoint** để xác minh phép đo dưới cùng môi trường. Vì vậy, bảng chỉ có trạng thái **group-reported**.
+
+| Mô hình | Kích thước đánh giá | AP50 (%) | AP50:95 (%) | Trạng thái |
+|:--|--:|--:|--:|:--|
+| Phát | 640 | 95,0 | 76,1 | Nhóm báo cáo |
+| Phát | 960 | 96,1 | 77,9 | Nhóm báo cáo |
+| Hiếu | 640 | 96,9 | 74,6 | Nhóm báo cáo |
+| Hiếu | 960 | 97,5 | 78,7 | Nhóm báo cáo |
+
+: Bảng 640/960 từ bản dự thảo DOCX được nhóm cung cấp; **không** coi là tái lập độc lập. {#tbl-sign-group-reported}
+
+Tại 640, nhóm báo cáo Hiếu cao hơn về AP50 nhưng Phát cao hơn về AP50:95; ở 960, Hiếu cao hơn ở cả hai chỉ số. Tuy nhiên, đó là **so sánh mô tả trên số nhóm cung cấp**, không chứng minh ý nghĩa thống kê hay cho biết việc tăng 640→960 tối ưu hơn về chi phí. Bộ ảnh test chỉ có **103 ảnh**, và bản dự thảo ghi **140 GT instances**, trong đó lớp Speed limit 60kmh có **4**, No U-turn có **12**. Số lượng nhỏ khiến một vài detection khác biệt có ảnh hưởng lớn; cần audit danh sách test và trùng ảnh trước khi đưa ra nhận định về tổng quát hóa.
+
+### Insight về pHash, biến đổi hình học và ảnh biển báo nhỏ
+
+Việc giảm gần trùng từ train có thể giúp tránh lặp một số kiểu ảnh mẫu nhưng cũng làm thay đổi phân bố lớp. Vì Hiếu còn augmentation chọn lọc cho lớp hiếm, phép so sánh với Phát **không phải** ablation pHash thuần. Muốn kết luận xử lý CV nào hiệu quả hơn cần tối thiểu các arm **Raw**, **Dedup-only**, **Augmentation-only**, **Dedup+Augmentation** với cùng model/split/seed/eval. Đây là **thiết kế thực nghiệm được đề xuất**, không phải bốn kết quả đã tồn tại.
+
+Trong video thực tế, biển báo thường chiếm vùng ảnh nhỏ, có thể bị che một phần hoặc nhòe chuyển động. Đề xuất phân tích tiếp AP theo diện tích bbox, khía cạnh shape và chất lượng ảnh crop. Đối với những lớp biển báo có hướng hoặc mũi tên, phép lật ngang cần được kiểm tra ngữ nghĩa và tính hợp lệ nhãn, không tự giả định mọi phép augmentation đều an toàn.
+
+## Kết quả tích hợp và phân tích chi phí
+
+**Chưa có bằng chứng chạy chung hai mô hình trên một luồng video** trong các nguồn đã kiểm tra. Đã có code/video demo ở từng nhánh nhưng không đồng nghĩa một sản phẩm tích hợp. Vì chưa có pipeline chung được chạy và log, các chỉ số **joint FPS**, latency end-to-end, tỉ lệ mất frame, mức sử dụng GPU, lỗi đồng bộ và hiệu quả phối hợp hai nhánh phải để **chưa đo**.
+
+Không thể gộp mAP vehicle và mAP sign thành “mAP toàn hệ thống” vì hai bộ dữ liệu, lớp và giao thức khác nhau. Nếu nhóm triển khai sau này, nên báo cáo hai mAP độc lập, ảnh/clip minh họa từ cùng frame, số lượng detection đúng/sai theo từng nhánh và chi phí decode/preprocess/inference/overlay/encode.
+
+## Thảo luận và giới hạn hiệu lực
+
+Thứ nhất, **ảnh nhìn đẹp hơn không nhất thiết phát hiện tốt hơn**: kết quả v4 cho thấy thêm biên có thể làm giảm AP ở motorcycle/bicycle. Thứ hai, hiệu quả có thể **phụ thuộc miền**: v3 cho tín hiệu tăng AP trên phân tầng tối nhưng không tăng AP50:95 tổng. Thứ ba, so sánh biển báo phải **gắn với quy trình dữ liệu và kích thước thực tế**, không đánh đồng hai mô hình hay hai phép đánh giá từ những repo khác nhau. Cuối cùng, mức độ tái lập hiện tại chưa đủ để khẳng định ý nghĩa thống kê, độc lập tuyệt đối các tập ảnh hoặc sẵn sàng vận hành an toàn.
 
 # Kết luận (Conclusions)
 
