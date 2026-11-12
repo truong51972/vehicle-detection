@@ -1,0 +1,63 @@
+# Report evidence provenance — source-only audit, no new experiments.
+report: "reports/mse-traffic-scene/report.qmd"
+last_source_review: "2026-11-12"
+vehicle:
+  repository: "https://github.com/truong51972/vehicle-detection"
+  inspected_main_ref: "4cce9809fe7a30518f3d056d1aa202f1cf163501"
+  split_manifest: "configs/data.yaml"
+  study_a:
+    batch: 32
+    models: ["v0", "v1", "v2", "v3"]
+    eval_paths:
+      - "runs/v0-2026-11-09/eval/metrics.json"
+      - "runs/v1-2026-11-09/eval/metrics.json"
+      - "runs/v2-2026-11-09/eval/metrics.json"
+      - "runs/v3-2026-11-09/eval/metrics.json"
+  study_b:
+    batch: 16
+    eval_paths:
+      - "docs/v4/evidence/matched_raw/metrics.json"
+      - "runs/v4-2026-11-10/eval/metrics.json"
+  final_holdout: "sealed; no new access performed"
+traffic_sign:
+  dataset: "Vietnamese Traffic Signs Detection v7 (Roboflow)"
+  six_classes:
+    - "No U-turn"
+    - "No going opposite"
+    - "No stopping"
+    - "No waiting"
+    - "Roundabout ahead"
+    - "Speed limit 60kmh"
+  phat:
+    repository: "https://github.com/dhphat/traffic-sign-detection"
+    ref: "f3c30d8be4e31404a73e8621d8fb050a62c90e05"
+    train_args: "runs/detect/runs/detect/traffic_sign_train/args.yaml"
+    train_history: "runs/detect/runs/detect/traffic_sign_train/results.csv"
+    checkpoint: "runs/detect/runs/detect/traffic_sign_train/weights/best.pt"
+    eval_script: "eval.py"
+    documented_test_sizes: [640, 960]
+    machine_readable_test_metrics_at_ref: false
+    test_640_960_status: "group-reported; not independently reproduced here"
+  hieu:
+    repository: "https://github.com/ec2003/VN-traffic-sign-detection"
+    ref: "1bcf75eebbb3b255f622ade63900cead00abd863"
+    train_args: "output/working/runs/detect/train/args.yaml"
+    train_history: "output/working/runs/detect/train/results.csv"
+    checkpoint: "output/working/runs/detect/train/weights/best.pt"
+    test_size_documented_in_readme: 832
+    test_ap50_reported_in_readme: 0.9727
+    test_ap50_95_reported_in_readme: 0.7836
+    test_assets: ["assets/test_predictions.jpg", "assets/test_precision_recall.png", "assets/test_confusion_matrix.png"]
+    machine_readable_test_metrics_at_ref: false
+    test_640_960_status: "group-reported; not independently reproduced here"
+  original_group_draft:
+    source: "Du_thao_Chi_tiet_Phuong_tien_va_Bien_bao_2026-11-12.docx (conversation upload; not tracked in this repo)"
+    scores_640_960: "reported by group; verify exact test IDs/configs before publication"
+    test_object_counts: "140 objects reported; not independently recomputed"
+  cross_split_leakage_audit: "not performed; do not infer dataset independence"
+integration:
+  combined_video_run: null
+  joint_fps: null
+  joint_map: null
+  claimed_status: "proposal only"
+figure_provenance: "figures/README.md"

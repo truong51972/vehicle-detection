@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="480" viewBox="0 0 1200 480" role="img" aria-label="Hai đồ thị tách nhóm study A và study B, biểu diễn thay đổi AP50:95 theo điểm phần trăm so với đối chứng Raw">
+<rect width="1200" height="480" fill="#F8FAFC"/>
+<text x="38" y="48" font-family="DejaVu Sans,Arial" font-size="24" font-weight="700" fill="#172C3C">Tác động của xử lý ảnh lên AP50:95</text>
+<text x="38" y="76" font-family="DejaVu Sans,Arial" font-size="15" fill="#64748B">Kết quả development · 13.975 ảnh · thay đổi so với Raw cùng study (điểm %)</text>
+<rect x="32" y="102" width="558" height="320" rx="14" fill="white" stroke="#CBD5E1"/>
+<rect x="610" y="102" width="558" height="320" rx="14" fill="white" stroke="#CBD5E1"/>
+<text x="55" y="137" font-family="DejaVu Sans,Arial" font-size="19" font-weight="700" fill="#1D4ED8">Study A · batch 32</text>
+<text x="636" y="137" font-family="DejaVu Sans,Arial" font-size="19" font-weight="700" fill="#0D9488">Study B · batch 16</text>
+<path d="M390 155V385" stroke="#64748B" stroke-width="1.3" stroke-dasharray="5 5"/>
+<path d="M970 155V385" stroke="#64748B" stroke-width="1.3" stroke-dasharray="5 5"/>
+<text x="200" y="182" font-family="DejaVu Sans,Arial" font-size="17" fill="#172C3C">Raw</text><circle cx="390" cy="175" r="5" fill="#0D9488"/><text x="412" y="182" font-family="DejaVu Sans,Arial" font-size="16" font-weight="700" fill="#172C3C">25.793%</text><text x="170" y="202" font-family="DejaVu Sans,Arial" font-size="12" fill="#64748B">Δ 0.000 pp</text>
+<text x="200" y="238" font-family="DejaVu Sans,Arial" font-size="17" fill="#172C3C">Gamma</text><rect x="276.08000000000004" y="219" width="113.91999999999999" height="24" rx="4" fill="#C65A11"/><text x="412" y="238" font-family="DejaVu Sans,Arial" font-size="16" font-weight="700" fill="#172C3C">25.437%</text><text x="170" y="258" font-family="DejaVu Sans,Arial" font-size="12" fill="#64748B">Δ -0.356 pp</text>
+<text x="200" y="294" font-family="DejaVu Sans,Arial" font-size="17" fill="#172C3C">Shadow</text><rect x="287.28" y="275" width="102.72" height="24" rx="4" fill="#C65A11"/><text x="412" y="294" font-family="DejaVu Sans,Arial" font-size="16" font-weight="700" fill="#172C3C">25.472%</text><text x="170" y="314" font-family="DejaVu Sans,Arial" font-size="12" fill="#64748B">Δ -0.321 pp</text>
+<text x="200" y="350" font-family="DejaVu Sans,Arial" font-size="17" fill="#172C3C">CLAHE</text><rect x="369.2" y="331" width="20.8" height="24" rx="4" fill="#C65A11"/><text x="412" y="350" font-family="DejaVu Sans,Arial" font-size="16" font-weight="700" fill="#172C3C">25.728%</text><text x="170" y="370" font-family="DejaVu Sans,Arial" font-size="12" fill="#64748B">Δ -0.065 pp</text>
+<text x="780" y="218" font-family="DejaVu Sans,Arial" font-size="17" fill="#172C3C">Raw matched</text><circle cx="970" cy="211" r="5" fill="#0D9488"/><text x="992" y="218" font-family="DejaVu Sans,Arial" font-size="16" font-weight="700" fill="#172C3C">25.822%</text><text x="750" y="238" font-family="DejaVu Sans,Arial" font-size="12" fill="#64748B">Δ 0.000 pp</text>
+<text x="780" y="274" font-family="DejaVu Sans,Arial" font-size="17" fill="#172C3C">Canny v4</text><rect x="921.68" y="255" width="48.32" height="24" rx="4" fill="#C65A11"/><text x="992" y="274" font-family="DejaVu Sans,Arial" font-size="16" font-weight="700" fill="#172C3C">25.671%</text><text x="750" y="294" font-family="DejaVu Sans,Arial" font-size="12" fill="#64748B">Δ -0.151 pp</text>
+<text x="38" y="453" font-family="DejaVu Sans,Arial" font-size="13" fill="#64748B">Nguồn: runs/v0–v4 eval/metrics.json và docs/v4/evidence/matched_raw/metrics.json · Không so ngang 2 study như phép đối chứng chung.</text>
+</svg>
