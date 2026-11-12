@@ -119,7 +119,7 @@ Biến đổi Gamma là một ánh xạ điểm phi tuyến, thường được 
 
 Trong cảnh giao thông, nâng sáng có thể làm lộ ranh giới thân xe trên nền tối, đồng thời làm nhiễu vùng thiếu sáng và các nguồn phát quang dễ bị bão hòa. Vì vậy, nên đánh giá riêng ảnh *được xử lý* và ảnh *được bỏ qua*, đối chiếu cùng định nghĩa độ sáng, thay vì suy luận từ ảnh minh họa đơn lẻ.
 
-![Đường biến đổi Gamma 0,85 so với ánh xạ đồng nhất trên miền cường độ [0,1]. Đây là đồ thị hàm số lý thuyết, không phải kết quả detection hay histogram đo trên ảnh BDD100K.](figures/gamma-mapping.svg){#fig-gamma-mapping width=83%}
+![Đường biến đổi Gamma 0,85 so với ánh xạ đồng nhất trên miền cường độ chuẩn hóa từ 0 đến 1. Đây là đồ thị hàm số lý thuyết, không phải kết quả detection hay histogram đo trên ảnh BDD100K.](figures/gamma-mapping.svg){#fig-gamma-mapping width=83%}
 
 ## Tương phản cục bộ: AHE và CLAHE
 
