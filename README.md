@@ -59,7 +59,12 @@ new run date; a training-arg change after training also needs a new run date.
 ## Notebook workflow
 
 Use the project `.venv` kernel. Every notebook is independent **Restart & Run All**,
-inspects saved results by default and only does expensive work after an explicit switch:
+inspects saved results by default and only does expensive work after an explicit switch.
+
+Committed `ALLOW_PREPARATION`, `ALLOW_TRAINING` and `ALLOW_INFERENCE` defaults are all
+`False`. Leave them disabled to inspect saved artifacts; missing artifacts are reported
+without starting work. Set the relevant flag to `True` deliberately to run that phase.
+Source auditing and CPU preprocessing benchmarks also default to disabled.
 
 1. [00_data_init.ipynb](notebooks/00_data_init.ipynb): frozen membership; `AUDIT_SOURCES=True`
    audits original non-final sources.
