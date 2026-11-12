@@ -8,7 +8,7 @@
 
 ### Nhánh phương tiện: BDD100K
 
-> TODO: Đối chiếu \`configs/data.yaml\`, split manifest, nguồn nhãn, năm lớp, tính độc lập theo nhóm nguồn và các giới hạn tránh trùng. Phân biệt training pool, S20, calibration, development và **final holdout chưa mở**.
+> TODO: Đối chiếu `configs/data.yaml`, split manifest, nguồn nhãn, năm lớp, tính độc lập theo nhóm nguồn và các giới hạn tránh trùng. Phân biệt training pool, S20, calibration, development và **final holdout chưa mở**.
 
 ### Nhánh biển báo: dữ liệu Việt Nam
 

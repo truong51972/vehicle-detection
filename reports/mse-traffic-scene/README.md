@@ -16,17 +16,17 @@ Tracks [#64](https://github.com/truong51972/vehicle-detection/issues/64). This i
 
 | File / directory | Purpose |
 | --- | --- |
-| \`_quarto.yml\` | Quarto book chapter order and prospective PDF configuration |
-| \`index.qmd\`, \`frontmatter/\` | Preface, abstract and contributor metadata |
-| \`chapters/\` | Exactly five FPT-oriented report chapters |
-| \`appendices/\` | CV operator details, experiment protocol and evidence mapping |
-| \`references.bib\`, \`references.qmd\` | Source-based citations, generated bibliography |
-| \`styles/fpt-mse.tex\` | Initial LaTeX typography; **not yet visually validated** |
-| \`styles/title-pages.tex\` | Prepared two-cover layout with four members; **not wired into render** until duplication with Quarto's default title page is resolved |
-| \`evidence/\` | Provenance register, unresolved data/checkpoint requirements |
-| \`figures/\` | Future source-backed diagrams and plots |
-| \`FPT_TEMPLATE_CHECKLIST.md\` | All findings (F01–F19), grouped for implementation |
-| \`scripts/check_scaffold.py\` | No-dependency, static structure-only validation |
+| `_quarto.yml` | Quarto book chapter order and prospective PDF configuration |
+| `index.qmd`, `frontmatter/` | Preface, abstract and contributor metadata |
+| `chapters/` | Exactly five FPT-oriented report chapters |
+| `appendices/` | CV operator details, experiment protocol and evidence mapping |
+| `references.bib`, `references.qmd` | Source-based citations, generated bibliography |
+| `styles/fpt-mse.tex` | Initial LaTeX typography; **not yet visually validated** |
+| `styles/title-pages.tex` | Prepared two-cover layout with four members; **not wired into render** until duplication with Quarto's default title page is resolved |
+| `evidence/` | Provenance register, unresolved data/checkpoint requirements |
+| `figures/` | Future source-backed diagrams and plots |
+| `FPT_TEMPLATE_CHECKLIST.md` | All findings (F01–F19), grouped for implementation |
+| `scripts/check_scaffold.py` | No-dependency, static structure-only validation |
 
 ## Members (provided by the team)
 
@@ -50,21 +50,21 @@ These four names and IDs are authoritative for this scaffold. The original FPT t
 
 The only validation intended for this PR is a static source check:
 
-\`\`\`bash
+```bash
 python reports/mse-traffic-scene/scripts/check_scaffold.py
-\`\`\`
+```
 
 **No PDF was rendered for this PR, by request.** When the team authorizes that next phase, prospective command:
 
-\`\`\`bash
+```bash
 quarto render reports/mse-traffic-scene --to pdf
-\`\`\`
+```
 
-PDF generation will require Quarto, a suitable TeX installation and licensed/installed Vietnamese-capable fonts. The current configuration (including \`Times New Roman\` and header layout) is **provisional**; do not claim visual or compilation parity until a real build, inspection and comparison are performed.
+PDF generation will require Quarto, a suitable TeX installation and licensed/installed Vietnamese-capable fonts. The current configuration (including `Times New Roman` and header layout) is **provisional**; do not claim visual or compilation parity until a real build, inspection and comparison are performed.
 
 ## Source policy
 
-- No automatic train/inference/download during report generation; \`execute.enabled=false\` in this initial scaffold.
+- No automatic train/inference/download during report generation; `execute.enabled=false` in this initial scaffold.
 - No guessed numerical results or screenshots presented as new measurements.
 - Keep cross-references and citations in native Quarto syntax; figures must identify source, dataset, split, run and whether GT or prediction.
-- \`docs/report.qmd\`, experimental notebooks, \`runs/\`, and raw checkpoints are outside this PR's scope.
+- `docs/report.qmd`, experimental notebooks, `runs/`, and raw checkpoints are outside this PR's scope.

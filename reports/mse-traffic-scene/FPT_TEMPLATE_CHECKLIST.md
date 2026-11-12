@@ -14,7 +14,7 @@
 - [ ] **F05** Vehicle class imbalance, small-object recall, confidence/error analysis, lighting/occlusion cohorts and GT-versus-prediction examples.
 - [ ] **F06** Analyze Canny v4 nearly always-on policy (Apply ~98.39%) and measured accuracy/cost; v3 dark-scene signal versus overall result.
 - [ ] **F07** Measure/report CV preprocessing, video I/O, inference and full pipeline latency independently; no invented combined FPS.
-- [ ] **F08** Clarify source/train/calibration/development/holdout roles and the vehicle \`test\` alias versus sign true test.
+- [ ] **F08** Clarify source/train/calibration/development/holdout roles and the vehicle `test` alias versus sign true test.
 
 ## P1 — FPT MSE template
 
@@ -43,7 +43,7 @@
 
 ## PR boundary
 
-- [x] Create isolated \`reports/mse-traffic-scene/\` source scaffold.
+- [x] Create isolated `reports/mse-traffic-scene/` source scaffold.
 - [x] Populate four verified member names/IDs.
 - [x] Create five CV-oriented chapter outlines and evidence policy.
 - [x] Prepare bibliography, appendix layout, LaTeX-style draft and future cover file.
