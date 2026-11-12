@@ -28,21 +28,58 @@ def cells(name):
     return json.loads((Path("notebooks") / name).read_text())["cells"]
 
 
-def test_active_notebooks_are_clean_and_independent():
+@pytest.mark.parametrize("name", sorted(ACTIVE))
+def test_committed_execution_gates_default_to_false(name):
+    gates = set()
+    code = [c for c in cells(name) if c["cell_type"] == "code"]
+    for index, cell in enumerate(code):
+        tree = ast.parse("".join(cell["source"]))
+        for node in ast.walk(tree):
+            if not isinstance(node, (ast.Assign, ast.AnnAssign)):
+                continue
+            targets = node.targets if isinstance(node, ast.Assign) else [node.target]
+            for target in targets:
+                if not isinstance(target, ast.Name):
+                    continue
+                gate = target.id
+                if not (
+                    gate.startswith("ALLOW_")
+                    or gate in {"AUDIT_SOURCES", "MEASURE_PREPROCESS_COST", "RESUME"}
+                ):
+                    continue
+                assert index == 0 and node in tree.body, (name, gate)
+                assert gate not in gates, (name, gate, "gate reassigned")
+                assert isinstance(node.value, ast.Constant) and node.value.value is False, (
+                    name,
+                    gate,
+                    "committed default must be literal False",
+                )
+                gates.add(gate)
+    required = {
+        "02_train_prepare.ipynb": "ALLOW_PREPARATION",
+        "03_train.ipynb": "ALLOW_TRAINING",
+        "04_eval.ipynb": "ALLOW_INFERENCE",
+        "compare.ipynb": "ALLOW_INFERENCE",
+        "00_data_init.ipynb": "AUDIT_SOURCES",
+    }
+    if Path(name).name in required:
+        assert required[Path(name).name] in gates, name
+
+
+def test_active_notebooks_are_independent():
     found = {
         p.relative_to("notebooks").as_posix()
         for p in Path("notebooks").rglob("*.ipynb")
         if ".ipynb_checkpoints" not in p.parts
     }
     assert found == ACTIVE
+    # Saved outputs are historical evidence; Run All safety depends on committed source.
     for name in ACTIVE:
         for cell in cells(name):
             if cell["cell_type"] != "code":
                 continue
             source = "".join(cell["source"])
             tree = ast.parse(source)
-            if name == "experiments/compare.ipynb":
-                assert cell["execution_count"] is None and cell["outputs"] == []
             assert not any(token in source for token in ("%run", "runpy", "papermill", "/home/"))
             if name.endswith("04_eval.ipynb"):
                 assert "train_experiment" not in source
@@ -150,21 +187,37 @@ from ultralytics import YOLO
 patch.object(YOLO, "train", side_effect=AssertionError("Training started")).start()
 patch.object(YOLO, "val", side_effect=AssertionError("Inference started")).start()
 """
+    read_only_guard = (
+        guard
+        + """import vehicle_detection.experiment_data as experiment_data
+patch.object(experiment_data, "prepare_data", side_effect=AssertionError("Export started")).start()
+"""
+    )
     run("00_data_init.ipynb", "AUDIT_SOURCES = True", guard)
     for version in VERSIONS[1:]:
         run(f"experiments/{version}/01_experiments.ipynb", "SAMPLES = 1\nSHOW = 1", guard)
     assert not (root / "runs").exists()
     for version in VERSIONS:
-        run(
-            f"experiments/{version}/02_train_prepare.ipynb",
-            f"RUN_DATE = '{DATE}'\nALLOW_PREPARATION = False",
-            guard,
-        )
+        # Use committed defaults: overrides previously hid unsafe True flags.
+        for phase in ("02_train_prepare", "03_train", "04_eval"):
+            notebook = run(f"experiments/{version}/{phase}.ipynb", setup=read_only_guard)
+            output = "".join(
+                o.get("text", "")
+                for cell in notebook.cells
+                if cell.cell_type == "code"
+                for o in cell.outputs
+            )
+            assert "disabled; inspecting saved artifacts only" in output
         assert not (root / f"runs/{version}-{DATE}").exists()
+    assert not (root / "runs").exists()
+    for version in VERSIONS:
         prepare = f"RUN_DATE = '{DATE}'\nALLOW_PREPARATION = True"
         run(f"experiments/{version}/02_train_prepare.ipynb", prepare, guard)
-        run(f"experiments/{version}/03_train.ipynb", "ALLOW_TRAINING = False", guard)
-        run(f"experiments/{version}/04_eval.ipynb", "ALLOW_INFERENCE = False", guard)
+        before = {p: file_hash(p) for p in (root / "runs").rglob("*") if p.is_file()}
+        for phase in ("02_train_prepare", "03_train", "04_eval"):
+            run(f"experiments/{version}/{phase}.ipynb", setup=read_only_guard)
+        after = {p: file_hash(p) for p in (root / "runs").rglob("*") if p.is_file()}
+        assert after == before
         assert (root / f"runs/{version}-{DATE}/data/data.yaml").is_file()
         assert not (root / f"runs/{version}-{DATE}/train").exists()
 
