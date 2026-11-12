@@ -450,7 +450,7 @@ Danh mục được biên dịch từ **references.bib**. Các mã nguồn của
 \appendix
 ```
 
-# Phụ lục A — Chi tiết các toán tử xử lý ảnh
+# Chi tiết các toán tử xử lý ảnh
 
 ## Trích đặc trưng chất lượng ảnh
 
@@ -476,7 +476,7 @@ Trong v3/v4, offset được giới hạn trên tín hiệu ảnh trước khi l
 
 Một hình định tính tốt nên cho cùng frame ở các phiên bản Raw, Gamma, Shadow, CLAHE, Canny, kèm: histogram grayscale; crop ROI có cùng tọa độ và tỷ lệ; biên Canny; nhãn GT; sau cùng là bbox dự đoán. Không dùng ảnh không cùng scene để tuyên bố phiên bản này làm rõ đối tượng tốt hơn phiên bản kia. Phần hình đối chiếu hiện tại ưu tiên kết quả thật đã được lưu, không tạo phép inference mới.
 
-# Phụ lục B — Giao thức đánh giá và đối chứng
+# Giao thức đánh giá và đối chứng
 
 ## Cấu hình vehicle tại thời điểm snapshot
 
@@ -494,15 +494,15 @@ FPS đầy đủ có thể ước tính từ số khung hình thành công chia 
 
 Dữ liệu test cần giữ danh sách filename, nhãn/box, class ordering, kiểm tra image hash/pHash giữa cả ba split, định nghĩa resize/letterbox, confidence và NMS, cùng phiên bản Ultralytics. Để so hai model 640/960, phải chạy cùng nguyên tập test, cùng máy và khai báo seed/eval settings; phép đánh giá ở **832** của Hiếu là một phép đo bổ sung, không được chèn vào một hàng 960.
 
-# Phụ lục C — Xuất xứ dữ liệu, hình và mã nguồn
+# Xuất xứ dữ liệu, hình và mã nguồn
 
 ## Nguồn repository đã kiểm tra
 
 | Nhánh | Repository và commit snapshot | Hiện vật đáng chú ý |
 |:--|:--|:--|
 | Vehicle | [truong51972/vehicle-detection](https://github.com/truong51972/vehicle-detection) | configs/data.yaml; notebook/experiments/v0–v4; runs/v*/eval/metrics.json; docs/v4/evidence/matched_raw |
-| Phát | [dhphat/traffic-sign-detection@f3c30d8](https://github.com/dhphat/traffic-sign-detection/tree/f3c30d8be4e31404a73e8621d8fb050a62c90e05) | train.py, eval.py, infer_video.py, data/data.yaml, results.csv, best.pt, các ảnh demo |
-| Hiếu | [ec2003/VN-traffic-sign-detection@1bcf75e](https://github.com/ec2003/VN-traffic-sign-detection/tree/1bcf75eebbb3b255f622ade63900cead00abd863) | notebook, README, runs/detect/train/args.yaml, results.csv, best.pt, val plots, test assets |
+| Phát | [dhphat/traffic-sign-detection (commit f3c30d8)](https://github.com/dhphat/traffic-sign-detection/tree/f3c30d8be4e31404a73e8621d8fb050a62c90e05) | train.py, eval.py, infer_video.py, data/data.yaml, results.csv, best.pt, các ảnh demo |
+| Hiếu | [ec2003/VN-traffic-sign-detection (commit 1bcf75e)](https://github.com/ec2003/VN-traffic-sign-detection/tree/1bcf75eebbb3b255f622ade63900cead00abd863) | notebook, README, runs/detect/train/args.yaml, results.csv, best.pt, val plots, test assets |
 
 : Các nguồn công khai đọc tại thời điểm cập nhật; cam kết khoa học yêu cầu dẫn đúng commit và artifact. {#tbl-repo-provenance}
 
