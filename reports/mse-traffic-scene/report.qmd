@@ -68,7 +68,7 @@ Lecturer identity/course wording must be confirmed.
 
 # Tóm tắt {.unnumbered}
 
-Nhận thức cảnh giao thông từ ảnh và video chịu ảnh hưởng của điều kiện chiếu sáng, tương phản, mật độ chi tiết và kích thước đối tượng. Báo cáo khảo sát năm chính sách xử lý ảnh đối với phát hiện năm lớp phương tiện trên BDD100K, đồng thời phân tích hai phương án phát hiện sáu loại biển báo giao thông Việt Nam. Các phép biến đổi Gamma, hiệu chỉnh vùng tối, CLAHE và tăng cường chi tiết có tham chiếu Canny được xem xét cùng kết quả phát hiện, độ ổn định theo lớp và giới hạn đánh giá. Trên nhóm thực nghiệm đối chứng phù hợp, v4 chưa vượt ảnh gốc. Hai nhánh biển báo có dữ liệu và giao thức khác nhau nên cần đối chiếu thận trọng. Việc tích hợp hai nhánh trên cùng video vẫn là hướng triển khai, chưa phải kết quả đã đo.
+Nhận thức cảnh giao thông chịu ảnh hưởng của chiếu sáng, tương phản và kích thước đối tượng. Báo cáo khảo sát năm chính sách xử lý ảnh đối với phát hiện năm lớp phương tiện trên BDD100K, đồng thời phân tích hai phương án phát hiện sáu loại biển báo giao thông Việt Nam. Các phép biến đổi Gamma, hiệu chỉnh vùng tối, CLAHE và tăng cường chi tiết có tham chiếu Canny được xem xét cùng kết quả phát hiện, độ ổn định theo lớp và giới hạn đánh giá. Trên nhóm thực nghiệm đối chứng phù hợp, v4 chưa vượt ảnh gốc. Hai nhánh biển báo có dữ liệu và giao thức khác nhau nên cần đối chiếu thận trọng. Việc tích hợp hai nhánh trên cùng video vẫn là hướng triển khai, chưa phải kết quả đã đo.
 
 **Từ khóa:** thị giác máy tính; xử lý ảnh; phát hiện phương tiện; phát hiện biển báo; Gamma; CLAHE; Canny; YOLO26n.
 
@@ -422,81 +422,107 @@ Thứ nhất, **ảnh nhìn đẹp hơn không nhất thiết phát hiện tốt
 
 ## Trả lời các câu hỏi nghiên cứu
 
-> TODO: Trả lời từng câu hỏi ở Chương 1, dựa trên **kết quả đã được kiểm chứng** trong Chương 4. Phân biệt cải thiện mang tính mô tả với kết luận có độ tin cậy thống kê.
+**RQ1 — Xử lý ảnh có tăng chất lượng detection phương tiện?** Trong các thí nghiệm đã chốt, chưa có chính sách v1–v4 nào đủ bằng chứng để thay Raw như lựa chọn mặc định. Ở Study A, v3 cao hơn Raw một ít ở AP50 nhưng thấp hơn Raw ở AP50:95; v3 thể hiện tín hiệu tích cực tại nhóm ảnh tối đã xác định. Ở Study B, tăng cường biên tham chiếu Canny (v4) thấp hơn Raw cùng batch và làm giảm AP50 ở xe máy/xe đạp. Đó là các kết luận mô tả trên development với một seed, **không phải** chứng minh hiệu quả tổng quát trên mọi video.
 
-## Đóng góp về Computer Vision
+**RQ2 — Hai quy trình biển báo cho thấy điều gì về Computer Vision?** Phát và Hiếu sử dụng cùng tập nguồn và cùng sáu lớp, nhưng khác cách xử lý dữ liệu, ảnh đầu vào khi huấn luyện và cách đánh giá đã lưu. Hiếu có bước pHash/augmentation chọn lọc nên đưa ra một hướng kiểm soát dữ liệu đáng khảo sát; tuy nhiên dữ liệu báo cáo hiện có chưa tạo thành ablation đủ chặt để quy chênh lệch AP cho bước này. Kết quả test @832 của Hiếu trong README là một giao thức riêng, không được hoán đổi với các số 640/960 nhóm cung cấp.
 
-> TODO: Tóm tắt bằng chứng của các toán tử trên dữ liệu giao thông, phân tích ánh sáng/biên/vật thể nhỏ và giao thức đánh giá ảnh/video. Không biến phần kết luận thành tổng kết một bài tối ưu training.
+**RQ3 — Hai detector đã trở thành một hệ thống nhận thức cảnh được đo kiểm chưa?** Chưa. Hai nhánh có mô hình và minh họa phát hiện riêng, nhưng chưa có video chạy chung được log thời gian và đánh giá đầu cuối. Hệ thống tích hợp trong báo cáo mới là thiết kế hướng đến thực nghiệm.
 
-## Hạn chế và hướng phát triển
+## Đóng góp theo trọng tâm Computer Vision
 
-> TODO: Nêu đầy đủ các giới hạn: single seed, các study khác batch, final holdout chưa đo, test biển báo ít đối tượng và thiếu artifact của Hiếu, pipeline hai model chưa chạy chung/đo tốc độ nếu chưa có minh chứng.
+Đồ án tổ chức được một phép so sánh dựa trên pixel/đặc trưng ảnh và kết quả detection, giữ nguyên hình học GT khi biến đổi độ sáng/tương phản/biên. Điểm thực chất là hiểu **điều kiện nào tác động tích cực hoặc tiêu cực** và biết đọc số liệu per-class, per-cohort thay vì dùng nhận xét “ảnh nhìn nét hơn”. Phân tích sign detection bổ sung góc nhìn về nhãn hiếm, trùng gần, augmentation có bảo toàn bbox và độ nhạy của đối tượng nhỏ.
+
+## Giới hạn và hướng phát triển
+
+Nghiên cứu vehicle còn phụ thuộc một seed, chưa có xác suất bất định theo video group và chưa mở tập final holdout. Nhánh biển báo có test nhỏ và chưa có phép benchmark chuẩn hóa cùng dataset ID/thiết bị; cần kiểm tra trùng cross-split và tính hợp lệ của phép flip biển báo. Tốc độ tổng video, độ trễ từng bước và kết quả tích hợp còn thiếu.
+
+Các bước có thể thực hiện tiếp, theo thứ tự: (1) chuẩn hóa provenance và test-prediction data cho hai repo biển báo; (2) vẽ hình before/after/histogram/edge map cùng ROI; (3) bổ sung phân tích false negative của xe nhỏ và biển báo hiếm; (4) chạy hai detector trên cùng video, đo toàn pipeline; (5) kiểm thử độc lập trên nhiều điều kiện ánh sáng/camera trước khi kết luận hiệu quả. Không bổ sung một thí nghiệm chưa chạy vào mục Results như thể đã hoàn tất.
+
 
 # Tài liệu tham khảo {.unnumbered}
 
+Danh mục được biên dịch từ **references.bib**. Các mã nguồn của thành viên được trích dẫn ở **commit cố định** để người đọc đối chiếu đúng phiên bản, không phải mặc nhiên dùng nội dung mới nhất của nhánh main.
+
 ::: {#refs}
 :::
-
 
 ```{=latex}
 \appendix
 ```
 
-# Tham số và công thức các toán tử xử lý ảnh
+# Phụ lục A — Chi tiết các toán tử xử lý ảnh
 
-## Đặc trưng thống kê ảnh
+## Trích đặc trưng chất lượng ảnh
 
-> TODO: Định nghĩa luminance/brightness, contrast, noise estimate, black/white fraction và edge density đúng theo mã nguồn; kèm đơn vị, chiều ảnh, màu và hệ tọa độ.
+Với ảnh grayscale \(Y\) 8-bit, độ sáng chuẩn hóa được ước lượng bằng \(\operatorname{mean}(Y)/255\), tương phản bằng \(\operatorname{std}(Y)/255\). Đặc trưng sắc nét có thể tính từ phương sai Laplacian. Noise trong phiên bản vehicle được xấp xỉ bằng median của sai khác tuyệt đối giữa grayscale và ảnh median-filter 3×3, sau đó chuẩn hóa bởi \(0.6745\times255\). Black fraction và white fraction lần lượt đếm pixel rất tối/rất sáng (theo ngưỡng implementation).
 
-## Gamma correction
+Các giá trị quality được tính trên grayscale đã giảm về cạnh dài tối đa **512**; thuật toán Canny tăng cường chi tiết của v4 thao tác trên ảnh theo độ phân giải nguồn. Do cách lấy mẫu khác nhau, tỷ lệ edge của quality không thay thế cho việc xem edge map thật.
 
-Với giá trị kênh được chuẩn hóa \(x\in[0,1]\), có thể mô tả phép Gamma bằng \(y=x^\gamma\); để tái lập cần đối chiếu chính xác thứ tự màu/round/clip của implementation.
+## Bảng tham số được công bố
 
-## CLAHE và tăng tương phản có giới hạn
+| Version | Cấu hình chính, từ file YAML | Câu hỏi cần xem bằng ảnh |
+|:--|:--|:--|
+| v0 | Raw, JPEG quality 95 | Các vùng mất chi tiết ban đầu |
+| v1 | brightness nhỏ hơn 0,12; Gamma 0,85 | Noise nền sau nâng sáng |
+| v2 | illumination Gaussian sigma 16; gain 1×–2× | Vùng shadow có bị mất cấu trúc/clip? |
+| v3 | contrast nhỏ hơn 0,20; brightness 0,04–0,80; noise ≤0,01; black/white ratio <0,30/<0,10; CLAHE clip 1,5, grid 8×8, offset ±12 | Cân bằng chi tiết vật thể và texture nền |
+| v4 | brightness 0,04–0,90; noise ≤0,02; edge density 0,001–0,20; Canny 50/150, Gaussian sigma 1, detail amount 0,5, offset ±12 | Biên giả và lớp motorcycle/bicycle |
 
-> TODO: Mô tả clip limit, grid, phép pha trộn độ chênh, bảo vệ vùng bão hòa; nêu phân biệt cải thiện ảnh nhìn thấy và AP đo được.
+: Tham số để tái tạo chính sách; cần kiểm tra mã nguồn tại commit của vehicle nếu bản triển khai tiếp tục thay đổi. {#tbl-operator-params}
 
-## Canny và vùng ảnh gần biên
+Trong v3/v4, offset được giới hạn trên tín hiệu ảnh trước khi lưu JPEG. Không thể lấy giới hạn ±12 để suy ra rằng pixel **sau nén JPEG** cũng chỉ khác ảnh gốc tối đa 12 đơn vị. Đó là hai bước biến đổi độc lập và cần đo riêng nếu đánh giá noise/artifact.
 
-> TODO: Smoothing, gradient, nonmaximum suppression, hysteresis thresholds, mask dilation/softening và điểm khác giữa edge map và ảnh đưa vào detector.
+## Hình minh họa cần bổ sung sau
 
-## Bảng tham số gốc
+Một hình định tính tốt nên cho cùng frame ở các phiên bản Raw, Gamma, Shadow, CLAHE, Canny, kèm: histogram grayscale; crop ROI có cùng tọa độ và tỷ lệ; biên Canny; nhãn GT; sau cùng là bbox dự đoán. Không dùng ảnh không cùng scene để tuyên bố phiên bản này làm rõ đối tượng tốt hơn phiên bản kia. Phần hình đối chiếu hiện tại ưu tiên kết quả thật đã được lưu, không tạo phép inference mới.
 
-> TODO: Điền từ config versioned/commit cụ thể, không chép số từ nhiều lần thử nghiệm không tương thích.
+# Phụ lục B — Giao thức đánh giá và đối chứng
 
-# Giao thức đánh giá, ngưỡng và chi phí
+## Cấu hình vehicle tại thời điểm snapshot
 
-## Dataset roles, split identity và leakage controls
+Các file v0/v1/v2/v3 dùng cùng checkpoint khởi tạo YOLO26n COCO, seed **2026**, 50 epoch, ảnh **640**, batch **32**. v4 thuộc lần chạy batch **16**. Các YAML mô tả SGD, lr0 **0,01**, không sử dụng tăng cường photometric HSV trong train để giữ phân phối phép xử lý ảnh có kiểm soát; mục này nhằm chứng minh các arm kiểm tra thuật toán CV dưới những điều kiện gần nhau, không phân tích tối ưu loss.
 
-> TODO: Bảng vai trò split, số ảnh, nhóm nguồn, hash và quy định không mở final holdout.
+Bước đánh giá vehicle trên development áp dụng **imgsz 640**, conf **0,001**, IoU **0,7**, max_det **300**, augmentation off, batch theo study; version Ultralytics ghi trong metrics.json là **8.4.198**. Phải tách raw matched batch16 khỏi v0 batch32. Tập final holdout **9.730 ảnh** chưa dùng để chốt số trong báo cáo.
 
-## Cấu hình thực nghiệm theo study
+## Hệ thống đo ảnh/video
 
-> TODO: Ghi riêng Study A v0–v3/batch32 và Study B v0/v1/v4/batch16; checkpoint/seed/epoch/image size/augment settings. Các study khác 20-epoch/960 phải ở nhóm riêng.
+Một phép benchmark tích hợp phải ghi hardware, môi trường, driver, file video, resolution, frame rate, chế độ decode, số frame sau warmup, phiên bản code và model checkpoint. Tách thời gian **decode / preprocessing phương tiện / preprocessing biển báo / inference từng nhánh / hợp nhất bbox / overlay / encode**. Có thể chạy hai nhánh tuần tự hoặc đồng thời, nhưng phải khai báo rõ và đo trên cùng cơ sở thời gian.
 
-## Đánh giá và thống kê
+FPS đầy đủ có thể ước tính từ số khung hình thành công chia thời gian thực tế toàn job; không thay thế bằng \(1000/(t_{preprocess}+t_{infer}+t_{postprocess})\) nếu các thành phần thời gian không bao gồm read/write video, dữ liệu di chuyển giữa thiết bị hoặc synchronization. Các con số latency do script Phát suy ra từ Ultralytics speed counters cần gắn đúng phạm vi phép đo.
 
-> TODO: IoU, AP interpolation/aggregation, confidence threshold, max detections, NMS/end-to-end settings, số GT, định nghĩa lighting cohorts và đánh giá đối chứng từng lớp.
+## Phép kiểm tra biển báo có thể tái lập
 
-## Thời gian và tài nguyên
+Dữ liệu test cần giữ danh sách filename, nhãn/box, class ordering, kiểm tra image hash/pHash giữa cả ba split, định nghĩa resize/letterbox, confidence và NMS, cùng phiên bản Ultralytics. Để so hai model 640/960, phải chạy cùng nguyên tập test, cùng máy và khai báo seed/eval settings; phép đánh giá ở **832** của Hiếu là một phép đo bổ sung, không được chèn vào một hàng 960.
 
-> TODO: Đo decode, preprocessing, inference, postprocessing và I/O theo cùng thiết bị/khung hình; tách FPS native của thư viện và FPS toàn video.
+# Phụ lục C — Xuất xứ dữ liệu, hình và mã nguồn
 
-# Nguồn, artifact và giới hạn tái lập
+## Nguồn repository đã kiểm tra
 
-## Nguồn vehicle
+| Nhánh | Repository và commit snapshot | Hiện vật đáng chú ý |
+|:--|:--|:--|
+| Vehicle | [truong51972/vehicle-detection](https://github.com/truong51972/vehicle-detection) | configs/data.yaml; notebook/experiments/v0–v4; runs/v*/eval/metrics.json; docs/v4/evidence/matched_raw |
+| Phát | [dhphat/traffic-sign-detection@f3c30d8](https://github.com/dhphat/traffic-sign-detection/tree/f3c30d8be4e31404a73e8621d8fb050a62c90e05) | train.py, eval.py, infer_video.py, data/data.yaml, results.csv, best.pt, các ảnh demo |
+| Hiếu | [ec2003/VN-traffic-sign-detection@1bcf75e](https://github.com/ec2003/VN-traffic-sign-detection/tree/1bcf75eebbb3b255f622ade63900cead00abd863) | notebook, README, runs/detect/train/args.yaml, results.csv, best.pt, val plots, test assets |
 
-> TODO: Bảng notebook, `metrics.json`, `results.csv`, training/eval config, commit/run SHA, nguồn GT, xác minh hệ nhãn và từng lần chốt số.
+: Các nguồn công khai đọc tại thời điểm cập nhật; cam kết khoa học yêu cầu dẫn đúng commit và artifact. {#tbl-repo-provenance}
 
-## Nguồn traffic sign
+Repo Hiếu **có best.pt và args.yaml**, trái với một nhận định sơ bộ trong bản review DOCX khi chưa có link repository này. Vì vậy, lý do chưa xem một phép so sánh test 640/960 là tái lập độc lập **không phải thiếu checkpoint Hiếu**, mà là **chưa có bộ metrics và bộ ảnh/nhãn test cùng config đã chạy lại** trong phạm vi phiên soạn báo cáo.
 
-> TODO: Repository `dhphat/traffic-sign-detection`; báo cáo nguồn; số nhóm cung cấp; tình trạng thiếu checkpoint/config/model Hiếu, chưa chạy lại test và giới hạn trùng lặp.
+## Nguồn metrics và hình minh họa
 
-## Chỉ số không thể tự suy ra
+Vehicle Study A: runs/v0-2026-11-09/eval/metrics.json, tương tự v1/v2/v3. Vehicle Study B: docs/v4/evidence/matched_raw/metrics.json và runs/v4-2026-11-10/eval/metrics.json. Bản đồ source split và hash ở configs/data.yaml; không dùng dataset được tải lại không bảo đảm cùng phân chia.
 
-> TODO: Không tự phát minh thống kê bootstrap/confidence interval, per-class confusions khi thiếu prediction, combined mAP/FPS hoặc đo khoảng cách theo mét.
+Ảnh minh họa hình GT/pred vehicle là asset gốc đã có trong docs/images của project. Hình prediction và PR biển báo của Hiếu được **sao chép không chỉnh sửa** từ assets tại commit 1bcf75e; attribution và điều kiện nguồn được ghi trong figures/README.md. Hai SVG pipeline và so sánh Vehicle do nhóm biên soạn lại từ số liệu/kiến trúc được mô tả, **không phải screenshot kết quả thí nghiệm mới**. Ảnh demo của Phát được **dẫn link về repository** thay vì sao chép.
 
-## Bảng claim → evidence → confidence
+## Những kết luận chưa đủ dữ liệu
 
-> TODO: Một dòng cho mỗi kết luận có số liệu hoặc claim quan trọng, trỏ tới path/commit/hash và đánh dấu verified / reported / proposal.
+- Bảng test Phát/Hiếu tại imgsz 640/960 có xuất xứ từ **dự thảo do nhóm cung cấp**; không có đủ đối chiếu máy đọc ở hai kích thước trong snapshot.
+- Repo Phát lưu script eval có thể sinh JSON, nhưng bản snapshot không có file **metrics.json** được README nhắc tới.
+- Repo Hiếu có thông tin test 832 và biểu đồ test; cần truy vết file prediction/GT mới định lượng sai sót cụ thể hoặc đo bất định.
+- pHash train subset chưa chứng minh **cross-split** độc lập; Roboflow dataset source có mô tả augmentation từ lúc xuất bản.
+- Chưa có video đầu ra và log tốc độ **chung** cho hai detector, nên không công bố joint mAP, FPS, khoảng cách vật lý hoặc hiệu quả thời gian thực.
+
+## Nguyên tắc tái lập
+
+Không đưa secret/API key, toàn bộ training dataset hay weights không được phép chia sẻ vào báo cáo. Không suy từ **Git blob SHA-1** của checkpoint ra **SHA-256 của nội dung binary**. Khi tạo phép đánh giá mới, ghi cả hash checkpoint, dataset/split manifest, câu lệnh chạy, thiết bị và JSON kết quả; bảng/hình phải ghi rõ được tạo lại từ dữ liệu nào.
 
