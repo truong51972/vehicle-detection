@@ -23,6 +23,10 @@ study = [
   "ultralytics==8.4.198", "torch>=2.4,<3", "torchvision>=0.19,<1",
   "nbformat>=5.10,<6", "nbclient>=0.10,<1", "ipykernel>=6,<8", "jupyterlab>=4,<5",
 ]
+demo = ["gradio==6.31.0", "ultralytics==8.4.198", "torch>=2.4,<3", "torchvision>=0.19,<1"]
+
+[tool.uv]
+conflicts = [[{ extra = "study" }, { extra = "demo" }]]
 
 [dependency-groups]
 dev = ["pytest>=8,<10", "ruff>=0.9,<1"]
@@ -41,7 +45,7 @@ select = ["E", "F", "I", "B", "UP"]
 packages = ["src/vehicle_detection"]
 
 [tool.hatch.build.targets.sdist]
-only-include = ["src", "tests", "notebooks", "configs", "docs", "README.md", "data/README.md", "pyproject.toml", "uv.lock", ".github"]
+only-include = ["src", "apps", "tests", "notebooks", "configs", "docs", "README.md", "data/README.md", "pyproject.toml", "uv.lock", ".github"]
 
 [tool.ruff.lint.per-file-ignores]
 "*.ipynb" = ["E402"]
